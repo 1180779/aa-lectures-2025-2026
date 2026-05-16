@@ -155,8 +155,31 @@ Opis algorytmu:
 Na początku musimy posortować tablicę $X$ i $Y$. To zajmuje $\BO(n\log n)$. Jeśli $X$ i $Y$ są już posortowane 
 to podział $X$ na posortowane $X_L$ i $X_L$ oraz $Y$ analogicznie zajmie $\BO(n)$. 
 
+\begin{alg}{???}{alg:closestpoints:one}
+	\State \Length{$Y_L$} \Assign \Length{$Y_R$} \Assign $0$
+	\For{$i$ \Assign $1$ \To \Length{$Y$}}
+		\If{$Y(i)\in P_L$}
+			\State \Length{$Y_L$} \Assign \Length{$Y_L$} + 1
+			\State $Y_L($\Length{$Y_L$}$)$ \Assign $Y(i)$
+		\Else
+			\State \Length{$Y_R$} \Assign \Length{$Y_R$} + 1
+			\State $Y_R($\Length{$Y_R$}$)$ \Assign $Y(i)$
+		\EndIf
+	\EndFor
+\end{alg}
+
 Mamy dwa wywołania rekurencyjne dla $n/2$ punktów i fazę połącz. Tablicę $Y'$ można otrzymać z $Y$ w czasie $\BO(n)$ 
 tak, że $Y'$ jest posortowana. Niech $x = x_L$ będzie równanie prostej $l$. 
+
+\begin{alg}{???}{alg:closestpoints:two}
+	\State \Length{$Y'$} \Assign $0$
+	\For{$i$\Assign $1$ \To \Length{$Y$}}
+		\If{$x_L - \delta \leq Y(i).x \leq x_L + \delta$}
+			\State \Length{$Y'$} \Assign \Length{$Y'$} + 1
+			\State $Y'($\Length{$Y'$}$)$ \Assign $Y(i)$
+		\EndIf
+	\EndFor
+\end{alg}
 
 Skoro dla każdego z $\BO(n)$ punktów z $Y'$ sprawdzamy odległość tylko co najwyżej $7$ punktów, to najmniejsza odległość 
 $\delta'$ punktów z $Y'$ znajdziemy w czasie $\BO(n)$. 
