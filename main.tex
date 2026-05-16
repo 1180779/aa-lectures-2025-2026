@@ -1,0 +1,169 @@
+\documentclass[11pt,a4paper]{article}
+
+%\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{tabularray}
+\usepackage{afterpage}
+\usepackage{rotating}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{pdflscape}
+\usepackage{makecell}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+
+\usepackage{caption}
+
+\usepackage{mathtools}
+\usepackage{xpatch}
+
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithm}
+\usepackage{multirow}
+\floatname{algorithm}{Algorytm}
+\renewcommand{\listalgorithmname}{Spis algorytmów}
+
+\usepackage{cancel}
+\usepackage{amsthm}
+%\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[warnings-off={mathtools-overbracket,mathtools-colon}]{unicode-math}
+\setmathfont{XITS Math}
+\mathtoolsset{mathic=true}
+
+\geometry{margin=2.5cm}
+
+\definecolor{accent}{RGB}{30, 60, 100}
+\definecolor{placeholdercolor}{RGB}{160, 160, 160}
+\definecolor{rowA}{RGB}{235, 242, 250}
+
+\titleformat{\section}{\large\bfseries\color{accent}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{}{0em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small }
+\lhead{\small \textit{Algorytmy Zaawansowane}}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\hypersetup{colorlinks=true, linkcolor=accent, urlcolor=accent}
+
+% ── KOMENDY ──────────────────────────────────────────────────────
+\theoremstyle{definition}
+\newtheorem{definition}{Definicja}[section]
+\newtheorem{example}[definition]{Przykład}
+
+\theoremstyle{plain}
+\newtheorem{properties}[definition]{Własności}
+\newtheorem{theorem}[definition]{Twierdzenie}
+\newtheorem{conclusion}[definition]{Wniosek}
+\newtheorem{lemma}[definition]{Lemat}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Uwaga}
+
+
+% ── KOMENDY ──────────────────────────────────────────────────────
+\newcommand{\N}[0]{\mathbb{N}}
+\newcommand{\Np}[0]{\mathbb{N_+}}
+\newcommand{\R}[0]{\mathbb{R}}
+\newcommand{\Rp}[0]{\mathbb{R_+}}
+
+\newcommand{\BO}[0]{\mathcal{O}}
+\newcommand{\BM}[0]{\mathcal{\Omega}}
+\newcommand{\BT}[0]{\mathcal{\Theta}}
+
+% ── KOMENDY ──────────────────────────────────────────────────────
+% change default thickness of brackets to .6pt
+\MHInternalSyntaxOn
+\xpatchcmd\upbracketfill
+  {\sbox\z@{$\braceld$}\edef\l_MT_bracketheight_fdim{\the\ht\z@}}
+  {\edef\l_MT_bracketheight_fdim{.6pt}}
+  {}{\fail}
+
+\xpatchcmd\downbracketfill
+  {\sbox\z@{$\braceld$}\edef\l_MT_bracketheight_fdim{\the\ht\z@}}
+  {\edef\l_MT_bracketheight_fdim{.6pt}}
+  {}{\fail}
+\MHInternalSyntaxOff
+
+% ── KOMENDY ──────────────────────────────────────────────────────
+\makeatletter
+\newcommand{\FunctionNN}[2]{%
+  \let\OldAlgLineNum\alglinenumber%
+  \renewcommand{\alglinenumber}[1]{}%
+  \Function{#1}{#2}%
+  \let\alglinenumber\OldAlgLineNum%
+  \addtocounter{ALG@line}{-1}% 
+}
+\makeatother
+
+\newenvironment{alg}[3][]{% #1=optional options, #2=caption, #3=label
+  \captionsetup[algorithm]{hypcap=false}%
+  \captionof{algorithm}{#2}%
+  \vspace{0.3cm}%
+  \label{#3}%
+  \small%
+\begin{tcolorbox}[
+    breakable,
+    sharp corners,
+    boxrule=0.4pt,
+    colback=white,
+    colframe=black,
+    left=2mm,
+    right=2mm,
+    top=2mm,
+    bottom=2mm
+  ]%
+  \begin{algorithmic}[1]%
+}{%
+  \end{algorithmic}%
+  \end{tcolorbox}%
+}
+% ─────────────────────────────────────────────────────────────────
+
+\begin{document}
+%\setmathfont{XITS Math}
+
+% ── STRONA TYTUŁOWA ──────────────────────────────────────────────
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\LARGE\bfseries\color{accent} Algorytmy Zaawansowane}\\[0.5cm]
+%{\large }\\[0.3cm]
+{\normalsize Opracował Radosław Głasek na podstawie wykładów Michała Tuczyńskiego}\\[2cm]
+
+% \begin{tabular}{ll}
+% \textbf{Kierownik projektu:}   & Kacper Trzciński \\[0.3em]
+% \textbf{Przewodnicząca KS:}    & Aleksandra Sobótka \\[0.3em]
+% \textbf{Główny Dostawca:}      & Aleksander Płocharski \\[0.3em]
+% \textbf{Główny Użytkownik:}    & Tomasz Herman \\[0.3em]
+% \textbf{Zespół:}               & A. Bielicki, R. Głasek, J. Pączka, \\
+%                                & M. Popkowicz, F. Shramko, K. Trzciński \\[0.3em]
+% \textbf{Data opracowania:}     & \today \\[0.3em]
+% \end{tabular}
+
+\vfill
+{\small Algorytmy Zaawansowane\\
+Wydział Matematyki i Nauk Informacyjnych, Politechnika Warszawska}
+\end{titlepage}
+
+% ── SPIS TREŚCI ─────────────────────────────────────────────────
+\tableofcontents
+\newpage
+
+\input{lect1}
+
+\end{document}

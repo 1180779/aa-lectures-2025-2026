@@ -1,0 +1,219 @@
+% ════════════════════════════════════════════════════════════════
+\section{Wykład 1}
+\subsection{Notacja asymptotyczna --- przypomnienie}
+% ════════════════════════════════════════════════════════════════
+\begin{flalign*}
+	& f,g:\N\rightarrow\Rp & \\
+	& g(n) = \BO(f(n)) \Leftrightarrow \exists_{c\in\Rp}\exists_{n_0\in\Np}\forall_{n > n_0} g(n) \leq c\cdot f(n) & \\
+	& g(n) = \BM(f(n)) \Leftrightarrow \exists_{c\in\Rp}\exists_{n_0\in\Np}\forall_{n > n_0} c\cdot f(n) \leq g(n) & \\
+	& g(n) = \BT(f(n)) \Leftrightarrow \exists_{c_1, c_2\in\Rp}\exists_{n_0\in\Np}\forall_{n > n_0} c_1\cdot f(n)\leq g(n) \leq c_2\cdot f(n) & \\
+	& g(n) = \BO(f(n)) \Leftrightarrow f(n) = \BM(g(n)) & \\
+	& g(n) = \BT(f(n)) \Leftrightarrow \big( g(n) = \BO(f(n)) \wedge g(n) = \BM(f(n)) \big) &
+\end{flalign*}
+
+\begin{flalign*}
+	& n^a = \BO(n^b),\ 0 < a \leq b && \log n = \BO(n^\epsilon),\ \epsilon > 0 & \\ 
+	& a^n = \BO(b^n),\ 1 < a \leq b && \log_a n = \BT(\log_b n),\ a, b > 1 & \\ 
+	& n^a = \BO(b^n),\ 0 < a,\ b > 1 && &
+\end{flalign*}
+
+$$ T(n) = 5n^3 + 2n^2 + 100n\log n \underset{n \to \infty}{\approx} 5n^3 = \BT(n^3) $$
+
+\paragraph{Procedura rekurencyjna}
+$$ n! = \begin{cases}
+	1 & n = 0 \\[0.5ex]
+	n \cdot (n - 1)! & n \geq 1 
+\end{cases} $$
+Oczywiste jest, że $\displaystyle n! = \prod_{i = 1}^{n}i$
+
+\paragraph{Ciąg Fibonacciego}
+$F_n$ - ciąg Fibonacciego.
+$$ F_n = \begin{cases}
+	0 & n = 0 \\[0.5ex]
+	1 & n = 1 \\[0.5ex]
+	F_{n - 1} + F_{n - 2} & n \geq 2
+\end{cases} $$
+
+\begin{alg}{Rekurencyjna konstrukcja ciągu Fibonacciego}{alg:fib:recursive}
+	\FunctionNN{Fibb}{$n$}
+	\If{$n = 0$} 
+	\State \Return 0 
+	\EndIf
+	\If{$n = 1$} 
+	\State \Return 1
+	\EndIf
+	\State \Return \Call{Fibb}{$n - 1$} $+$ \Call{Fibb}{$n - 2$}
+	\EndFunction
+\end{alg}
+
+Wywołanie rekurencyjne dla (typowo łatwiejszych i mniejszych) instancji tego samego problemu.
+
+\subsection{Strategia typu \textit{Dziel i Zwyciężaj} (\textit{Divide and Conquer})}
+Algorytm typu \textit{dziel i zwyciężaj} składa się z trzech części
+\begin{enumerate}
+	\item \textit{Dziel} -- problem jest dzielony na mniejsze podproblemy
+	\item \textit{Zwyciężaj} -- podproblemy są rozwiązywane rekurencyjnie
+	\item \textit{Połącz} -- rozwiązanie całego problemu jest konstruowane z rozwiązań podproblemów
+\end{enumerate}
+
+Zakładamy, że (zazwyczaj) w fazie \textit{dziel} problem jest dzielony na co najmniej dwa podproblemy i podproblemy są rozłączne.
+
+\begin{example}{Mnożenie liczb $n$-cyfrowych} 
+	$x,y$ -- liczby naturalne $n$-cyfrowe.
+	
+	Aby policzyć $x\cdot y$ można użyć mnożenia pisemnego (jak na kartce). Tym sposobem musimy wykonać $\BO(n^2)$ mnożeń cyfr. Spróbujemy znaleźć lepszą metodę. 
+	Dzielimy $x$ i $y$ na ,,dwie połowy''. Zakładamy, dla uproszczenia, że $n$ jest parzyste.
+	$$ x = x_1x_2\cdots x_n = \underbracket{x_1x_2\cdots x_{n/2}}_{x_L}\underbracket{x_{n/2 + 1}\cdots x_n}_{x_R} = 10^{n/2}x_L + x_R $$
+	podobnie dla $y$: 
+	$$ y = \cdots = 10^{n/2}y_L + y_R $$
+	
+	Wymnażamy:
+	$$ x\cdot y = (10^{n/2}x_L + x_R) \cdot (10^{n/2}y_L + y_R) = 10^nx_Ly_L + 10^{n/2}(x_Ly_R + x_Ry_L) + x_Ry_R $$
+	
+	Złożoność czasowa algorytmu -- ozn. $T(n)$. 
+	\begin{itemize}[nosep]
+		\item Podział $x, y$ na $x_L,x_R,y_L,y_R$ zajmie $\BO(n)$ czasu.
+		\item Dodanie liczb $n$-cyfrowych zajmie $\BO(n)$ czasu.
+		\item Mnożenie przez $10^n$ jest równoważne dopisaniu $n$ zer więc też $\BO(n)$.
+	\end{itemize}
+	$$T(n) = 4\cdot T(n/2) + \BT(n)$$
+\end{example}
+
+\begin{theorem}{CLRS - Uniwersalne Twierdzenie o Rekurencji} \label{theorem:utor}
+	Niech $a \geq 1,\ b > 1$ będą stałymi, $f(n)$ funkcją i $T(n) = a\cdot T\left(\frac{n}{b}\right) + f(n)$ (gdzie $\frac{n}{b}$ znaczy $\left\lfloor \frac{n}{b} \right\rfloor$ lub $\left\lceil \frac{n}{b}\right\rceil$).
+	Wtedy
+	$$ T(n) = \begin{cases}
+		\BT(n^{\log_b a}) & f(n) = \BO(n^{\log_b a - \epsilon}) \text{ dla pewnego } \epsilon > 0 \\[1ex]
+		\BT(n^{\log_b a} \log n) & f(n) = \BT(n^{\log_b a}) \\[1ex]
+		\BT(f(n)) & \substack{
+			f(n) = \BM(n^{\log_b a + \epsilon}) \text{ dla pewnego } \epsilon > 0 \\ 
+			a\cdot f(n/b) \leq c\cdot f(n) \text{ dla pewnej stałej } c < 1 \text{ dla dużych } n
+		}
+	\end{cases} $$
+\end{theorem}
+
+\begin{lemma}
+	Niech $a\geq 1,\ b>1$ będą stałymi i niech $f(n)$ będzie nieujemną funkcją zdefiniowaną dla potęg $b$. Jeśli
+	\begin{equation*}
+		T(n) = \begin{cases}
+			\BT(1) & n = 1 \\[1ex]
+			a\cdot T\left(\frac{n}{b}\right) + f(n) & n = b^i,\ i \geq 1
+		\end{cases}
+	\end{equation*}
+	to 
+	$$ T(n) = \BT\left(n^{\log_b n}\right) + \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) $$
+\end{lemma}
+
+\begin{proof}
+	\begin{equation} \label{eq:utor:star}
+		a^{\log_b n} = b^{\log_b n \cdot \log_b a} = b^{\log_b a \cdot \log_b n} = \left(b^{\log_b a}\right)^{\log_b n} = n^{\log_b a}
+	\end{equation}
+	
+	\begin{align*}
+		T(n) &= f(n) + a\cdot T\left(\frac{n}{b}\right) 
+		= f(n) + a\left(f\left(\frac{n}{b}\right) + aT\left(\frac{n}{b^2}\right)\right) \\[1.5ex]
+		&= f(n) + af\left(\frac{n}{b}\right) + a^2 T\left(\frac{n}{b^2}\right) 
+		= f(n) + af\left(\frac{n}{b}\right) + a^2\left(f\left(\frac{n}{b^2}\right) + aT\left(\frac{n}{b^3}\right)\right) \\[1.5ex]
+		&= f(n) + af\left(\frac{n}{b}\right) + a^2 f\left(\frac{n}{b^2}\right) + \cdots + a^{\log_b n - 1} f\left(\frac{n}{b^{\log_b n}}\right) + a^{\log_b n} T(1) \\[1.5ex]
+		&\overset{\ref{eq:utor:star}}{=} \cdots + a^{\log_b n} T(1) 
+		= \cdots + n^{\log_b a} T(1) 
+		= \BT\left(n^{\log_b a}\right) + \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
+	\end{align*}
+\end{proof}
+
+Przeprowadzimy teraz dowód uniwersalnego twierdzenia o rekurencji (\ref{theorem:utor}). Ograniczymy się do przypadku, gdy $n$ jest potęgą $b$. Pozostały przypadek jest bardziej techniczny.
+
+\begin{proof}
+	Rozważmy wszystkie przypadki:
+	\begin{enumerate}
+		\item $$ f(n) = \BO(n^{\log_b a - \epsilon}) $$ 
+		Wtedy
+		\begin{align*}
+			f\left(\frac{n}{b^j}\right) &= \BO\left(\left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}\right)
+		\end{align*}
+		
+		\begin{align*}
+			\sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) 
+			&= \sum_{j = 0}^{\log_b n - 1} a^j \BO\left(\left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}\right) 
+			= \BO\left(\underbracket{\sum_{j = 0}^{\log_b n - 1} a^j \left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}}_{\blacktriangle}\right)
+		\end{align*}
+		
+		\begin{align*}
+			\blacktriangle &= \sum_{j = 0}^{\log_b n - 1} a^j \frac{n^{\log_b a - \epsilon}}{b^{j(\log_b a - \epsilon)}} 
+			= n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} a^j \frac{b^{j\epsilon}}{b^{j\log_b a}} \\[1.5ex]
+			&= n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} \left(\frac{a\cdot b^{\epsilon}}{\underbracket{b^{\log_b a}}_{= a}}\right)^j 
+			= n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} b^{\epsilon j} \quad \text{(wzór na ciąg geometryczny)} \\[1.5ex]
+			&= n^{\log_b a - \epsilon} \frac{b^{\epsilon \log_b n} - 1}{b^\epsilon - 1} 
+			= n^{\log_b a - \epsilon} \frac{n^\epsilon - 1}{\underbracket{b^\epsilon - 1}_{\text{stała}}} \\[1.5ex]
+			&= n^{\log_b a - \epsilon} \BO(n^\epsilon - 1) 
+			= \BO\left(n^{\log_b a - \epsilon}\cdot n^\epsilon - 1\right) 
+			= \BO\left(n^{\log_b a}\right) 
+		\end{align*}
+		
+		Z lematu:
+		\begin{align*}
+			T(n) &= \sum_{j = 0}^{\log_b n - 1} a^j T\left(\frac{n}{b^j}\right) + \BT\left(n^{\log_b a}\right) 
+			= \BO\left(n^{\log_b a}\right) + \BT\left(n^{\log_b a}\right) 
+			= \BT\left(n^{\log_b a}\right)
+		\end{align*}
+		
+		\item $$ f(n) = \BT\left(n^{\log_b a}\right) $$
+		Wtedy:
+		\begin{align*}
+			f\left(\frac{n}{b^j}\right) = \BT\left(\left(\frac{n}{b^j}\right)^{\log_b a}\right)
+		\end{align*}
+		
+		\begin{align*}
+			\sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) 
+			&= \sum_{j = 0}^{\log_b n - 1} a^j \BT\left(\left(\frac{n}{b^j}\right)^{\log_b a}\right) 
+			= \BT\left(\sum_{j = 0}^{\log_b n - 1} a^j \left(\frac{n}{b^j}\right)^{\log_b a}\right) \\[1.5ex]
+			&= \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} a^j \frac{1}{b^{j\log_b a}}\right) 
+			= \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} a^j \frac{1}{\underbracket{b^{\log_b a^j}}_{=a^j}}\right) \\[1.5ex]
+			&= \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} 1 \right) 
+			= \BT\left(n^{\log_b a} \log_b n\right)
+		\end{align*}
+		
+		Z lematu:
+		\begin{align*}
+			T(n) &= \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT\left(n^{\log_b a}\right) 
+			= \BO\left(n^{\log_b a}\log n\right) + \BT\left(n^{\log_b a}\right) 
+			= \BT\left(n^{\log_b a}\log n\right)
+		\end{align*}
+		
+		\item $$ f(n) = \BM\left(n^{\log_b a + \epsilon}\right) $$ 
+		oraz $$ a \cdot f\left(\frac{n}{b}\right) \leq c\cdot f(n) $$ dla jakiegoś $c < 1$ i odpowiednio dużych $n$.
+		
+		Z założenia:
+		$$ f\left(\frac{n}{b}\right) \leq \frac{c}{a}f(n) \quad \text{więc} \quad f\left(\frac{n}{b^j}\right) \leq \left(\frac{c}{a}\right)^j f(n) = \frac{c^j}{a^j}f(n) $$
+		
+		\begin{align*}
+			\sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) 
+			&\leq \sum_{j = 0}^{\log_b n - 1} \cancel{a^j} \frac{c^j}{\cancel{a^j}} f(n) + \BO(1) 
+			\leq f(n) \sum_{j = 0}^{\log_b n - 1} c^j + \BO(1) \\[1.5ex]
+			&\leq f(n) \sum_{j = 0}^{\infty} c^j + \BO(1) 
+			\leq f(n) \frac{1}{1 - c} + \BO(1) 
+			= \BO(f(n)) 
+		\end{align*}
+		
+		Z drugiej strony:
+		\begin{align*}
+			\sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) 
+			&= a^0 f\left(\frac{n}{b^0}\right) + \underbracket{\sum_{j = 1}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)}_{\geq 0} 
+			= \BM(f(n))
+		\end{align*}
+		
+		Z lematu:
+		$$ T(n) = \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT(n^{\log_b a}) = \BT(f(n)) + \BT(n^{\log_b a}) = \BT(f(n)) $$
+	\end{enumerate}
+\end{proof}
+
+\begin{conclusion}
+	Niech $a\geq 1,\ b>1$ będą stałymi, a $f(n)$ funkcją taką, że $f(n) = \BT(n^k)$.
+	Niech $T(n) = a\cdot T\left(\frac{n}{b}\right) + f(n)$ (gdzie $\frac{n}{b}$ znaczy $\left\lfloor \frac{n}{b} \right\rfloor$ lub $\left\lceil \frac{n}{b}\right\rceil$).
+	Wtedy
+	$$ T(n) = \begin{cases}
+		\BT(n^{\log_b a}) & a > b^k \Leftrightarrow \log_b a > k \\[1ex]
+		\BT(n^{\log_b a}\log n) & a = b^k \Leftrightarrow \log_b a = k \\[1ex]
+		\BT(n^k) & a < b^k \Leftrightarrow \log_b a < k
+	\end{cases} $$
+\end{conclusion}
