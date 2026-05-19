@@ -54,7 +54,11 @@
 
 \pagestyle{fancy}
 \fancyhf{}
-\rhead{\small 2025/2026}
+
+\newcommand{\lecturedate}{2025/2026}
+\rhead{\small \lecturedate}
+\markright{2025/2026}
+%\rhead{\small 2025/2026}
 \lhead{\small \textit{Algorytmy Zaawansowane}}
 \cfoot{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
@@ -162,9 +166,16 @@ Wydział Matematyki i Nauk Informacyjnych, Politechnika Warszawska}
 \tableofcontents
 \newpage
 
-\input{lect1}
-\input{lect2}
-\input{lect3}
-\input{lect4}
+\renewcommand{\lecturedate}{4 marca 2026}
+\input{lect2-04-03-2026}
+
+\renewcommand{\lecturedate}{11 marca 2026}
+\input{lect3-11-03-2026}
+
+\renewcommand{\lecturedate}{18 i 25 marca 2026}
+\input{lect4+5-18+25-03-2026}
+
+\renewcommand{\lecturedate}{1 kwietnia 2026}
+\input{lect6-01-04-2026}
 
 \end{document}
