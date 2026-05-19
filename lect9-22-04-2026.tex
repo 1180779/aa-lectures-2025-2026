@@ -1,0 +1,136 @@
+% ════════════════════════════════════════════════════════════════
+\section{Wykład 9}
+\subsection{Matroidy}
+% ════════════════════════════════════════════════════════════════
+
+\begin{definition}
+	\textbf{Matroid} to para $M = (S, \mathcal{A})$ taka, że:
+	\begin{enumerate}
+		\item $S$ -- niepusty zbiór skończony,
+		\item $\mathcal{A} \subseteq 2^S$ i $\mathcal{A} \neq \emptyset$ -- czyli $\mathcal{A}$ to niepusta rodzina podzbiorów $S$,
+		\item $\forall A, B \subseteq S \quad A \in \mathcal{A} \wedge B \subseteq A \implies B \in \mathcal{A}$,
+		\item $\forall A, B \subseteq S \quad A, B \in \mathcal{A} \wedge |B| > |A| \implies \text{istnieje } x \in B \setminus A \text{ taki, że } A \cup \{x\} \in \mathcal{A}$ (własność wymiany).
+	\end{enumerate}
+	$\mathcal{A}$ -- rodzina zbiorów niezależnych matroidu $M$, elementy $\mathcal{A}$ -- zbiory niezależne matroidu $M$.
+\end{definition}
+
+\begin{example} \leavevmode
+	\begin{enumerate}
+		\item $A$ -- macierz, $S$ -- zbiór wierszy $A$, $\mathcal{A} = \{R \subseteq S : R \text{ tworzy zbiór liniowo niezależny}\}$.\\
+		Wtedy $(S, \mathcal{A})$ to matroid.
+		\item $G = (V, E)$ -- graf, $\mathcal{A} = \{F \subseteq E : G[F] \text{ jest acykliczny}\}$.\\
+		Wtedy $(E, \mathcal{A})$ to matroid zwany matroidem grafowym.
+	\end{enumerate}
+	Z definicji $\emptyset \in \mathcal{A}$.
+\end{example}
+
+\begin{lemma}
+	Niech $M = (S, \mathcal{A})$. Wszystkie maksymalne zbiory niezależne $M$ mają tę samą liczność.
+\end{lemma}
+\begin{proof}
+	Niech $A, B \in \mathcal{A}$ będą maksymalnymi zbiorami niezależnymi $M$. Przypuśćmy, że $|B| > |A|$.\\
+	Z własności 4. istnieje $x \in B \setminus A$ taki, że $A \cup \{x\} \in \mathcal{A}$ -- sprzeczność z maksymalnością $A$.
+\end{proof}
+
+\paragraph{Problem}
+$M = (S, \mathcal{A})$ -- matroid, $w: S \to \Rp$ -- funkcja wagi.\\
+Dla $A \subseteq S$ niech $w(A) = \sum_{x \in A} w(x)$ -- waga $A$.\\
+\textbf{Problem:} Znaleźć zbiór niezależny o maksymalnej wadze w $M$.\\
+$S = \{x_1, x_2, \ldots, x_n\}$.
+
+\begin{alg}{Algorytm Greedy}{alg:greedy}
+	\FunctionNN{Greedy}{$M, w$}
+	\State $n \Assign |S|$
+	\State $A \Assign \emptyset$ \Comment{$A$ -- rozwiązanie}
+	\State posortuj $S$ w porządku nierosnącym względem wagi, tak żeby $w(x_1) \geq w(x_2) \geq \ldots \geq w(x_n)$
+	\For{$i \Assign 1$ \To $n$}
+	\If{$A \cup \{x_i\} \in \mathcal{A}$}
+	\State $A \Assign A \cup \{x_i\}$
+	\EndIf
+	\EndFor
+	\State \Return $A$
+	\EndFunction
+\end{alg}
+
+\begin{theorem}[Rado, Edmonds]
+	Algorytm Greedy znajduje zbiór niezależny o maksymalnej wadze.
+\end{theorem}
+\begin{proof}
+	Niech $A = \{x_{i_1}, x_{i_2}, \ldots, x_{i_k}\}$ będzie zbiorem zwróconym przez algorytm i $w(x_{i_1}) \geq w(x_{i_2}) \geq \ldots \geq w(x_{i_k})$.\\
+	Najpierw pokażemy, że $A$ jest maksymalnym zbiorem niezależnym.\\
+	Przypuśćmy, że istnieje $x_j \in S \setminus A$ taki, że $A \cup \{x_j\} \in \mathcal{A}$.
+	Wtedy $j < i_k$, bo w przeciwnym wypadku algorytm dodałby $x_j$ do $A$ jako $(k+1)$-szy element.\\
+	Niech $l$ będzie najmniejszą liczbą taką, że $j < i_l$.
+	Wtedy $w(x_{i_1}) \geq w(x_{i_2}) \geq \ldots \geq w(x_{i_{l-1}}) \geq w(x_j) \geq w(x_{i_l})$.\\
+	$A \cup \{x_j\} \in \mathcal{A}$, więc z własności 3. $\{x_{i_1}, x_{i_2}, \ldots, x_{i_{l-1}}, x_j\} \subseteq A \cup \{x_j\}$ jest zbiorem niezależnym.\\
+	Ale wtedy algorytm dodałby $x_j$ zamiast $x_{i_l}$ jako $l$-ty element dodany do $A$ -- sprzeczność.\\
+	Zatem $A$ jest maksymalnym zbiorem niezależnym.
+	
+	Rozważmy zbiór niezależny $B = \{y_1, y_2, \ldots, y_m\} \in \mathcal{A}$ i załóżmy, że $w(y_1) \geq w(y_2) \geq \ldots \geq w(y_m)$.\\
+	Mamy $m \leq k$, bo $A$ jest maksymalnym zbiorem niezależnym (Stw).\\
+	Pokażemy, że $w(B) \leq w(A)$.\\
+	Pokażemy, że dla każdego $j \leq m \quad w(y_j) \leq w(x_{i_j})$.\\
+	Przypuśćmy, że $w(y_j) > w(x_{i_j})$.\\
+	Rozważmy zbiory niezależne $A_{j-1} = \{x_{i_1}, \ldots, x_{i_{j-1}}\} \subseteq A$, $B_j = \{y_1, \ldots, y_j\} \subseteq B$.\\
+	$|B_j| = j > |A_{j-1}| = j-1$, więc z własności 4. istnieje $y_s \in B_j \setminus A_{j-1}$ taki, że $A_{j-1} \cup \{y_s\} \in \mathcal{A}$.\\
+	Mamy $w(y_s) \geq w(y_j) > w(x_{i_j})$, więc istnieje $t \leq j$ takie, że $w(x_{i_1}) \geq w(x_{i_2}) \geq \ldots \geq w(x_{i_{t-1}}) \geq w(y_s) > w(x_{i_t})$.\\
+	Z własności 3. $\{x_{i_1}, x_{i_2}, \ldots, x_{i_{t-1}}, y_s\} \subseteq A_{j-1} \cup \{y_s\}$ jest zbiorem niezależnym.\\
+	Ale wtedy algorytm dodałby $y_s$ zamiast $x_{i_t}$ jako $t$-ty element dodany do $A$ -- sprzeczność.\\
+	Zatem 
+	$\begin{rcases}
+		w(y_1) \leq w(x_{i_1}) \\
+		w(y_2) \leq w(x_{i_2}) \\
+		\vdots \\
+		w(y_m) \leq w(x_{i_m})
+	\end{rcases} \implies w(B) = w(y_1) + \ldots + w(y_m) \leq w(x_{i_1}) + \ldots + w(x_{i_m}) \leq w(A)$.
+\end{proof}
+
+\paragraph{Złożoność czasowa algorytmu Greedy}
+$n = |S|$
+\begin{itemize}[nosep]
+	\item linia 1: $\BO(1)$
+	\item linia 2: $\BO(1)$
+	\item linia 3: $\BO(n \log n)$
+	\item liczba iteracji pętli z linii 4 wynosi $n$
+	\item linia 5: $f(n)$ -- czas sprawdzenia warunku z linii 5
+	\item linia 6: $\BO(1)$
+	\item linia 7: $\BO(1)$
+\end{itemize}
+
+% ════════════════════════════════════════════════════════════════
+\subsection{Problem szeregowania zadań}
+% ════════════════════════════════════════════════════════════════
+
+\begin{itemize}[nosep]
+	\item $S = \{z_1, z_2, \ldots, z_n\}$ -- zbiór zadań o jednostkowym czasie wykonania
+	\item $d_1, d_2, \ldots, d_n$ -- deadliny, $d_i \in \{1, \ldots, n\}$ dla $i \in [n]$
+	\item $w_1, w_2, \ldots, w_n$ -- kary, $w_i \geq 0$ dla $i \in [n]$
+\end{itemize}
+Płacimy karę $w_i$ za zadanie $z_i$, jeżeli nie jest skończone w momencie $d_i$.\\
+\textbf{Problem:} Znaleźć kolejność wykonania zadań minimalizującą sumę kar.
+
+Załóżmy, że mamy pewien harmonogram. Zadanie $z_i$ nazywamy \underline{terminowym} w tym harmonogramie, jeśli jest zakończone do chwili $d_i$, w przeciwnym razie nazywamy je \underline{spóźnionym}.\\
+Nie płacimy kar za zadania terminowe, płacimy kary za zadania spóźnione.
+
+\begin{lemma}
+	Każdy harmonogram można przetransformować na harmonogram z taką samą sumą kar, w którym wszystkie zadania terminowe poprzedzają wszystkie zadania spóźnione oraz zadania terminowe są posortowane w kolejności niemalejącej względem deadlinów.
+\end{lemma}
+\begin{proof}
+	\begin{enumerate}
+		\item Niech $z_i$ będzie zadaniem spóźnionym ukończonym w chwili $l_i > d_i$ i niech $z_j$ będzie zadaniem terminowym ukończonym w chwili $l_j \leq d_j$ i niech $z_i$ będzie przed $z_j$ w harmonogramie, tzn. $l_i < l_j$.\\
+		Zamieniamy miejscami $z_i$ i $z_j$. Po zamianie:
+		\begin{itemize}[nosep]
+			\item $z_i$ jest ukończone w chwili $l_j > l_i > d_i$, więc nadal jest spóźnione.
+			\item $z_j$ jest ukończone w chwili $l_i < l_j \leq d_j$, więc nadal jest terminowe.
+		\end{itemize}
+		Po pewnej liczbie takich zamian otrzymujemy harmonogram o tej samej sumie kar, w którym wszystkie zadania terminowe poprzedzają wszystkie zadania spóźnione.
+		
+		\item Niech $z_i, z_j$ będą zadaniami terminowymi takimi, że $z_i$ jest ukończone w chwili $l_i \leq d_i$, $z_j$ jest ukończone w chwili $l_j \leq d_j$, $l_i < l_j$, ale $d_i > d_j$.\\
+		Zamieniamy miejscami $z_i$ i $z_j$. Po zamianie:
+		\begin{itemize}[nosep]
+			\item $z_i$ jest ukończone w chwili $l_j \leq d_j < d_i$, więc $z_i$ jest nadal terminowe.
+			\item $z_j$ jest ukończone w chwili $l_i < l_j \leq d_j$, więc $z_j$ jest nadal terminowe.
+		\end{itemize}
+		Po pewnej liczbie takich zamian otrzymujemy harmonogram spełniający warunki lematu.
+	\end{enumerate}
+\end{proof}
