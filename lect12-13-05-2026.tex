@@ -1,0 +1,202 @@
+% ════════════════════════════════════════════════════════════════
+\section{Wykład 12}
+\subsection{Problem sumy podzbiorów}
+% ════════════════════════════════════════════════════════════════
+
+\paragraph{Problem sumy podzbiorów (Subset-Sum)}
+$S = \{x_1, x_2, \ldots, x_n\} \subseteq \N$, $t \in \N$.
+
+\paragraph{Wersja decyzyjna}
+\begin{itemize}[nosep]
+	\item Instancja: $(S, t)$.
+	\item Problem: czy istnieje $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i = t$?
+\end{itemize}
+
+\paragraph{Wersja optymalizacyjna}
+\begin{itemize}[nosep]
+	\item Instancja: $(S, t)$.
+	\item Problem: znaleźć $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i$ jest największą możliwą liczbą $\leq t$.
+\end{itemize}
+
+Dla zbioru $P \subseteq \N$ i $x \in \N$ oznaczamy $P + x = \{s + x : s \in P\}$.\\
+np.\ dla $P = \{1, 2, 3, 6\}$ i $x = 2$: \quad $P + x = \{3, 4, 5, 8\}$.
+
+Dla listy $L$ liczb naturalnych i $x \in \N$ przez $L + x$ oznaczamy listę powstałą z $L$ przez dodanie $x$ do każdego elementu.\\
+np.\ $L = (3, 5, 8)$ i $x = 3$: \quad $L + x = (6, 8, 11)$.
+
+\begin{lemma} \label{lemma:subsetsum-Pi}
+	Niech $S = \{x_1, \ldots, x_n\} \subseteq \N$. Niech $P_0 = \{0\}$ i $P_i = P_{i-1} \cup (P_{i-1} + x_i)$ dla $i \in [n]$. Zbiór $P_n$ składa się ze wszystkich możliwych sum podzbiorów zbioru $S$.
+\end{lemma}
+\begin{proof}
+	Pokażemy przez indukcję po $i$, że zbiór $P_i$ składa się ze wszystkich możliwych sum elementów ze zbioru $\{x_1, x_2, \ldots, x_i\}$.
+	
+	$i = 0$: \quad $P_0 = \{0\}$ i $\sum_{x_i \in \emptyset} x_i = 0$. $\checkmark$
+	
+	Załóżmy, że $P_{i-1}$ składa się ze wszystkich możliwych sum elementów z $\{x_1, \ldots, x_{i-1}\}$.\\
+	Niech $S' \subseteq \{x_1, \ldots, x_i\}$.
+	\begin{itemize}[nosep]
+		\item Jeśli $x_i \notin S'$, to $S' \subseteq \{x_1, \ldots, x_{i-1}\}$, więc $\sum_{x_k \in S'} x_k \in P_{i-1} \subseteq P_i$.
+		\item Jeśli $x_i \in S'$, to $S' \setminus \{x_i\} \subseteq \{x_1, \ldots, x_{i-1}\}$, więc
+		\begin{flalign*}
+			\sum_{x_k \in S'} x_k = \sum_{x_k \in S' \setminus \{x_i\}} x_k + x_i \in P_{i-1} + x_i \subseteq P_i && &&
+		\end{flalign*}
+	\end{itemize}
+	Zatem $P_i$ zawiera wszystkie możliwe sumy elementów z $\{x_1, \ldots, x_i\}$.\\
+	$P_i$ nie zawiera innych elementów, bo $P_{i-1}$ składa się z sum elementów z $\{x_1, \ldots, x_{i-1}\}$ a $P_{i-1} + x_i$ zawiera tylko sumy elementów z $\{x_1, \ldots, x_{i-1}, x_i\} \subseteq \{x_1, \ldots, x_i\}$.\\
+	Dla $i = n$ mamy tezę.
+\end{proof}
+
+Załóżmy, że mamy procedurę $\Call{MergeLists}{L, L'}$, która dla posortowanych list liczb naturalnych $L$, $L'$ zwraca posortowaną listę elementów z $L$ i $L'$ i usuwa duplikaty. Złożoność czasowa $\Call{MergeLists}{L, L'}$ wynosi $\BT(|L| + |L'|)$.
+
+\begin{alg}{Exact Subset Sum}{alg:exactsubsetsum}
+	\FunctionNN{ExactSubsetSum}{$S, t$}
+	\State $n \Assign |S|$
+	\State $L_0 \Assign (0)$
+	\For{$i \Assign 1$ \To $n$}
+	\State $L_i \Assign \Call{MergeLists}{L_{i-1}, L_{i-1} + x_i}$
+	\State usuń z $L_i$ wszystkie liczby $> t$
+	\EndFor
+	\State \Return największy element $L_n$
+	\EndFunction
+\end{alg}
+
+Poprawność wynika z lematu \ref{lemma:subsetsum-Pi}.
+
+\paragraph{Złożoność czasowa}
+Długość listy $L_i$ może być wykładnicza względem $i$, nawet $2^i$. Dla $I = (S, t)$:
+\begin{flalign*}
+	|I| = \BT\left(\log t + \sum_{i=1}^{n} \log x_i\right) && &&
+\end{flalign*}
+Jeśli liczby $t$ i $x_i$ są $n$-cyfrowe, to $\log t, \log x_i = \BT(n)$ i wtedy $|I| = \BT(n + n^2) = \BT(n^2)$. Skoro $L_n$ może mieć długość $2^n$, to ExactSubsetSum jest algorytmem wykładniczym.
+
+Jeśli liczba $t$ jest ograniczona przez funkcję wielomianową od $n = |S|$, czyli $t = \BO(n^p)$ dla jakiegoś $p \in \N$, to długość $L_i$ jest ograniczona przez $\BO(t) = \BO(n^p)$ i w tym przypadku algorytm działa w czasie wielomianowym.
+
+\paragraph{Schemat aproksymacyjny}
+Pokażemy w pełni wielomianowy schemat aproksymacyjny dla tego problemu.
+
+\paragraph{Pomysł:} będziemy skracać listy $L_i$. Dla $0 < \delta < 1$ z listy $L$ robimy krótszą listę $L'$ taką, że dla każdego elementu $y$ usuniętego z $L$ istnieje element $z$ w $L'$, który jest blisko niego, dokładnie $\frac{y}{1 + \delta} \leq z \leq y$.
+
+\paragraph{Przykład}
+$L = (15, 16, 17, 25, 27, 28, 35, 36, 37)$, $\delta = 0{,}1$.\\
+$L' = (15, 17, 25, 28, 35)$.
+
+Następująca procedura $\Call{Trim}{L, \delta}$ realizuje ten pomysł.\\
+$L = (y_1, \ldots, y_m)$ -- posortowana rosnąco lista, $0 < \delta < 1$.
+
+\begin{alg}{Trim}{alg:trim}
+	\FunctionNN{Trim}{$L, \delta$}
+	\State $m \Assign |L|$
+	\State $L' \Assign (y_1)$
+	\State $last \Assign y_1$
+	\For{$i \Assign 2$ \To $m$}
+	\If{$y_i > last \cdot (1 + \delta)$}
+	\State dołącz $y_i$ na koniec $L'$
+	\State $last \Assign y_i$
+	\EndIf
+	\EndFor
+	\State \Return $L'$
+	\EndFunction
+\end{alg}
+
+Czas działania $\Call{Trim}{L, \delta}$ wynosi $\BT(|L|)$.
+
+Oto schemat aproksymacyjny:
+
+\begin{alg}{Approx Subset Sum}{alg:approxsubsetsum}
+	\FunctionNN{ApproxSubsetSum}{$S, t, \varepsilon$}
+	\State $n \Assign |S|$
+	\State $L_0 \Assign (0)$
+	\For{$i \Assign 1$ \To $n$}
+	\State $L_i \Assign \Call{MergeLists}{L_{i-1}, L_{i-1} + x_i}$
+	\State usuń z $L_i$ liczby $> t$
+	\State $L_i \Assign \Call{Trim}{L_i, \frac{\varepsilon}{2n}}$ \Comment{$\delta = \frac{\varepsilon}{2n}$}
+	\EndFor
+	\State \Return największy element $z \in L_n$ \Comment{$z^*$}
+	\EndFunction
+\end{alg}
+
+% ════════════════════════════════════════════════════════════════
+\subsection{NP-zupełność problemu sumy podzbiorów}
+% ════════════════════════════════════════════════════════════════
+
+\begin{theorem}
+	Problem sumy podzbiorów jest NP-zupełny.
+\end{theorem}
+\begin{proof}
+	Problem jest w NP. Dla instancji $(S, t)$ i $S' \subseteq S$ można sprawdzić w czasie wielomianowym czy $\sum_{x_i \in S'} x_i = t$.
+	
+	Pokażemy redukcję $\text{3-SAT} \leq_p \text{SUBSET-SUM}$.
+	
+	$\Phi$ -- formuła 3-SAT w CNF, $x_1, x_2, \ldots, x_n$ -- zmienne, $C_1, C_2, \ldots, C_m$ -- klauzule. Załóżmy, że żadna klauzula nie zawiera zmiennej i jej zaprzeczenia (wpp.\ jest spełniona) oraz każda zmienna występuje w co najmniej jednej klauzuli.
+	
+	Utworzymy instancję $(S, t)$ problemu SUBSET-SUM dla $\Phi$.\\
+	Dla każdej zmiennej $x_i$ mamy w $S$ dwie liczby $r_i$ i $r_i'$, $(n+m)$-cyfrowe.\\
+	Dla każdej klauzuli $C_j$ mamy w $S$ dwie liczby $s_j$ i $s_j'$, $(n+m)$-cyfrowe.\\
+	$t$ jest liczbą $(n+m)$-cyfrową: $\underbrace{1\,1\,\ldots\,1}_{n}\,\underbrace{4\,4\,\ldots\,4}_{m}$.
+	
+	Pierwsze $n$ cyfr etykietowane jest zmiennymi, ostatnie $m$ cyfr etykietowane jest klauzulami.
+	\begin{itemize}[nosep]
+		\item $r_i, r_i'$ mają $1$ na pozycji $x_i$ i $0$ na innych pozycjach etykietowanych zmiennymi.
+		\item $1$ na pozycji $C_j$: jeśli $x_i$ występuje w $C_j$ to w $r_i$, jeśli $\overline{x_i}$ to w $r_i'$. \\Na pozostałych pozycjach etykietowanych klauzulami $r_i$ i $r_i'$ mają $0$.
+		\item $s_j$ ma na pozycji $C_j$ $1$, a na reszcie pozycji $0$.
+		\item $s_j'$ ma na pozycji $C_j$ $2$, a na reszcie pozycji $0$.
+	\end{itemize}
+	Liczby $r_i, r_i', s_j, s_j'$ są różne -- z konstrukcji i założeń o $\Phi$.\\
+	Na każdej pozycji suma wszystkich liczb $\leq 6$, więc nie ma przeniesień.
+	
+	Redukcja jest w czasie wielomianowym: $|S|$ jest $2(n + m)$ liczb $(n + m)$-cyfrowych, utworzenie $t$ zajmuje czas liniowy względem $n + m$, utworzenie każdej z nich jest w czasie wielomianowym względem $n + m$.
+	
+	$\Phi$ spełnialna $\implies$ istnieje spełniające wartościowanie.\\
+	Jeśli $x_i = 1$, to do $S'$ bierzemy $r_i$.\\
+	Jeśli $x_i = 0$, to do $S'$ bierzemy $r_i'$.\\
+	$C_j$ spełniona $\implies$ suma $r_i, r_i' \in S'$ ma na pozycji $C_j$ $1$ lub $2$ lub $3$.\\
+	Dokładamy do $S'$ odpowiednio $s_j$ i $s_j'$ lub $s_j'$ lub $s_j$.\\
+	Wtedy $S'$ ma sumę równą $t$.
+	
+	$S' \subseteq S$ ma sumę równą $t$ $\implies$ do $S'$ należy dokładnie jedna z liczb $r_i, r_i'$:
+	\begin{itemize}[nosep]
+		\item jeśli $r_i \in S'$, to $x_i = 1$,
+		\item jeśli $r_i' \in S'$, to $x_i = 0$.
+	\end{itemize}
+	$C_j$ jest spełniona, bo $s_j + s_j' \leq 3$ na pozycji $C_j$ $\implies$ co najmniej $1$ jest z $r_i, r_i'$ należących do $S'$ mająca $1$ na pozycji $C_j$:
+	\begin{itemize}[nosep]
+		\item $r_i \in S'$ to $x_i$ jest w $C_j$, a mamy $x_i = 1$,
+		\item $r_i' \in S'$ to $\overline{x_i}$ jest w $C_j$, a mamy $x_i = 0$.
+	\end{itemize}
+\end{proof}
+
+\paragraph{Przykład}
+$C_1 = (x_1 \vee \overline{x_2} \vee \overline{x_3})$, \quad $C_2 = (\overline{x_1} \vee \overline{x_2} \vee \overline{x_3})$,\\
+$C_3 = (\overline{x_1} \vee \overline{x_2} \vee x_3)$, \quad $C_4 = (x_1 \vee x_2 \vee x_3)$.\\
+$\Phi = C_1 \wedge C_2 \wedge C_3 \wedge C_4$. \quad $n = 3$, $m = 4$.
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.2}
+	\begin{NiceTabular}{c|ccc|cccc}[margin,hvlines]
+		& $x_1$ & $x_2$ & $x_3$ & $C_1$ & $C_2$ & $C_3$ & $C_4$ \\
+		\hline
+		$t$   & 1 & 1 & 1 & 4 & 4 & 4 & 4 \\
+		\hline
+		$r_1$ & 1 & 0 & 0 & 1 & 0 & 0 & 1 \\
+		$r_1'$& 1 & 0 & 0 & 0 & 1 & 1 & 0 \\
+		$r_2$ & 0 & 1 & 0 & 0 & 0 & 0 & 1 \\
+		$r_2'$& 0 & 1 & 0 & 1 & 1 & 1 & 0 \\
+		$r_3$ & 0 & 0 & 1 & 0 & 0 & 1 & 1 \\
+		$r_3'$& 0 & 0 & 1 & 1 & 1 & 0 & 0 \\
+		$s_1$ & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+		$s_1'$& 0 & 0 & 0 & 2 & 0 & 0 & 0 \\
+		$s_2$ & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+		$s_2'$& 0 & 0 & 0 & 0 & 2 & 0 & 0 \\
+		$s_3$ & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+		$s_3'$& 0 & 0 & 0 & 0 & 0 & 2 & 0 \\
+		$s_4$ & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+		$s_4'$& 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
+	\end{NiceTabular}
+\end{table}
+
+Dla wartościowania $x_1 = 1$, $x_2 = 0$, $x_3 = 0$ otrzymujemy:
+\begin{flalign*}
+	S' = \{r_1, r_2', r_3', s_1, s_2', s_3, s_4, s_4'\} && &&
+\end{flalign*}
+i $\sum_{x \in S'} x = t$.

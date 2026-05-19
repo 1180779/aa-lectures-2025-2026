@@ -1,0 +1,204 @@
+% ════════════════════════════════════════════════════════════════
+\section{Wykład 10}
+\subsection{Problem szeregowania zadań (cd.)}
+% ════════════════════════════════════════════════════════════════
+
+Zbiór $A \subseteq S$ nazywamy \underline{wolnym od kar}, jeśli istnieje harmonogram zbioru $A$, w którym wszystkie zadania są terminowe.
+
+Dla $t \in \{0, 1, \ldots, n\}$ niech
+\begin{flalign*}
+	N_t(A) = |\{z_i \in A : d_i \leq t\}| && &&
+\end{flalign*}
+-- liczba zadań w $A$ o deadlinie $\leq t$.
+
+\begin{lemma} \label{lemma:wolny-od-kar}
+	Niech $A \subseteq S$. Następujące warunki są równoważne:
+	\begin{enumerate}
+		\item $A$ jest wolny od kar.
+		\item $N_t(A) \leq t$ dla każdego $t \in \{1, 2, \ldots, n\}$.
+		\item Jeśli zadania z $A$ są posortowane w kolejności niemalejącej ze względu na deadliny, to żadne zadanie nie jest spóźnione.
+	\end{enumerate}
+\end{lemma}
+
+\begin{theorem}
+	Niech $S$ -- zbiór zadań o jednostkowym czasie wykonania, a $\mathcal{A}$ -- rodzina zbiorów wolnych od kar. Wtedy $(S, \mathcal{A})$ jest matroidem.
+\end{theorem}
+\begin{proof}
+	Sprawdzamy własności z definicji matroidu:
+	\begin{enumerate}
+		\item Oczywiste. $\checkmark$
+		\item Dla każdego $i \in [n]$ zachodzi $\{z_i\} \in \mathcal{A}$, więc $\mathcal{A} \neq \emptyset$. $\checkmark$
+		\item Niech $A \in \mathcal{A}$, $B \subseteq A$. Istnieje harmonogram zbioru $A$, w którym wszystkie zadania są terminowe. Harmonogram zbioru $B$ powstały z usunięcia z tego harmonogramu zadań z $A \setminus B$ jest harmonogramem zbioru $B$, w którym wszystkie zadania są terminowe. Zatem $B \in \mathcal{A}$.
+		\item Niech $A, B \in \mathcal{A}$, $|B| > |A|$.\\
+		Niech $k \in \{0, 1, \ldots, n\}$ będzie największą liczbą $t$ taką, że $N_t(B) \leq N_t(A)$.\\
+		$k$ jest dobrze zdefiniowane, bo $N_0(B) = 0 = N_0(A)$.\\
+		Mamy $N_n(B) = |B| > |A| = N_n(A)$, więc $k < n$.\\
+		Dla $j \in \{k+1, k+2, \ldots, n\}$ mamy $N_j(B) > N_j(A)$, więc $N_j(B) \geq N_j(A) + 1$.
+		\begin{flalign*}
+			\left.
+			\begin{array}{l}
+				N_{k+1}(B) > N_{k+1}(A) \\
+				N_k(B) \leq N_k(A)
+			\end{array}
+			\right\} \implies \text{istnieje zadanie } z \in B \setminus A \text{ o deadlinie } = k+1 && &&
+		\end{flalign*}
+		Niech $A' = A \cup \{z\}$. Pokażemy, że $A'$ jest wolny od kar, używając lematu \ref{lemma:wolny-od-kar}.
+		\begin{itemize}[nosep]
+			\item Dla $t \in \{1, 2, \ldots, k\}$:\quad $N_t(A') = N_t(A) \leq t$, bo $A$ jest wolny od kar.
+			\item Dla $t \in \{k+1, k+2, \ldots, n\}$:\quad $N_t(A') = N_t(A) + 1 \leq N_t(B) \leq t$, bo $B$ jest wolny od kar.
+		\end{itemize}
+		Zatem $A'$ jest wolny od kar.
+	\end{enumerate}
+	Pokazaliśmy, że $(S, \mathcal{A})$ jest matroidem.
+\end{proof}
+
+Możemy do rozwiązania problemu szeregowania zadań użyć algorytmu Greedy (Algorytm \ref{alg:greedy}) dla matroidu $(S, \mathcal{A})$ maksymalizującego $\sum_{z_i \in A} w_i$ (czyli minimalizującego sumę kar zadań spóźnionych).
+
+Z twierdzenia Rado, Edmonds algorytm Greedy użyty do tego problemu zwraca rozwiązanie optymalne. Warunek z linii 5 algorytmu Greedy (tzn. czy $A \cup \{x_i\} \in \mathcal{A}$) można sprawdzić w czasie $\BO(n)$ -- lemat \ref{lemma:wolny-od-kar}, warunek 3.
+
+Złożoność czasowa algorytmu wynosi:
+\begin{flalign*}
+	\BO(n \log n + n \cdot n) = \BO(n^2) && &&
+\end{flalign*}
+
+\paragraph{Przykład}
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.2}
+	\begin{NiceTabular}{c|cccccccc}[margin,hvlines]
+		$i$   & 1  & 2  & 3  & 4  & 5  & 6  & 7  & 8  \\
+		\hline
+		$d_i$ & 3  & 2  & 2  & 3  & 1  & 4  & 6  & 5  \\
+		$w_i$ & 80 & 70 & 60 & 50 & 40 & 30 & 20 & 10
+	\end{NiceTabular}
+\end{table}
+
+Zadania są już posortowane w porządku nierosnącym względem wagi ($w_1 \geq w_2 \geq \ldots \geq w_8$). Kolejne iteracje algorytmu Greedy (poniżej $A$ wypisane w kolejności niemalejącej po deadlinach):
+\begin{enumerate}[nosep]
+	\item $A = (z_1)$
+	\item $A = (z_2, z_1)$
+	\item $A = (z_2, z_3, z_1)$
+	\item $A = (z_2, z_3, z_1)$ \quad ($z_4$ nie dodajemy, bo $N_3(A \cup \{z_4\}) = 4 > 3$)
+	\item $A = (z_2, z_3, z_1)$ \quad ($z_5$ nie dodajemy, bo $N_2(A \cup \{z_5\}) = 3 > 2$)
+	\item $A = (z_2, z_3, z_1, z_6)$
+	\item $A = (z_2, z_3, z_1, z_6, z_7)$
+	\item $A = (z_2, z_3, z_1, z_6, z_8, z_7)$
+\end{enumerate}
+
+Harmonogram (zadania terminowe posortowane po deadlinach, potem zadania spóźnione):
+\begin{flalign*}
+	(z_2,\ z_3,\ z_1,\ z_6,\ z_8,\ z_7,\ z_4,\ z_5) && &&
+\end{flalign*}
+\begin{flalign*}
+	\text{Suma kar} = w_4 + w_5 = 50 + 40 = 90 && &&
+\end{flalign*}
+
+% ════════════════════════════════════════════════════════════════
+\subsection{Algorytmy aproksymacyjne}
+% ════════════════════════════════════════════════════════════════
+
+Algorytmy aproksymacyjne stosuje się do problemów, dla których jest mała szansa na znalezienie algorytmu dokładnego (np. wielomianowego). Zamiast szukać rozwiązania optymalnego, szukamy rozwiązania ,,prawie optymalnego''.
+
+Niech $\Pi$ -- problem optymalizacyjny znalezienia maksimum lub minimum pewnej funkcji celu $f$.
+\begin{itemize}[nosep]
+	\item $D_\Pi$ -- zbiór instancji problemu $\Pi$.
+	\item $I \in D_\Pi$ -- instancja $\Pi$.
+	\item $S(I)$ -- zbiór rozwiązań dopuszczalnych dla instancji $I$.
+	\item $f: \bigcup_{I \in D_\Pi} S(I) \to \R$ -- funkcja celu. Możemy założyć, że
+	\begin{flalign*}
+		\forall I \in D_\Pi\ \forall s \in S(I)\ f(s) > 0 && &&
+	\end{flalign*}
+\end{itemize}
+
+Niech $c^*(I)$ oznacza wartość rozwiązania optymalnego instancji $I$, $c^*(I) > 0$.\\
+$A$ -- algorytm aproksymacyjny rozwiązujący $\Pi$.\\
+$c(I)$ -- wartość rozwiązania znalezionego przez algorytm $A$ dla instancji $I$, $c(I) > 0$.
+
+\begin{definition}
+	Mówimy, że algorytm $A$ ma \underline{współczynnik aproksymacji} $\rho(n)$, jeśli dla każdej instancji $I \in D_\Pi$ rozmiaru $n$ zachodzi
+	\begin{flalign*}
+		\max\left\{\frac{c(I)}{c^*(I)},\ \frac{c^*(I)}{c(I)}\right\} \leq \rho(n) && &&
+	\end{flalign*}
+	Wtedy $A$ nazywamy algorytmem $\rho(n)$-aproksymacyjnym.
+\end{definition}
+
+Zauważmy, że:
+\begin{flalign*}
+	\left.
+	\begin{array}{ll}
+		\text{dla problemu maksymalizacji:} & 0 < c(I) \leq c^*(I) \\[0.5ex]
+		\text{dla problemu minimalizacji:}  & 0 < c^*(I) \leq c(I)
+	\end{array}
+	\right\} \implies \max\left\{\frac{c(I)}{c^*(I)},\ \frac{c^*(I)}{c(I)}\right\} \geq 1 && &&
+\end{flalign*}
+
+Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \underline{współczynnik aproksymacji} algorytmu $A$ wynosi $\rho$ i $A$ nazywamy algorytmem $\rho$-aproksymacyjnym.
+
+% ════════════════════════════════════════════════════════════════
+\subsection{Problem pokrycia wierzchołkowego}
+% ════════════════════════════════════════════════════════════════
+
+\begin{definition}
+	Niech $G = (V, E)$ -- graf. \underline{Pokryciem wierzchołkowym} (Vertex Cover, VC) grafu $G$ nazywamy zbiór $W \subseteq V$ taki, że dla każdej krawędzi $e \in E$ zachodzi $W \cap e \neq \emptyset$ -- czyli każda krawędź $G$ ma co najmniej jeden koniec w $W$.
+\end{definition}
+
+\paragraph{Problem pokrycia wierzchołkowego}
+\begin{itemize}[nosep]
+	\item Instancja: graf $G$.
+	\item Problem: znaleźć pokrycie wierzchołkowe grafu $G$ o minimalnej liczbie wierzchołków.
+\end{itemize}
+
+\paragraph{Przykład}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.6cm, inner sep=1pt}]
+		\node[fill=accent!25] (a) at (0, 2) {$a$};
+		\node              (b) at (2, 2) {$b$};
+		\node[fill=accent!25] (e) at (1, 1) {$e$};
+		\node              (c) at (0, 0) {$c$};
+		\node[fill=accent!25] (d) at (2, 0) {$d$};
+		\node[fill=accent!25] (f) at (4, 1) {$f$};
+		\draw (a) -- (b);
+		\draw (a) -- (c);
+		\draw (a) -- (e);
+		\draw (b) -- (d);
+		\draw (b) -- (e);
+		\draw (c) -- (d);
+		\draw (d) -- (e);
+		\draw (d) -- (f);
+	\end{tikzpicture}
+\end{figure}
+$W = \{a, e, d, f\}$ jest pokryciem wierzchołkowym powyższego grafu $G$ (zaznaczone wyróżnione wierzchołki).
+
+\paragraph{Algorytm Approx Vertex Cover}
+
+\begin{alg}{Approx Vertex Cover}{alg:avc}
+	\FunctionNN{AVC}{$G$}
+	\State $C \Assign \emptyset$ \Comment{$C$ -- rozwiązanie}
+	\State $F \Assign E(G)$ \Comment{$F$ -- zbiór dotychczas niepokrytych krawędzi}
+	\While{$F \neq \emptyset$}
+	\State wybierz dowolną krawędź $uv \in F$
+	\State $C \Assign C \cup \{u, v\}$
+	\State usuń z $F$ wszystkie krawędzie incydentne z $u$ lub z $v$
+	\EndWhile
+	\State \Return $C$
+	\EndFunction
+\end{alg}
+
+\paragraph{Przykład}
+Rozważmy graf z poprzedniego przykładu.
+
+Pierwszy przebieg algorytmu może wybrać kolejno krawędzie $ab$ i $cd$:
+\begin{itemize}[nosep]
+	\item Po wybraniu $ab$ usuwamy z $F$ krawędzie $ab, ac, ae, bd, be$, zostają $cd, de, df$.
+	\item Po wybraniu $cd$ usuwamy z $F$ krawędzie $cd, de, df$ -- $F = \emptyset$.
+\end{itemize}
+Algorytm zwraca $C = \{a, b, c, d\}$.
+
+Inny przebieg algorytmu może wybrać kolejno krawędzie $df$, $be$ i $ac$:
+\begin{itemize}[nosep]
+	\item Po wybraniu $df$ usuwamy z $F$ krawędzie $df, de, bd, cd$.
+	\item Po wybraniu $be$ usuwamy z $F$ krawędzie $be, ae, ab$.
+	\item Po wybraniu $ac$ usuwamy ostatnią krawędź $ac$ -- $F = \emptyset$.
+\end{itemize}
+Algorytm zwraca $C = \{d, f, e, b, a, c\}$.
