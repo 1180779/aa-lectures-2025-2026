@@ -20,12 +20,23 @@ jobs:
       - name: Send to Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          RELEASE_BODY: ${{ github.event.release.body }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
           PDF_FILE=$(find assets -name "*.pdf" | head -n 1)
-          TAG="${{ github.event.release.tag_name }}"
-          BODY=$(echo "${{ github.event.release.body }}" | head -c 1800)
+
+          if [ -z "$PDF_FILE" ]; then
+            echo "No PDF found in release assets"
+            exit 1
+          fi
+
+          # Use jq to safely build the JSON payload with proper escaping
+          PAYLOAD=$(jq -n \
+            --arg tag "$RELEASE_TAG" \
+            --arg body "$(echo "$RELEASE_BODY" | head -c 1800)" \
+            '{content: "🚀 **New Release: \($tag)**\n\n\($body)"}')
 
           curl -f \
-            -F "payload_json={\"content\": \"🚀 **New Release: ${TAG}**\n\n${BODY}\"}" \
+            -F "payload_json=$PAYLOAD" \
             -F "file=@${PDF_FILE}" \
-            "$DISCORD_WEBHOOK"  
+            "$DISCORD_WEBHOOK"
