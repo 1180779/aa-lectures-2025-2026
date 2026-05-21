@@ -1,0 +1,31 @@
+name: Notify Discord on Release
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir assets
+          gh release download "${{ github.event.release.tag_name }}" \
+            --repo "${{ github.repository }}" \
+            --pattern "*.pdf" \
+            --dir assets
+      - name: Send to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          PDF_FILE=$(find assets -name "*.pdf" | head -n 1)
+          TAG="${{ github.event.release.tag_name }}"
+          BODY=$(echo "${{ github.event.release.body }}" | head -c 1800)
+
+          curl -f \
+            -F "payload_json={\"content\": \"🚀 **New Release: ${TAG}**\n\n${BODY}\"}" \
+            -F "file=@${PDF_FILE}" \
+            "$DISCORD_WEBHOOK"  
