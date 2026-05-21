@@ -25,8 +25,10 @@ $C$ -- alfabet, $f: C \to \N$ funkcja częstości, $d_T(c)$ -- głębokość li�
 	
 	Niech $T'$ będzie drzewem powstałym z $T$ przez zamianę liści $x$ i $a$.
 	\begin{flalign*}
-		B(T) - B(T') &= \sum_{c \in C} f(c) \cdot d_T(c) - \sum_{c \in C} f(c) \cdot d_{T'}(c) = f(a) \cdot d_T(a) + f(x) \cdot d_T(x) - f(a) \cdot d_{T'}(a) - f(x) \cdot d_{T'}(x) = && \\
-		&= f(a) \cdot d_T(a) + f(x) \cdot d_T(x) - f(a) \cdot d_T(x) - f(x) \cdot d_T(a) = f(a) (d_T(a) - d_T(x)) - f(x) (d_T(a) - d_T(x)) = && \\
+		B(T) - B(T') &= \sum_{c \in C} f(c) \cdot d_T(c) - \sum_{c \in C} f(c) \cdot d_{T'}(c) =  && \\ 
+		&= f(a) \cdot d_T(a) + f(x) \cdot d_T(x) - f(a) \cdot d_{T'}(a) - f(x) \cdot d_{T'}(x) = && \\
+		&= f(a) \cdot d_T(a) + f(x) \cdot d_T(x) - f(a) \cdot d_T(x) - f(x) \cdot d_T(a) =  && \\ 
+		&= f(a) (d_T(a) - d_T(x)) - f(x) (d_T(a) - d_T(x)) = && \\
 		&= \underbrace{(f(a) - f(x))}_{\geq 0} \underbrace{(d_T(a) - d_T(x))}_{\geq 0} \geq 0 &&
 	\end{flalign*}
 	
@@ -47,7 +49,8 @@ Z lematu~\ref{lemma:huffman:1} wynika, że można zacząć konstrukcję optymaln
 	\begin{flalign*}
 		B(T) &= \sum_{c \in A} f(c) \cdot d_T(c) = \sum_{c \in A \setminus \{x, y\}} f(c) \cdot d_T(c) + f(x) \cdot d_T(x) + f(y) \cdot d_T(y) = && \\
 		&= \sum_{c \in A \setminus \{x, y\}} f'(c) \cdot d_{T'}(c) + f(x) (d_{T'}(z) + 1) + f(y) (d_{T'}(z) + 1) = && \\
-		&= \sum_{c \in A \setminus \{x, y\}} f'(c) \cdot d_{T'}(c) + d_{T'}(z) (f(x) + f(y)) + f(x) + f(y) = \sum_{c \in A' \setminus \{z\}} f'(c) \cdot d_{T'}(c) + d_{T'}(z) \cdot f'(z) + f(x) + f(y) = && \\
+		&= \sum_{c \in A \setminus \{x, y\}} f'(c) \cdot d_{T'}(c) + d_{T'}(z) (f(x) + f(y)) + f(x) + f(y) =  && \\
+		&= \sum_{c \in A' \setminus \{z\}} f'(c) \cdot d_{T'}(c) + d_{T'}(z) \cdot f'(z) + f(x) + f(y) = && \\
 		&= \sum_{c \in A'} f'(c) \cdot d_{T'}(c) + f(x) + f(y) = B(T') + f(x) + f(y) &&
 	\end{flalign*}
 	Stąd $B(T') = B(T) - f(x) - f(y)$.
@@ -185,4 +188,6 @@ W \textbf{Problemie 2} (dla $3 \mid n$) dla uszeregowania $z_{i_1}, z_{i_2}, \do
 	Po pewnej liczbie takich zamian otrzymujemy permutację $\Pi_0 = (j_1, \dots, j_n)$ minimalizującą $f$ taką, że $t_{j_1} \leq t_{j_2} \leq \dots \leq t_{j_n}$.
 \end{proof}
 
-\textbf{Wniosek:} Nasze algorytmy szeregowania zadań są poprawne.
+\begin{conclusion}
+	Nasze algorytmy szeregowania zadań są poprawne.
+\end{conclusion}

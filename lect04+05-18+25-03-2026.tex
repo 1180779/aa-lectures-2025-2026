@@ -295,11 +295,11 @@ W celu znalezienia rozwiązania wywołujemy: \Call{MatrixChainMultiply}{$A, s, 1
 
 Aby algorytm zadziałał dobrze, problem musi spełniać warunki:
 \begin{enumerate}
-	\item \textbf{Własność optymalnej podstruktury} -- optymalne rozwiązanie problemu można skonstruować z optymalnych rozwiązań podproblemów.
-	\item \textbf{Własność wspólnych podproblemów} -- sytuacja, gdy prosty algorytm rekurencyjny obliczałby rozwiązania tych samych podproblemów wielokrotnie. Liczba podproblemów powinna być ,,mała''.
+	\item \underline{Własność optymalnej podstruktury} -- optymalne rozwiązanie problemu można skonstruować z optymalnych rozwiązań podproblemów.
+	\item \underline{Własność wspólnych podproblemów} -- sytuacja, gdy prosty algorytm rekurencyjny obliczałby rozwiązania tych samych podproblemów wielokrotnie. Liczba podproblemów powinna być ,,mała''.
 \end{enumerate}
 
-W klasycznej metodzie programowania dynamicznego rozwiązanie jest budowane od dołu do góry -- od podproblemów najmniejszych do największych. Jest też podejście, w którym rozwiązanie jest budowane od góry do dołu, podobnie jak w prostym algorytmie rekurencyjnym, ale z tą różnicą, że unikamy obliczania tych samych podproblemów wielokrotnie. To podejście nazywa się \textbf{spamiętywaniem} (\textit{memoization}).
+W klasycznej metodzie programowania dynamicznego rozwiązanie jest budowane od dołu do góry -- od podproblemów najmniejszych do największych. Jest też podejście, w którym rozwiązanie jest budowane od góry do dołu, podobnie jak w prostym algorytmie rekurencyjnym, ale z tą różnicą, że unikamy obliczania tych samych podproblemów wielokrotnie. To podejście nazywa się \underline{spamiętywaniem} (\textit{memoization}).
 
 \paragraph{Problem mnożenia ciągu macierzy ze spamiętywaniem}
 Algorytm oblicza tablice $m$ i $s$ jak poprzednio, ale w inny sposób. Dopóki podproblem nie jest rozwiązany, $m(i, j)$ przechowuje $\infty$. Po rozwiązaniu podproblemu $(i, j)$ umieszczamy w $m(i, j)$ odpowiednią wartość i od tej pory używamy jej bez obliczania.
