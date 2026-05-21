@@ -89,7 +89,7 @@ Operacją dominującą jest mnożenie w linii 5. Mamy $p \cdot q \cdot r$ mnoże
 \subsection{Problem mnożenia ciągu macierzy}
 % ════════════════════════════════════════════════════════════════
 
-\paragraph{Przykład:}
+\begin{example}{Mnożenie ciągu macierzy}
 $(A_1, A_2, A_3)$ gdzie $A_1$ -- macierz $5 \times 10$, $A_2$ -- macierz $10 \times 3$, $A_3$ -- macierz $3 \times 2$.
 Ile potrzeba mnożeń skalarnych (mnożenia liczb) do obliczenia iloczynu $A_1 \cdot A_2 \cdot A_3$?
 \begin{flalign*}
@@ -101,13 +101,15 @@ Ile potrzeba mnożeń skalarnych (mnożenia liczb) do obliczenia iloczynu $A_1 \
 	\item[II sposób:] $A_1 \cdot (A_2 \cdot A_3) = 10 \cdot 3 \cdot 2 + 5 \cdot 10 \cdot 2 = 60 + 100 = 160$
 \end{itemize}
 II sposób jest szybszy.
+\end{example}
 
 \paragraph{Problem:}
 Dla danego ciągu macierzy $(A_1, A_2, \dots, A_n)$, gdzie $A_i$ jest macierzą $p_{i-1} \times p_i$, znajdź kolejność wykonywania mnożeń minimalizującą liczbę mnożeń skalarnych użytych do obliczenia iloczynu $A_1 \cdot A_2 \cdot \dots \cdot A_n$.
 
 Ile jest różnych sposobów obliczenia tego iloczynu? Innymi słowy, na ile sposobów możemy poprawnie wstawić nawiasy w iloczynie $A_1 \cdot A_2 \cdot \dots \cdot A_n$?
 
-\paragraph{Przykład:} $A_1 \cdot A_2 \cdot A_3 \cdot A_4$ \quad ($n = 4$)
+\begin{example}{Kolejności nawiasowania dla $n=4$}
+$A_1 \cdot A_2 \cdot A_3 \cdot A_4$ \quad ($n = 4$)
 \begin{itemize}
 	\item $((A_1 \cdot A_2) \cdot A_3) \cdot A_4$
 	\item $(A_1 \cdot (A_2 \cdot A_3)) \cdot A_4$
@@ -116,6 +118,7 @@ Ile jest różnych sposobów obliczenia tego iloczynu? Innymi słowy, na ile spo
 	\item $(A_1 \cdot A_2) \cdot (A_3 \cdot A_4)$
 \end{itemize}
 Zatem mamy 5 sposobów.
+\end{example}
 
 Sprawdźmy czy umiemy rozwiązać ten problem szybko poprzez sprawdzenie wszystkich możliwości.
 Niech $P(n)$ -- liczba sposobów wstawienia nawiasów w iloczynie $n$ macierzy.
@@ -180,7 +183,8 @@ Jeśli zaimplementujemy po prostu tę formułę rekurencyjną otrzymamy alg. wyk
 
 Mamy 3 pętle (po $l, i, k$) i liczbę iteracji każdej z tych pętli można ograniczyć przez $n$, zatem złożoność czasowa to $\BO(n^3)$.
 
-\paragraph{Przykład:} $n=5$, $p=(4, 5, 2, 1, 2, 3)$. \\
+\begin{example}{Optymalna kolejność mnożenia macierzy dla $n=5$}
+$n=5$, $p=(4, 5, 2, 1, 2, 3)$. \\
 $A_1 \text{ - } 4 \times 5,\ A_2 \text{ - } 5 \times 2,\ A_3 \text{ - } 2 \times 1,\ A_4 \text{ - } 1 \times 2,\ A_5 \text{ - } 2 \times 3$.
 
 \begin{minipage}{0.45\linewidth}
@@ -287,6 +291,7 @@ W celu znalezienia rozwiązania wywołujemy: \Call{MatrixChainMultiply}{$A, s, 1
 	& s(1, 3) = 1 \implies (A_1 \cdot (A_2 \cdot A_3))(A_4 \cdot A_5) \qquad s(4, 5) = 4 \implies \text{bez zmian} && \\
 	& s(2, 3) = 2 \implies (A_1 \cdot (A_2 \cdot A_3))(A_4 \cdot A_5) &&
 \end{flalign*}
+\end{example}
 
 Aby algorytm zadziałał dobrze, problem musi spełniać warunki:
 \begin{enumerate}
@@ -348,9 +353,10 @@ Ostatecznie złożoność algorytmu wynosi $\BO(n^3)$.
 Niech $X = (x_1, \dots, x_m)$ -- ciąg. \\
 $Z = (z_1, \dots, z_k)$ jest podciągiem $X$, jeśli istnieje rosnący ciąg indeksów $1 \leq i_1 < i_2 < \dots < i_k \leq m$ takich, że dla każdego $j \in \{1, \dots, k\}$, $z_j = x_{i_j}$.
 
-\paragraph{Przykład:}
+\begin{example}{Podciąg}
 $X = (A, B, C, B, D, A, B)$, $Z = (B, C, D, B)$.
 Indeksy: $(2, 3, 5, 7)$.
+\end{example}
 
 \paragraph{Problem:}
 Dane są ciągi $X = (x_1, \dots, x_m)$ oraz $Y = (y_1, \dots, y_n)$. 

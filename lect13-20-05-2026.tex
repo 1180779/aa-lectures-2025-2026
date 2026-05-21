@@ -20,7 +20,7 @@ Znaleźć: $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i$ jest największa 
 	\EndFunction
 \end{alg}
 
-\begin{alg}{Procedura Trim}{alg:trim}
+\begin{alg}{Procedura Trim}{alg:trim:lect13}
 	\FunctionNN{Trim}{$L, \delta$} \Comment{$L = (y_1, \dots, y_m)$}
 	\State $m \Assign |L|$
 	\State $L' \Assign (y_1)$
@@ -35,7 +35,7 @@ Znaleźć: $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i$ jest największa 
 	\EndFunction
 \end{alg}
 
-\begin{example}
+\begin{example}{Aproksymacja sumy podzbioru}
 	$S = \{205, 203, 400, 200\}$, $t = 650$, $\epsilon = 0.4$.
 	
 	$n = 4$, $\delta = \frac{\epsilon}{2n} = \frac{0.4}{8} = 0.05$.
@@ -78,25 +78,25 @@ Znaleźć: $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i$ jest największa 
 	
 	Pokażemy przez indukcję po $i$, że dla każdego $y \in P_i$, $y \le t$ istnieje $z \in L_i$ taki, że:
 	\begin{equation} \label{eq:subset_sum_ind}
-		\frac{y}{\left(1 + \frac{\epsilon}{2n}\right)^i} \le z \le y \quad \text{(*)} \quad \text{(po $i$-tym obrocie pętli)}
+		\frac{y}{\left(1 + \frac{\epsilon}{2n}\right)^i} \le z \le y \quad \text{(po $i$-tym obrocie pętli)}
 	\end{equation}
 	
 	Dla $i = 1$: $P_1 = \{0, x_1\}$, $L_1 = (0, x_1)$ -- zachodzi oczywiście.
 	
-	Załóżmy, że (*) zachodzi dla jakiegoś $i < n$. Pokażemy, że (*) zachodzi dla $i + 1$. \\
+	Załóżmy, że \eqref{eq:subset_sum_ind} zachodzi dla jakiegoś $i < n$. Pokażemy, że \eqref{eq:subset_sum_ind} zachodzi dla $i + 1$. \\
 	Niech $y \in P_{i+1} = P_i \cup (P_i + x_{i+1})$.
 	
 	\textbf{Przypadek 1:} $y \in P_i$. \\
 	Z założenia indukcyjnego istnieje $z \in L_i$ takie, że $\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} \le z \le y$.
 	
-	Jeśli $z \in L_{i+1}$, to $\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^{i+1}} \le \frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} \le z \le y$, więc (*) zachodzi.
+	Jeśli $z \in L_{i+1}$, to $\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^{i+1}} \le \frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} \le z \le y$, więc \eqref{eq:subset_sum_ind} zachodzi.
 	
 	Jeśli $z \notin L_{i+1}$ (został usunięty przez Trim), to istnieje $z' \in L_{i+1}$ takie, że $z' \le z \le z'\left(1+\frac{\epsilon}{2n}\right)$, więc $\frac{z}{1+\frac{\epsilon}{2n}} \le z' \le z$. \\
 	Mamy:
 	\[
 	\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^{i+1}} = \frac{1}{1+\frac{\epsilon}{2n}} \frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} \overset{\text{zał. ind.}}{\le} \frac{z}{1+\frac{\epsilon}{2n}} \le z' \le z \le y,
 	\]
-	więc (*) zachodzi.
+	więc \eqref{eq:subset_sum_ind} zachodzi.
 	
 	\textbf{Przypadek 2:} $y \in P_i + x_{i+1}$. \\
 	Wtedy $y = y' + x_{i+1}$, gdzie $y' \in P_i$. \\
@@ -106,7 +106,7 @@ Znaleźć: $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i$ jest największa 
 	\[
 	\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^{i+1}} \le \frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} = \frac{y' + x_{i+1}}{\left(1+\frac{\epsilon}{2n}\right)^i} \le \frac{y'}{\left(1+\frac{\epsilon}{2n}\right)^i} + x_{i+1} \le z + x_{i+1} \le y' + x_{i+1} = y,
 	\]
-	więc (*) zachodzi.
+	więc \eqref{eq:subset_sum_ind} zachodzi.
 	
 	Jeśli $z + x_{i+1} \notin L_{i+1}$ (został usunięty przez Trim), to istnieje $z' \in L_{i+1}$ takie, że $z' \le z + x_{i+1} \le z'\left(1+\frac{\epsilon}{2n}\right)$, więc $\frac{z+x_{i+1}}{1+\frac{\epsilon}{2n}} \le z' \le z + x_{i+1}$. \\
 	Mamy:
@@ -115,9 +115,9 @@ Znaleźć: $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i$ jest największa 
 		&\le \frac{1}{1+\frac{\epsilon}{2n}}\left(\frac{y'}{\left(1+\frac{\epsilon}{2n}\right)^i} + x_{i+1}\right) \overset{\text{zał. ind.}}{\le} \frac{1}{1+\frac{\epsilon}{2n}}(z + x_{i+1}) \\
 		&\le z' \le z + x_{i+1} \le y' + x_{i+1} = y
 	\end{align*}
-	Więc (*) zachodzi.
+	Więc \eqref{eq:subset_sum_ind} zachodzi.
 	
-	W szczególności (*) zachodzi dla $y^* \in P_n$. Zatem istnieje $z \in L_n$ takie, że $\frac{y^*}{\left(1+\frac{\epsilon}{2n}\right)^n} \le z \le y^*$, więc $\frac{y^*}{z} \le \left(1+\frac{\epsilon}{2n}\right)^n$. \\
+	W szczególności \eqref{eq:subset_sum_ind} zachodzi dla $y^* \in P_n$. Zatem istnieje $z \in L_n$ takie, że $\frac{y^*}{\left(1+\frac{\epsilon}{2n}\right)^n} \le z \le y^*$, więc $\frac{y^*}{z} \le \left(1+\frac{\epsilon}{2n}\right)^n$. \\
 	Ale $z^* \ge z$, więc $\frac{y^*}{z^*} \le \frac{y^*}{z} \le \left(1+\frac{\epsilon}{2n}\right)^n$. \\
 	\begin{align*}
 		\frac{y^*}{z^*} &\le \left(1+\frac{\epsilon}{2n}\right)^n \overset{\text{Fakt 1}}{\le} \lim_{n\to\infty} \left(1+\frac{\epsilon}{2n}\right)^n = \lim_{n\to\infty} \left(\left(1+\frac{\epsilon}{2n}\right)^{\frac{2n}{\epsilon}}\right)^{\frac{\epsilon}{2}} = e^{\frac{\epsilon}{2}}

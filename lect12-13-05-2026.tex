@@ -76,9 +76,10 @@ Pokażemy w pełni wielomianowy schemat aproksymacyjny dla tego problemu.
 
 \paragraph{Pomysł:} będziemy skracać listy $L_i$. Dla $0 < \delta < 1$ z listy $L$ robimy krótszą listę $L'$ taką, że dla każdego elementu $y$ usuniętego z $L$ istnieje element $z$ w $L'$, który jest blisko niego, dokładnie $\frac{y}{1 + \delta} \leq z \leq y$.
 
-\paragraph{Przykład}
+\begin{example}{Procedura Trim}
 $L = (15, 16, 17, 25, 27, 28, 35, 36, 37)$, $\delta = 0{,}1$.\\
 $L' = (15, 17, 25, 28, 35)$.
+\end{example}
 
 Następująca procedura $\Call{Trim}{L, \delta}$ realizuje ten pomysł.\\
 $L = (y_1, \ldots, y_m)$ -- posortowana rosnąco lista, $0 < \delta < 1$.
@@ -165,7 +166,7 @@ Oto schemat aproksymacyjny:
 	\end{itemize}
 \end{proof}
 
-\paragraph{Przykład}
+\begin{example}{Redukcja 3-SAT do SUBSET-SUM}
 $C_1 = (x_1 \vee \overline{x_2} \vee \overline{x_3})$, \quad $C_2 = (\overline{x_1} \vee \overline{x_2} \vee \overline{x_3})$,\\
 $C_3 = (\overline{x_1} \vee \overline{x_2} \vee x_3)$, \quad $C_4 = (x_1 \vee x_2 \vee x_3)$.\\
 $\Phi = C_1 \wedge C_2 \wedge C_3 \wedge C_4$. \quad $n = 3$, $m = 4$.
@@ -200,3 +201,4 @@ Dla wartościowania $x_1 = 1$, $x_2 = 0$, $x_3 = 0$ otrzymujemy:
 	S' = \{r_1, r_2', r_3', s_1, s_2', s_3, s_4, s_4'\} && &&
 \end{flalign*}
 i $\sum_{x \in S'} x = t$.
+\end{example}

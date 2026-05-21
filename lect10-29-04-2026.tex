@@ -61,7 +61,7 @@ Złożoność czasowa algorytmu wynosi:
 	\BO(n \log n + n \cdot n) = \BO(n^2) && &&
 \end{flalign*}
 
-\paragraph{Przykład}
+\begin{example}{Szeregowanie zadań z deadlinami}
 \begin{table}[H]
 	\centering
 	\renewcommand{\arraystretch}{1.2}
@@ -92,6 +92,7 @@ Harmonogram (zadania terminowe posortowane po deadlinach, potem zadania spóźni
 \begin{flalign*}
 	\text{Suma kar} = w_4 + w_5 = 50 + 40 = 90 && &&
 \end{flalign*}
+\end{example}
 
 % ════════════════════════════════════════════════════════════════
 \subsection{Algorytmy aproksymacyjne}
@@ -148,7 +149,7 @@ Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \underline{współ
 	\item Problem: znaleźć pokrycie wierzchołkowe grafu $G$ o minimalnej liczbie wierzchołków.
 \end{itemize}
 
-\paragraph{Przykład}
+\begin{example}{Pokrycie wierzchołkowe}
 \begin{figure}[H]
 	\centering
 	\begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.6cm, inner sep=1pt}]
@@ -169,6 +170,7 @@ Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \underline{współ
 	\end{tikzpicture}
 \end{figure}
 $W = \{a, e, d, f\}$ jest pokryciem wierzchołkowym powyższego grafu $G$ (zaznaczone wyróżnione wierzchołki).
+\end{example}
 
 \paragraph{Algorytm Approx Vertex Cover}
 
@@ -185,7 +187,7 @@ $W = \{a, e, d, f\}$ jest pokryciem wierzchołkowym powyższego grafu $G$ (zazna
 	\EndFunction
 \end{alg}
 
-\paragraph{Przykład}
+\begin{example}{Algorytm AVC -- przykład}
 Rozważmy graf z poprzedniego przykładu.
 
 Pierwszy przebieg algorytmu może wybrać kolejno krawędzie $ab$ i $cd$:
@@ -202,3 +204,4 @@ Inny przebieg algorytmu może wybrać kolejno krawędzie $df$, $be$ i $ac$:
 	\item Po wybraniu $ac$ usuwamy ostatnią krawędź $ac$ -- $F = \emptyset$.
 \end{itemize}
 Algorytm zwraca $C = \{d, f, e, b, a, c\}$.
+\end{example}
