@@ -55,36 +55,44 @@ AVC zwraca pokrycie złożone z $2m$ wierzchołków, natomiast optymalne pokryci
 	Rodzina $\mathcal{A} \subseteq \mathcal{F}$ jest \underline{pokryciem} zbioru $X$, jeśli $\bigcup_{S \in \mathcal{A}} S = X$.
 \end{definition}
 
+\definecolor{Scol1}{HTML}{1F77B4}  % blue
+\definecolor{Scol2}{HTML}{D62728}  % red
+\definecolor{Scol3}{HTML}{2CA02C}  % green
+\definecolor{Scol4}{HTML}{FF7F0E}  % orange
+\definecolor{Scol5}{HTML}{9467BD}  % purple
+\definecolor{Scol6}{HTML}{17BECF}  % cyan
+
+\newcommand{\Sone}{\textcolor{Scol1}{S_1}}
+\newcommand{\Stwo}{\textcolor{Scol2}{S_2}}
+\newcommand{\Sthree}{\textcolor{Scol3}{S_3}}
+\newcommand{\Sfour}{\textcolor{Scol4}{S_4}}
+\newcommand{\Sfive}{\textcolor{Scol5}{S_5}}
+\newcommand{\Ssix}{\textcolor{Scol6}{S_6}}
+
 \begin{example}{Pokrycie zbioru}
 	\begin{figure}[H]
 		\centering
-		\begin{tikzpicture}[scale=0.95]
+		\begin{tikzpicture}[scale=0.9, thick]
 			% Współrzędne elementów (siatka 3x3)
-			\coordinate (e1) at (-2.4, 2);
-			\coordinate (e2) at (0, 2);
-			\coordinate (e3) at (2.4, 2);
-			\coordinate (e4) at (-2.4, 0);
-			\coordinate (e5) at (0, 0);
-			\coordinate (e6) at (2.4, 0);
-			\coordinate (e7) at (-2.4, -2);
-			\coordinate (e8) at (0, -2);
-			\coordinate (e9) at (2.4, -2);
+			\coordinate (e1) at (-2.4, 2);  \coordinate (e2) at (0, 2);  \coordinate (e3) at (2.4, 2);
+			\coordinate (e4) at (-2.4, 0);  \coordinate (e5) at (0, 0);  \coordinate (e6) at (2.4, 0);
+			\coordinate (e7) at (-2.4,-2);  \coordinate (e8) at (0,-2);  \coordinate (e9) at (2.4,-2);
 			
 			% Elipsy zbiorów
-			\draw (0, -1)    ellipse (3.2  and 1.7);   % S_1
-			\draw (0, 2)     ellipse (3.2  and 0.65);  % S_2
-			\draw (-0.22, 1) ellipse (0.55 and 1.55);  % S_3
-			\draw (0.22, 1)  ellipse (0.55 and 1.55);  % S_6
-			\draw (-1.2, 0)  ellipse (1.5  and 0.55);  % S_4
-			\draw (2.4, 1)   ellipse (0.55 and 1.55);  % S_5
+			\draw[Scol1, rotate around={20:(0.5,-1)}] (0.5, -1) ellipse (3.2 and 1.9); % S_1
+			\draw[Scol2] (-2.4, 0)   ellipse (0.55 and 2.4);                            % S_2
+			\draw[Scol3] (0, 2)      ellipse (2.9 and 0.55);                            % S_3 (first row)
+			\draw[Scol6] (0, 1)      ellipse (0.55 and 1.5);                            % S_6 (top two of middle col)
+			\draw[Scol4] (-1.2, 0)   ellipse (1.5  and 0.55);                           % S_4
+			\draw[Scol5] (2.4, 0)    ellipse (0.55 and 2.4);                            % S_5
 			
 			% Etykiety zbiorów
-			\node[anchor=north] at (0, -2.85)   {$S_1$};
-			\node[anchor=east]  at (-3.35, 2)   {$S_2$};
-			\node[anchor=south] at (-0.45, 2.7) {$S_3$};
-			\node[anchor=south] at (0.5, 2.7)   {$S_6$};
-			\node[anchor=east]  at (-3.35, 0)   {$S_4$};
-			\node[anchor=south] at (2.7, 2.7)   {$S_5$};
+			\node[Scol1] at (-0.5, -3.5) {$S_1$};
+			\node[Scol2] at (-2.4,  2.7) {$S_2$};
+			\node[Scol3] at (-3.3,  2.0) {$S_3$};
+			\node[Scol6] at ( 0.0,  2.8) {$S_6$};
+			\node[Scol4] at (-3.3,  0)   {$S_4$};
+			\node[Scol5] at ( 2.4,  2.7) {$S_5$};
 			
 			% Punkty (elementy zbioru X)
 			\foreach \p in {e1,e2,e3,e4,e5,e6,e7,e8,e9} {
@@ -92,7 +100,8 @@ AVC zwraca pokrycie złożone z $2m$ wierzchołków, natomiast optymalne pokryci
 			}
 		\end{tikzpicture}
 	\end{figure}
-	$\mathcal{F} = \{S_1, S_2, S_3, S_4, S_5, S_6\}$. \quad $\{S_1, S_2, S_3\}$ -- pokrycie.
+	$\mathcal{F} = \{\Sone, \Stwo, \Sthree, \Sfour, \Sfive, \Ssix\}$. \quad
+	$\{\Sone, \Stwo, \Sthree\}$ -- pokrycie.
 \end{example}
 
 \paragraph{Problem pokrycia zbioru}
