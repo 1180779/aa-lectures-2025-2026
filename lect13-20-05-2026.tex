@@ -1,0 +1,251 @@
+% ════════════════════════════════════════════════════════════════
+\section{Wykład 13}
+\subsection{Problem sumy podzbioru}
+% ════════════════════════════════════════════════════════════════
+
+Dane: $S = \{x_1, x_2, \dots, x_n\} \subseteq \N$, $t \in \N$. \\
+Znaleźć: $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i$ jest największa możliwa, ale $\le t$.
+
+\begin{alg}{Aproksymacja sumy podzbioru}{alg:approx_subset_sum}
+	\FunctionNN{ApproxSubsetSum}{$S, t, \epsilon$}
+	\State $n \Assign |S|$
+	\State $L_0 \Assign (0)$
+	\State $\delta \Assign \frac{\epsilon}{2n}$
+	\For{$i \Assign 1$ \To $n$}
+	\State $L_i \Assign \Call{MergeLists}{L_{i-1}, L_{i-1} + x_i}$
+	\State usuń z $L_i$ wszystkie elementy $> t$
+	\State $L_i \Assign \Call{Trim}{L_i, \delta}$ \Comment{$\delta = \frac{\epsilon}{2n}$}
+	\EndFor
+	\State \Return największy element z $L_n$ \Comment{$z^*$ -- liczba zwrócona przez algorytm}
+	\EndFunction
+\end{alg}
+
+\begin{alg}{Procedura Trim}{alg:trim}
+	\FunctionNN{Trim}{$L, \delta$} \Comment{$L = (y_1, \dots, y_m)$}
+	\State $m \Assign |L|$
+	\State $L' \Assign (y_1)$
+	\State $last \Assign y_1$
+	\For{$i \Assign 2$ \To $m$}
+	\If{$y_i > last \cdot (1 + \delta)$}
+	\State dodaj $y_i$ na koniec $L'$
+	\State $last \Assign y_i$
+	\EndIf
+	\EndFor
+	\State \Return $L'$
+	\EndFunction
+\end{alg}
+
+\begin{example}
+	$S = \{205, 203, 400, 200\}$, $t = 650$, $\epsilon = 0.4$.
+	
+	$n = 4$, $\delta = \frac{\epsilon}{2n} = \frac{0.4}{8} = 0.05$.
+	
+	\begin{flalign*}
+		L_0 &= (0) && \\
+		L_1 &= (0, 205) && \\
+		L_2 &= (0, 203, 205, 408) && \text{(po linii 4)} \\
+		L_2 &= (0, 203, 205, 408) && \text{(po linii 5)} \\
+		L_2 &= (0, 203, 408) && \text{(po linii 6)} \\
+		L_3 &= (0, 203, 400, 408, 603, 808) && \\
+		L_3 &= (0, 203, 400, 408, 603) && \\
+		L_3 &= (0, 203, 400, 603) && \\
+		L_4 &= (0, 200, 203, 400, 403, 600, 603, 803) && \\
+		L_4 &= (0, 200, 203, 400, 403, 600, 603) && \\
+		L_4 &= (0, 200, 400, 600) &&
+	\end{flalign*}
+	
+	$z^* = 600 \quad (600 = 400 + 200)$ \\
+	Optymalne rozwiązanie: $205 + 203 + 200 = 608$.
+	
+	$\frac{608}{600} \le 1.4 = 1 + \epsilon$
+\end{example}
+
+\begin{theorem}
+	Algorytm \textnormal{\Call{ApproxSubsetSum}{}} jest w pełni wielomianowym schematem aproksymacyjnym dla problemu sumy podzbioru.
+\end{theorem}
+
+\begin{proof}
+	Użyjemy faktów z analizy:
+	\begin{itemize}[nosep]
+		\item[\textbf{Fakt 1}] $\left(1 + \frac{\epsilon}{2n}\right)^n$ jest ciągiem rosnącym.
+		\item[\textbf{Fakt 2}] $e^x \le 1 + x + x^2$ dla $0 \le x \le 1$.
+		\item[\textbf{Fakt 3}] $\frac{x}{1+x} \le \ln(1+x)$ dla $x \ge 0$.
+	\end{itemize}
+	
+	Oczywiście $z^* \in P_n$, więc $z^*$ jest sumą elementów z $S$. \\
+	Niech $y^* \in P_n$ będzie optymalną sumą elementów $\le t$. \\
+	Oczywiście $y^* \ge z^*$. Pokażemy, że $\frac{y^*}{z^*} \le 1 + \epsilon$.
+	
+	Pokażemy przez indukcję po $i$, że dla każdego $y \in P_i$, $y \le t$ istnieje $z \in L_i$ taki, że:
+	\begin{equation} \label{eq:subset_sum_ind}
+		\frac{y}{\left(1 + \frac{\epsilon}{2n}\right)^i} \le z \le y \quad \text{(*)} \quad \text{(po $i$-tym obrocie pętli)}
+	\end{equation}
+	
+	Dla $i = 1$: $P_1 = \{0, x_1\}$, $L_1 = (0, x_1)$ -- zachodzi oczywiście.
+	
+	Załóżmy, że (*) zachodzi dla jakiegoś $i < n$. Pokażemy, że (*) zachodzi dla $i + 1$. \\
+	Niech $y \in P_{i+1} = P_i \cup (P_i + x_{i+1})$.
+	
+	\textbf{Przypadek 1:} $y \in P_i$. \\
+	Z założenia indukcyjnego istnieje $z \in L_i$ takie, że $\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} \le z \le y$.
+	
+	Jeśli $z \in L_{i+1}$, to $\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^{i+1}} \le \frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} \le z \le y$, więc (*) zachodzi.
+	
+	Jeśli $z \notin L_{i+1}$ (został usunięty przez Trim), to istnieje $z' \in L_{i+1}$ takie, że $z' \le z \le z'\left(1+\frac{\epsilon}{2n}\right)$, więc $\frac{z}{1+\frac{\epsilon}{2n}} \le z' \le z$. \\
+	Mamy:
+	\[
+	\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^{i+1}} = \frac{1}{1+\frac{\epsilon}{2n}} \frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} \overset{\text{zał. ind.}}{\le} \frac{z}{1+\frac{\epsilon}{2n}} \le z' \le z \le y,
+	\]
+	więc (*) zachodzi.
+	
+	\textbf{Przypadek 2:} $y \in P_i + x_{i+1}$. \\
+	Wtedy $y = y' + x_{i+1}$, gdzie $y' \in P_i$. \\
+	Z założenia indukcyjnego istnieje $z \in L_i$ takie, że $\frac{y'}{\left(1+\frac{\epsilon}{2n}\right)^i} \le z \le y'$.
+	
+	Jeśli $z + x_{i+1} \in L_{i+1}$, to 
+	\[
+	\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^{i+1}} \le \frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} = \frac{y' + x_{i+1}}{\left(1+\frac{\epsilon}{2n}\right)^i} \le \frac{y'}{\left(1+\frac{\epsilon}{2n}\right)^i} + x_{i+1} \le z + x_{i+1} \le y' + x_{i+1} = y,
+	\]
+	więc (*) zachodzi.
+	
+	Jeśli $z + x_{i+1} \notin L_{i+1}$ (został usunięty przez Trim), to istnieje $z' \in L_{i+1}$ takie, że $z' \le z + x_{i+1} \le z'\left(1+\frac{\epsilon}{2n}\right)$, więc $\frac{z+x_{i+1}}{1+\frac{\epsilon}{2n}} \le z' \le z + x_{i+1}$. \\
+	Mamy:
+	\begin{align*}
+		\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^{i+1}} &= \frac{1}{1+\frac{\epsilon}{2n}}\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} = \frac{1}{1+\frac{\epsilon}{2n}} \frac{y' + x_{i+1}}{\left(1+\frac{\epsilon}{2n}\right)^i} \\
+		&\le \frac{1}{1+\frac{\epsilon}{2n}}\left(\frac{y'}{\left(1+\frac{\epsilon}{2n}\right)^i} + x_{i+1}\right) \overset{\text{zał. ind.}}{\le} \frac{1}{1+\frac{\epsilon}{2n}}(z + x_{i+1}) \\
+		&\le z' \le z + x_{i+1} \le y' + x_{i+1} = y
+	\end{align*}
+	Więc (*) zachodzi.
+	
+	W szczególności (*) zachodzi dla $y^* \in P_n$. Zatem istnieje $z \in L_n$ takie, że $\frac{y^*}{\left(1+\frac{\epsilon}{2n}\right)^n} \le z \le y^*$, więc $\frac{y^*}{z} \le \left(1+\frac{\epsilon}{2n}\right)^n$. \\
+	Ale $z^* \ge z$, więc $\frac{y^*}{z^*} \le \frac{y^*}{z} \le \left(1+\frac{\epsilon}{2n}\right)^n$. \\
+	\begin{align*}
+		\frac{y^*}{z^*} &\le \left(1+\frac{\epsilon}{2n}\right)^n \overset{\text{Fakt 1}}{\le} \lim_{n\to\infty} \left(1+\frac{\epsilon}{2n}\right)^n = \lim_{n\to\infty} \left(\left(1+\frac{\epsilon}{2n}\right)^{\frac{2n}{\epsilon}}\right)^{\frac{\epsilon}{2}} = e^{\frac{\epsilon}{2}}
+	\end{align*}
+\end{proof}
+
+Pokażemy, że algorytm działa w czasie wielomianowym względem $|I| = \BT\left(\log t + \sum_{i=1}^n \log x_i\right)$ i $\frac{1}{\epsilon}$.
+
+Na każdej liście $L_i$ po linii 6 elementy $z_0=0, z_1, \dots, z_k$ spełniają warunek $z_{j+1} > z_j\left(1 + \frac{\epsilon}{2n}\right)$ dla $j \ge 1$.
+Ile różnych liczb naturalnych $z_1, \dots, z_k$ spełniających ten warunek może się tu zmieścić w przedziale $[1, t]$?
+
+Przez indukcję po $i$ mamy, że $z_{i+1} > z_1\left(1 + \frac{\epsilon}{2n}\right)^i$ dla $1 \le i \le k-1$.
+Zatem
+\begin{flalign*}
+	z_1\left(1 + \frac{\epsilon}{2n}\right)^{k-1} &< z_k \le t &&
+\end{flalign*}
+Skoro $z_1 \ge 1$, to
+\begin{flalign*}
+	\left(1 + \frac{\epsilon}{2n}\right)^{k-1} &\le t \quad \Big| \ln && \\[1ex]
+	(k-1)\ln\left(1 + \frac{\epsilon}{2n}\right) &\le \ln t && \\[1ex]
+	k-1 &\le \frac{\ln t}{\ln\left(1 + \frac{\epsilon}{2n}\right)} \quad \Big| +2 && \\[1ex]
+	k+1 &\le \frac{\ln t}{\ln\left(1 + \frac{\epsilon}{2n}\right)} + 2 \overset{\text{Fakt 3}}{\le} \frac{\ln t \cdot \left(1 + \frac{\epsilon}{2n}\right)}{\frac{\epsilon}{2n}} + 2 
+	= \frac{\cancel{2n}+\epsilon}{\cancel{2n}} \cdot \frac{\cancel{2n}}{\epsilon} \ln t + 2 
+	\le \frac{3n \ln t}{\epsilon} + 2 &&
+\end{flalign*}
+Skoro długość $L_i$ po linii 6 wynosi $k+1 \le \frac{3n \ln t}{\epsilon} + 2$, a po $(i+1)$-szej linii 4 może być co najwyżej $2$ razy dłuższa i $|I| = \BM(\ln t + n)$, to złożoność czasowa algorytmu jest wielomianowa względem $|I|$ i $\frac{1}{\epsilon}$.
+
+% ════════════════════════════════════════════════════════════════
+\subsection{Najliczniejsze skojarzenie w grafach}
+% ════════════════════════════════════════════════════════════════
+
+\paragraph{Najliczniejsze skojarzenie w grafach dwudzielnych}
+$G = (V, E)$ -- graf. \\
+$G$ jest \textbf{dwudzielny} jeśli istnieje podział $V$ na dwa niepuste podzbiory $V_1, V_2$ takie, że dla każdej krawędzi $e = v_1v_2 \in E$ mamy $v_1 \in V_1$ i $v_2 \in V_2$. Oznaczamy to jako $G = (V_1, V_2, E)$.
+
+\textbf{Skojarzenie} w $G$ to zbiór parami rozłącznych krawędzi. \\
+Skojarzenie jest \textbf{najliczniejsze} jeśli ma największą liczność.
+
+\begin{example} ~ \\
+	\begin{minipage}{0.4\textwidth}
+		\centering
+		\begin{tikzpicture}[scale=1.2, every node/.style={circle, fill=black, inner sep=1.5pt, label distance=2pt}]
+			\node[label=below:$a$] (a) at (0,0) {};
+			\node[label=below:$b$] (b) at (2,0) {};
+			\node[label=right:$c$] (c) at (3,1) {};
+			\node[label=above:$d$] (d) at (2,2) {};
+			\node[label=above:$e$] (e) at (0,2) {};
+			\node[label=above:$f$] (f) at (1,1) {};
+			
+			\draw (a) -- (b) -- (c) -- (d) -- (e) -- (a);
+			\draw (a) -- (f) -- (d);
+			\draw (b) -- (f) -- (e);
+			
+			\draw[line width=1.5pt, accent] (a) -- (e);
+			\draw[line width=1.5pt, accent] (d) -- (f);
+			\draw[line width=1.5pt, accent] (b) -- (c);
+		\end{tikzpicture}
+	\end{minipage}
+	\begin{minipage}{0.55\textwidth}
+		Przykładowe skojarzenie: $\{ae, df, bc\}$ \\
+		\textit{Jeśli $M$ jest skojarzeniem, to każdy wierzchołek należy do co najwyżej jednej krawędzi z $M$.}
+	\end{minipage}
+\end{example}
+
+Niech $M$ będzie ustalonym skojarzeniem w $G$.
+\begin{itemize}[nosep]
+	\item wierzchołek jest \textbf{skojarzony} jeśli należy do jakiejś krawędzi z $M$ (mówimy też, że $M$ \textbf{pokrywa} ten wierzchołek),
+	\item wierzchołek jest \textbf{wolny} jeśli nie jest skojarzony,
+	\item krawędź jest \textbf{skojarzona} jeśli należy do $M$,
+	\item krawędź jest \textbf{wolna} jeśli nie należy do $M$.
+\end{itemize}
+
+\textbf{Ścieżka powiększająca} (względem $M$) to naprzemienna ścieżka składająca się z wolnych i skojarzonych krawędzi o wolnych końcach.
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[x=1.1cm]
+		\begin{scope}
+			\node[left] at (-0.3, 0) {$P$};
+			\foreach \x/\l in {0/a, 1/b, 2/c, 3/d, 4/e, 5/f, 6/g, 7/h} {
+				\node[circle, fill=black, inner sep=1.5pt, label=below:$\l$] (\l) at (\x, 0) {};
+			}
+			\draw (a) -- (b);
+			\draw[double, thick] (b) -- (c);
+			\draw (c) -- (d);
+			\draw[double, thick] (d) -- (e);
+			\draw (e) -- (f);
+			\draw[double, thick] (f) -- (g);
+			\draw (g) -- (h);
+			\node[right] at (7.3, 0) {$|M|=3$};
+		\end{scope}
+		
+		\begin{scope}[yshift=-1.5cm]
+			\node at (3.5, 0) {$M' = M \div E(P) = (M - E(P)) \cup (E(P) - M)$};
+		\end{scope}
+		
+		\begin{scope}[yshift=-3cm]
+			\foreach \x/\l in {0/a, 1/b, 2/c, 3/d, 4/e, 5/f, 6/g, 7/h} {
+				\node[circle, fill=black, inner sep=1.5pt, label=below:$\l$] (\l) at (\x, 0) {};
+			}
+			\draw[double, thick] (a) -- (b);
+			\draw (b) -- (c);
+			\draw[double, thick] (c) -- (d);
+			\draw (d) -- (e);
+			\draw[double, thick] (e) -- (f);
+			\draw (f) -- (g);
+			\draw[double, thick] (g) -- (h);
+			\node[right] at (7.3, 0) {$|M'|=4$};
+		\end{scope}
+	\end{tikzpicture}
+\end{figure}
+Możemy użyć ścieżki powiększającej i różnicy symetrycznej do zwiększenia liczności skojarzenia.
+
+\begin{theorem}{Berge'a}
+	Niech $G=(V,E)$ -- graf, $M$ -- skojarzenie w $G$. \\
+	$M$ jest najliczniejszym skojarzeniem w $G \iff$ nie istnieje ścieżka powiększająca względem $M$.
+\end{theorem}
+
+\begin{proof}
+	$\implies$ Przypuśćmy, że istnieje ścieżka powiększająca $P$ względem $M$. \\
+	Wtedy $M' = M \div E(P)$ jest skojarzeniem i $|M'| > |M|$, więc $M$ nie jest skojarzeniem najliczniejszym.
+	
+	$\impliedby$ Przypuśćmy, że $M$ nie jest najliczniejszym skojarzeniem w $G$. \\
+	Niech $M'$ będzie skojarzeniem takim, że $|M'| > |M|$. \\
+	Niech $H$ będzie podgrafem $G$ indukowanym przez $M' \div M$, czyli $H = (V(G), M' \div M)$. \\
+	$M, M'$ to skojarzenia, więc stopień wierzchołka $d_H(v) \le 2$ dla każdego $v \in V(G)$.
+	
+	Każda składowa $H$ jest ścieżką lub cyklem. \\
+	$M, M'$ to skojarzenia, więc nie ma cykli nieparzystych w $H$. \\
+	Każda składowa $H$ jest ścieżką lub cyklem parzystym. \\
+	Skoro $|M'| > |M|$, to istnieje składowa $H$, która jest ścieżką zawierającą więcej krawędzi z $M'$ niż z $M$, więc ta ścieżka zaczyna się i kończy krawędzią z $M'$. Ta ścieżka jest ścieżką powiększającą względem $M$.
+\end{proof}
