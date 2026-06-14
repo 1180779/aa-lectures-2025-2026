@@ -23,6 +23,51 @@ Powodem może być to, że jakieś wartości obliczane są wielokrotnie.
 \end{alg}
 
 Zobaczmy jak jest obliczane np. \Call{Fib1}{$5$}. W drzewie wywołań poszczególne wartości powtarzają się:
+
+\tikzset{
+	fibtree/.style={
+		level distance=1.15cm,
+		level 1/.style={sibling distance=6cm},
+		level 2/.style={sibling distance=3cm},
+		level 3/.style={sibling distance=1.6cm},
+		every node/.style={circle, draw, minimum size=0.78cm, inner sep=0pt, font=\small},
+	},
+	f3/.style={fill=accent!20},
+	f2/.style={fill=orange!30},
+	f1/.style={fill=green!28},
+	f0/.style={fill=accent!8},
+}
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}[fibtree]
+		\node {$F_5$}
+		child { node {$F_4$}
+			child { node[f3] {$F_3$}
+				child { node[f2] {$F_2$}
+					child { node[f1] {$F_1$} }
+					child { node[f0] {$F_0$} }
+				}
+				child { node[f1] {$F_1$} }
+			}
+			child { node[f2] {$F_2$}
+				child { node[f1] {$F_1$} }
+				child { node[f0] {$F_0$} }
+			}
+		}
+		child { node[f3] {$F_3$}
+			child { node[f2] {$F_2$}
+				child { node[f1] {$F_1$} }
+				child { node[f0] {$F_0$} }
+			}
+			child { node[f1] {$F_1$} }
+		};
+	\end{tikzpicture}
+	\caption{Drzewo wywołań rekurencyjnych \protect\Call{Fib1}{$5$}. Wierzchołki o~tym samym
+		kolorze odpowiadają temu samemu podproblemowi, liczonemu wielokrotnie od zera:
+		$F_3$ jest wyznaczane $2$~razy, $F_2$ -- $3$~razy, a~$F_1$ -- $5$~razy.}
+	\label{fig:fib:tree}
+\end{figure}
+
 \begin{flalign*}
 	& \begin{array}{lc}
 		F(i) \text{ jest obliczane} & \text{razy} \\
@@ -42,7 +87,9 @@ Niech $s(n)$ będzie liczbą dodawań wykonanych przez alg. w wywołaniu \Call{F
 	\end{cases} && && \\[1.5ex]
 	& \text{Niech } f(n) = s(n) + 1 && && \\[1.5ex]
 	& \text{Wtedy } f(0) = f(1) = 1 && && \\[1.5ex]
-	& f(n) = s(n) + 1 = s(n - 1) + s(n - 2) + 1 + 1 = f(n - 1) - 1 + f(n - 2) - 1 + 1 + 1 && && \\
+  & f(n) = s(n) + 1 =  && && \\[1.5ex]
+  & \phantom{f(n)} = s(n - 1) + s(n - 2) + 1 + 1 =  && && \\[1.5ex]
+  & \phantom{f(n)} = f(n - 1) - 1 + f(n - 2) - 1 + 1 + 1 = && && \\[1.5ex]
 	& \phantom{f(n)} = f(n - 1) + f(n - 2) && && \\[1.5ex]
 	& \text{Zatem } f(n) = F_n \qquad f(n) = \BT(F_n) = \BT\left(\left(\frac{1 + \sqrt{5}}{2}\right)^n\right) = \BM(1.61^n). \text{ Zatem } s(n) = \BM(1.61^n). && &&
 \end{flalign*}
