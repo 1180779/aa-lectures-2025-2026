@@ -12,9 +12,9 @@
 \end{flalign*}
 
 \begin{flalign*}
-	& n^a = \BO(n^b),\ 0 < a \leq b && \log n = \BO(n^\epsilon),\ \epsilon > 0 & && \\ 
-	& a^n = \BO(b^n),\ 1 < a \leq b && \log_a n = \BT(\log_b n),\ a, b > 1 & && \\ 
-	& n^a = \BO(b^n),\ 0 < a,\ b > 1 && &
+	& n^a = \BO(n^b) \text{ gdy } 0 < a \leq b && \log n = \BO(n^\epsilon) \text{ gdy } \epsilon > 0 & && \\ 
+	& a^n = \BO(b^n) \text{ gdy } 1 < a \leq b && \log_a n = \BT(\log_b n) \text{ gdy } a, b > 1 & && \\ 
+	& n^a = \BO(b^n) \text{ gdy } 0 < a,\ b > 1 && &
 \end{flalign*}
 
 \begin{flalign*}
@@ -24,8 +24,8 @@
 \paragraph{Procedura rekurencyjna}
 \begin{flalign*}
 	n! = \begin{cases}
-		1 & n = 0 \\[0.5ex]
-		n \cdot (n - 1)! & n \geq 1 
+		1 & \text{gdy } n = 0 \\[0.5ex]
+		n \cdot (n - 1)! & \text{gdy } n \geq 1 
 	\end{cases} && && 
 \end{flalign*}
 Oczywiste jest, że $\displaystyle n! = \prod_{i = 1}^{n}i$
@@ -34,9 +34,9 @@ Oczywiste jest, że $\displaystyle n! = \prod_{i = 1}^{n}i$
 	$F_n$ - ciąg Fibonacciego.
 \begin{flalign*}
 	F_n = \begin{cases}
-		0 & n = 0 \\[0.5ex]
-		1 & n = 1 \\[0.5ex]
-		F_{n - 1} + F_{n - 2} & n \geq 2
+		0 & \text{gdy } n = 0 \\[0.5ex]
+		1 & \text{gdy } n = 1 \\[0.5ex]
+		F_{n - 1} + F_{n - 2} & \text{gdy } n \geq 2
 	\end{cases} && && 
 \end{flalign*}
 
@@ -100,9 +100,9 @@ Zakładamy, że (zazwyczaj) w fazie \textit{dziel} problem jest dzielony na co n
 	Wtedy
 	\begin{flalign*}
 		T(n) = \begin{cases}
-			\BT(n^{\log_b a}) & f(n) = \BO(n^{\log_b a - \epsilon}) \text{ dla pewnego } \epsilon > 0 \\[1ex]
-			\BT(n^{\log_b a} \log n) & f(n) = \BT(n^{\log_b a}) \\[1ex]
-			\BT(f(n)) & \substack{
+			\BT(n^{\log_b a}) & \text{gdy } f(n) = \BO(n^{\log_b a - \epsilon}) \text{ dla pewnego } \epsilon > 0 \\[1ex]
+			\BT(n^{\log_b a} \log n) & \text{gdy } f(n) = \BT(n^{\log_b a}) \\[1ex]
+			\BT(f(n)) & \text{gdy } \substack{
 				f(n) = \BM(n^{\log_b a + \epsilon}) \text{ dla pewnego } \epsilon > 0 \\ 
 				a\cdot f(n/b) \leq c\cdot f(n) \text{ dla pewnej stałej } c < 1 \text{ dla dużych } n
 			}
@@ -114,19 +114,20 @@ Zakładamy, że (zazwyczaj) w fazie \textit{dziel} problem jest dzielony na co n
 	Niech $a\geq 1,\ b>1$ będą stałymi i niech $f(n)$ będzie nieujemną funkcją zdefiniowaną dla potęg $b$. Jeśli
 	\begin{flalign*}
 		T(n) = \begin{cases}
-			\BT(1) & n = 1 \\[1ex]
-			a\cdot T\left(\frac{n}{b}\right) + f(n) & n = b^i,\ i \geq 1
-		\end{cases} && && 
+			\BT(1) & \text{gdy } n = 1 \\[1ex]
+			a\cdot T\left(\frac{n}{b}\right) + f(n) & \text{gdy } n = b^i,\ i \geq 1
+		\end{cases} && &&
 	\end{flalign*}
+
 	to 
 	\begin{flalign*}
-		T(n) = \BT\left(n^{\log_b n}\right) + \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) && && 
+		T(n) = \BT\left(n^{\log_b a}\right) + \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) && && 
 	\end{flalign*}
 \end{lemma}
 
 \begin{proof}
 	\begin{flalign} \label{eq:utor:star}
-		a^{\log_b n} = b^{\log_b n \cdot \log_b a} = b^{\log_b a \cdot \log_b n} = \left(b^{\log_b a}\right)^{\log_b n} = n^{\log_b a} && && 
+		a^{\log_b n} = \left(b^{\log_b a}\right)^{\log_b n} = b^{\log_b a \cdot \log_b n} = b^{\log_b n \cdot \log_b a} = \left(b^{\log_b n}\right)^{\log_b a} = n^{\log_b a} && && 
 	\end{flalign}
 	
 	\begin{align*}
@@ -146,7 +147,7 @@ Przeprowadzimy teraz dowód uniwersalnego twierdzenia o rekurencji (\ref{theorem
 \begin{proof}
 	Rozważmy wszystkie przypadki:
 	\begin{enumerate}
-		\item $f(n) = \BO\left(n^{\log_b a - \epsilon}\right)$. Wtedy
+		\item Gdy $f(n) = \BO\left(n^{\log_b a - \epsilon}\right)$. Wtedy
 		\begin{flalign*}
 			f\left(\frac{n}{b^j}\right) &= \BO\left(\left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}\right) && && \\[1.5ex]
 			%
@@ -164,12 +165,13 @@ Przeprowadzimy teraz dowód uniwersalnego twierdzenia o rekurencji (\ref{theorem
 			= \BO\left(n^{\log_b a - \epsilon}\cdot n^\epsilon - 1\right) 
 			= \BO\left(n^{\log_b a}\right)  && && \\[1.5ex]
 			%
-			\text{Z lematu: } T(n) &= \sum_{j = 0}^{\log_b n - 1} a^j T\left(\frac{n}{b^j}\right) + \BT\left(n^{\log_b a}\right) 
+			\text{Z lematu: } T(n) &= \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT\left(n^{\log_b a}\right)
+      % 
 			= \BO\left(n^{\log_b a}\right) + \BT\left(n^{\log_b a}\right) 
 			= \BT\left(n^{\log_b a}\right) && &&
 		\end{flalign*}
 		
-		\item $f(n) = \BT\left(n^{\log_b a}\right)$. Wtedy:
+		\item Gdy $f(n) = \BT\left(n^{\log_b a}\right)$. Wtedy:
 		\begin{flalign*}
 			f\left(\frac{n}{b^j}\right) &= \BT\left(\left(\frac{n}{b^j}\right)^{\log_b a}\right) && && \\[1.5ex]
 			%
@@ -186,25 +188,30 @@ Przeprowadzimy teraz dowód uniwersalnego twierdzenia o rekurencji (\ref{theorem
 			= \BT\left(n^{\log_b a}\log n\right) && &&
 		\end{flalign*}
 		
-		\item $f(n) = \BM\left(n^{\log_b a + \epsilon}\right)$ oraz $a \cdot f\left(\frac{n}{b}\right) \leq c\cdot f(n)$ dla jakiegoś $c < 1$ i odpowiednio dużych $n$.
+		\item Gdy $f(n) = \BM\left(n^{\log_b a + \epsilon}\right)$ oraz $a \cdot f\left(\frac{n}{b}\right) \leq c\cdot f(n)$ dla jakiegoś $c < 1$ i odpowiednio dużych $n$.
 		
-		Z założenia $f\left(\frac{n}{b}\right) \leq \frac{c}{a}f(n)$, więc $f\left(\frac{n}{b^j}\right) \leq \left(\frac{c}{a}\right)^j f(n) = \frac{c^j}{a^j}f(n)$.
-		
+		Z założenia $f\left(\frac{n}{b}\right) \leq \frac{c}{a}f(n)$, więc drogą iteracji:
 		\begin{flalign*}
-			\sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) 
-			&\leq \sum_{j = 0}^{\log_b n - 1} \cancel{a^j} \frac{c^j}{\cancel{a^j}} f(n) + \BO(1) 
+			f\left(\frac{n}{b^j}\right) &\overset{(\star)}{\leq} \left(\frac{c}{a}\right)^j f(n) = \frac{c^j}{a^j}f(n) && && \\[1.5ex]
+			%
+			(\star) \,\, f\left(\frac{n}{b^j}\right) &\leq \frac{c}{a} f\left(\frac{n}{b^{j-1}}\right) \leq \left(\frac{c}{a}\right)^2 f\left(\frac{n}{b^{j-2}}\right) \leq \dots \leq \left(\frac{c}{a}\right)^j f(n) && && \\[1.5ex]
+			%
+			\sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
+			&\leq \sum_{j = 0}^{\log_b n - 1} \cancel{a^j} \frac{c^j}{\cancel{a^j}} f(n) + \BO(1)
 			\leq f(n) \sum_{j = 0}^{\log_b n - 1} c^j + \BO(1) && && \\[1.5ex]
-			&\leq f(n) \sum_{j = 0}^{\infty} c^j + \BO(1) 
-			\leq f(n) \frac{1}{1 - c} + \BO(1) 
+			&\leq f(n) \sum_{j = 0}^{\infty} c^j + \BO(1)
+			\leq f(n) \frac{1}{1 - c} + \BO(1)
+			\leq f(n) \BO(1)
 			= \BO(f(n)) && && \\[1.5ex]
 			%
-			\text{Z drugiej strony: } \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) 
-			&= a^0 f\left(\frac{n}{b^0}\right) + \underbracket{\sum_{j = 1}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)}_{\geq 0} 
+			\text{Z drugiej strony: } \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
+			&= a^0 f\left(\frac{n}{b^0}\right) + \underbracket{\sum_{j = 1}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)}_{\geq 0}
 			= \BM(f(n)) && && \\[1.5ex]
 			%
-			\text{Z lematu: } T(n) &= \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT(n^{\log_b a}) 
+			\text{Z lematu: } T(n) &= \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT(n^{\log_b a})
 			= \BT(f(n)) + \BT(n^{\log_b a}) = \BT(f(n)) && &&
 		\end{flalign*}
+
 	\end{enumerate}
 \end{proof}
 
@@ -213,10 +220,10 @@ Przeprowadzimy teraz dowód uniwersalnego twierdzenia o rekurencji (\ref{theorem
 	Niech $T(n) = a\cdot T\left(\frac{n}{b}\right) + f(n)$ (gdzie $\frac{n}{b}$ znaczy $\left\lfloor \frac{n}{b} \right\rfloor$ lub $\left\lceil \frac{n}{b}\right\rceil$).
 	Wtedy
 	\begin{flalign*}
-		& T(n) = \begin{cases}
-			\BT(n^{\log_b a}) & a > b^k \Leftrightarrow \log_b a > k \\[1ex]
-			\BT(n^{\log_b a}\log n) & a = b^k \Leftrightarrow \log_b a = k \\[1ex]
-			\BT(n^k) & a < b^k \Leftrightarrow \log_b a < k
+		T(n) = \begin{cases}
+			\BT(n^{\log_b a}) & \text{gdy } f(n) = \BO(n^{\log_b a - \epsilon}) \implies k < \log_b a \iff b^k < a \\[1ex]
+			\BT(n^k \log n) & \text{gdy } f(n) = \BT(n^{\log_b a}) \implies k = \log_b a \iff b^k = a \\[1ex]
+			\BT(n^k) & \text{gdy } f(n) = \BM(n^{\log_b a + \epsilon}) \implies k > \log_b a \iff b^k > a
 		\end{cases} && &&
 	\end{flalign*}
 \end{conclusion}

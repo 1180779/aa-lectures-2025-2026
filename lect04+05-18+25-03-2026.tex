@@ -453,10 +453,10 @@ $m = 7$, $n = 6$.
 	\If{$i = 0$ \textbf{lub} $j = 0$} 
 	\State \Return $\varepsilon$ \Comment{ciąg pusty}
 	\EndIf
-	\If{$b(i, j) = \text{,,\nwarrow''}$}
+	\If{$b(i, j) = \text{,,}\nwarrow\text{''}$}
 	\State \Call{PrintLCS}{$b, X, Y, i - 1, j - 1$}
 	\State \textbf{print} $x_i$
-	\ElsIf{$b(i, j) = \text{,,\uparrow''}$}
+	\ElsIf{$b(i, j) = \text{,,}\uparrow\text{''}$}
 	\State \Call{PrintLCS}{$b, X, Y, i - 1, j$}
 	\Else
 	\State \Call{PrintLCS}{$b, X, Y, i, j - 1$}
