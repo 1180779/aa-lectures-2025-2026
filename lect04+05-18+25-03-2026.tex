@@ -267,7 +267,7 @@ Jeśli zaimplementujemy po prostu tę formułę rekurencyjną otrzymamy alg. wyk
 Mamy 3 pętle (po $l, i, k$) i liczbę iteracji każdej z tych pętli można ograniczyć przez $n$, zatem złożoność czasowa to $\BO(n^3)$.
 
 \begin{example}{Optymalna kolejność mnożenia macierzy dla $n=5$}
-	$n=5$, $p=(4, 5, 2, 1, 2, 3)$. \\
+	$p=(4, 5, 2, 1, 2, 3)$. \\
 	$A_1 \text{ - } 4 \times 5,\ A_2 \text{ - } 5 \times 2,\ A_3 \text{ - } 2 \times 1,\ A_4 \text{ - } 1 \times 2,\ A_5 \text{ - } 2 \times 3$.
 
 	\begin{minipage}{0.45\linewidth}
@@ -295,33 +295,35 @@ Mamy 3 pętle (po $l, i, k$) i liczbę iteracji każdej z tych pętli można ogr
 	\vspace{1em}
 
 	\begin{flalign*}
-		L=2: \quad & m(1, 2) = 4 \cdot 5 \cdot 2 = 40                                       &  &                                   \\
-		           & m(2, 3) = 5 \cdot 2 \cdot 1 = 10                                       &  &                                   \\
-		           & m(3, 4) = 2 \cdot 1 \cdot 2 = 4                                        &  &                                   \\
-		           & m(4, 5) = 1 \cdot 2 \cdot 3 = 6                                        &  &                                   \\[1.5ex]
-		%
+		L=2: \quad & m(1, 2) = 4 \cdot 5 \cdot 2 = 40 &  & \\
+		           & m(2, 3) = 5 \cdot 2 \cdot 1 = 10 &  & \\
+		           & m(3, 4) = 2 \cdot 1 \cdot 2 = 4  &  & \\
+		           & m(4, 5) = 1 \cdot 2 \cdot 3 = 6  &  &
+	\end{flalign*}
+	\begin{flalign*}
 		L=3: \quad & m(1, 3) = \min \begin{cases}
 			                            m(1, 1) + m(2, 3) + 4 \cdot 5 \cdot 1 \\
 			                            m(1, 2) + m(3, 3) + 4 \cdot 2 \cdot 1
 		                            \end{cases} = \min \begin{cases}
 			                                               0 + 10 + 20 \\
 			                                               40 + 0 + 8
-		                                               \end{cases} = \min \begin{cases} 30 \\ 48 \end{cases} = 30             &  & \\
+		                                               \end{cases} = \min \begin{cases} 30 \\ 48 \end{cases} = 30 &  & \\
 		           & m(2, 4) = \min \begin{cases}
 			                            m(2, 2) + m(3, 4) + 5 \cdot 2 \cdot 2 \\
 			                            m(2, 3) + m(4, 4) + 5 \cdot 1 \cdot 2
 		                            \end{cases} = \min \begin{cases}
 			                                               0 + 4 + 20 \\
 			                                               10 + 0 + 10
-		                                               \end{cases} = \min \begin{cases} 24 \\ 20 \end{cases} = 20             &  & \\
+		                                               \end{cases} = \min \begin{cases} 24 \\ 20 \end{cases} = 20 &  & \\
 		           & m(3, 5) = \min \begin{cases}
 			                            m(3, 3) + m(4, 5) + 2 \cdot 1 \cdot 3 \\
 			                            m(3, 4) + m(5, 5) + 2 \cdot 2 \cdot 3
 		                            \end{cases} = \min \begin{cases}
 			                                               0 + 6 + 6 \\
 			                                               4 + 0 + 12
-		                                               \end{cases} = \min \begin{cases} 12 \\ 16 \end{cases} = 12             &  & \\[1.5ex]
-		%
+		                                               \end{cases} = \min \begin{cases} 12 \\ 16 \end{cases} = 12 &  &
+	\end{flalign*}
+	\begin{flalign*}
 		L=4: \quad & m(1, 4) = \min \begin{cases}
 			                            m(1, 1) + m(2, 4) + 4 \cdot 5 \cdot 2 \\
 			                            m(1, 2) + m(3, 4) + 4 \cdot 2 \cdot 2 \\
@@ -330,7 +332,7 @@ Mamy 3 pętle (po $l, i, k$) i liczbę iteracji każdej z tych pętli można ogr
 			                                               0 + 20 + 40 \\
 			                                               40 + 4 + 16 \\
 			                                               30 + 0 + 8
-		                                               \end{cases} = \min \begin{cases} 60 \\ 60 \\ 38 \end{cases} = 38       &  & \\
+		                                               \end{cases} = \min \begin{cases} 60 \\ 60 \\ 38 \end{cases} = 38 &  & \\
 		           & m(2, 5) = \min \begin{cases}
 			                            m(2, 2) + m(3, 5) + 5 \cdot 2 \cdot 3 \\
 			                            m(2, 3) + m(4, 5) + 5 \cdot 1 \cdot 3 \\
@@ -339,8 +341,9 @@ Mamy 3 pętle (po $l, i, k$) i liczbę iteracji każdej z tych pętli można ogr
 			                                               0 + 12 + 30 \\
 			                                               10 + 6 + 15 \\
 			                                               20 + 0 + 30
-		                                               \end{cases} = \min \begin{cases} 42 \\ 31 \\ 50 \end{cases} = 31       &  & \\[1.5ex]
-		%
+		                                               \end{cases} = \min \begin{cases} 42 \\ 31 \\ 50 \end{cases} = 31 &  &
+	\end{flalign*}
+	\begin{flalign*}
 		L=5: \quad & m(1, 5) = \min \begin{cases}
 			                            m(1, 1) + m(2, 5) + 4 \cdot 5 \cdot 3 \\
 			                            m(1, 2) + m(3, 5) + 4 \cdot 2 \cdot 5 \\
@@ -516,19 +519,40 @@ $m = 7$, $n = 6$.
 \begin{table}[H]
 	\centering
 	\renewcommand{\arraystretch}{1.2}
-	\begin{NiceTabular}{cc|c|cccccc}[margin,hvlines]
-		    & $j$   & 0     & 1            & 2              & 3              & 4              & 5              & 6              \\
-		$i$ &       & $y_j$ & $B$          & $D$            & $C$            & $A$            & $B$            & $A$            \\
-		\hline
-		0   & $x_i$ & 0     & 0            & 0              & 0              & 0              & 0              & 0              \\
-		1   & $A$   & 0     & $\uparrow 0$ & $\uparrow 0$   & $\uparrow 0$   & $\nwarrow 1$   & $\leftarrow 1$ & $\nwarrow 1$   \\
-		2   & $B$   & 0     & $\nwarrow 1$ & $\leftarrow 1$ & $\leftarrow 1$ & $\uparrow 1$   & $\nwarrow 2$   & $\leftarrow 2$ \\
-		3   & $C$   & 0     & $\uparrow 1$ & $\uparrow 1$   & $\nwarrow 2$   & $\leftarrow 2$ & $\uparrow 2$   & $\uparrow 2$   \\
-		4   & $B$   & 0     & $\nwarrow 1$ & $\uparrow 1$   & $\uparrow 2$   & $\uparrow 2$   & $\nwarrow 3$   & $\leftarrow 3$ \\
-		5   & $D$   & 0     & $\uparrow 1$ & $\nwarrow 2$   & $\uparrow 2$   & $\uparrow 2$   & $\uparrow 3$   & $\uparrow 3$   \\
-		6   & $A$   & 0     & $\uparrow 1$ & $\uparrow 2$   & $\uparrow 2$   & $\nwarrow 3$   & $\uparrow 3$   & $\nwarrow 4$   \\
-		7   & $B$   & 0     & $\nwarrow 1$ & $\uparrow 2$   & $\uparrow 2$   & $\uparrow 3$   & $\nwarrow 4$   & $\uparrow 4$   \\
-	\end{NiceTabular}
+	\begin{minipage}{0.48\linewidth}
+		\centering
+		Tablica kosztów $c$: \\[0.5em]
+		\begin{NiceTabular}{cc|c|cccccc}[margin,hvlines]
+			    & $j$   & 0     & 1   & 2   & 3   & 4   & 5   & 6   \\
+			$i$ &       & $y_j$ & $B$ & $D$ & $C$ & $A$ & $B$ & $A$ \\
+			\hline
+			0   & $x_i$ & 0     & 0   & 0   & 0   & 0   & 0   & 0   \\
+			1   & $A$   & 0     & 0   & 0   & 0   & 1   & 1   & 1   \\
+			2   & $B$   & 0     & 1   & 1   & 1   & 1   & 2   & 2   \\
+			3   & $C$   & 0     & 1   & 1   & 2   & 2   & 2   & 2   \\
+			4   & $B$   & 0     & 1   & 1   & 2   & 2   & 3   & 3   \\
+			5   & $D$   & 0     & 1   & 2   & 2   & 2   & 3   & 3   \\
+			6   & $A$   & 0     & 1   & 2   & 2   & 3   & 3   & 4   \\
+			7   & $B$   & 0     & 1   & 2   & 2   & 3   & 4   & 4   \\
+		\end{NiceTabular}
+	\end{minipage}\hfill
+	\begin{minipage}{0.48\linewidth}
+		\centering
+		Tablica strzałek $b$: \\[0.5em]
+		\begin{NiceTabular}{cc|c|cccccc}[margin,hvlines]
+			    & $j$   & 0     & 1          & 2            & 3            & 4            & 5            & 6            \\
+			$i$ &       & $y_j$ & $B$        & $D$          & $C$          & $A$          & $B$          & $A$          \\
+			\hline
+			0   & $x_i$ &       &            &              &              &              &              &              \\
+			1   & $A$   &       & $\uparrow$ & $\uparrow$   & $\uparrow$   & $\nwarrow$   & $\leftarrow$ & $\nwarrow$   \\
+			2   & $B$   &       & $\nwarrow$ & $\leftarrow$ & $\leftarrow$ & $\uparrow$   & $\nwarrow$   & $\leftarrow$ \\
+			3   & $C$   &       & $\uparrow$ & $\uparrow$   & $\nwarrow$   & $\leftarrow$ & $\uparrow$   & $\uparrow$   \\
+			4   & $B$   &       & $\nwarrow$ & $\uparrow$   & $\uparrow$   & $\uparrow$   & $\nwarrow$   & $\leftarrow$ \\
+			5   & $D$   &       & $\uparrow$ & $\nwarrow$   & $\uparrow$   & $\uparrow$   & $\uparrow$   & $\uparrow$   \\
+			6   & $A$   &       & $\uparrow$ & $\uparrow$   & $\uparrow$   & $\nwarrow$   & $\uparrow$   & $\nwarrow$   \\
+			7   & $B$   &       & $\nwarrow$ & $\uparrow$   & $\uparrow$   & $\uparrow$   & $\nwarrow$   & $\uparrow$   \\
+		\end{NiceTabular}
+	\end{minipage}
 \end{table}
 
 \begin{alg}{Wypisywanie najdłuższego wspólnego podciągu}{alg:printlcs}
