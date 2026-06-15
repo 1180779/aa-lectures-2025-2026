@@ -114,7 +114,7 @@
 % ── KOMENDY ──────────────────────────────────────────────────────
 
 \algnewcommand{\To}[0]{\textbf{to} }
-\algnewcommand{\Assign}[0]{$\gets$}
+\algnewcommand{\Assign}[0]{$\;\,\gets\,\;$}
 \algnewcommand{\Length}[1]{\textit{length}(#1)}
 \algnewcommand{\Swap}[2]{\textit{swap}(#1, #2)}
 \algnewcommand{\Size}[1]{\textit{size}(#1)}
@@ -129,11 +129,14 @@
 }
 \makeatother
 
-\newenvironment{alg}[3][]{% #1=optional options, #2=caption, #3=label
-  \captionsetup[algorithm]{hypcap=false}%
-  \captionof{algorithm}{#2}%
-  \vspace{0.3cm}%
-  \label{#3}%
+\makeatletter
+\newenvironment{alg}[3][]{% #1=optional tcolorbox options, #2=caption, #3=label
+  \if@noskipsec \leavevmode \fi% flush a pending run-in heading (\paragraph) so it stays above the box
+  \par
+  \addvspace{\bigskipamount}% breathing room before the box
+  \refstepcounter{algorithm}\label{#3}% step the float counter + set ref/hyperref target
+  \addcontentsline{\csname ext@algorithm\endcsname}{algorithm}% list-of-algorithms entry
+    {\protect\numberline{\thealgorithm}{\ignorespaces #2}}%
   \small%
 \begin{tcolorbox}[
     breakable,
@@ -141,16 +144,23 @@
     boxrule=1pt,
     colback=white,
     colframe=black,
+    colbacktitle=accent,
+    coltitle=white,
+    fonttitle=\bfseries,
+    title={\csname fnum@algorithm\endcsname:\ \mdseries #2},% "Algorytm N: caption"
     left=2mm,
     right=2mm,
     top=2mm,
-    bottom=2mm
+    bottom=2mm,
+    #1%                    pass through any caller-supplied options
   ]%
   \begin{algorithmic}[1]%
 }{%
   \end{algorithmic}%
   \end{tcolorbox}%
+  \par\addvspace{\bigskipamount}% breathing room after the box
 }
+\makeatother
 % ─────────────────────────────────────────────────────────────────
 
 \begin{document}

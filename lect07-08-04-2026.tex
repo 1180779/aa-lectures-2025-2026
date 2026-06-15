@@ -60,6 +60,16 @@ Słowo kodowe znaku jest ciągiem etykiet krawędzi na ścieżce od korzenia do 
 			elabel right/.style={draw=none, font=\scriptsize, inner sep=1pt, midway, sloped, above},
 		}
 }
+% Wariant dla kroków konstrukcji: jednakowe, okrągłe węzły (etykiety typu "n,1")
+\tikzset{
+	htree/.style={
+			mytree,
+			level distance=0.95cm,
+			level 4/.style={sibling distance=1.0cm},
+			level 5/.style={sibling distance=0.85cm},
+			every node/.style={circle, draw, minimum size=0.7cm, inner sep=0pt, font=\footnotesize, align=center},
+		}
+}
 \begin{figure}[ht]
 	\centering
 	\begin{minipage}{0.48\textwidth}
@@ -305,12 +315,12 @@ Algorytm konstruuje drzewo binarne. $z$ - wierzchołek, $left, right$ - dzieci.
 
 Złożoność czasowa algorytmu wynosi $\BO(n \log n)$.
 
-\begin{example}{Konstrukcja drzewa Huffmana}
+\begin{example}{Konstrukcja drzewa Huffmana} \\
 	Zaczynamy ze zbiorem wierzchołków: $(n, 1), (s, 3), (t, 4), (a, 10), (i, 12), (r, 13), (e, 15)$.
 
 	\begin{enumerate}
 		\item Łączymy $n$ i $s$: \\
-		      \begin{tikzpicture}[mytree]
+		      \begin{tikzpicture}[htree]
 			      \node {4}
 			      child { node {n,1} }
 			      child { node {s,3} };
@@ -318,7 +328,7 @@ Złożoność czasowa algorytmu wynosi $\BO(n \log n)$.
 		      \quad Zostają: $(t, 4), (a, 10), (i, 12), (r, 13), (e, 15)$.
 
 		\item Łączymy $4$ i $t$: \\
-		      \begin{tikzpicture}[mytree]
+		      \begin{tikzpicture}[htree]
 			      \node {8}
 			      child { node {4}
 					      child { node {n,1} }
@@ -329,7 +339,7 @@ Złożoność czasowa algorytmu wynosi $\BO(n \log n)$.
 		      \quad Zostają: $(a, 10), (i, 12), (r, 13), (e, 15)$.
 
 		\item Łączymy $8$ i $a$: \\
-		      \begin{tikzpicture}[mytree]
+		      \begin{tikzpicture}[htree]
 			      \node {18}
 			      child { node {8}
 					      child { node {4}
@@ -343,7 +353,7 @@ Złożoność czasowa algorytmu wynosi $\BO(n \log n)$.
 		      \quad Zostają: $(i, 12), (r, 13), (e, 15)$.
 
 		\item Łączymy $i$ i $r$: \\
-		      \begin{tikzpicture}[mytree]
+		      \begin{tikzpicture}[htree]
 			      \node {25}
 			      child { node {i,12} }
 			      child { node {r,13} };
@@ -351,7 +361,7 @@ Złożoność czasowa algorytmu wynosi $\BO(n \log n)$.
 		      \quad Zostaje: $(e, 15)$.
 
 		\item Łączymy $e$ i $18$:  \\
-		      \begin{tikzpicture}[mytree]
+		      \begin{tikzpicture}[htree]
 			      \node {33}
 			      child { node {e,15} }
 			      child { node {18}
@@ -367,7 +377,7 @@ Złożoność czasowa algorytmu wynosi $\BO(n \log n)$.
 		      \end{tikzpicture}
 
 		\item Łączymy $25$ i $33$ (Ostateczne drzewo kodów): \\
-		      \begin{tikzpicture}[mytree]
+		      \begin{tikzpicture}[htree]
 			      \node {58}
 			      child { node {25}
 					      child { node {i,12} edge from parent node[elabel left] {0} }

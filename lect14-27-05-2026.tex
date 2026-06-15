@@ -88,7 +88,7 @@ Procedura do znajdowania ścieżki powiększającej --- \textit{Augmenting Path 
 	Procedura \textnormal{\Call{APS}{}} zwraca ścieżkę $P \iff$ istnieje ścieżka powiększająca względem $M$ w $G$. Ponadto ścieżka $P$ zwrócona przez \textnormal{\Call{APS}{}} jest ścieżką powiększającą względem $M$.
 \end{lemma}
 
-\begin{proof} ~\\
+\begin{proof} ~
 	\begin{itemize}
 		\item[$\implies$] Jeśli \textnormal{\Call{APS}{}} zwraca ścieżkę $P$, to skierowana ścieżka $\vec{P}$ znaleziona w linii 4 zaczyna się w wierzchołku z $V_1'$ (a więc wolnym) i kończy się w wierzchołku z $V_2'$ (a więc wolnym). Z definicji grafu $G_M$ wynika, że pierwsza krawędź $P$ jest wolna, druga krawędź $P$ jest skojarzona, trzecia krawędź $P$ jest wolna, \dots, ostatnia krawędź $P$ jest wolna. Zatem $P$ jest ścieżką powiększającą względem $M$.
 
