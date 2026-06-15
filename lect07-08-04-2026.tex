@@ -6,7 +6,7 @@
 Często znaki są reprezentowane przy użyciu 8 bitów (np. ASCII). Skoro częstość znaków się różni, lepiej reprezentować znaki występujące często przy użyciu krótszych ciągów bitów, a znaki występujące rzadko przy użyciu dłuższych ciągów bitów.
 
 \begin{flalign*}
-	\text{częstość} = \text{liczba wystąpień} && &&
+	\text{częstość} = \text{liczba wystąpień} &  &  &  &
 \end{flalign*}
 
 \paragraph{Przykład}
@@ -16,28 +16,28 @@ W pliku jest 58 znaków. Każdy znak jest elementem zbioru $\{a, e, i, s, t, r, 
 	\centering
 	\renewcommand{\arraystretch}{1.2}
 	\begin{NiceTabular}{c|l|c|c|c|c|c|c|c}[margin,hvlines]
-		\multicolumn{2}{c|}{} & $a$ & $e$ & $i$ & $s$ & $t$ & $r$ & $n$ \\
+		\multicolumn{2}{c|}{}         & $a$                          & $e$ & $i$ & $s$ & $t$ & $r$ & $n$ \\
 		\hline
-		\multicolumn{2}{c|}{częstość} & 10 & 15 & 12 & 3 & 4 & 13 & 1 \\
+		\multicolumn{2}{c|}{częstość} & 10                           & 15  & 12  & 3   & 4   & 13  & 1   \\
 		\hline
-		kod 1 & \makecell[l]{stała długość \\ słowa kodowego} & 000 & 001 & 010 & 011 & 100 & 101 & 110 \\
+		kod 1                         & \makecell[l]{stała długość                                       \\ słowa kodowego} & 000 & 001 & 010 & 011 & 100 & 101 & 110 \\
 		\hline
-		kod 2 & \makecell[l]{zmienna długość \\ słowa kodowego} & 001 & 01 & 10 & 00000 & 0001 & 11 & 00001 \\
+		kod 2                         & \makecell[l]{zmienna długość                                     \\ słowa kodowego} & 001 & 01 & 10 & 00000 & 0001 & 11 & 00001 \\
 		\hline
-		kod 3 & \makecell[l]{zmienna długość \\ słowa kodowego} & 001 & 01 & 10 & 00010 & 0001 & 11 & 00001
+		kod 3                         & \makecell[l]{zmienna długość                                     \\ słowa kodowego} & 001 & 01 & 10 & 00010 & 0001 & 11 & 00001
 	\end{NiceTabular}
 \end{table}
 
 Jeśli użyjemy kodu o stałej długości słowa kodowego (kod 1) to zakodowany plik ma: $58 \cdot 3 = 174$ bity. \\
 Jeśli użyjemy kodu o zmiennej długości słowa kodowego (kod 2 lub kod 3) to zakodowany plik ma:
 \begin{flalign*}
-	10 \cdot 3 + 15 \cdot 2 + 12 \cdot 2 + 3 \cdot 5 + 4 \cdot 4 + 13 \cdot 2 + 1 \cdot 5 = 146 \text{ bitów.} && &&
+	10 \cdot 3 + 15 \cdot 2 + 12 \cdot 2 + 3 \cdot 5 + 4 \cdot 4 + 13 \cdot 2 + 1 \cdot 5 = 146 \text{ bitów.} &  &  &  &
 \end{flalign*}
 
 Jeśli używamy kodu o zmiennej długości słowa kodowego, to chcemy aby spełniony był warunek: \textbf{żadne słowo kodowe nie jest prefixem innego słowa kodowego}. \\
 Takie kody nazywa się \underline{kodami prefixowymi} (chociaż powinno być bezprefixowe).
 
-Rozważmy kod 3. Ciąg $0001001$ można odkodować na dwa sposoby: 
+Rozważmy kod 3. Ciąg $0001001$ można odkodować na dwa sposoby:
 \begin{itemize}[nosep]
 	\item $00010 \quad 01 \implies s \quad e$
 	\item $0001 \quad 001 \implies t \quad a$
@@ -49,16 +49,16 @@ Słowo kodowe znaku jest ciągiem etykiet krawędzi na ścieżce od korzenia do 
 
 \tikzset{
 	mytree/.style={
-		level distance=0.8cm,
-		level 1/.style={sibling distance=4.0cm},
-		level 2/.style={sibling distance=1.8cm},
-		level 3/.style={sibling distance=1.2cm},
-		level 4/.style={sibling distance=0.9cm},
-		level 5/.style={sibling distance=0.7cm},
-		every node/.style={circle, draw, minimum size=0.4cm, inner sep=1pt},
-		elabel left/.style={draw=none, font=\scriptsize, inner sep=1pt, midway, sloped, above},
-		elabel right/.style={draw=none, font=\scriptsize, inner sep=1pt, midway, sloped, above},
-	}
+			level distance=0.8cm,
+			level 1/.style={sibling distance=4.0cm},
+			level 2/.style={sibling distance=1.8cm},
+			level 3/.style={sibling distance=1.2cm},
+			level 4/.style={sibling distance=0.9cm},
+			level 5/.style={sibling distance=0.7cm},
+			every node/.style={circle, draw, minimum size=0.4cm, inner sep=1pt},
+			elabel left/.style={draw=none, font=\scriptsize, inner sep=1pt, midway, sloped, above},
+			elabel right/.style={draw=none, font=\scriptsize, inner sep=1pt, midway, sloped, above},
+		}
 }
 \begin{figure}[ht]
 	\centering
@@ -68,30 +68,30 @@ Słowo kodowe znaku jest ciągiem etykiet krawędzi na ścieżce od korzenia do 
 		\begin{tikzpicture}[mytree]
 			\node {}
 			child { node {}
-				child { node {}
-					child { node[draw=none] {a} edge from parent node[elabel left] {0} }
-					child { node[draw=none] {e} edge from parent node[elabel right] {1} }
+					child { node {}
+							child { node[draw=none] {a} edge from parent node[elabel left] {0} }
+							child { node[draw=none] {e} edge from parent node[elabel right] {1} }
+							edge from parent node[elabel left] {0}
+						}
+					child { node {}
+							child { node[draw=none] {i} edge from parent node[elabel left] {0} }
+							child { node[draw=none] {s} edge from parent node[elabel right] {1} }
+							edge from parent node[elabel right] {1}
+						}
 					edge from parent node[elabel left] {0}
 				}
-				child { node {}
-					child { node[draw=none] {i} edge from parent node[elabel left] {0} }
-					child { node[draw=none] {s} edge from parent node[elabel right] {1} }
-					edge from parent node[elabel right] {1}
-				}
-				edge from parent node[elabel left] {0}
-			}
 			child { node {}
-				child { node {}
-					child { node[draw=none] {t} edge from parent node[elabel left] {0} }
-					child { node[draw=none] {r} edge from parent node[elabel right] {1} }
-					edge from parent node[elabel left] {0}
-				}
-				child { node {}
-					child { node[draw=none] {n} edge from parent node[elabel left] {0} }
+					child { node {}
+							child { node[draw=none] {t} edge from parent node[elabel left] {0} }
+							child { node[draw=none] {r} edge from parent node[elabel right] {1} }
+							edge from parent node[elabel left] {0}
+						}
+					child { node {}
+							child { node[draw=none] {n} edge from parent node[elabel left] {0} }
+							edge from parent node[elabel right] {1}
+						}
 					edge from parent node[elabel right] {1}
-				}
-				edge from parent node[elabel right] {1}
-			};
+				};
 		\end{tikzpicture}
 	\end{minipage}
 	\hfill
@@ -101,63 +101,63 @@ Słowo kodowe znaku jest ciągiem etykiet krawędzi na ścieżce od korzenia do 
 		\begin{tikzpicture}[mytree, every node/.append style={font=\scriptsize}]
 			\node {58}
 			child { node {33}
-				child { node {18}
-					child { node {8}
-						child { node {4}
-							child { node {3}
-								child { node[draw=none] {s} edge from parent node[elabel left] {0} }
-								child { node[draw=none] {n} edge from parent node[elabel right] {1} }
-								edge from parent node[elabel left] {0}
-							}
-							child { node[draw=none] {t} edge from parent node[elabel right] {1} }
+					child { node {18}
+							child { node {8}
+									child { node {4}
+											child { node {3}
+													child { node[draw=none] {s} edge from parent node[elabel left] {0} }
+													child { node[draw=none] {n} edge from parent node[elabel right] {1} }
+													edge from parent node[elabel left] {0}
+												}
+											child { node[draw=none] {t} edge from parent node[elabel right] {1} }
+											edge from parent node[elabel left] {0}
+										}
+									child { node[draw=none] {a} edge from parent node[elabel right] {1} }
+									edge from parent node[elabel left] {0}
+								}
+							child { node[draw=none] {e} edge from parent node[elabel right] {1} }
 							edge from parent node[elabel left] {0}
 						}
-						child { node[draw=none] {a} edge from parent node[elabel right] {1} }
-						edge from parent node[elabel left] {0}
-					}
-					child { node[draw=none] {e} edge from parent node[elabel right] {1} }
+					child { node {25}
+							child { node[draw=none] {i} edge from parent node[elabel left] {0} }
+							child { node[draw=none] {r} edge from parent node[elabel right] {1} }
+							edge from parent node[elabel right] {1}
+						}
 					edge from parent node[elabel left] {0}
 				}
-				child { node {25}
-					child { node[draw=none] {i} edge from parent node[elabel left] {0} }
-					child { node[draw=none] {r} edge from parent node[elabel right] {1} }
-					edge from parent node[elabel right] {1}
-				}
-				edge from parent node[elabel left] {0}
-			}
 			child { node[draw=none] {} edge from parent[draw=none] };
 		\end{tikzpicture}
 	\end{minipage}
-	
+
 	\vspace{1cm}
 	\textbf{3. kod 3} \\ (zmienna długość) \\[1ex]
 	\begin{tikzpicture}[mytree]
 		\node {}
 		child { node {}
-			child { node {}
 				child { node {}
-					child { node {}
 						child { node {}
-							child { node[draw=none] {n} edge from parent node[elabel left] {0} }
-							child { node[draw=none] {s} edge from parent node[elabel right] {1} }
-							edge from parent node[elabel left] {0}
-						}
-						child { node[draw=none] {t} edge from parent node[elabel right] {1} }
+								child { node {}
+										child { node {}
+												child { node[draw=none] {n} edge from parent node[elabel left] {0} }
+												child { node[draw=none] {s} edge from parent node[elabel right] {1} }
+												edge from parent node[elabel left] {0}
+											}
+										child { node[draw=none] {t} edge from parent node[elabel right] {1} }
+										edge from parent node[elabel left] {0}
+									}
+								child { node[draw=none] {a} edge from parent node[elabel right] {1} }
+								edge from parent node[elabel left] {0}
+							}
+						child { node[draw=none] {e} edge from parent node[elabel right] {1} }
 						edge from parent node[elabel left] {0}
 					}
-					child { node[draw=none] {a} edge from parent node[elabel right] {1} }
-					edge from parent node[elabel left] {0}
-				}
-				child { node[draw=none] {e} edge from parent node[elabel right] {1} }
+				child { node {}
+						child { node[draw=none] {i} edge from parent node[elabel left] {0} }
+						child { node[draw=none] {r} edge from parent node[elabel right] {1} }
+						edge from parent node[elabel right] {1}
+					}
 				edge from parent node[elabel left] {0}
 			}
-			child { node {}
-				child { node[draw=none] {i} edge from parent node[elabel left] {0} }
-				child { node[draw=none] {r} edge from parent node[elabel right] {1} }
-				edge from parent node[elabel right] {1}
-			}
-			edge from parent node[elabel left] {0}
-		}
 		child { node[draw=none] {} edge from parent[draw=none] };
 	\end{tikzpicture}
 \end{figure}
@@ -170,12 +170,12 @@ Etykietujemy wierzchołki w następujący sposób: każdy wierzchołek $v$ dosta
 
 Niech $C$ będzie alfabetem, $f: C \to \N_+$, $f(c) =$ częstość znaku $c \in C$.
 \begin{flalign*}
-	d_T(c) & \text{ -- głębokość liścia reprezentującego znak } c \in C \text{ w drzewie } T && \\
-	d_T(c) & = \text{długość słowa kodowego znaku } c \in C \text{ w kodzie reprezentowanym przez drzewo } T && 
+	d_T(c) & \text{ -- głębokość liścia reprezentującego znak } c \in C \text{ w drzewie } T                 &  & \\
+	d_T(c) & = \text{długość słowa kodowego znaku } c \in C \text{ w kodzie reprezentowanym przez drzewo } T &  &
 \end{flalign*}
 Liczba bitów w zakodowanym pliku (kod reprezentowany przez drzewo $T$) wynosi:
 \begin{flalign*}
-	B(T) = \sum_{c \in C} f(c) \cdot d_T(c) && &&
+	B(T) = \sum_{c \in C} f(c) \cdot d_T(c) &  &  &  &
 \end{flalign*}
 
 Kod prefixowy reprezentowany przez drzewo $T$ nazywamy \underline{optymalnym}, jeśli $B(T)$ jest najmniejsze możliwe. \\
@@ -187,8 +187,8 @@ Drzewo binarne nazywamy \underline{regularnym}, jeśli każdy wierzchołek wewn�
 \end{theorem}
 
 \begin{proof}
-	Niech $T$ będzie drzewem binarnym reprezentującym optymalny kod prefixowy. Przypuśćmy, że $T$ nie jest regularne. Wtedy istnieje wierzchołek wewnętrzny $v$ z dokładnie jednym dzieckiem $w$. Niech $u$ będzie rodzicem $v$ (jeśli $v$ nie jest korzeniem $T$). 
-	
+	Niech $T$ będzie drzewem binarnym reprezentującym optymalny kod prefixowy. Przypuśćmy, że $T$ nie jest regularne. Wtedy istnieje wierzchołek wewnętrzny $v$ z dokładnie jednym dzieckiem $w$. Niech $u$ będzie rodzicem $v$ (jeśli $v$ nie jest korzeniem $T$).
+
 	\begin{figure}[H]
 		\centering
 		\begin{minipage}{0.4\textwidth}
@@ -196,27 +196,27 @@ Drzewo binarne nazywamy \underline{regularnym}, jeśli każdy wierzchołek wewn�
 			\begin{tikzpicture}[mytree]
 				\node {u}
 				child { node {}
-					child { node {}
-						child { node[draw=none] {a} edge from parent node[elabel left] {0} }
-						child { node[draw=none] {b} edge from parent node[elabel right] {1} }
+						child { node {}
+								child { node[draw=none] {a} edge from parent node[elabel left] {0} }
+								child { node[draw=none] {b} edge from parent node[elabel right] {1} }
+								edge from parent node[elabel left] {0}
+							}
+						child { node {}
+								child { node[draw=none] {c} edge from parent node[elabel left] {0} }
+								child { node[draw=none] {d} edge from parent node[elabel right] {1} }
+								edge from parent node[elabel right] {1}
+							}
 						edge from parent node[elabel left] {0}
 					}
-					child { node {}
-						child { node[draw=none] {c} edge from parent node[elabel left] {0} }
-						child { node[draw=none] {d} edge from parent node[elabel right] {1} }
-						edge from parent node[elabel right] {1}
-					}
-					edge from parent node[elabel left] {0}
-				}
 				child { node {v}
-					child[missing] {}
-					child { node {w}
-						child { node[draw=none] {e} edge from parent node[elabel left] {0} }
-						child { node[draw=none] {f} edge from parent node[elabel right] {1} }
+						child[missing] {}
+						child { node {w}
+								child { node[draw=none] {e} edge from parent node[elabel left] {0} }
+								child { node[draw=none] {f} edge from parent node[elabel right] {1} }
+								edge from parent node[elabel right] {1}
+							}
 						edge from parent node[elabel right] {1}
-					}
-					edge from parent node[elabel right] {1}
-				};
+					};
 				\node[draw=none] at (-2, 0) {$T$};
 			\end{tikzpicture}
 		\end{minipage}
@@ -228,28 +228,28 @@ Drzewo binarne nazywamy \underline{regularnym}, jeśli każdy wierzchołek wewn�
 			\begin{tikzpicture}[mytree]
 				\node {u}
 				child { node {}
-					child { node {}
-						child { node[draw=none] {a} edge from parent node[elabel left] {0} }
-						child { node[draw=none] {b} edge from parent node[elabel right] {1} }
+						child { node {}
+								child { node[draw=none] {a} edge from parent node[elabel left] {0} }
+								child { node[draw=none] {b} edge from parent node[elabel right] {1} }
+								edge from parent node[elabel left] {0}
+							}
+						child { node {}
+								child { node[draw=none] {c} edge from parent node[elabel left] {0} }
+								child { node[draw=none] {d} edge from parent node[elabel right] {1} }
+								edge from parent node[elabel right] {1}
+							}
 						edge from parent node[elabel left] {0}
 					}
-					child { node {}
-						child { node[draw=none] {c} edge from parent node[elabel left] {0} }
-						child { node[draw=none] {d} edge from parent node[elabel right] {1} }
-						edge from parent node[elabel right] {1}
-					}
-					edge from parent node[elabel left] {0}
-				}
 				child { node {w}
-					child { node[draw=none] {e} edge from parent node[elabel left] {0} }
-					child { node[draw=none] {f} edge from parent node[elabel right] {1} }
-					edge from parent node[elabel right] {1}
-				};
+						child { node[draw=none] {e} edge from parent node[elabel left] {0} }
+						child { node[draw=none] {f} edge from parent node[elabel right] {1} }
+						edge from parent node[elabel right] {1}
+					};
 				\node[draw=none] at (-2, 0) {$T'$};
 			\end{tikzpicture}
 		\end{minipage}
 	\end{figure}
-	
+
 	Niech $T'$ będzie drzewem powstałym z $T$ przez usunięcie $v$ i dodanie krawędzi $uw$, jeśli $v$ nie był korzeniem $T$.
 	$T'$ reprezentuje kod prefixowy i $B(T') < B(T)$ -- sprzeczność z optymalnością $T$.
 \end{proof}
@@ -290,118 +290,118 @@ Algorytm konstruuje drzewo binarne. $z$ - wierzchołek, $left, right$ - dzieci.
 	\item linia 1 -- $\BO(1)$
 	\item linia 2 -- $\BO(n)$
 	\item wnętrze pętli z linii 3 wykona się $n - 1$ razy:
-	\begin{itemize}[nosep]
-		\item linia 4 -- $\BO(1)$
-		\item linie 5, 6 -- $\BO(\log n)$
-		\item linia 7 -- $\BO(1)$
-		\item linia 8 -- $\BO(\log n)$
-	\end{itemize}
-	Wnętrze pętli zajmuje łącznie czas $\BO(\log n)$.
+	      \begin{itemize}[nosep]
+		      \item linia 4 -- $\BO(1)$
+		      \item linie 5, 6 -- $\BO(\log n)$
+		      \item linia 7 -- $\BO(1)$
+		      \item linia 8 -- $\BO(\log n)$
+	      \end{itemize}
+	      Wnętrze pętli zajmuje łącznie czas $\BO(\log n)$.
 \end{itemize}
 
 \begin{flalign*}
-	\BO(n) + (n - 1) \cdot \BO(\log n) = \BO(n \log n) && &&
+	\BO(n) + (n - 1) \cdot \BO(\log n) = \BO(n \log n) &  &  &  &
 \end{flalign*}
 
 Złożoność czasowa algorytmu wynosi $\BO(n \log n)$.
 
 \begin{example}{Konstrukcja drzewa Huffmana}
-Zaczynamy ze zbiorem wierzchołków: $(n, 1), (s, 3), (t, 4), (a, 10), (i, 12), (r, 13), (e, 15)$.
+	Zaczynamy ze zbiorem wierzchołków: $(n, 1), (s, 3), (t, 4), (a, 10), (i, 12), (r, 13), (e, 15)$.
 
-\begin{enumerate}
-	\item Łączymy $n$ i $s$: \\
-	\begin{tikzpicture}[mytree]
-		\node {4}
-		child { node {n,1} }
-		child { node {s,3} };
-	\end{tikzpicture}
-	\quad Zostają: $(t, 4), (a, 10), (i, 12), (r, 13), (e, 15)$.
-	
-	\item Łączymy $4$ i $t$: \\
-	\begin{tikzpicture}[mytree]
-		\node {8}
-		child { node {4}
-			child { node {n,1} }
-			child { node {s,3} }
-		}
-		child { node {t,4} };
-	\end{tikzpicture}
-	\quad Zostają: $(a, 10), (i, 12), (r, 13), (e, 15)$.
-	
-	\item Łączymy $8$ i $a$: \\
-	\begin{tikzpicture}[mytree]
-		\node {18}
-		child { node {8}
-			child { node {4}
-				child { node {n,1} }
-				child { node {s,3} }
-			}
-			child { node {t,4} }
-		}
-		child { node {a,10} };
-	\end{tikzpicture}
-	\quad Zostają: $(i, 12), (r, 13), (e, 15)$.
-	
-	\item Łączymy $i$ i $r$: \\
-	\begin{tikzpicture}[mytree]
-		\node {25}
-		child { node {i,12} }
-		child { node {r,13} };
-	\end{tikzpicture}
-	\quad Zostaje: $(e, 15)$.
-	
-	\item Łączymy $e$ i $18$:  \\
-	\begin{tikzpicture}[mytree]
-		\node {33}
-		child { node {e,15} }
-		child { node {18}
-			child { node {8}
-				child { node {4}
-					child { node {n,1} }
-					child { node {s,3} }
-				}
-				child { node {t,4} }
-			}
-			child { node {a,10} }
-		};
-	\end{tikzpicture}
-	
-	\item Łączymy $25$ i $33$ (Ostateczne drzewo kodów): \\
-	\begin{tikzpicture}[mytree]
-		\node {58}
-		child { node {25}
-			child { node {i,12} edge from parent node[elabel left] {0} }
-			child { node {r,13} edge from parent node[elabel right] {1} }
-			edge from parent node[elabel left] {0}
-		}
-		child { node {33}
-			child { node {e,15} edge from parent node[elabel left] {0} }
-			child { node {18}
-				child { node {8}
-					child { node {4}
-						child { node {n,1} edge from parent node[elabel left] {0} }
-						child { node {s,3} edge from parent node[elabel right] {1} }
-						edge from parent node[elabel left] {0}
-					}
-					child { node {t,4} edge from parent node[elabel right] {1} }
-					edge from parent node[elabel left] {0}
-				}
-				child { node {a,10} edge from parent node[elabel right] {1} }
-				edge from parent node[elabel right] {1}
-			}
-			edge from parent node[elabel right] {1}
-		};
-	\end{tikzpicture}
-\end{enumerate}
+	\begin{enumerate}
+		\item Łączymy $n$ i $s$: \\
+		      \begin{tikzpicture}[mytree]
+			      \node {4}
+			      child { node {n,1} }
+			      child { node {s,3} };
+		      \end{tikzpicture}
+		      \quad Zostają: $(t, 4), (a, 10), (i, 12), (r, 13), (e, 15)$.
 
-Odczytany kod z drzewa w kroku 6:
-\begin{flalign*}
-	i & \implies 00 && \\
-	r & \implies 01 && \\
-	e & \implies 10 && \\
-	n & \implies 11000 && \\
-	s & \implies 11001 && \\
-	t & \implies 1101 && \\
-	a & \implies 111 &&
-\end{flalign*}
+		\item Łączymy $4$ i $t$: \\
+		      \begin{tikzpicture}[mytree]
+			      \node {8}
+			      child { node {4}
+					      child { node {n,1} }
+					      child { node {s,3} }
+				      }
+			      child { node {t,4} };
+		      \end{tikzpicture}
+		      \quad Zostają: $(a, 10), (i, 12), (r, 13), (e, 15)$.
+
+		\item Łączymy $8$ i $a$: \\
+		      \begin{tikzpicture}[mytree]
+			      \node {18}
+			      child { node {8}
+					      child { node {4}
+							      child { node {n,1} }
+							      child { node {s,3} }
+						      }
+					      child { node {t,4} }
+				      }
+			      child { node {a,10} };
+		      \end{tikzpicture}
+		      \quad Zostają: $(i, 12), (r, 13), (e, 15)$.
+
+		\item Łączymy $i$ i $r$: \\
+		      \begin{tikzpicture}[mytree]
+			      \node {25}
+			      child { node {i,12} }
+			      child { node {r,13} };
+		      \end{tikzpicture}
+		      \quad Zostaje: $(e, 15)$.
+
+		\item Łączymy $e$ i $18$:  \\
+		      \begin{tikzpicture}[mytree]
+			      \node {33}
+			      child { node {e,15} }
+			      child { node {18}
+					      child { node {8}
+							      child { node {4}
+									      child { node {n,1} }
+									      child { node {s,3} }
+								      }
+							      child { node {t,4} }
+						      }
+					      child { node {a,10} }
+				      };
+		      \end{tikzpicture}
+
+		\item Łączymy $25$ i $33$ (Ostateczne drzewo kodów): \\
+		      \begin{tikzpicture}[mytree]
+			      \node {58}
+			      child { node {25}
+					      child { node {i,12} edge from parent node[elabel left] {0} }
+					      child { node {r,13} edge from parent node[elabel right] {1} }
+					      edge from parent node[elabel left] {0}
+				      }
+			      child { node {33}
+					      child { node {e,15} edge from parent node[elabel left] {0} }
+					      child { node {18}
+							      child { node {8}
+									      child { node {4}
+											      child { node {n,1} edge from parent node[elabel left] {0} }
+											      child { node {s,3} edge from parent node[elabel right] {1} }
+											      edge from parent node[elabel left] {0}
+										      }
+									      child { node {t,4} edge from parent node[elabel right] {1} }
+									      edge from parent node[elabel left] {0}
+								      }
+							      child { node {a,10} edge from parent node[elabel right] {1} }
+							      edge from parent node[elabel right] {1}
+						      }
+					      edge from parent node[elabel right] {1}
+				      };
+		      \end{tikzpicture}
+	\end{enumerate}
+
+	Odczytany kod z drzewa w kroku 6:
+	\begin{flalign*}
+		i & \implies 00    &  & \\
+		r & \implies 01    &  & \\
+		e & \implies 10    &  & \\
+		n & \implies 11000 &  & \\
+		s & \implies 11001 &  & \\
+		t & \implies 1101  &  & \\
+		a & \implies 111   &  &
+	\end{flalign*}
 \end{example}

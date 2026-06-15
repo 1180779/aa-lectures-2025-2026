@@ -17,9 +17,9 @@
 \begin{example} \leavevmode
 	\begin{enumerate}
 		\item $A$ -- macierz, $S$ -- zbiór wierszy $A$, $\mathcal{A} = \{R \subseteq S : R \text{ tworzy zbiór liniowo niezależny}\}$.\\
-		Wtedy $(S, \mathcal{A})$ to matroid.
+		      Wtedy $(S, \mathcal{A})$ to matroid.
 		\item $G = (V, E)$ -- graf, $\mathcal{A} = \{F \subseteq E : G[F] \text{ jest acykliczny}\}$.\\
-		Wtedy $(E, \mathcal{A})$ to matroid zwany matroidem grafowym.
+		      Wtedy $(E, \mathcal{A})$ to matroid zwany matroidem grafowym.
 	\end{enumerate}
 	Z definicji $\emptyset \in \mathcal{A}$.
 \end{example}
@@ -65,7 +65,7 @@ $S = \{x_1, x_2, \ldots, x_n\}$.
 	$A \cup \{x_j\} \in \mathcal{A}$, więc z własności 3. $\{x_{i_1}, x_{i_2}, \ldots, x_{i_{l-1}}, x_j\} \subseteq A \cup \{x_j\}$ jest zbiorem niezależnym.\\
 	Ale wtedy algorytm dodałby $x_j$ zamiast $x_{i_l}$ jako $l$-ty element dodany do $A$ -- sprzeczność.\\
 	Zatem $A$ jest maksymalnym zbiorem niezależnym.
-	
+
 	Rozważmy zbiór niezależny $B = \{y_1, y_2, \ldots, y_m\} \in \mathcal{A}$ i załóżmy, że $w(y_1) \geq w(y_2) \geq \ldots \geq w(y_m)$.\\
 	Mamy $m \leq k$, bo $A$ jest maksymalnym zbiorem niezależnym (Stw).\\
 	Pokażemy, że $w(B) \leq w(A)$.\\
@@ -76,13 +76,13 @@ $S = \{x_1, x_2, \ldots, x_n\}$.
 	Mamy $w(y_s) \geq w(y_j) > w(x_{i_j})$, więc istnieje $t \leq j$ takie, że $w(x_{i_1}) \geq w(x_{i_2}) \geq \ldots \geq w(x_{i_{t-1}}) \geq w(y_s) > w(x_{i_t})$.\\
 	Z własności 3. $\{x_{i_1}, x_{i_2}, \ldots, x_{i_{t-1}}, y_s\} \subseteq A_{j-1} \cup \{y_s\}$ jest zbiorem niezależnym.\\
 	Ale wtedy algorytm dodałby $y_s$ zamiast $x_{i_t}$ jako $t$-ty element dodany do $A$ -- sprzeczność.\\
-	Zatem 
+	Zatem
 	$\begin{rcases}
-		w(y_1) \leq w(x_{i_1}) \\
-		w(y_2) \leq w(x_{i_2}) \\
-		\vdots \\
-		w(y_m) \leq w(x_{i_m})
-	\end{rcases} \implies w(B) = w(y_1) + \ldots + w(y_m) \leq w(x_{i_1}) + \ldots + w(x_{i_m}) \leq w(A)$.
+			w(y_1) \leq w(x_{i_1}) \\
+			w(y_2) \leq w(x_{i_2}) \\
+			\vdots                 \\
+			w(y_m) \leq w(x_{i_m})
+		\end{rcases} \implies w(B) = w(y_1) + \ldots + w(y_m) \leq w(x_{i_1}) + \ldots + w(x_{i_m}) \leq w(A)$.
 \end{proof}
 
 \paragraph{Złożoność czasowa algorytmu Greedy}
@@ -118,19 +118,19 @@ Nie płacimy kar za zadania terminowe, płacimy kary za zadania spóźnione.
 \begin{proof}
 	\begin{enumerate}
 		\item Niech $z_i$ będzie zadaniem spóźnionym ukończonym w chwili $l_i > d_i$ i niech $z_j$ będzie zadaniem terminowym ukończonym w chwili $l_j \leq d_j$ i niech $z_i$ będzie przed $z_j$ w harmonogramie, tzn. $l_i < l_j$.\\
-		Zamieniamy miejscami $z_i$ i $z_j$. Po zamianie:
-		\begin{itemize}[nosep]
-			\item $z_i$ jest ukończone w chwili $l_j > l_i > d_i$, więc nadal jest spóźnione.
-			\item $z_j$ jest ukończone w chwili $l_i < l_j \leq d_j$, więc nadal jest terminowe.
-		\end{itemize}
-		Po pewnej liczbie takich zamian otrzymujemy harmonogram o tej samej sumie kar, w którym wszystkie zadania terminowe poprzedzają wszystkie zadania spóźnione.
-		
+		      Zamieniamy miejscami $z_i$ i $z_j$. Po zamianie:
+		      \begin{itemize}[nosep]
+			      \item $z_i$ jest ukończone w chwili $l_j > l_i > d_i$, więc nadal jest spóźnione.
+			      \item $z_j$ jest ukończone w chwili $l_i < l_j \leq d_j$, więc nadal jest terminowe.
+		      \end{itemize}
+		      Po pewnej liczbie takich zamian otrzymujemy harmonogram o tej samej sumie kar, w którym wszystkie zadania terminowe poprzedzają wszystkie zadania spóźnione.
+
 		\item Niech $z_i, z_j$ będą zadaniami terminowymi takimi, że $z_i$ jest ukończone w chwili $l_i \leq d_i$, $z_j$ jest ukończone w chwili $l_j \leq d_j$, $l_i < l_j$, ale $d_i > d_j$.\\
-		Zamieniamy miejscami $z_i$ i $z_j$. Po zamianie:
-		\begin{itemize}[nosep]
-			\item $z_i$ jest ukończone w chwili $l_j \leq d_j < d_i$, więc $z_i$ jest nadal terminowe.
-			\item $z_j$ jest ukończone w chwili $l_i < l_j \leq d_j$, więc $z_j$ jest nadal terminowe.
-		\end{itemize}
-		Po pewnej liczbie takich zamian otrzymujemy harmonogram spełniający warunki lematu.
+		      Zamieniamy miejscami $z_i$ i $z_j$. Po zamianie:
+		      \begin{itemize}[nosep]
+			      \item $z_i$ jest ukończone w chwili $l_j \leq d_j < d_i$, więc $z_i$ jest nadal terminowe.
+			      \item $z_j$ jest ukończone w chwili $l_i < l_j \leq d_j$, więc $z_j$ jest nadal terminowe.
+		      \end{itemize}
+		      Po pewnej liczbie takich zamian otrzymujemy harmonogram spełniający warunki lematu.
 	\end{enumerate}
 \end{proof}

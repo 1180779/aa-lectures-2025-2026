@@ -10,7 +10,7 @@ Znaleźć: najliczniejsze skojarzenie w $G$.
 Niech $M$ będzie skojarzeniem w $G$. \\
 Definiujemy graf skierowany $G_M = (V_1 \cup V_2, E_M)$, gdzie
 \begin{flalign*}
-	E_M = \{(u, v) : uv \in E - M,\ u \in V_1,\ v \in V_2\} \cup \{(v, u) : uv \in M,\ u \in V_1,\ v \in V_2\}. &&
+	E_M = \{(u, v) : uv \in E - M,\ u \in V_1,\ v \in V_2\} \cup \{(v, u) : uv \in M,\ u \in V_1,\ v \in V_2\}. &  &
 \end{flalign*}
 Innymi słowy, krawędzie wolne kierujemy z $V_1$ do $V_2$, a krawędzie skojarzone z $V_2$ do $V_1$.
 
@@ -19,16 +19,16 @@ Innymi słowy, krawędzie wolne kierujemy z $V_1$ do $V_2$, a krawędzie skojarz
 		\centering
 		\begin{tikzpicture}[x=0.9cm, y=0.9cm]
 			\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-				\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-			}
+					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
+				}
 			\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-				\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-			}
+					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
+				}
 			\node[right] at (4.3, 1) {$V_1$};
 			\node[right] at (4.3, 0) {$V_2$};
 			\node[left] at (-0.3, 0.5) {$G$};
-			
-			
+
+
 			\draw (ua) -- (lq);
 			\draw (ub) -- (lp);
 			\draw (uc) -- (lp);
@@ -45,15 +45,15 @@ Innymi słowy, krawędzie wolne kierujemy z $V_1$ do $V_2$, a krawędzie skojarz
 		\centering
 		\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
 			\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-				\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-			}
+					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
+				}
 			\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-				\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-			}
+					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
+				}
 			\node[right] at (4.3, 1) {$V_1$};
 			\node[right] at (4.3, 0) {$V_2$};
 			\node[left] at (-0.3, 0.5) {$G_M$};
-			
+
 			\draw[->] (ua) -- (lq);
 			\draw[->] (ub) -- (lp);
 			\draw[->] (uc) -- (lp);
@@ -91,9 +91,9 @@ Procedura do znajdowania ścieżki powiększającej --- \textit{Augmenting Path 
 \begin{proof} ~\\
 	\begin{itemize}
 		\item[$\implies$] Jeśli \textnormal{\Call{APS}{}} zwraca ścieżkę $P$, to skierowana ścieżka $\vec{P}$ znaleziona w linii 4 zaczyna się w wierzchołku z $V_1'$ (a więc wolnym) i kończy się w wierzchołku z $V_2'$ (a więc wolnym). Z definicji grafu $G_M$ wynika, że pierwsza krawędź $P$ jest wolna, druga krawędź $P$ jest skojarzona, trzecia krawędź $P$ jest wolna, \dots, ostatnia krawędź $P$ jest wolna. Zatem $P$ jest ścieżką powiększającą względem $M$.
-		
+
 		\item[$\impliedby$] Jeśli istnieje ścieżka powiększająca względem $M$ w $G$, to ścieżka skierowana otrzymana z takiej ścieżki powiększającej przez skierowanie krawędzi zgodnie z $E_M$ jest ścieżką skierowaną z $V_1'$ do $V_2'$ w $G_M$. Taką ścieżkę skierowaną znajduje \textnormal{\Call{APS}{}}.
-	\end{itemize} 
+	\end{itemize}
 \end{proof}
 
 Algorytm znajdowania najliczniejszego skojarzenia --- \textit{Maximum Matching} (MM).
@@ -129,11 +129,11 @@ Złożoność czasowa \textnormal{\Call{MM}{}}:
 	\item Linia 1: $\BO(1)$.
 	\item Pętla 2--6 wykona się co najwyżej $\frac{|V|}{2}$ razy, bo w każdej iteracji $|M|$ zwiększa się o $1$, a maksymalna liczność skojarzenia jest $\le \frac{|V|}{2}$.
 	\item Wnętrze pętli:
-	\begin{itemize}[nosep]
-		\item Linia 3: $\BO(|E|)$.
-		\item Linia 5: $\BO(|V|)$.
-	\end{itemize}
-	Razem $\BO(|E|)$.
+	      \begin{itemize}[nosep]
+		      \item Linia 3: $\BO(|E|)$.
+		      \item Linia 5: $\BO(|V|)$.
+	      \end{itemize}
+	      Razem $\BO(|E|)$.
 	\item Linia 7: $\BO(|V|)$.
 \end{itemize}
 Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
@@ -142,20 +142,20 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 
 \begin{example}{Działanie algorytmu Maximum Matching} ~\\
 	Prześledźmy działanie algorytmu \textnormal{\Call{MM}{}} na poniższym grafie $G$:
-	
+
 	\begin{figure}[H]
 		\centering
 		\begin{tikzpicture}[x=0.9cm, y=0.9cm]
 			\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-				\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-			}
+					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
+				}
 			\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-				\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-			}
+					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
+				}
 			\node[right] at (4.3, 1) {$V_1$};
 			\node[right] at (4.3, 0) {$V_2$};
 			\node[left] at (-0.3, 0.5) {$G$};
-			
+
 			\draw (ua) -- (lq);
 			\draw (ub) -- (lp);
 			\draw (uc) -- (lp);
@@ -168,7 +168,7 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 			\draw (ue) -- (lt);
 		\end{tikzpicture}
 	\end{figure}
-	
+
 	\textbf{Iteracja 1:}
 	\begin{figure}[H]
 		\centering
@@ -176,20 +176,20 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 			\centering
 			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
 				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
+					}
 				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
+					}
 				\node[right] at (4.3, 1) {$V_1$};
 				\node[right] at (4.3, 0) {$V_2$};
 				\node[left] at (-0.3, 0.5) {$G_M$};
-				
+
 				% wszystkie wolne
 				\foreach \name in {a, b, c, d, e} {\draw[draw=black] (u\name) circle (4pt);}
 				\foreach \name in {p, q, r, s, t} {\draw[draw=black] (l\name) circle (4pt);}
-				
-				
+
+
 				\draw[->] (ua) -- (lq);
 				\draw[->] (ub) -- (lp);
 				\draw[->] (uc) -- (lp);
@@ -205,15 +205,15 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 			\centering
 			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
 				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
+					}
 				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
+					}
 				\node[right] at (4.3, 1) {$V_1$};
 				\node[right] at (4.3, 0) {$V_2$};
 				\node[left] at (-0.3, 0.5) {$G$};
-				
+
 				\draw (ua) -- (lq);
 				\draw (ub) -- (lp);
 				\draw (uc) -- (lp);
@@ -225,9 +225,9 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 				\draw (ue) -- (ls);
 				\draw (ue) -- (lt);
 			\end{tikzpicture}
-		\end{minipage} 
+		\end{minipage}
 	\end{figure}
-	
+
 	\textbf{Iteracja 2:}
 	\begin{figure}[H]
 		\centering
@@ -235,19 +235,19 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 			\centering
 			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
 				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
+					}
 				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
+					}
 				\node[right] at (4.3, 1) {$V_1$};
 				\node[right] at (4.3, 0) {$V_2$};
 				\node[left] at (-0.3, 0.5) {$G_M$};
-				
+
 				\foreach \name in {a, b, d, e} {\draw[draw=black] (u\name) circle (4pt);}
 				\foreach \name in {p, r, s, t} {\draw[draw=black] (l\name) circle (4pt);}
-				
-				
+
+
 				\draw[->] (ua) -- (lq);
 				\draw[->] (ub) -- (lp);
 				\draw[->] (uc) -- (lp);
@@ -263,15 +263,15 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 			\centering
 			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
 				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
+					}
 				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
+					}
 				\node[right] at (4.3, 1) {$V_1$};
 				\node[right] at (4.3, 0) {$V_2$};
 				\node[left] at (-0.3, 0.5) {$G$};
-				
+
 				\draw (ua) -- (lq);
 				\draw (ub) -- (lp);
 				\draw (uc) -- (lp);
@@ -283,9 +283,9 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 				\draw[line width=1.2pt, path] (ue) -- (ls);
 				\draw (ue) -- (lt);
 			\end{tikzpicture}
-		\end{minipage} 
+		\end{minipage}
 	\end{figure}
-	
+
 	\textbf{Iteracja 3:}
 	\begin{figure}[H]
 		\centering
@@ -293,19 +293,19 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 			\centering
 			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
 				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
+					}
 				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
+					}
 				\node[right] at (4.3, 1) {$V_1$};
 				\node[right] at (4.3, 0) {$V_2$};
 				\node[left] at (-0.3, 0.5) {$G_M$};
-				
+
 				\foreach \name in {a, b, d} {\draw[draw=black] (u\name) circle (4pt);}
 				\foreach \name in {p, r, t} {\draw[draw=black] (l\name) circle (4pt);}
-				
-				
+
+
 				\draw[->] (ua) -- (lq);
 				\draw[->] (ub) -- (lp);
 				\draw[->] (uc) -- (lp);
@@ -321,15 +321,15 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 			\centering
 			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
 				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
+					}
 				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
+					}
 				\node[right] at (4.3, 1) {$V_1$};
 				\node[right] at (4.3, 0) {$V_2$};
 				\node[left] at (-0.3, 0.5) {$G$};
-				
+
 				\draw (ua) -- (lq);
 				\draw (ub) -- (lp);
 				\draw (uc) -- (lp);
@@ -341,10 +341,10 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 				\draw[line width=1.2pt, path] (ue) -- (ls);
 				\draw (ue) -- (lt);
 			\end{tikzpicture}
-		\end{minipage} 
+		\end{minipage}
 	\end{figure}
-	
-	
+
+
 	\textbf{Iteracja 4:}
 	\begin{figure}[H]
 		\centering
@@ -352,19 +352,19 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 			\centering
 			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
 				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
+					}
 				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
+					}
 				\node[right] at (4.3, 1) {$V_1$};
 				\node[right] at (4.3, 0) {$V_2$};
 				\node[left] at (-0.3, 0.5) {$G_M$};
-				
+
 				\foreach \name in {a, b, d} {\draw[draw=black] (u\name) circle (4pt);}
 				\foreach \name in {p, r, t} {\draw[draw=black] (l\name) circle (4pt);}
-				
-				
+
+
 				\draw[->, line width=1.2pt, path] (ua) -- (lq);
 				\draw[->] (ub) -- (lp);
 				\draw[->] (uc) -- (lp);
@@ -380,15 +380,15 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 			\centering
 			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
 				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
+					}
 				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
+					}
 				\node[right] at (4.3, 1) {$V_1$};
 				\node[right] at (4.3, 0) {$V_2$};
 				\node[left] at (-0.3, 0.5) {$G$};
-				
+
 				\draw[line width=1.2pt, path] (ua) -- (lq);
 				\draw (ub) -- (lp);
 				\draw (uc) -- (lp);
@@ -400,9 +400,9 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 				\draw[] (ue) -- (ls);
 				\draw[line width=1.2pt, path] (ue) -- (lt);
 			\end{tikzpicture}
-		\end{minipage} 
+		\end{minipage}
 	\end{figure}
-	
+
 	\textbf{Iteracja 5:}
 	\begin{figure}[H]
 		\centering
@@ -410,19 +410,19 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 			\centering
 			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
 				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
+					}
 				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
+					}
 				\node[right] at (4.3, 1) {$V_1$};
 				\node[right] at (4.3, 0) {$V_2$};
 				\node[left] at (-0.3, 0.5) {$G_M$};
-				
+
 				\foreach \name in {b} {\draw[draw=black] (u\name) circle (4pt);}
 				\foreach \name in {p} {\draw[draw=black] (l\name) circle (4pt);}
-				
-				
+
+
 				\draw[<-] (ua) -- (lq);
 				\draw[->, line width=1.2pt, path] (ub) -- (lp);
 				\draw[->] (uc) -- (lp);
@@ -438,15 +438,15 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 			\centering
 			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
 				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
+					}
 				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-				}
+						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
+					}
 				\node[right] at (4.3, 1) {$V_1$};
 				\node[right] at (4.3, 0) {$V_2$};
 				\node[left] at (-0.3, 0.5) {$G$};
-				
+
 				\draw[line width=1.2pt, path] (ua) -- (lq);
 				\draw[line width=1.2pt, path] (ub) -- (lp);
 				\draw (uc) -- (lp);
@@ -458,6 +458,6 @@ Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 				\draw[] (ue) -- (ls);
 				\draw[line width=1.2pt, path] (ue) -- (lt);
 			\end{tikzpicture}
-		\end{minipage} 
+		\end{minipage}
 	\end{figure}
 \end{example}

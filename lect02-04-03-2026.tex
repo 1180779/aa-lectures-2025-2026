@@ -3,46 +3,46 @@
 \subsection{Notacja asymptotyczna --- przypomnienie}
 % ════════════════════════════════════════════════════════════════
 \begin{flalign*}
-	& f,g:\N\rightarrow\Rp & \\
-	& g(n) = \BO(f(n)) \Leftrightarrow \exists_{c\in\Rp}\exists_{n_0\in\Np}\forall_{n > n_0} g(n) \leq c\cdot f(n) & \\
-	& g(n) = \BM(f(n)) \Leftrightarrow \exists_{c\in\Rp}\exists_{n_0\in\Np}\forall_{n > n_0} c\cdot f(n) \leq g(n) & \\
-	& g(n) = \BT(f(n)) \Leftrightarrow \exists_{c_1, c_2\in\Rp}\exists_{n_0\in\Np}\forall_{n > n_0} c_1\cdot f(n)\leq g(n) \leq c_2\cdot f(n) & \\
-	& g(n) = \BO(f(n)) \Leftrightarrow f(n) = \BM(g(n)) & \\
-	& g(n) = \BT(f(n)) \Leftrightarrow \big( g(n) = \BO(f(n)) \wedge g(n) = \BM(f(n)) \big) &
+	 & f,g:\N\rightarrow\Rp                                                                                                                    & \\
+	 & g(n) = \BO(f(n)) \Leftrightarrow \exists_{c\in\Rp}\exists_{n_0\in\Np}\forall_{n > n_0} g(n) \leq c\cdot f(n)                            & \\
+	 & g(n) = \BM(f(n)) \Leftrightarrow \exists_{c\in\Rp}\exists_{n_0\in\Np}\forall_{n > n_0} c\cdot f(n) \leq g(n)                            & \\
+	 & g(n) = \BT(f(n)) \Leftrightarrow \exists_{c_1, c_2\in\Rp}\exists_{n_0\in\Np}\forall_{n > n_0} c_1\cdot f(n)\leq g(n) \leq c_2\cdot f(n) & \\
+	 & g(n) = \BO(f(n)) \Leftrightarrow f(n) = \BM(g(n))                                                                                       & \\
+	 & g(n) = \BT(f(n)) \Leftrightarrow \big( g(n) = \BO(f(n)) \wedge g(n) = \BM(f(n)) \big)                                                   &
 \end{flalign*}
 
 \begin{flalign*}
-	& n^a = \BO(n^b) \text{ gdy } 0 < a \leq b && \log n = \BO(n^\epsilon) \text{ gdy } \epsilon > 0 & && \\ 
-	& a^n = \BO(b^n) \text{ gdy } 1 < a \leq b && \log_a n = \BT(\log_b n) \text{ gdy } a, b > 1 & && \\ 
-	& n^a = \BO(b^n) \text{ gdy } 0 < a,\ b > 1 && &
+	 & n^a = \BO(n^b) \text{ gdy } 0 < a \leq b  &  & \log n = \BO(n^\epsilon) \text{ gdy } \epsilon > 0 &   &  & \\
+	 & a^n = \BO(b^n) \text{ gdy } 1 < a \leq b  &  & \log_a n = \BT(\log_b n) \text{ gdy } a, b > 1     &   &  & \\
+	 & n^a = \BO(b^n) \text{ gdy } 0 < a,\ b > 1 &  &                                                    &
 \end{flalign*}
 
 \begin{flalign*}
-	T(n) = 5n^3 + 2n^2 + 100n\log n \underset{n \to \infty}{\approx} 5n^3 = \BT(n^3) && && 
+	T(n) = 5n^3 + 2n^2 + 100n\log n \underset{n \to \infty}{\approx} 5n^3 = \BT(n^3) &  &  &  &
 \end{flalign*}
 
 \paragraph{Procedura rekurencyjna}
 \begin{flalign*}
 	n! = \begin{cases}
-		1 & \text{gdy } n = 0 \\[0.5ex]
-		n \cdot (n - 1)! & \text{gdy } n \geq 1 
-	\end{cases} && && 
+		     1                & \text{gdy } n = 0    \\[0.5ex]
+		     n \cdot (n - 1)! & \text{gdy } n \geq 1
+	     \end{cases} &  &  &  &
 \end{flalign*}
 Oczywiste jest, że $\displaystyle n! = \prod_{i = 1}^{n}i$
 
 \paragraph{Ciąg Fibonacciego}
-	$F_n$ - ciąg Fibonacciego.
+$F_n$ - ciąg Fibonacciego.
 \begin{flalign*}
 	F_n = \begin{cases}
-		0 & \text{gdy } n = 0 \\[0.5ex]
-		1 & \text{gdy } n = 1 \\[0.5ex]
-		F_{n - 1} + F_{n - 2} & \text{gdy } n \geq 2
-	\end{cases} && && 
+		      0                     & \text{gdy } n = 0    \\[0.5ex]
+		      1                     & \text{gdy } n = 1    \\[0.5ex]
+		      F_{n - 1} + F_{n - 2} & \text{gdy } n \geq 2
+	      \end{cases} &  &  &  &
 \end{flalign*}
 
 \begin{alg}{Rekurencyjna konstrukcja ciągu Fibonacciego}{alg:fib:recursive}
 	\FunctionNN{Fibb}{$n$}
-	\If{$n = 0$} \Return 0 
+	\If{$n = 0$} \Return 0
 	\EndIf
 	\If{$n = 1$} \Return 1
 	\EndIf
@@ -62,36 +62,36 @@ Algorytm typu \textit{dziel i zwyciężaj} składa się z trzech części
 
 Zakładamy, że (zazwyczaj) w fazie \textit{dziel} problem jest dzielony na co najmniej dwa podproblemy i podproblemy są rozłączne.
 
-\begin{example}{Mnożenie liczb $n$-cyfrowych} 
+\begin{example}{Mnożenie liczb $n$-cyfrowych}
 	$x,y$ -- liczby naturalne $n$-cyfrowe.
-	
-	Aby policzyć $x\cdot y$ można użyć mnożenia pisemnego (jak na kartce). Tym sposobem musimy wykonać $\BO(n^2)$ mnożeń cyfr. Spróbujemy znaleźć lepszą metodę. 
+
+	Aby policzyć $x\cdot y$ można użyć mnożenia pisemnego (jak na kartce). Tym sposobem musimy wykonać $\BO(n^2)$ mnożeń cyfr. Spróbujemy znaleźć lepszą metodę.
 	Dzielimy $x$ i $y$ na ,,dwie połowy''. Zakładamy, dla uproszczenia, że $n$ jest parzyste.
 	\begin{flalign*}
-		x = x_1x_2\cdots x_n = \underbracket{x_1x_2\cdots x_{n/2}}_{x_L}\underbracket{x_{n/2 + 1}\cdots x_n}_{x_R} = 10^{n/2}x_L + x_R && && 
+		x = x_1x_2\cdots x_n = \underbracket{x_1x_2\cdots x_{n/2}}_{x_L}\underbracket{x_{n/2 + 1}\cdots x_n}_{x_R} = 10^{n/2}x_L + x_R &  &  &  &
 	\end{flalign*}
-	podobnie dla $y$: 
+	podobnie dla $y$:
 	\begin{flalign*}
-		y = \cdots = 10^{n/2}y_L + y_R && &&
+		y = \cdots = 10^{n/2}y_L + y_R &  &  &  &
 	\end{flalign*}
-	
+
 	Wymnażamy:
 	\begin{flalign*}
-		x\cdot y = (10^{n/2}x_L + x_R) \cdot (10^{n/2}y_L + y_R) = 10^nx_Ly_L + 10^{n/2}(x_Ly_R + x_Ry_L) + x_Ry_R && && 
+		x\cdot y = (10^{n/2}x_L + x_R) \cdot (10^{n/2}y_L + y_R) = 10^nx_Ly_L + 10^{n/2}(x_Ly_R + x_Ry_L) + x_Ry_R &  &  &  &
 	\end{flalign*}
-	
-	Złożoność czasowa algorytmu -- ozn. $T(n)$. 
+
+	Złożoność czasowa algorytmu -- ozn. $T(n)$.
 	\begin{itemize}[nosep]
 		\item Podział $x, y$ na $x_L,x_R,y_L,y_R$ zajmie $\BO(n)$ czasu.
 		\item Dodanie liczb $n$-cyfrowych zajmie $\BO(n)$ czasu.
 		\item Mnożenie przez $10^n$ jest równoważne dopisaniu $n$ zer więc też $\BO(n)$.
 	\end{itemize}
 	\begin{flalign*}
-		T(n) = 4\cdot T(n/2) + \BT(n) && && 
+		T(n) = 4\cdot T(n/2) + \BT(n) &  &  &  &
 	\end{flalign*}
-	
-	Można lepiej, bo możemy zauważyć, że $x_Ly_R + x_Ry_L = (x_L - x_R)\cdot (y_R - y_L) + x_L y_L + x_R y_R$, 
-	więc potrzebujemy policzyć tylko 3 iloczyny: $x_L y_L,\ x_R y_R,\ (x_L - x_R)\cdot (y_R - y_L)$. 
+
+	Można lepiej, bo możemy zauważyć, że $x_Ly_R + x_Ry_L = (x_L - x_R)\cdot (y_R - y_L) + x_L y_L + x_R y_R$,
+	więc potrzebujemy policzyć tylko 3 iloczyny: $x_L y_L,\ x_R y_R,\ (x_L - x_R)\cdot (y_R - y_L)$.
 	To daje $T(n) = 3\cdot T\left(\frac{n}{2}\right) + \BT(n)$
 \end{example}
 
@@ -100,13 +100,13 @@ Zakładamy, że (zazwyczaj) w fazie \textit{dziel} problem jest dzielony na co n
 	Wtedy
 	\begin{flalign*}
 		T(n) = \begin{cases}
-			\BT(n^{\log_b a}) & \text{gdy } f(n) = \BO(n^{\log_b a - \epsilon}) \text{ dla pewnego } \epsilon > 0 \\[1ex]
-			\BT(n^{\log_b a} \log n) & \text{gdy } f(n) = \BT(n^{\log_b a}) \\[1ex]
-			\BT(f(n)) & \text{gdy } \substack{
-				f(n) = \BM(n^{\log_b a + \epsilon}) \text{ dla pewnego } \epsilon > 0 \\ 
-				a\cdot f(n/b) \leq c\cdot f(n) \text{ dla pewnej stałej } c < 1 \text{ dla dużych } n
-			}
-		\end{cases} && && 
+			       \BT(n^{\log_b a})        & \text{gdy } f(n) = \BO(n^{\log_b a - \epsilon}) \text{ dla pewnego } \epsilon > 0 \\[1ex]
+			       \BT(n^{\log_b a} \log n) & \text{gdy } f(n) = \BT(n^{\log_b a})                                              \\[1ex]
+			       \BT(f(n))                & \text{gdy } \substack{
+			       f(n) = \BM(n^{\log_b a + \epsilon}) \text{ dla pewnego } \epsilon > 0                                        \\
+				       a\cdot f(n/b) \leq c\cdot f(n) \text{ dla pewnej stałej } c < 1 \text{ dla dużych } n
+			       }
+		       \end{cases} &  &  &  &
 	\end{flalign*}
 \end{theorem}
 
@@ -114,30 +114,30 @@ Zakładamy, że (zazwyczaj) w fazie \textit{dziel} problem jest dzielony na co n
 	Niech $a\geq 1,\ b>1$ będą stałymi i niech $f(n)$ będzie nieujemną funkcją zdefiniowaną dla potęg $b$. Jeśli
 	\begin{flalign*}
 		T(n) = \begin{cases}
-			\BT(1) & \text{gdy } n = 1 \\[1ex]
-			a\cdot T\left(\frac{n}{b}\right) + f(n) & \text{gdy } n = b^i,\ i \geq 1
-		\end{cases} && &&
+			       \BT(1)                                  & \text{gdy } n = 1              \\[1ex]
+			       a\cdot T\left(\frac{n}{b}\right) + f(n) & \text{gdy } n = b^i,\ i \geq 1
+		       \end{cases} &  &  &  &
 	\end{flalign*}
 
-	to 
+	to
 	\begin{flalign*}
-		T(n) = \BT\left(n^{\log_b a}\right) + \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) && && 
+		T(n) = \BT\left(n^{\log_b a}\right) + \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) &  &  &  &
 	\end{flalign*}
 \end{lemma}
 
 \begin{proof}
 	\begin{flalign} \label{eq:utor:star}
-		a^{\log_b n} = \left(b^{\log_b a}\right)^{\log_b n} = b^{\log_b a \cdot \log_b n} = b^{\log_b n \cdot \log_b a} = \left(b^{\log_b n}\right)^{\log_b a} = n^{\log_b a} && && 
+		a^{\log_b n} = \left(b^{\log_b a}\right)^{\log_b n} = b^{\log_b a \cdot \log_b n} = b^{\log_b n \cdot \log_b a} = \left(b^{\log_b n}\right)^{\log_b a} = n^{\log_b a} &  &  &  &
 	\end{flalign}
-	
+
 	\begin{align*}
-		T(n) &= f(n) + a\cdot T\left(\frac{n}{b}\right) 
-		= f(n) + a\left(f\left(\frac{n}{b}\right) + aT\left(\frac{n}{b^2}\right)\right) \\[1.5ex]
-		&= f(n) + af\left(\frac{n}{b}\right) + a^2 T\left(\frac{n}{b^2}\right) 
-		= f(n) + af\left(\frac{n}{b}\right) + a^2\left(f\left(\frac{n}{b^2}\right) + aT\left(\frac{n}{b^3}\right)\right) \\[1.5ex]
-		&= f(n) + af\left(\frac{n}{b}\right) + a^2 f\left(\frac{n}{b^2}\right) + \cdots + a^{\log_b n - 1} f\left(\frac{n}{b^{\log_b n}}\right) + a^{\log_b n} T(1) \\[1.5ex]
-		&\overset{\ref{eq:utor:star}}{=} \cdots + a^{\log_b n} T(1) 
-		= \cdots + n^{\log_b a} T(1) 
+		T(n) & = f(n) + a\cdot T\left(\frac{n}{b}\right)
+		= f(n) + a\left(f\left(\frac{n}{b}\right) + aT\left(\frac{n}{b^2}\right)\right)                                                                                   \\[1.5ex]
+		     & = f(n) + af\left(\frac{n}{b}\right) + a^2 T\left(\frac{n}{b^2}\right)
+		= f(n) + af\left(\frac{n}{b}\right) + a^2\left(f\left(\frac{n}{b^2}\right) + aT\left(\frac{n}{b^3}\right)\right)                                                  \\[1.5ex]
+		     & = f(n) + af\left(\frac{n}{b}\right) + a^2 f\left(\frac{n}{b^2}\right) + \cdots + a^{\log_b n - 1} f\left(\frac{n}{b^{\log_b n}}\right) + a^{\log_b n} T(1) \\[1.5ex]
+		     & \overset{\ref{eq:utor:star}}{=} \cdots + a^{\log_b n} T(1)
+		= \cdots + n^{\log_b a} T(1)
 		= \BT\left(n^{\log_b a}\right) + \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
 	\end{align*}
 \end{proof}
@@ -148,69 +148,69 @@ Przeprowadzimy teraz dowód uniwersalnego twierdzenia o rekurencji (\ref{theorem
 	Rozważmy wszystkie przypadki:
 	\begin{enumerate}
 		\item Gdy $f(n) = \BO\left(n^{\log_b a - \epsilon}\right)$. Wtedy
-		\begin{flalign*}
-			f\left(\frac{n}{b^j}\right) &= \BO\left(\left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}\right) && && \\[1.5ex]
-			%
-			\sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) 
-			&= \sum_{j = 0}^{\log_b n - 1} a^j \BO\left(\left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}\right) 
-			= \BO\left(\underbracket{\sum_{j = 0}^{\log_b n - 1} a^j \left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}}_{\blacktriangle}\right) && && \\[1.5ex]
-			%
-			\blacktriangle &= \sum_{j = 0}^{\log_b n - 1} a^j \frac{n^{\log_b a - \epsilon}}{b^{j(\log_b a - \epsilon)}} 
-			= n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} a^j \frac{b^{j\epsilon}}{b^{j\log_b a}} && && \\[1.5ex]
-			&= n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} \left(\frac{a\cdot b^{\epsilon}}{\underbracket{b^{\log_b a}}_{= a}}\right)^j 
-			= n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} b^{\epsilon j} \quad \text{(wzór na ciąg geometryczny)} && && \\[1.5ex]
-			&= n^{\log_b a - \epsilon} \frac{b^{\epsilon \log_b n} - 1}{b^\epsilon - 1} 
-			= n^{\log_b a - \epsilon} \frac{n^\epsilon - 1}{\underbracket{b^\epsilon - 1}_{\text{stała}}} && && \\[1.5ex]
-			&= n^{\log_b a - \epsilon} \BO(n^\epsilon - 1) 
-			= \BO\left(n^{\log_b a - \epsilon}\cdot n^\epsilon - 1\right) 
-			= \BO\left(n^{\log_b a}\right)  && && \\[1.5ex]
-			%
-			\text{Z lematu: } T(n) &= \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT\left(n^{\log_b a}\right)
-      % 
-			= \BO\left(n^{\log_b a}\right) + \BT\left(n^{\log_b a}\right) 
-			= \BT\left(n^{\log_b a}\right) && &&
-		\end{flalign*}
-		
+		      \begin{flalign*}
+			      f\left(\frac{n}{b^j}\right)                                                                                                        & = \BO\left(\left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}\right)                                                                 &  &  &   & \\[1.5ex]
+			      %
+			      \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
+			                                                                                                                                         & = \sum_{j = 0}^{\log_b n - 1} a^j \BO\left(\left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}\right)
+			      = \BO\left(\underbracket{\sum_{j = 0}^{\log_b n - 1} a^j \left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}}_{\blacktriangle}\right) &                                                                                                                                    &  &  &     \\[1.5ex]
+			      %
+			      \blacktriangle                                                                                                                     & = \sum_{j = 0}^{\log_b n - 1} a^j \frac{n^{\log_b a - \epsilon}}{b^{j(\log_b a - \epsilon)}}
+			      = n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} a^j \frac{b^{j\epsilon}}{b^{j\log_b a}}                                      &                                                                                                                                    &  &  &     \\[1.5ex]
+			                                                                                                                                         & = n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} \left(\frac{a\cdot b^{\epsilon}}{\underbracket{b^{\log_b a}}_{= a}}\right)^j
+			      = n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} b^{\epsilon j} \quad \text{(wzór na ciąg geometryczny)}                      &                                                                                                                                    &  &  &     \\[1.5ex]
+			                                                                                                                                         & = n^{\log_b a - \epsilon} \frac{b^{\epsilon \log_b n} - 1}{b^\epsilon - 1}
+			      = n^{\log_b a - \epsilon} \frac{n^\epsilon - 1}{\underbracket{b^\epsilon - 1}_{\text{stała}}}                                      &                                                                                                                                    &  &  &     \\[1.5ex]
+			                                                                                                                                         & = n^{\log_b a - \epsilon} \BO(n^\epsilon - 1)
+			      = \BO\left(n^{\log_b a - \epsilon}\cdot n^\epsilon - 1\right)
+			      = \BO\left(n^{\log_b a}\right)                                                                                                     &                                                                                                                                    &  &  &     \\[1.5ex]
+			      %
+			      \text{Z lematu: } T(n)                                                                                                             & = \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT\left(n^{\log_b a}\right)
+			      % 
+			      = \BO\left(n^{\log_b a}\right) + \BT\left(n^{\log_b a}\right)
+			      = \BT\left(n^{\log_b a}\right)                                                                                                     &                                                                                                                                    &  &  &
+		      \end{flalign*}
+
 		\item Gdy $f(n) = \BT\left(n^{\log_b a}\right)$. Wtedy:
-		\begin{flalign*}
-			f\left(\frac{n}{b^j}\right) &= \BT\left(\left(\frac{n}{b^j}\right)^{\log_b a}\right) && && \\[1.5ex]
-			%
-			\sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) 
-			&= \sum_{j = 0}^{\log_b n - 1} a^j \BT\left(\left(\frac{n}{b^j}\right)^{\log_b a}\right) 
-			= \BT\left(\sum_{j = 0}^{\log_b n - 1} a^j \left(\frac{n}{b^j}\right)^{\log_b a}\right) && && \\[1.5ex]
-			&= \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} a^j \frac{1}{b^{j\log_b a}}\right) 
-			= \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} a^j \frac{1}{\underbracket{b^{\log_b a^j}}_{=a^j}}\right) && && \\[1.5ex]
-			&= \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} 1 \right) 
-			= \BT\left(n^{\log_b a} \log_b n\right) && && \\[1.5ex]
-			%
-			\text{Z lematu: } T(n) &= \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT\left(n^{\log_b a}\right) 
-			= \BO\left(n^{\log_b a}\log n\right) + \BT\left(n^{\log_b a}\right) 
-			= \BT\left(n^{\log_b a}\log n\right) && &&
-		\end{flalign*}
-		
+		      \begin{flalign*}
+			      f\left(\frac{n}{b^j}\right)                                                                                   & = \BT\left(\left(\frac{n}{b^j}\right)^{\log_b a}\right)                                      &  &  &   & \\[1.5ex]
+			      %
+			      \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
+			                                                                                                                    & = \sum_{j = 0}^{\log_b n - 1} a^j \BT\left(\left(\frac{n}{b^j}\right)^{\log_b a}\right)
+			      = \BT\left(\sum_{j = 0}^{\log_b n - 1} a^j \left(\frac{n}{b^j}\right)^{\log_b a}\right)                       &                                                                                              &  &  &     \\[1.5ex]
+			                                                                                                                    & = \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} a^j \frac{1}{b^{j\log_b a}}\right)
+			      = \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} a^j \frac{1}{\underbracket{b^{\log_b a^j}}_{=a^j}}\right) &                                                                                              &  &  &     \\[1.5ex]
+			                                                                                                                    & = \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} 1 \right)
+			      = \BT\left(n^{\log_b a} \log_b n\right)                                                                       &                                                                                              &  &  &     \\[1.5ex]
+			      %
+			      \text{Z lematu: } T(n)                                                                                        & = \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT\left(n^{\log_b a}\right)
+			      = \BO\left(n^{\log_b a}\log n\right) + \BT\left(n^{\log_b a}\right)
+			      = \BT\left(n^{\log_b a}\log n\right)                                                                          &                                                                                              &  &  &
+		      \end{flalign*}
+
 		\item Gdy $f(n) = \BM\left(n^{\log_b a + \epsilon}\right)$ oraz $a \cdot f\left(\frac{n}{b}\right) \leq c\cdot f(n)$ dla jakiegoś $c < 1$ i odpowiednio dużych $n$.
-		
-		Z założenia $f\left(\frac{n}{b}\right) \leq \frac{c}{a}f(n)$, więc drogą iteracji:
-		\begin{flalign*}
-			f\left(\frac{n}{b^j}\right) &\overset{(\star)}{\leq} \left(\frac{c}{a}\right)^j f(n) = \frac{c^j}{a^j}f(n) && && \\[1.5ex]
-			%
-			(\star) \,\, f\left(\frac{n}{b^j}\right) &\leq \frac{c}{a} f\left(\frac{n}{b^{j-1}}\right) \leq \left(\frac{c}{a}\right)^2 f\left(\frac{n}{b^{j-2}}\right) \leq \dots \leq \left(\frac{c}{a}\right)^j f(n) && && \\[1.5ex]
-			%
-			\sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
-			&\leq \sum_{j = 0}^{\log_b n - 1} \cancel{a^j} \frac{c^j}{\cancel{a^j}} f(n) + \BO(1)
-			\leq f(n) \sum_{j = 0}^{\log_b n - 1} c^j + \BO(1) && && \\[1.5ex]
-			&\leq f(n) \sum_{j = 0}^{\infty} c^j + \BO(1)
-			\leq f(n) \frac{1}{1 - c} + \BO(1)
-			\leq f(n) \BO(1)
-			= \BO(f(n)) && && \\[1.5ex]
-			%
-			\text{Z drugiej strony: } \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
-			&= a^0 f\left(\frac{n}{b^0}\right) + \underbracket{\sum_{j = 1}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)}_{\geq 0}
-			= \BM(f(n)) && && \\[1.5ex]
-			%
-			\text{Z lematu: } T(n) &= \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT(n^{\log_b a})
-			= \BT(f(n)) + \BT(n^{\log_b a}) = \BT(f(n)) && &&
-		\end{flalign*}
+
+		      Z założenia $f\left(\frac{n}{b}\right) \leq \frac{c}{a}f(n)$, więc drogą iteracji:
+		      \begin{flalign*}
+			      f\left(\frac{n}{b^j}\right)                        & \overset{(\star)}{\leq} \left(\frac{c}{a}\right)^j f(n) = \frac{c^j}{a^j}f(n)                                                                                    &  &  &   & \\[1.5ex]
+			      %
+			      (\star) \,\, f\left(\frac{n}{b^j}\right)           & \leq \frac{c}{a} f\left(\frac{n}{b^{j-1}}\right) \leq \left(\frac{c}{a}\right)^2 f\left(\frac{n}{b^{j-2}}\right) \leq \dots \leq \left(\frac{c}{a}\right)^j f(n) &  &  &   & \\[1.5ex]
+			      %
+			      \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
+			                                                         & \leq \sum_{j = 0}^{\log_b n - 1} \cancel{a^j} \frac{c^j}{\cancel{a^j}} f(n) + \BO(1)
+			      \leq f(n) \sum_{j = 0}^{\log_b n - 1} c^j + \BO(1) &                                                                                                                                                                  &  &  &     \\[1.5ex]
+			                                                         & \leq f(n) \sum_{j = 0}^{\infty} c^j + \BO(1)
+			      \leq f(n) \frac{1}{1 - c} + \BO(1)
+			      \leq f(n) \BO(1)
+			      = \BO(f(n))                                        &                                                                                                                                                                  &  &  &     \\[1.5ex]
+			      %
+			      \text{Z drugiej strony: } \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
+			                                                         & = a^0 f\left(\frac{n}{b^0}\right) + \underbracket{\sum_{j = 1}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)}_{\geq 0}
+			      = \BM(f(n))                                        &                                                                                                                                                                  &  &  &     \\[1.5ex]
+			      %
+			      \text{Z lematu: } T(n)                             & = \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT(n^{\log_b a})
+			      = \BT(f(n)) + \BT(n^{\log_b a}) = \BT(f(n))        &                                                                                                                                                                  &  &  &
+		      \end{flalign*}
 
 	\end{enumerate}
 \end{proof}
@@ -221,22 +221,22 @@ Przeprowadzimy teraz dowód uniwersalnego twierdzenia o rekurencji (\ref{theorem
 	Wtedy
 	\begin{flalign*}
 		T(n) = \begin{cases}
-			\BT(n^{\log_b a}) & \text{gdy } f(n) = \BO(n^{\log_b a - \epsilon}) \implies k < \log_b a \iff b^k < a \\[1ex]
-			\BT(n^k \log n) & \text{gdy } f(n) = \BT(n^{\log_b a}) \implies k = \log_b a \iff b^k = a \\[1ex]
-			\BT(n^k) & \text{gdy } f(n) = \BM(n^{\log_b a + \epsilon}) \implies k > \log_b a \iff b^k > a
-		\end{cases} && &&
+			       \BT(n^{\log_b a}) & \text{gdy } f(n) = \BO(n^{\log_b a - \epsilon}) \implies k < \log_b a \iff b^k < a \\[1ex]
+			       \BT(n^k \log n)   & \text{gdy } f(n) = \BT(n^{\log_b a}) \implies k = \log_b a \iff b^k = a            \\[1ex]
+			       \BT(n^k)          & \text{gdy } f(n) = \BM(n^{\log_b a + \epsilon}) \implies k > \log_b a \iff b^k > a
+		       \end{cases} &  &  &  &
 	\end{flalign*}
 \end{conclusion}
 
-Wróćmy teraz do naszego problemu mnożenia liczb $n$-cyfrowych. 
+Wróćmy teraz do naszego problemu mnożenia liczb $n$-cyfrowych.
 Drugi algorytm ma złożoność:
 \begin{flalign*}
-	T(n) &= 4\cdot T\left(\frac{n}{2}\right) + \BT(n^1) && a = 4,\ b = 2,\ k = 1 && \\[1.5ex]
-	4 &> 2^1 \Rightarrow T(n) = \BT\left(n^{\log_2 4}\right) = \BT\left(n^2\right) && &&
+	T(n) & = 4\cdot T\left(\frac{n}{2}\right) + \BT(n^1)                               &  & a = 4,\ b = 2,\ k = 1 &  & \\[1.5ex]
+	4    & > 2^1 \Rightarrow T(n) = \BT\left(n^{\log_2 4}\right) = \BT\left(n^2\right) &  &                       &  &
 \end{flalign*}
 
 Trzeci algorytm ma złożoność:
 \begin{flalign*}
-	T(n) &= 3\cdot T\left(\frac{n}{2}\right) + \BT(n^1) && a = 3,\ b = 2,\ k = 1 && \\[1.5ex]
-	3 &> 2^1 \Rightarrow T(n) = \BT\left(n^{\log_2 3}\right) = \BT\left(n^{1.59}\right) && &&
+	T(n) & = 3\cdot T\left(\frac{n}{2}\right) + \BT(n^1)                                    &  & a = 3,\ b = 2,\ k = 1 &  & \\[1.5ex]
+	3    & > 2^1 \Rightarrow T(n) = \BT\left(n^{\log_2 3}\right) = \BT\left(n^{1.59}\right) &  &                       &  &
 \end{flalign*}

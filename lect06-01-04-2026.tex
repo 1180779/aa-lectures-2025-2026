@@ -8,8 +8,8 @@
 \paragraph{Problem wyboru zajęć}
 $S = \{z_1, \dots, z_n\}$ -- zbiór zajęć wymagający tych samych zasobów.
 \begin{flalign*}
-	s_i & \text{ -- czas rozpoczęcia zajęcia } z_i && s_i, t_i \in \N, \quad s_i < t_i && \\
-	t_i & \text{ -- czas zakończenia zajęcia } z_i && &&
+	s_i & \text{ -- czas rozpoczęcia zajęcia } z_i &  & s_i, t_i \in \N, \quad s_i < t_i &  & \\
+	t_i & \text{ -- czas zakończenia zajęcia } z_i &  &                                  &  &
 \end{flalign*}
 
 Zajęcia $z_i$ i $z_j$ nazywamy \underline{zgodnymi}, jeśli $\langle s_i, t_i) \cap \langle s_j, t_j) = \emptyset$.
@@ -19,9 +19,9 @@ Zadanie polega na znalezieniu podzbioru o największej liczności $A \subseteq S
 	\centering
 	\renewcommand{\arraystretch}{1.2}
 	\begin{NiceTabular}{c|cccccc}[margin,hvlines]
-		$i$ & 1 & 2 & 3 & 4 & 5 & 6 \\
+		$i$   & 1 & 2 & 3 & 4  & 5 & 6 \\
 		\hline
-		$s_i$ & 0 & 2 & 4 & 7 & 1 & 7 \\
+		$s_i$ & 0 & 2 & 4 & 7  & 1 & 7 \\
 		$t_i$ & 4 & 6 & 7 & 10 & 3 & 9
 	\end{NiceTabular}
 \end{table}
@@ -32,9 +32,9 @@ Porządkujemy zajęcia w czasie niemalejącym względem czasu zakończenia. To z
 	\centering
 	\renewcommand{\arraystretch}{1.2}
 	\begin{NiceTabular}{c|cccccc}[margin,hvlines]
-		$i$ & 1 & 2 & 3 & 4 & 5 & 6 \\
+		$i$   & 1 & 2 & 3 & 4 & 5 & 6  \\
 		\hline
-		$s_i$ & 1 & 0 & 2 & 4 & 7 & 7 \\
+		$s_i$ & 1 & 0 & 2 & 4 & 7 & 7  \\
 		$t_i$ & 3 & 4 & 6 & 7 & 9 & 10
 	\end{NiceTabular}
 \end{table}
@@ -42,7 +42,7 @@ Porządkujemy zajęcia w czasie niemalejącym względem czasu zakończenia. To z
 \paragraph{Podejście programowania dynamicznego}
 Definiujemy zbiory zajęć:
 \begin{flalign*}
-	S_{ij} = \{ z_k \in S : t_i \leq s_k < t_k \leq s_j \} && &&
+	S_{ij} = \{ z_k \in S : t_i \leq s_k < t_k \leq s_j \} &  &  &  &
 \end{flalign*}
 (zbiór zajęć zaczynających się po czasie zakończenia zajęcia $z_i$ i kończących się przed czasem rozpoczęcia zajęcia $z_j$).
 
@@ -67,10 +67,10 @@ Zatem $A_{ik}$ oraz $A_{kj}$ muszą być rozwiązaniami optymalnymi dla odpowied
 
 Stąd wzór rekurencyjny:
 \begin{flalign*}
-	& \begin{cases}
-		c(i, j) = 0 & \text{dla } i \geq j \\
-		c(i, j) = \max_{i < k < j} \{ c(i, k) + c(k, j) + 1 \}
-	\end{cases} && &&
+	 & \begin{cases}
+		   c(i, j) = 0 & \text{dla } i \geq j \\
+		   c(i, j) = \max_{i < k < j} \{ c(i, k) + c(k, j) + 1 \}
+	   \end{cases} &  &  &  &
 \end{flalign*}
 
 Używając tego wzoru rekurencyjnego możemy skonstruować algorytm programowania dynamicznego. Mamy $\BO(n^2)$ podproblemów. Dla $j > i$ mamy $j - i - 1$ wartości $k$ do sprawdzenia, czyli rozwiązanie jednego podproblemu zajmie czas liniowy. Otrzymujemy algorytm o złożoności $\BO(n^3)$.
@@ -86,7 +86,7 @@ Używając tego wzoru rekurencyjnego możemy skonstruować algorytm programowani
 
 \begin{proof}
 	\textbf{Ad 2.} Przypuśćmy, że nie. Niech $z_k \in S_{im}$. Wtedy $t_i \leq s_k < t_k \leq s_m < t_m \leq s_j$. Zatem $z_k \in S_{ij}$ oraz $t_k < t_m$ -- sprzeczność z definicją zajęcia $z_m$.
-	
+
 	\textbf{Ad 1.} Niech $A_{ij}$ będzie podzbiorem o największej liczności składającym się z zajęć parami zgodnych zbioru $S_{ij}$. Niech $z_k$ będzie zajęciem z $A_{ij}$ o najmniejszym czasie zakończenia.
 	Jeśli $z_k = z_m$, to teza jest udowodniona.
 	Przypuśćmy, że $z_k \neq z_m$ i rozważmy zbiór $A'_{ij} = A_{ij} \setminus \{z_k\} \cup \{z_m\}$. Skoro $t_m \leq t_k$ oraz zajęcia z $A_{ij}$ są parami zgodne, to zajęcia z $A'_{ij}$ również są parami zgodne.
@@ -120,20 +120,20 @@ Pokażemy przez indukcję po $n$, że algorytm znajduje rozwiązanie optymalne.
 \begin{itemize}
 	\item Dla $n = 1$ oczywiste $\checkmark$
 	\item Niech $n > 1$. Z lematu istnieje optymalne rozwiązanie $A_1$ takie, że $z_1 \in A_1$. \\
-	Rozważmy problem dla $S' = \{z_i \in S : s_i \geq t_1\}$. Oczywiście zachodzi $|S'| < |S|$. \\
-	Dla każdego $z_j \in A_1 \setminus \{z_1\}$, mamy $z_j \in S'$, bo $s_j \geq t_1$, co wynika z faktu, że $A_1$ jest rozwiązaniem dla $S$. \\
-	Pokażemy, że $A_1 \setminus \{z_1\}$ jest rozwiązaniem optymalnym dla $S'$. \\
-	Przypuśćmy, że istnieje rozwiązanie $B$ dla $S'$ takie, że $|B| > |A_1 \setminus \{z_1\}|$. Wtedy $\{z_1\} \cup B$ byłoby rozwiązaniem dla $S$ takim, że:
-	\begin{flalign*}
-		|\{z_1\} \cup B| = 1 + |B| > 1 + |A_1 \setminus \{z_1\}| = |A_1| && && 
-	\end{flalign*}
-	Otrzymujemy sprzeczność, bo $A_1$ jest z założenia rozwiązaniem optymalnym. \\
-	Z założenia indukcyjnego nasz algorytm znajduje rozwiązanie optymalne $B'$ dla $S'$. Wtedy $|B'| = |A_1 \setminus \{z_1\}| = |A_1| - 1$. \\
-	Zbiór $\{z_1\} \cup B'$ jest rozwiązaniem znalezionym przez algorytm dla $S$ i:
-	\begin{flalign*}
-		|\{z_1\} \cup B'| = 1 + |B'| = 1 + |A_1| - 1 = |A_1| && &&
-	\end{flalign*}
-	Więc $\{z_1\} \cup B'$ jest rozwiązaniem optymalnym.
+	      Rozważmy problem dla $S' = \{z_i \in S : s_i \geq t_1\}$. Oczywiście zachodzi $|S'| < |S|$. \\
+	      Dla każdego $z_j \in A_1 \setminus \{z_1\}$, mamy $z_j \in S'$, bo $s_j \geq t_1$, co wynika z faktu, że $A_1$ jest rozwiązaniem dla $S$. \\
+	      Pokażemy, że $A_1 \setminus \{z_1\}$ jest rozwiązaniem optymalnym dla $S'$. \\
+	      Przypuśćmy, że istnieje rozwiązanie $B$ dla $S'$ takie, że $|B| > |A_1 \setminus \{z_1\}|$. Wtedy $\{z_1\} \cup B$ byłoby rozwiązaniem dla $S$ takim, że:
+	      \begin{flalign*}
+		      |\{z_1\} \cup B| = 1 + |B| > 1 + |A_1 \setminus \{z_1\}| = |A_1| &  &  &  &
+	      \end{flalign*}
+	      Otrzymujemy sprzeczność, bo $A_1$ jest z założenia rozwiązaniem optymalnym. \\
+	      Z założenia indukcyjnego nasz algorytm znajduje rozwiązanie optymalne $B'$ dla $S'$. Wtedy $|B'| = |A_1 \setminus \{z_1\}| = |A_1| - 1$. \\
+	      Zbiór $\{z_1\} \cup B'$ jest rozwiązaniem znalezionym przez algorytm dla $S$ i:
+	      \begin{flalign*}
+		      |\{z_1\} \cup B'| = 1 + |B'| = 1 + |A_1| - 1 = |A_1| &  &  &  &
+	      \end{flalign*}
+	      Więc $\{z_1\} \cup B'$ jest rozwiązaniem optymalnym.
 \end{itemize}
 
 \paragraph{Złożoność czasowa}
@@ -147,5 +147,5 @@ Pokażemy przez indukcję po $n$, że algorytm znajduje rozwiązanie optymalne.
 Całość zajmuje $\BT(n)$, jeśli zajęcia są już posortowane po czasie zakończenia.
 Ostatecznie złożoność algorytmu wynosi (uwzględniając początkowe sortowanie):
 \begin{flalign*}
-	\BO(n \log n) + \BT(n) = \BO(n \log n) && &&
+	\BO(n \log n) + \BT(n) = \BO(n \log n) &  &  &  &
 \end{flalign*}
