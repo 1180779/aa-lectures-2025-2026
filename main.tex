@@ -54,6 +54,7 @@
 \definecolor{accentB}{RGB}{255, 100, 0}
 \definecolor{placeholdercolor}{RGB}{160, 160, 160}
 \definecolor{rowA}{RGB}{235, 242, 250}
+\definecolor{dygresjagray}{RGB}{105, 105, 105}% treść dygresji — wyszarzona, materiał opcjonalny
 
 \titleformat{\section}{\large\bfseries\color{accent}}{}{0em}{}[\titlerule]
 \titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
@@ -86,6 +87,17 @@
 \theoremstyle{remark}
 \newtheorem*{remark}{Uwaga}
 
+% Dygresja: wolniejsze rozwinięcie kroku dla czytelnika, który gubi się w rachunkach.
+% Wyszarzona treść sygnalizuje materiał opcjonalny (można pominąć przy powtórce).
+\newtheoremstyle{dygresjastyle}%
+  {\topsep}{\topsep}%                       odstęp przed / po
+  {\color{dygresjagray}}%                    czcionka treści (wyszarzona)
+  {0pt}%                                     wcięcie
+  {\color{dygresjagray}\itshape}%            czcionka nagłówka
+  {.}{.5em}{}%                               interpunkcja, odstęp po nagłówku, spec.
+\theoremstyle{dygresjastyle}
+\newtheorem*{dygresja}{Dygresja}
+
 
 % ── KOMENDY ──────────────────────────────────────────────────────
 \newcommand{\N}[0]{\mathbb{N}}
@@ -96,6 +108,13 @@
 \newcommand{\BO}[0]{\mathcal{O}}
 \newcommand{\BM}[0]{\mathcal{\Omega}}
 \newcommand{\BT}[0]{\mathcal{\Theta}}
+
+% Podwójne przekreślenie w „zwykłym” kierunku (//) — pakiet cancel daje tylko
+% \cancel (/), \bcancel (\) i \xcancel (X). Oznacza skrócenie z wyrazem
+% schowanym w wielokropku (drugi partner nie jest pokazany).
+\newcommand{\dcancel}[1]{{\mathrlap{\cancel{#1}}\mkern8mu\cancel{\phantom{#1}}}}
+% To samo w kierunku wstecznym (\\) — dla kompletu.
+\newcommand{\dbcancel}[1]{{\mathrlap{\bcancel{#1}}\mkern8mu\bcancel{\phantom{#1}}}}
 
 % ── KOMENDY ──────────────────────────────────────────────────────
 % change default thickness of brackets to .6pt

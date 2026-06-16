@@ -236,6 +236,23 @@ Optymalny sposób rozmieszczenia nawiasów jest postaci $(A_i \dots A_k)(A_{k+1}
 	m(i, j) = \min_{i \leq k < j} \left\{ m(i, k) + m(k + 1, j) + p_{i-1} \cdot p_k \cdot p_j \right\} \quad \text{dla } i < j &  &  &  &
 \end{flalign*}
 
+\begin{dygresja}
+	Składnik $p_{i-1} \cdot p_k \cdot p_j$ to koszt \emph{ostatniego} mnożenia, czyli pomnożenia macierzy będącej wynikiem $A_i \dots A_k$ przez macierz będącą wynikiem $A_{k+1} \dots A_j$. Rozmiar iloczynu ciągu macierzy odczytujemy ,,teleskopowo'' -- wewnętrzne wymiary (liczba kolumn poprzedniej macierzy = liczba wierszy następnej) skracają się, a zostają jedynie skrajne:
+	\begin{align*}
+		A_i \dots A_k:\quad &
+		M_{p_{i-1}}^{\cancel{p_i}} \cdot M_{\cancel{p_i}}^{\bcancel{p_{i+1}}} \cdots M_{\dcancel{p_{k-1}}}^{p_k}
+		\ \longrightarrow\ M_{p_{i-1}}^{p_k}, \\[2pt]
+		A_{k+1} \dots A_j:\quad &
+		M_{p_k}^{\cancel{p_{k+1}}} \cdot M_{\cancel{p_{k+1}}}^{\bcancel{p_{k+2}}} \cdots M_{\dcancel{p_{j-1}}}^{p_j}
+		\ \longrightarrow\ M_{p_k}^{p_j}.
+	\end{align*}
+	Pozostaje pomnożyć macierz $M_{p_{i-1}}^{p_k}$\footnote{$M_a^b$ -- przestrzeń liniowa macierzy o $a$ wierszach i $b$ kolumnach (wymiaru $a \times b$).} przez macierz $M_{p_k}^{p_j}$, a to -- zgodnie ze wzorem na koszt mnożenia dwóch macierzy -- kosztuje
+	\[
+		p_{i-1} \cdot \underbrace{p_k}_{\mathclap{\text{wspólny wymiar}}} \cdot\ p_j
+	\]
+	mnożeń skalarnych.
+\end{dygresja}
+
 Niech $s(i, j)$ będzie wartością $k$, dla którego to minimum jest osiągane (czyli $s(i, j)$ wskazuje miejsce ostatniego mnożenia w optymalnym rozwiązaniu podproblemu $A_i \dots A_j$). Czyli dla $1 \leq i < j \leq n$.
 
 Jeśli zaimplementujemy po prostu tę formułę rekurencyjną otrzymamy alg. wykładniczy. Ale jest tylko $n + \binom{n}{2} = \BO(n^2)$ podproblemów, więc rzędu $\BO(n^2)$ liczb $m(i, j)$ i każdą z tych liczb wystarczy obliczyć jeden raz.
