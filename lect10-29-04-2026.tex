@@ -3,7 +3,7 @@
 \subsection{Problem szeregowania zadań (cd.)}
 % ════════════════════════════════════════════════════════════════
 
-Zbiór $A \subseteq S$ nazywamy \underline{wolnym od kar}, jeśli istnieje harmonogram zbioru $A$, w którym wszystkie zadania są terminowe.
+Zbiór $A \subseteq S$ nazywamy \uemph{wolnym od kar}, jeśli istnieje harmonogram zbioru $A$, w którym wszystkie zadania są terminowe.
 
 Dla $t \in \{0, 1, \ldots, n\}$ niech
 \begin{flalign*}
@@ -116,7 +116,7 @@ $A$ -- algorytm aproksymacyjny rozwiązujący $\Pi$.\\
 $c(I)$ -- wartość rozwiązania znalezionego przez algorytm $A$ dla instancji $I$, $c(I) > 0$.
 
 \begin{definition}
-	Mówimy, że algorytm $A$ ma \underline{współczynnik aproksymacji} $\rho(n)$, jeśli dla każdej instancji $I \in D_\Pi$ rozmiaru $n$ zachodzi
+	Mówimy, że algorytm $A$ ma \uemph{współczynnik aproksymacji} $\rho(n)$, jeśli dla każdej instancji $I \in D_\Pi$ rozmiaru $n$ zachodzi
 	\begin{flalign*}
 		\max\left\{\frac{c(I)}{c^*(I)},\ \frac{c^*(I)}{c(I)}\right\} \leq \rho(n) &  &  &  &
 	\end{flalign*}
@@ -133,14 +133,14 @@ Zauważmy, że:
 	\right\} \implies \max\left\{\frac{c(I)}{c^*(I)},\ \frac{c^*(I)}{c(I)}\right\} \geq 1 &  &  &  &
 \end{flalign*}
 
-Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \underline{współczynnik aproksymacji} algorytmu $A$ wynosi $\rho$ i $A$ nazywamy algorytmem $\rho$-aproksymacyjnym.
+Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \uemph{współczynnik aproksymacji} algorytmu $A$ wynosi $\rho$ i $A$ nazywamy algorytmem $\rho$-aproksymacyjnym.
 
 % ════════════════════════════════════════════════════════════════
 \subsection{Problem pokrycia wierzchołkowego}
 % ════════════════════════════════════════════════════════════════
 
 \begin{definition}
-	Niech $G = (V, E)$ -- graf. \underline{Pokryciem wierzchołkowym} (Vertex Cover, VC) grafu $G$ nazywamy zbiór $W \subseteq V$ taki, że dla każdej krawędzi $e \in E$ zachodzi $W \cap e \neq \emptyset$ -- czyli każda krawędź $G$ ma co najmniej jeden koniec w $W$.
+	Niech $G = (V, E)$ -- graf. \uemph{Pokryciem wierzchołkowym} (Vertex Cover, VC) grafu $G$ nazywamy zbiór $W \subseteq V$ taki, że dla każdej krawędzi $e \in E$ zachodzi $W \cap e \neq \emptyset$ -- czyli każda krawędź $G$ ma co najmniej jeden koniec w $W$.
 \end{definition}
 
 \paragraph{Problem pokrycia wierzchołkowego}

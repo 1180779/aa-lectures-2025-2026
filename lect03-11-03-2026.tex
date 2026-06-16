@@ -99,7 +99,7 @@ Opis algorytmu:
 	\item[jeśli $|P| \leq 3$] sprawdzamy wszystkie pary
 	\item[jeśli $|P| > 3$] ~
 	      \begin{itemize}
-		      \item[\underline{Dziel:}] Dzielimy punkty $P$ pionową prostą $l$ na dwa podzbiory $P_L$ i $P_R$ na lewo i na prawo
+		      \item[\uemph{Dziel:}] Dzielimy punkty $P$ pionową prostą $l$ na dwa podzbiory $P_L$ i $P_R$ na lewo i na prawo
 		            od $l$ tak, że $|P_L| = \left\lceil \frac{P}{2} \right\rceil,\ |P_R| = \left\lfloor \frac{P}{2} \right\rfloor$.
 		            Dzielimy tablicę $X$ na $X_L$ i $X_R$ zawierające punkty odpowiednio $P_L$ i $P_R$ posortowane w porządku
 		            niemalejącym względem pierwszej współrzędnej. Podobnie dzielimy $Y$ na $Y_L$ i $Y_R$ zawierające
@@ -132,12 +132,12 @@ Opis algorytmu:
 			            \label{fig:closestpoints:split}
 		            \end{figure}
 
-		      \item[\underline{Zwyciężaj:}] Wywołujemy rekurencyjnie algorytm dla wejścia $P_L,\ X_L,\ Y_L$ i $P_R,\ X_R,\ Y_R$.
+		      \item[\uemph{Zwyciężaj:}] Wywołujemy rekurencyjnie algorytm dla wejścia $P_L,\ X_L,\ Y_L$ i $P_R,\ X_R,\ Y_R$.
 		            Algorytm znajduje pary najbliższych punktów w $P_L$ i $P_R$. Niech $\delta_L$ i $\delta_R$ będą
 		            najmniejszymi odległościami znalezionymi przez algorytm dla odpowiednio $P_L$ i $P_R$.
 		            Niech $\delta$ będzie mniejszą z nich: $\delta = \min(\delta_L,\delta_R)$.
 
-		      \item[\underline{Połącz:}] Para najbliższych punktów z $P$ składa się z dwóch punktów z $P_L$ lub z dwóch punktów
+		      \item[\uemph{Połącz:}] Para najbliższych punktów z $P$ składa się z dwóch punktów z $P_L$ lub z dwóch punktów
 		            z $P_R$ lub jednego punkty z $P_L$ i jednego z $P_R$.
 
 		            Musimy sprawdzić czy istnieje para 3-go typu w odległości mniejszej niż $\delta$.

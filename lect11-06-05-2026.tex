@@ -52,7 +52,7 @@ AVC zwraca pokrycie złożone z $2m$ wierzchołków, natomiast optymalne pokryci
 \begin{definition}
 	Niech $X$ -- zbiór skończony, $|X| = n$, $\mathcal{F} \subseteq 2^X$ -- rodzina podzbiorów zbioru $X$ taka, że $\bigcup_{S \in \mathcal{F}} S = X$ (każdy element $X$ należy do co najmniej jednego zbioru z $\mathcal{F}$).
 
-	Rodzina $\mathcal{A} \subseteq \mathcal{F}$ jest \underline{pokryciem} zbioru $X$, jeśli $\bigcup_{S \in \mathcal{A}} S = X$.
+	Rodzina $\mathcal{A} \subseteq \mathcal{F}$ jest \uemph{pokryciem} zbioru $X$, jeśli $\bigcup_{S \in \mathcal{A}} S = X$.
 \end{definition}
 
 \definecolor{Scol1}{HTML}{1F77B4}  % blue
@@ -224,15 +224,15 @@ Dla grafów o maksymalnym stopniu $\leq 3$ ($H(3) < 2 < H(4)$) oszacowanie wspó
 Niech $\Pi$ -- problem (NP-trudny).
 
 \begin{definition}
-	Algorytm $A$ jest \underline{schematem aproksymacyjnym} dla $\Pi$, jeśli dla dowolnego wejścia $(I, \varepsilon)$, gdzie $I$ jest instancją $\Pi$ i $\varepsilon > 0$, $A$ jest algorytmem $(1 + \varepsilon)$-aproksymacyjnym.
+	Algorytm $A$ jest \uemph{schematem aproksymacyjnym} dla $\Pi$, jeśli dla dowolnego wejścia $(I, \varepsilon)$, gdzie $I$ jest instancją $\Pi$ i $\varepsilon > 0$, $A$ jest algorytmem $(1 + \varepsilon)$-aproksymacyjnym.
 \end{definition}
 
 \begin{definition}
-	Schemat aproksymacyjny $A$ nazywamy \underline{wielomianowym schematem aproksymacyjnym}, jeśli jego złożoność czasowa może być ograniczona wielomianową funkcją względem $|I|$ dla każdego ustalonego $\varepsilon > 0$.
+	Schemat aproksymacyjny $A$ nazywamy \uemph{wielomianowym schematem aproksymacyjnym}, jeśli jego złożoność czasowa może być ograniczona wielomianową funkcją względem $|I|$ dla każdego ustalonego $\varepsilon > 0$.
 \end{definition}
 
 Złożoność czasowa wielomianowego schematu aproksymacyjnego może wynosić np.\ $\BT\left(2^{1/\varepsilon} \cdot n^2\right)$, gdzie $n = |I|$. Wtedy zmniejszanie precyzji (czyli zmniejszanie $\varepsilon$) jest kosztowne czasowo.
 
 \begin{definition}
-	Schemat aproksymacyjny $A$ nazywamy \underline{w pełni wielomianowym schematem aproksymacyjnym}, jeśli jego złożoność czasowa może być ograniczona funkcją wielomianową względem $|I|$ i $\frac{1}{\varepsilon}$.
+	Schemat aproksymacyjny $A$ nazywamy \uemph{w pełni wielomianowym schematem aproksymacyjnym}, jeśli jego złożoność czasowa może być ograniczona funkcją wielomianową względem $|I|$ i $\frac{1}{\varepsilon}$.
 \end{definition}
