@@ -16,7 +16,7 @@ Dla $t \in \{0, 1, \ldots, n\}$ niech
 	\begin{enumerate}
 		\item $A$ jest wolny od kar.
 		\item $N_t(A) \leq t$ dla każdego $t \in \{1, 2, \ldots, n\}$.
-		\item Jeśli zadania z $A$ są posortowane w kolejności niemalejącej ze względu na deadliny, to żadne zadanie nie jest spóźnione.
+		\item \label{lemma:wolny-od-kar:sort} Jeśli zadania z $A$ są posortowane w kolejności niemalejącej ze względu na deadliny, to żadne zadanie nie jest spóźnione.
 	\end{enumerate}
 \end{lemma}
 
@@ -54,7 +54,7 @@ Dla $t \in \{0, 1, \ldots, n\}$ niech
 
 Możemy do rozwiązania problemu szeregowania zadań użyć algorytmu Greedy (Algorytm \ref{alg:greedy}) dla matroidu $(S, \mathcal{A})$ maksymalizującego $\sum_{z_i \in A} w_i$ (czyli minimalizującego sumę kar zadań spóźnionych).
 
-Z twierdzenia Rado, Edmonds algorytm Greedy użyty do tego problemu zwraca rozwiązanie optymalne. Warunek z linii 5 algorytmu Greedy (tzn. czy $A \cup \{x_i\} \in \mathcal{A}$) można sprawdzić w czasie $\BO(n)$ -- lemat \ref{lemma:wolny-od-kar}, warunek 3.
+Z twierdzenia~\ref{thm:rado-edmonds} (Rado, Edmonds) algorytm Greedy użyty do tego problemu zwraca rozwiązanie optymalne. Warunek z linii~\ref{line:greedy-niezaleznosc} algorytmu Greedy (tzn. czy $A \cup \{x_i\} \in \mathcal{A}$) można sprawdzić w czasie $\BO(n)$ -- lemat \ref{lemma:wolny-od-kar}, warunek~\ref{lemma:wolny-od-kar:sort}.
 
 Złożoność czasowa algorytmu wynosi:
 \begin{flalign*}

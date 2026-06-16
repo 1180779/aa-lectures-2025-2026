@@ -47,7 +47,7 @@ $S = \{x_1, x_2, \ldots, x_n\}$.
 	\State $A \Assign \emptyset$ \Comment{$A$ -- rozwiązanie}
 	\State posortuj $S$ w porządku nierosnącym względem wagi, tak żeby $w(x_1) \geq w(x_2) \geq \ldots \geq w(x_n)$
 	\For{$i \Assign 1$ \To $n$}
-	\If{$A \cup \{x_i\} \in \mathcal{A}$}
+	\If{$A \cup \{x_i\} \in \mathcal{A}$} \label{line:greedy-niezaleznosc}
 	\State $A \Assign A \cup \{x_i\}$
 	\EndIf
 	\EndFor
@@ -55,7 +55,7 @@ $S = \{x_1, x_2, \ldots, x_n\}$.
 	\EndFunction
 \end{alg}
 
-\begin{theorem}{Rado, Edmonds}
+\begin{theorem}{Rado, Edmonds} \label{thm:rado-edmonds}
 	Algorytm Greedy znajduje zbiór niezależny o maksymalnej wadze.
 \end{theorem}
 \begin{proof}
