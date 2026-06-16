@@ -640,6 +640,80 @@ Niech $X_i = (x_1, \dots, x_i)$ dla $i \in \{1, \dots, m\}$ i dodatkowo $X_0 = (
 	\end{enumerate}
 \end{lemma}
 
+\tikzset{
+	lcs/.style={font=\small, baseline=(current bounding box.center)},
+	lab/.style={anchor=east, font=\itshape},
+	pref/.style={draw, rounded corners=2pt, fill=accent!8, minimum width=1.7cm, minimum height=0.62cm, anchor=west, inner sep=2pt},
+	cell/.style={draw, minimum width=0.62cm, minimum height=0.62cm, anchor=west, inner sep=1pt},
+	match/.style={fill=accentA!55},
+	drop/.style={fill=placeholdercolor!25, text=dygresjagray},
+	sub/.style={accentB, thick, dashed, rounded corners=2pt},
+}
+
+\begin{figure}[ht]
+	\centering
+	% ----- Przypadek 1: x_m = y_n -----
+	\begin{minipage}[t]{0.31\textwidth}
+		\centering
+		\begin{tikzpicture}[lcs]
+			\node[lab] at (-0.4,0) {$X$};
+			\node[pref] (Xp) at (0,0) {$X_{m-1}$};
+			\node[cell, match] (xm) at (Xp.east) {$x_m$};
+			\node[lab] at (-0.4,-0.95) {$Y$};
+			\node[pref] (Yp) at (0,-0.95) {$Y_{n-1}$};
+			\node[cell, match] (yn) at (Yp.east) {$y_n$};
+			\draw[accentB, thick] (xm.south) -- (yn.north)
+			node[midway, fill=white, inner sep=1pt, text=accentB] {$=$};
+			\draw[sub] ([shift={(-2pt,2pt)}]Xp.north west) rectangle ([shift={(2pt,-2pt)}]Xp.south east);
+			\draw[sub] ([shift={(-2pt,2pt)}]Yp.north west) rectangle ([shift={(2pt,-2pt)}]Yp.south east);
+		\end{tikzpicture}
+		\par\smallskip
+		{\footnotesize $x_m = y_n$\par
+			$z_k = x_m = y_n$ wchodzi do LCS; \\ podproblem $(X_{m-1}, Y_{n-1})$}
+	\end{minipage}\hfill
+	% ----- Przypadek 2: x_m != y_n, z_k != x_m -----
+	\begin{minipage}[t]{0.31\textwidth}
+		\centering
+		\begin{tikzpicture}[lcs]
+			\node[lab] at (-0.4,0) {$X$};
+			\node[pref] (Xp) at (0,0) {$X_{m-1}$};
+			\node[cell, drop] (xm) at (Xp.east) {$x_m$};
+			\draw[dygresjagray] (xm.south west) -- (xm.north east);
+			\node[lab] at (-0.4,-0.95) {$Y$};
+			\node[pref] (Yp) at (0,-0.95) {$Y_{n-1}$};
+			\node[cell] (yn) at (Yp.east) {$y_n$};
+			\draw[sub] ([shift={(-2pt,2pt)}]Xp.north west) rectangle ([shift={(2pt,-2pt)}]Xp.south east);
+			\draw[sub] ([shift={(-2pt,2pt)}]Yp.north west) rectangle ([shift={(2pt,-2pt)}]yn.south east);
+		\end{tikzpicture}
+		\par\smallskip
+		{\footnotesize $x_m \neq y_n$ i $z_k \neq x_m$\par
+			$x_m$ nie należy do LCS; \\ podproblem $(X_{m-1}, Y)$}
+	\end{minipage}\hfill
+	% ----- Przypadek 3: x_m != y_n, z_k != y_n -----
+	\begin{minipage}[t]{0.31\textwidth}
+		\centering
+		\begin{tikzpicture}[lcs]
+			\node[lab] at (-0.4,0) {$X$};
+			\node[pref] (Xp) at (0,0) {$X_{m-1}$};
+			\node[cell] (xm) at (Xp.east) {$x_m$};
+			\node[lab] at (-0.4,-0.95) {$Y$};
+			\node[pref] (Yp) at (0,-0.95) {$Y_{n-1}$};
+			\node[cell, drop] (yn) at (Yp.east) {$y_n$};
+			\draw[dygresjagray] (yn.south west) -- (yn.north east);
+			\draw[sub] ([shift={(-2pt,2pt)}]Xp.north west) rectangle ([shift={(2pt,-2pt)}]xm.south east);
+			\draw[sub] ([shift={(-2pt,2pt)}]Yp.north west) rectangle ([shift={(2pt,-2pt)}]Yp.south east);
+		\end{tikzpicture}
+		\par\smallskip
+		{\footnotesize $x_m \neq y_n$ i $z_k \neq y_n$\par
+			$y_n$ nie należy do LCS; \\ podproblem $(X, Y_{n-1})$}
+	\end{minipage}
+	\caption{Trzy przypadki lematu o~optymalnej podstrukturze LCS. Żółta komórka --
+		dopasowany ostatni element ($x_m = y_n$), który wchodzi do LCS; szara,
+		przekreślona komórka -- element odrzucony, nienależący do tego LCS;
+		przerywana pomarańczowa ramka -- podproblem(y), do których redukuje się zadanie.}
+	\label{fig:lcs:cases}
+\end{figure}
+
 \begin{proof} ~
 	\begin{enumerate}
 		\item Załóżmy, że $x_m = y_n$. Gdyby $z_k \neq x_m$, to moglibyśmy wydłużyć podciąg $Z$ przez dodanie $z_{k+1} = x_m = y_n$, co daje sprzeczność, bo $(z_1, \dots, z_{k+1})$ jest wspólnym podciągiem $X$ i $Y$ dłuższym niż $Z$. Zatem $z_k = x_m = y_n$ i $Z_{k-1}$ jest wspólnym podciągiem $X_{m-1}$ i $Y_{n-1}$. Gdyby istniał wspólny podciąg $W$ ciągów $X_{m-1}$ i $Y_{n-1}$ długości $> k - 1$, to dodając na koniec $W$ element $x_m = y_n$ otrzymalibyśmy wspólny podciąg $X$ i $Y$ długości $> k - 1 + 1 = k$. Sprzeczność, bo długość $Z$ wynosi $k$.
