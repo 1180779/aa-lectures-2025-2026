@@ -6,13 +6,14 @@
 Czasami gdy zaimplementujemy jakąś formę rekurencyjną dostajemy algorytm działający w czasie wykładniczym.
 Powodem może być to, że jakieś wartości obliczane są wielokrotnie.
 
-\paragraph{Problem liczb Fibonacciego}
-\begin{flalign*}
-	\begin{cases}
-		F_0 = F_1 = 1               & n = 0, 1 \\[0.5ex]
-		F_n = F_{n - 1} + F_{n - 2} & n \geq 2
-	\end{cases} &  & \text{Zadanie: Obliczyć } n\text{-tą liczbę Fibonacciego} &  &
-\end{flalign*}
+\begin{problem}[liczb Fibonacciego]
+	\begin{flalign*}
+		\begin{cases}
+			F_0 = F_1 = 1               & n = 0, 1 \\[0.5ex]
+			F_n = F_{n - 1} + F_{n - 2} & n \geq 2
+		\end{cases} &  & \text{Zadanie: Obliczyć } n\text{-tą liczbę Fibonacciego} &  &
+	\end{flalign*}
+\end{problem}
 
 \begin{alg}{Algorytm naiwny Fib1}{alg:fib1}
 	\FunctionNN{Fib1}{$n$}
@@ -172,7 +173,7 @@ Operacją dominującą jest mnożenie w linii 5. Mamy $p \cdot q \cdot r$ mnoże
 \subsection{Problem mnożenia ciągu macierzy}
 % ════════════════════════════════════════════════════════════════
 
-\begin{example}{Mnożenie ciągu macierzy}
+\begin{example}[Mnożenie ciągu macierzy]
 	$(A_1, A_2, A_3)$ gdzie $A_1$ -- macierz $5 \times 10$, $A_2$ -- macierz $10 \times 3$, $A_3$ -- macierz $3 \times 2$.
 	Ile potrzeba mnożeń skalarnych (mnożenia liczb) do obliczenia iloczynu $A_1 \cdot A_2 \cdot A_3$?
 	\begin{flalign*}
@@ -186,12 +187,13 @@ Operacją dominującą jest mnożenie w linii 5. Mamy $p \cdot q \cdot r$ mnoże
 	II sposób jest szybszy.
 \end{example}
 
-\paragraph{Problem:}
-Dla danego ciągu macierzy $(A_1, A_2, \dots, A_n)$, gdzie $A_i$ jest macierzą $p_{i-1} \times p_i$ (cały ciąg wymiarów zapisujemy jednym ciągiem $p = (p_0, p_1, \dots, p_n)$ -- kolejne macierze dzielą wspólny wymiar, więc $n$ macierzy opisuje $n + 1$ liczb), znajdź kolejność wykonywania mnożeń minimalizującą liczbę mnożeń skalarnych użytych do obliczenia iloczynu $A_1 \cdot A_2 \cdot \dots \cdot A_n$.
+\begin{problem}[mnożenia ciągu macierzy]
+	Dla danego ciągu macierzy $(A_1, A_2, \dots, A_n)$, gdzie $A_i$ jest macierzą $p_{i-1} \times p_i$ (cały ciąg wymiarów zapisujemy jednym ciągiem $p = (p_0, p_1, \dots, p_n)$ -- kolejne macierze dzielą wspólny wymiar, więc $n$ macierzy opisuje $n + 1$ liczb), znajdź kolejność wykonywania mnożeń minimalizującą liczbę mnożeń skalarnych użytych do obliczenia iloczynu $A_1 \cdot A_2 \cdot \dots \cdot A_n$.
+\end{problem}
 
 Ile jest różnych sposobów obliczenia tego iloczynu? Innymi słowy, na ile sposobów możemy poprawnie wstawić nawiasy w iloczynie $A_1 \cdot A_2 \cdot \dots \cdot A_n$?
 
-\begin{example}{Kolejności nawiasowania dla $n=4$}
+\begin{example}[Kolejności nawiasowania dla $n=4$]
 	$A_1 \cdot A_2 \cdot A_3 \cdot A_4$ \quad ($n = 4$)
 	\begin{itemize}
 		\item $((A_1 \cdot A_2) \cdot A_3) \cdot A_4$
@@ -300,7 +302,7 @@ Pomysł programowania dynamicznego polega więc na zapamiętaniu tych wartości 
 
 Mamy 3 pętle (po $l, i, k$) i liczbę iteracji każdej z tych pętli można ograniczyć przez $n$, zatem złożoność czasowa to $\BO(n^3)$.
 
-\begin{example}{Optymalna kolejność mnożenia macierzy dla $n=5$}
+\begin{example}[Optymalna kolejność mnożenia macierzy dla $n=5$]
 	$p=(4, 5, 2, 1, 2, 3)$. \\
 	$A_1 \text{ - } 4 \times 5,\ A_2 \text{ - } 5 \times 2,\ A_3 \text{ - } 2 \times 1,\ A_4 \text{ - } 1 \times 2,\ A_5 \text{ - } 2 \times 3$.
 
@@ -617,15 +619,16 @@ Ostatecznie złożoność algorytmu wynosi $\BO(n^3)$.
 Niech $X = (x_1, \dots, x_m)$ -- ciąg. \\
 $Z = (z_1, \dots, z_k)$ jest podciągiem $X$, jeśli istnieje rosnący ciąg indeksów $1 \leq i_1 < i_2 < \dots < i_k \leq m$ takich, że dla każdego $j \in \{1, \dots, k\}$, $z_j = x_{i_j}$.
 
-\begin{example}{Podciąg}
+\begin{example}[Podciąg]
 	$X = (A, {\color{accent}B}, {\color{accent}C}, B, {\color{accent}D}, A, {\color{accent}B})$, $Z =
 		({\color{accent}B}, {\color{accent}C}, {\color{accent}D}, {\color{accent}B})$.
 	Indeksy: $(2, 3, 5, 7)$.
 \end{example}
 
-\paragraph{Problem:}
-Dane są ciągi $X = (x_1, \dots, x_m)$ oraz $Y = (y_1, \dots, y_n)$.
-Należy znaleźć najdłuższy wspólny podciąg (LCS -- \textit{Longest Common Subsequence}) $X$ i $Y$, czyli najdłuższy ciąg, który jest podciągiem zarówno $X$, jak i $Y$.
+\begin{problem}[najdłuższego wspólnego podciągu]
+	Dane są ciągi $X = (x_1, \dots, x_m)$ oraz $Y = (y_1, \dots, y_n)$.
+	Należy znaleźć najdłuższy wspólny podciąg (LCS -- \textit{Longest Common Subsequence}) $X$ i $Y$, czyli najdłuższy ciąg, który jest podciągiem zarówno $X$, jak i $Y$.
+\end{problem}
 
 Wszystkich podciągów $X$ jest $2^m$, więc algorytm sprawdzający wszystkie podciągi $X$ działa w czasie wykładniczym.
 

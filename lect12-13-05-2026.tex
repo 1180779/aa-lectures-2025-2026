@@ -3,8 +3,9 @@
 \subsection{Problem sumy podzbiorów}
 % ════════════════════════════════════════════════════════════════
 
-\paragraph{Problem sumy podzbiorów (Subset-Sum)}
-$S = \{x_1, x_2, \ldots, x_n\} \subseteq \N$, $t \in \N$.
+\begin{problem}[sumy podzbiorów (Subset-Sum)]
+	$S = \{x_1, x_2, \ldots, x_n\} \subseteq \N$, $t \in \N$.
+\end{problem}
 
 \paragraph{Wersja decyzyjna}
 \begin{itemize}[nosep]
@@ -76,7 +77,7 @@ Pokażemy w pełni wielomianowy schemat aproksymacyjny dla tego problemu.
 
 \paragraph{Pomysł:} będziemy skracać listy $L_i$. Dla $0 < \delta < 1$ z listy $L$ robimy krótszą listę $L'$ taką, że dla każdego elementu $y$ usuniętego z $L$ istnieje element $z$ w $L'$, który jest blisko niego, dokładnie $\frac{y}{1 + \delta} \leq z \leq y$.
 
-\begin{example}{Procedura Trim}
+\begin{example}[Procedura Trim]
 	$L = (15, 16, 17, 25, 27, 28, 35, 36, 37)$, $\delta = 0{,}1$.\\
 	$L' = (15, 17, 25, 28, 35)$.
 \end{example}
@@ -166,7 +167,7 @@ Oto schemat aproksymacyjny:
 	\end{itemize}
 \end{proof}
 
-\begin{example}{Redukcja 3-SAT do SUBSET-SUM}
+\begin{example}[Redukcja 3-SAT do SUBSET-SUM]
 	$C_1 = (x_1 \vee \overline{x_2} \vee \overline{x_3})$, \quad $C_2 = (\overline{x_1} \vee \overline{x_2} \vee \overline{x_3})$,\\
 	$C_3 = (\overline{x_1} \vee \overline{x_2} \vee x_3)$, \quad $C_4 = (x_1 \vee x_2 \vee x_3)$.\\
 	$\Phi = C_1 \wedge C_2 \wedge C_3 \wedge C_4$. \quad $n = 3$, $m = 4$.

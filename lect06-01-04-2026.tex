@@ -5,15 +5,15 @@
 
 \textbf{Pomysł:} Algorytm w każdym kroku dokonuje lokalnie najlepszego wyboru (najlepszego w danym momencie).
 
-\paragraph{Problem wyboru zajęć}
-$S = \{z_1, \dots, z_n\}$ -- zbiór zajęć wymagający tych samych zasobów.
-\begin{flalign*}
-	s_i & \text{ -- czas rozpoczęcia zajęcia } z_i &  & s_i, t_i \in \N, \quad s_i < t_i &  & \\
-	t_i & \text{ -- czas zakończenia zajęcia } z_i &  &                                  &  &
-\end{flalign*}
-
-Zajęcia $z_i$ i $z_j$ nazywamy \uemph{zgodnymi}, jeśli $\langle s_i, t_i) \cap \langle s_j, t_j) = \emptyset$.
-Zadanie polega na znalezieniu podzbioru o największej liczności $A \subseteq S$ parami zgodnych zajęć.
+\begin{problem}[wyboru zajęć]
+	$S = \{z_1, \dots, z_n\}$ -- zbiór zajęć wymagający tych samych zasobów.
+	\begin{flalign*}
+		s_i & \text{ -- czas rozpoczęcia zajęcia } z_i &  & s_i, t_i \in \N, \quad s_i < t_i &  & \\
+		t_i & \text{ -- czas zakończenia zajęcia } z_i &  &                                  &  &
+	\end{flalign*}
+	Zajęcia $z_i$ i $z_j$ nazywamy \uemph{zgodnymi}, jeśli $\langle s_i, t_i) \cap \langle s_j, t_j) = \emptyset$.
+	Zadanie polega na znalezieniu podzbioru o największej liczności $A \subseteq S$ parami zgodnych zajęć.
+\end{problem}
 
 \begin{example}\label{ex:zajecia}
 	Przykładowy zbiór zajęć:

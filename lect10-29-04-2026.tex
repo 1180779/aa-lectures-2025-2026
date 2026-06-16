@@ -61,7 +61,7 @@ Złożoność czasowa algorytmu wynosi:
 	\BO(n \log n + n \cdot n) = \BO(n^2) &  &  &  &
 \end{flalign*}
 
-\begin{example}{Szeregowanie zadań z deadlinami}
+\begin{example}[Szeregowanie zadań z deadlinami]
 	\begin{table}[H]
 		\centering
 		\renewcommand{\arraystretch}{1.2}
@@ -143,13 +143,14 @@ Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \uemph{współczyn
 	Niech $G = (V, E)$ -- graf. \uemph{Pokryciem wierzchołkowym} (Vertex Cover, VC) grafu $G$ nazywamy zbiór $W \subseteq V$ taki, że dla każdej krawędzi $e \in E$ zachodzi $W \cap e \neq \emptyset$ -- czyli każda krawędź $G$ ma co najmniej jeden koniec w $W$.
 \end{definition}
 
-\paragraph{Problem pokrycia wierzchołkowego}
-\begin{itemize}[nosep]
-	\item Instancja: graf $G$.
-	\item Problem: znaleźć pokrycie wierzchołkowe grafu $G$ o minimalnej liczbie wierzchołków.
-\end{itemize}
+\begin{problem}[pokrycia wierzchołkowego]
+	\begin{itemize}[nosep]
+		\item Instancja: graf $G$.
+		\item Problem: znaleźć pokrycie wierzchołkowe grafu $G$ o minimalnej liczbie wierzchołków.
+	\end{itemize}
+\end{problem}
 
-\begin{example}{Pokrycie wierzchołkowe}
+\begin{example}[Pokrycie wierzchołkowe]
 	\begin{figure}[H]
 		\centering
 		\begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.6cm, inner sep=1pt}]
@@ -187,7 +188,7 @@ Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \uemph{współczyn
 	\EndFunction
 \end{alg}
 
-\begin{example}{Algorytm AVC -- przykład}
+\begin{example}[Algorytm AVC -- przykład]
 	Rozważmy graf z poprzedniego przykładu.
 
 	Pierwszy przebieg algorytmu może wybrać kolejno krawędzie $ab$ i $cd$:

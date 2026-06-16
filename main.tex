@@ -31,6 +31,7 @@
 \usepackage{caption}
 
 \usepackage{mathtools}
+\usepackage{etoolbox}
 \usepackage{xpatch}
 
 \usepackage[noend]{algpseudocode}
@@ -54,6 +55,7 @@
 \AtBeginDocument{%
   \let\leq\leqslant
   \let\geq\geqslant
+  \allowdisplaybreaks
 }
 
 \geometry{margin=2.5cm}
@@ -83,11 +85,37 @@
 \hypersetup{colorlinks=true, linkcolor=accent, urlcolor=accent}
 
 % ── KOMENDY ──────────────────────────────────────────────────────
-\theoremstyle{definition}
+% Wspólny nagłówek twierdzeń: gdy podano nazwę (argument [opcjonalny]),
+% wypisz ją w nawiasie i przełam wiersz przed treścią; bez nazwy nagłówek
+% pozostaje w jednej linii (run-in). \azThmHead{name}{number}{note}.
+\newcommand{\azThmHead}[3]{%
+  \thmname{#1}\thmnumber{ #2}%
+  \def\azNote{#3}%
+  \ifx\azNote\empty. \else\ (#3).\newline\fi}
+
+% Większy odstęp przed/po + wspólny nagłówek z przełamaniem dla nazwanych.
+% Wariant „definition” (treść prosta) i „plain” (treść kursywą).
+\newtheoremstyle{azdefinition}%
+  {14pt plus 3pt minus 2pt}{12pt plus 3pt minus 2pt}%  odstęp przed / po
+  {\normalfont}%                                        czcionka treści
+  {0pt}%                                                wcięcie
+  {\bfseries}%                                          czcionka nagłówka
+  {}{0pt}%                                              interpunkcja i odstęp obsłużone w \azThmHead (headsep = 0)
+  {\azThmHead{#1}{#2}{#3}}%                          nagłówek
+\newtheoremstyle{azplain}%
+  {14pt plus 3pt minus 2pt}{12pt plus 3pt minus 2pt}%
+  {\itshape}%
+  {0pt}%
+  {\bfseries}%
+  {}{0pt}%
+  {\azThmHead{#1}{#2}{#3}}%
+
+\theoremstyle{azdefinition}
 \newtheorem{definition}{Definicja}[section]
 \newtheorem{example}[definition]{Przykład}
+\newtheorem{problem}[definition]{Problem}
 
-\theoremstyle{plain}
+\theoremstyle{azplain}
 \newtheorem{properties}[definition]{Własności}
 \newtheorem{theorem}[definition]{Twierdzenie}
 \newtheorem{conclusion}[definition]{Wniosek}
@@ -95,6 +123,18 @@
 
 \theoremstyle{remark}
 \newtheorem*{remark}{Uwaga}
+
+% Nie pozostawiaj osamotnionego nagłówka twierdzenia na końcu strony:
+% zarezerwuj kilka wierszy, w razie potrzeby przełam stronę przed środowiskiem.
+\usepackage{needspace}
+\newcommand{\azNeedSpace}{\Needspace*{4\baselineskip}}
+\AtBeginEnvironment{definition}{\azNeedSpace}
+\AtBeginEnvironment{example}{\azNeedSpace}
+\AtBeginEnvironment{problem}{\azNeedSpace}
+\AtBeginEnvironment{properties}{\azNeedSpace}
+\AtBeginEnvironment{theorem}{\azNeedSpace}
+\AtBeginEnvironment{conclusion}{\azNeedSpace}
+\AtBeginEnvironment{lemma}{\azNeedSpace}
 
 % Dygresja: wolniejsze rozwinięcie kroku dla czytelnika, który gubi się w rachunkach.
 % Wyszarzona treść sygnalizuje materiał opcjonalny (można pominąć przy powtórce).

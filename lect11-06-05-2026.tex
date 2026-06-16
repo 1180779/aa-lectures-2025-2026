@@ -69,7 +69,7 @@ AVC zwraca pokrycie złożone z $2m$ wierzchołków, natomiast optymalne pokryci
 \newcommand{\Sfive}{\textcolor{Scol5}{S_5}}
 \newcommand{\Ssix}{\textcolor{Scol6}{S_6}}
 
-\begin{example}{Pokrycie zbioru}
+\begin{example}[Pokrycie zbioru]
 	\begin{figure}[H]
 		\centering
 		\begin{tikzpicture}[scale=0.9, thick]
@@ -104,11 +104,12 @@ AVC zwraca pokrycie złożone z $2m$ wierzchołków, natomiast optymalne pokryci
 	$\{\Sone, \Stwo, \Sthree\}$ -- pokrycie.
 \end{example}
 
-\paragraph{Problem pokrycia zbioru}
-\begin{itemize}[nosep]
-	\item Instancja: $(X, \mathcal{F})$, gdzie $X$ -- zbiór skończony, $|X| = n$, $\mathcal{F} \subseteq 2^X$ taki, że $\bigcup_{S \in \mathcal{F}} S = X$.
-	\item Problem: znaleźć pokrycie $\mathcal{A} \subseteq \mathcal{F}$ minimalizujące $|\mathcal{A}|$.
-\end{itemize}
+\begin{problem}[pokrycia zbioru]
+	\begin{itemize}[nosep]
+		\item Instancja: $(X, \mathcal{F})$, gdzie $X$ -- zbiór skończony, $|X| = n$, $\mathcal{F} \subseteq 2^X$ taki, że $\bigcup_{S \in \mathcal{F}} S = X$.
+		\item Problem: znaleźć pokrycie $\mathcal{A} \subseteq \mathcal{F}$ minimalizujące $|\mathcal{A}|$.
+	\end{itemize}
+\end{problem}
 
 \begin{remark}
 	VC jest szczególnym przypadkiem problemu pokrycia zbiorów. Dla $G = (V, E)$ kładziemy $X = E$, $\mathcal{F} = \{E(v) : v \in V\}$, gdzie $E(v) = \{e \in E : v \in e\}$.

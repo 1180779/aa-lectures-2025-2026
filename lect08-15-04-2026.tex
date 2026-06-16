@@ -113,9 +113,11 @@ Z lematu~\ref{lemma:huffman:1} wynika, że można zacząć konstrukcję optymaln
 \subsection{Szeregowanie zadań}
 % ════════════════════════════════════════════════════════════════
 
+\begin{problem}[Szeregowanie zadań -- jeden procesor]
 Jak uszeregować zadania tak, aby średni czas ukończenia był jak najmniejszy?
+\end{problem}
 
-\begin{example}{Szeregowanie zadań -- jeden procesor}
+\begin{example}[Szeregowanie zadań -- jeden procesor] \label{prob:szeregowanieZadan}
 	\begin{table}[H]
 		\centering
 		\renewcommand{\arraystretch}{1.2}
@@ -142,10 +144,11 @@ Jak uszeregować zadania tak, aby średni czas ukończenia był jak najmniejszy?
 	\textbf{Rozwiązanie:} Uszereguj zadania od najkrótszego do najdłuższego.
 \end{example}
 
-\paragraph{Problem 2}
-Mamy 3 procesory. Pytanie jak poprzednio.
+\begin{problem}[Szeregowanie zadań -- 3 procesory] \label{prob:szeregowanieZadanTrzy}
+Mamy 3 procesory. Pytanie jak poprzednio (por. \ref{prob:szeregowanieZadan}).
+\end{problem}
 
-\begin{example}{Szeregowanie zadań -- trzy procesory}
+\begin{example}[Szeregowanie zadań -- trzy procesory]
 	\begin{table}[H]
 		\centering
 		\renewcommand{\arraystretch}{1.2}
@@ -188,13 +191,13 @@ Mamy 3 procesory. Pytanie jak poprzednio.
 	\end{figure}
 \end{example}
 
-W \textbf{Problemie 1} dla uszeregowania $z_{i_1}, z_{i_2}, \dots, z_{i_n}$ suma zakończeń zadań wynosi:
+W problemie \ref{prob:szeregowanieZadan} dla uszeregowania $z_{i_1}, z_{i_2}, \dots, z_{i_n}$ suma zakończeń zadań wynosi:
 \begin{flalign*}
 	\sum_{j=1}^n \sum_{k=1}^j t_{i_k} & = t_{i_1} + (t_{i_1} + t_{i_2}) + (t_{i_1} + t_{i_2} + t_{i_3}) + \dots + (t_{i_1} + \dots + t_{i_n}) =            &  & \\
 	                                  & = n \cdot t_{i_1} + (n - 1) t_{i_2} + (n - 2) t_{i_3} + \dots + 1 \cdot t_{i_n} = \sum_{j=1}^n (n + 1 - j) t_{i_j} &  &
 \end{flalign*}
 
-W \textbf{Problemie 2} (dla $3 \mid n$) dla uszeregowania $z_{i_1}, z_{i_2}, \dots, z_{i_n}$ suma czasów zakończeń wynosi:
+W problemie \ref{prob:szeregowanieZadanTrzy} (dla $3 \mid n$) dla uszeregowania $z_{i_1}, z_{i_2}, \dots, z_{i_n}$ suma czasów zakończeń wynosi:
 \begin{flalign*}
 	\vphantom{\sum_{j=1}^n \left( \frac{n}{3} - \left\lfloor \frac{j-1}{3} \right\rfloor \right)} & \underbracket{t_{i_1} + t_{i_2} + t_{i_3}} + \underbracket{(t_{i_1} + t_{i_4}) + (t_{i_2} + t_{i_5}) + (t_{i_3} + t_{i_6})} + \underbracket{(t_{i_1} + t_{i_4} + t_{i_7}) + (t_{i_2} + t_{i_5} + t_{i_8}) + (t_{i_3} + t_{i_6} + t_{i_9})} + &  & \\
 	\vphantom{\sum_{j=1}^n \left( \frac{n}{3} - \left\lfloor \frac{j-1}{3} \right\rfloor \right)} & + \dots + \underbracket{(t_{i_1} + t_{i_4} + \dots + t_{i_{n-2}}) + (t_{i_2} + t_{i_5} + \dots + t_{i_{n-1}}) + (t_{i_3} + t_{i_6} + \dots + t_{i_n})} =                                                                                     &  & \\

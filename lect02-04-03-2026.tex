@@ -62,7 +62,7 @@ Algorytm typu \textit{dziel i zwyciężaj} składa się z trzech części
 
 Zakładamy, że (zazwyczaj) w fazie \textit{dziel} problem jest dzielony na co najmniej dwa podproblemy i podproblemy są rozłączne.
 
-\begin{example}{Mnożenie liczb $n$-cyfrowych}
+\begin{example}[Mnożenie liczb $n$-cyfrowych]
 	$x,y$ -- liczby naturalne $n$-cyfrowe.
 
 	Aby policzyć $x\cdot y$ można użyć mnożenia pisemnego (jak na kartce). Tym sposobem musimy wykonać $\BO(n^2)$ mnożeń cyfr. Spróbujemy znaleźć lepszą metodę.
@@ -95,7 +95,7 @@ Zakładamy, że (zazwyczaj) w fazie \textit{dziel} problem jest dzielony na co n
 	To daje $T(n) = 3\cdot T\left(\frac{n}{2}\right) + \BT(n)$
 \end{example}
 
-\begin{theorem}{CLRS - Uniwersalne Twierdzenie o Rekurencji} \label{theorem:utor}
+\begin{theorem}[CLRS - Uniwersalne Twierdzenie o Rekurencji] \label{theorem:utor}
 	Niech $a \geq 1,\ b > 1$ będą stałymi, $f(n)$ funkcją i $T(n) = a\cdot T\left(\frac{n}{b}\right) + f(n)$ (gdzie $\frac{n}{b}$ znaczy $\left\lfloor \frac{n}{b} \right\rfloor$ lub $\left\lceil \frac{n}{b}\right\rceil$).
 	Wtedy
 	\begin{flalign*}
