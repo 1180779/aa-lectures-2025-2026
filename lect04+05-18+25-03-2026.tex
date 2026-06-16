@@ -187,7 +187,7 @@ Operacją dominującą jest mnożenie w linii 5. Mamy $p \cdot q \cdot r$ mnoże
 \end{example}
 
 \paragraph{Problem:}
-Dla danego ciągu macierzy $(A_1, A_2, \dots, A_n)$, gdzie $A_i$ jest macierzą $p_{i-1} \times p_i$, znajdź kolejność wykonywania mnożeń minimalizującą liczbę mnożeń skalarnych użytych do obliczenia iloczynu $A_1 \cdot A_2 \cdot \dots \cdot A_n$.
+Dla danego ciągu macierzy $(A_1, A_2, \dots, A_n)$, gdzie $A_i$ jest macierzą $p_{i-1} \times p_i$ (cały ciąg wymiarów zapisujemy jednym ciągiem $p = (p_0, p_1, \dots, p_n)$ -- kolejne macierze dzielą wspólny wymiar, więc $n$ macierzy opisuje $n + 1$ liczb), znajdź kolejność wykonywania mnożeń minimalizującą liczbę mnożeń skalarnych użytych do obliczenia iloczynu $A_1 \cdot A_2 \cdot \dots \cdot A_n$.
 
 Ile jest różnych sposobów obliczenia tego iloczynu? Innymi słowy, na ile sposobów możemy poprawnie wstawić nawiasy w iloczynie $A_1 \cdot A_2 \cdot \dots \cdot A_n$?
 
@@ -239,7 +239,7 @@ Optymalny sposób rozmieszczenia nawiasów jest postaci $(A_i \dots A_k)(A_{k+1}
 \begin{dygresja}
 	Składnik $p_{i-1} \cdot p_k \cdot p_j$ to koszt \emph{ostatniego} mnożenia, czyli pomnożenia macierzy będącej wynikiem $A_i \dots A_k$ przez macierz będącą wynikiem $A_{k+1} \dots A_j$. Rozmiar iloczynu ciągu macierzy odczytujemy ,,teleskopowo'' -- wewnętrzne wymiary (liczba kolumn poprzedniej macierzy = liczba wierszy następnej) skracają się, a zostają jedynie skrajne:
 	\begin{align*}
-		A_i \dots A_k:\quad &
+		A_i \dots A_k:\quad     &
 		M_{p_{i-1}}^{\cancel{p_i}} \cdot M_{\cancel{p_i}}^{\bcancel{p_{i+1}}} \cdots M_{\dcancel{p_{k-1}}}^{p_k}
 		\ \longrightarrow\ M_{p_{i-1}}^{p_k}, \\[2pt]
 		A_{k+1} \dots A_j:\quad &
@@ -253,14 +253,20 @@ Optymalny sposób rozmieszczenia nawiasów jest postaci $(A_i \dots A_k)(A_{k+1}
 	mnożeń skalarnych.
 \end{dygresja}
 
-Niech $s(i, j)$ będzie wartością $k$, dla którego to minimum jest osiągane (czyli $s(i, j)$ wskazuje miejsce ostatniego mnożenia w optymalnym rozwiązaniu podproblemu $A_i \dots A_j$). Czyli dla $1 \leq i < j \leq n$.
+Niech $s(i, j)$, dla $1 \leq i < j \leq n$, będzie wartością $k$, dla którego to minimum jest osiągane (czyli $s(i, j)$ wskazuje miejsce ostatniego mnożenia w optymalnym rozwiązaniu podproblemu $A_i \dots A_j$).
 
 Jeśli zaimplementujemy po prostu tę formułę rekurencyjną otrzymamy alg. wykładniczy. Ale jest tylko $n + \binom{n}{2} = \BO(n^2)$ podproblemów, więc rzędu $\BO(n^2)$ liczb $m(i, j)$ i każdą z tych liczb wystarczy obliczyć jeden raz.
 
+Pomysł programowania dynamicznego polega więc na zapamiętaniu tych wartości w~tablicy zamiast liczenia ich wielokrotnie. Wprowadzamy dwie tablice indeksowane parą $(i, j)$, $1 \leq i \leq j \leq n$ (a~ponieważ rozważamy tylko $i \leq j$, wypełniona zostaje jedynie górna połowa każdej z~nich -- jak w~przykładzie poniżej):
+\begin{itemize}
+	\item $m(i, j)$ -- \textbf{koszt}: minimalna liczba mnożeń skalarnych dla podproblemu $A_i \dots A_j$. Ostateczną odpowiedzią jest $m(1, n)$.
+	\item $s(i, j)$ -- \textbf{cięcie}: miejsce $k$ ostatniego mnożenia, na którym ten minimalny koszt jest osiągany. Sama tablica $m$ podaje tylko \emph{ile} mnożeń wystarczy, ale nie \emph{jak} ustawić nawiasy; to $s$ pozwala odtworzyć optymalne nawiasowanie (wykorzysta ją algorytm \Call{MatrixChainMultiply}{} dalej).
+\end{itemize}
+
 \begin{alg}{Algorytm Matrix Chain Order}{alg:matrixchainorder}
 	\FunctionNN{MatrixChainOrder}{$p$}
-	\Comment{$(p_0, p_1, \dots, p_n)$ - ciąg rozmiarów; $A_i$ - macierz $p_{i-1} \times p_i$}
-	\State $n \Assign \Length{p} - 1$
+	\Comment{$p = (p_0, p_1, \dots, p_n)$ - ciąg rozmiarów}
+	\State $n \Assign \Length{p} - 1$ \Comment{$A_i$ - macierz $p_{i-1} \times p_i$}
 	\For{$i \Assign 1$ \To $n$}
 	\State $m(i, i) \Assign 0$
 	\EndFor
@@ -280,6 +286,17 @@ Jeśli zaimplementujemy po prostu tę formułę rekurencyjną otrzymamy alg. wyk
 	\State \Return $m, s$
 	\EndFunction
 \end{alg}
+
+\begin{dygresja}
+	Algorytm wypełnia tablicę $m$ \emph{od dołu}: zaczyna od najmniejszych podproblemów i~rośnie. Kluczowa jest kolejność, w~jakiej wpełnimy komórki -- tak dobrana, by w~chwili liczenia $m(i, j)$ wszystkie potrzebne mniejsze wartości były już policzone.
+	\begin{itemize}
+		\item \textbf{Pierwsza pętla (po $i$)} ustawia przekątną $m(i, i) = 0$: pojedyncza macierz nie wymaga żadnego mnożenia.
+		\item \textbf{Zmienna $l$} to \emph{długość} podproblemu, czyli liczba macierzy w~ciągu $A_i \dots A_j$. Wzór $m(i, j) = \min_k \{\,m(i, k) + m(k{+}1, j) + \dots\,\}$ odwołuje się wyłącznie do podciągów \emph{krótszych} niż $A_i \dots A_j$ (bo $k < j$ oraz $k + 1 > i$). Dlatego idziemy po $l = 2, 3, \dots, n$: gdy liczymy ciągi długości $l$, wszystkie ciągi długości $< l$ są już w~tablicy.
+		\item \textbf{Przy ustalonym $l$} przesuwamy okno długości $l$ wzdłuż ciągu: $i$ to początek okna, a~koniec wyznacza $j = i + l - 1$. Górna granica $i \leq n - l + 1$ pilnuje, by okno nie wyszło poza $A_n$ (komentarze obok pętli pokazują, jak dla kolejnych $l$ przesuwa się okno).
+		\item \textbf{Wewnętrzna pętla po $k$} próbuje każdego miejsca ostatniego mnożenia $A_i \dots A_k \mid A_{k+1} \dots A_j$ i~zostawia to o~najmniejszym koszcie $q$. Przy każdej poprawie zapamiętujemy nie tylko koszt w~$m(i, j)$, ale i~zwycięskie cięcie w~$s(i, j)$ -- to ono pozwoli później odtworzyć nawiasowanie.
+	\end{itemize}
+	Innymi słowy: $l$ mówi \emph{jak duży} podproblem liczymy, $i$ (a~z~nim $j$) \emph{który} to podproblem, a~$k$ przeszukuje wszystkie sposoby jego rozcięcia.
+\end{dygresja}
 
 Mamy 3 pętle (po $l, i, k$) i liczbę iteracji każdej z tych pętli można ograniczyć przez $n$, zatem złożoność czasowa to $\BO(n^3)$.
 
@@ -311,12 +328,71 @@ Mamy 3 pętle (po $l, i, k$) i liczbę iteracji każdej z tych pętli można ogr
 	\end{minipage}
 	\vspace{1em}
 
+	Prześledźmy, jak rosną obie tablice. Algorytm wypełnia je \emph{przekątnymi}: najpierw $L=1$ (przekątna główna), potem $L=2$, $L=3$, \dots. Komórki dopisane w~danym kroku wyróżniono na \textcolor{accentB}{pomarańczowo}; puste pola to podproblemy jeszcze nieobliczone, a~$\times$ -- pola nieużywane ($i \geq j$ dla $s$, $i > j$ dla $m$).
+
+	\medskip
+	\noindent Stan początkowy ($L=1$, pojedyncze macierze, koszt $0$):\\[0.7em]
+	\begin{minipage}{0.45\linewidth}
+		$m$
+		$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+				i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+				1 & 0 &  &  &  &  \\
+				2 & \times & 0 &  &  &  \\
+				3 & \times & \times & 0 &  &  \\
+				4 & \times & \times & \times & 0 &  \\
+				5 & \times & \times & \times & \times & 0
+			\end{bNiceArray}$
+	\end{minipage}\hfill
+	\begin{minipage}{0.45\linewidth}
+		$s$
+		$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+				i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+				1 & \times &  &  &  &  \\
+				2 & \times & \times &  &  &  \\
+				3 & \times & \times & \times &  &  \\
+				4 & \times & \times & \times & \times &  \\
+				5 & \times & \times & \times & \times & \times
+			\end{bNiceArray}$
+	\end{minipage}
+
+	\medskip
+	\noindent{\color{placeholdercolor}\rule{\linewidth}{0.4pt}}\par\smallskip
+	\noindent{\color{dygresjagray}\footnotesize$\begin{array}{c|*{6}{c}} i & 0 & 1 & 2 & 3 & 4 & 5 \\ \hline p_i & 4 & 5 & 2 & 1 & 2 & 3 \end{array}$\qquad $A_i = p_{i-1}\times p_i$}
 	\begin{flalign*}
 		L=2: \quad & m(1, 2) = 4 \cdot 5 \cdot 2 = 40 &  & \\
 		           & m(2, 3) = 5 \cdot 2 \cdot 1 = 10 &  & \\
 		           & m(3, 4) = 2 \cdot 1 \cdot 2 = 4  &  & \\
 		           & m(4, 5) = 1 \cdot 2 \cdot 3 = 6  &  &
 	\end{flalign*}
+
+	\medskip
+	\noindent po $L=2$ (pary sąsiednich macierzy):\\[0.7em]
+	\begin{minipage}{0.45\linewidth}
+		$m$
+		$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+				i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+				1 & 0 & \color{accentB}40 &  &  &  \\
+				2 & \times & 0 & \color{accentB}10 &  &  \\
+				3 & \times & \times & 0 & \color{accentB}4 &  \\
+				4 & \times & \times & \times & 0 & \color{accentB}6 \\
+				5 & \times & \times & \times & \times & 0
+			\end{bNiceArray}$
+	\end{minipage}\hfill
+	\begin{minipage}{0.45\linewidth}
+		$s$
+		$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+				i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+				1 & \times & \color{accentB}1 &  &  &  \\
+				2 & \times & \times & \color{accentB}2 &  &  \\
+				3 & \times & \times & \times & \color{accentB}3 &  \\
+				4 & \times & \times & \times & \times & \color{accentB}4 \\
+				5 & \times & \times & \times & \times & \times
+			\end{bNiceArray}$
+	\end{minipage}
+
+	\medskip
+	\noindent{\color{placeholdercolor}\rule{\linewidth}{0.4pt}}\par\smallskip
+	\noindent{\color{dygresjagray}\footnotesize$\begin{array}{c|*{6}{c}} i & 0 & 1 & 2 & 3 & 4 & 5 \\ \hline p_i & 4 & 5 & 2 & 1 & 2 & 3 \end{array}$\qquad $A_i = p_{i-1}\times p_i$}
 	\begin{flalign*}
 		L=3: \quad & m(1, 3) = \min \begin{cases}
 			                            m(1, 1) + m(2, 3) + 4 \cdot 5 \cdot 1 \\
@@ -324,22 +400,51 @@ Mamy 3 pętle (po $l, i, k$) i liczbę iteracji każdej z tych pętli można ogr
 		                            \end{cases} = \min \begin{cases}
 			                                               0 + 10 + 20 \\
 			                                               40 + 0 + 8
-		                                               \end{cases} = \min \begin{cases} 30 \\ 48 \end{cases} = 30 &  & \\
+		                                               \end{cases} = \min \begin{cases} 30 \\ 48 \end{cases} = 30 \\
 		           & m(2, 4) = \min \begin{cases}
 			                            m(2, 2) + m(3, 4) + 5 \cdot 2 \cdot 2 \\
 			                            m(2, 3) + m(4, 4) + 5 \cdot 1 \cdot 2
 		                            \end{cases} = \min \begin{cases}
 			                                               0 + 4 + 20 \\
 			                                               10 + 0 + 10
-		                                               \end{cases} = \min \begin{cases} 24 \\ 20 \end{cases} = 20 &  & \\
+		                                               \end{cases} = \min \begin{cases} 24 \\ 20 \end{cases} = 20 \\
 		           & m(3, 5) = \min \begin{cases}
 			                            m(3, 3) + m(4, 5) + 2 \cdot 1 \cdot 3 \\
 			                            m(3, 4) + m(5, 5) + 2 \cdot 2 \cdot 3
 		                            \end{cases} = \min \begin{cases}
 			                                               0 + 6 + 6 \\
 			                                               4 + 0 + 12
-		                                               \end{cases} = \min \begin{cases} 12 \\ 16 \end{cases} = 12 &  &
+		                                               \end{cases} = \min \begin{cases} 12 \\ 16 \end{cases} = 12
 	\end{flalign*}
+
+	\medskip
+	\noindent po $L=3$:\\[0.7em]
+	\begin{minipage}{0.45\linewidth}
+		$m$
+		$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+				i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+				1 & 0 & 40 & \color{accentB}30 &  &  \\
+				2 & \times & 0 & 10 & \color{accentB}20 &  \\
+				3 & \times & \times & 0 & 4 & \color{accentB}12 \\
+				4 & \times & \times & \times & 0 & 6 \\
+				5 & \times & \times & \times & \times & 0
+			\end{bNiceArray}$
+	\end{minipage}\hfill
+	\begin{minipage}{0.45\linewidth}
+		$s$
+		$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+				i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+				1 & \times & 1 & \color{accentB}1 &  &  \\
+				2 & \times & \times & 2 & \color{accentB}3 &  \\
+				3 & \times & \times & \times & 3 & \color{accentB}3 \\
+				4 & \times & \times & \times & \times & 4 \\
+				5 & \times & \times & \times & \times & \times
+			\end{bNiceArray}$
+	\end{minipage}
+
+	\medskip
+	\noindent{\color{placeholdercolor}\rule{\linewidth}{0.4pt}}\par\smallskip
+	\noindent{\color{dygresjagray}\footnotesize$\begin{array}{c|*{6}{c}} i & 0 & 1 & 2 & 3 & 4 & 5 \\ \hline p_i & 4 & 5 & 2 & 1 & 2 & 3 \end{array}$\qquad $A_i = p_{i-1}\times p_i$}
 	\begin{flalign*}
 		L=4: \quad & m(1, 4) = \min \begin{cases}
 			                            m(1, 1) + m(2, 4) + 4 \cdot 5 \cdot 2 \\
@@ -349,7 +454,7 @@ Mamy 3 pętle (po $l, i, k$) i liczbę iteracji każdej z tych pętli można ogr
 			                                               0 + 20 + 40 \\
 			                                               40 + 4 + 16 \\
 			                                               30 + 0 + 8
-		                                               \end{cases} = \min \begin{cases} 60 \\ 60 \\ 38 \end{cases} = 38 &  & \\
+		                                               \end{cases} = \min \begin{cases} 60 \\ 60 \\ 38 \end{cases} = 38 \\
 		           & m(2, 5) = \min \begin{cases}
 			                            m(2, 2) + m(3, 5) + 5 \cdot 2 \cdot 3 \\
 			                            m(2, 3) + m(4, 5) + 5 \cdot 1 \cdot 3 \\
@@ -358,8 +463,37 @@ Mamy 3 pętle (po $l, i, k$) i liczbę iteracji każdej z tych pętli można ogr
 			                                               0 + 12 + 30 \\
 			                                               10 + 6 + 15 \\
 			                                               20 + 0 + 30
-		                                               \end{cases} = \min \begin{cases} 42 \\ 31 \\ 50 \end{cases} = 31 &  &
+		                                               \end{cases} = \min \begin{cases} 42 \\ 31 \\ 50 \end{cases} = 31
 	\end{flalign*}
+
+	\medskip
+	\noindent po $L=4$:\\[0.7em]
+	\begin{minipage}{0.45\linewidth}
+		$m$
+		$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+				i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+				1 & 0 & 40 & 30 & \color{accentB}38 &  \\
+				2 & \times & 0 & 10 & 20 & \color{accentB}31 \\
+				3 & \times & \times & 0 & 4 & 12 \\
+				4 & \times & \times & \times & 0 & 6 \\
+				5 & \times & \times & \times & \times & 0
+			\end{bNiceArray}$
+	\end{minipage}\hfill
+	\begin{minipage}{0.45\linewidth}
+		$s$
+		$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+				i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+				1 & \times & 1 & 1 & \color{accentB}3 &  \\
+				2 & \times & \times & 2 & 3 & \color{accentB}3 \\
+				3 & \times & \times & \times & 3 & 3 \\
+				4 & \times & \times & \times & \times & 4 \\
+				5 & \times & \times & \times & \times & \times
+			\end{bNiceArray}$
+	\end{minipage}
+
+	\medskip
+	\noindent{\color{placeholdercolor}\rule{\linewidth}{0.4pt}}\par\smallskip
+	\noindent{\color{dygresjagray}\footnotesize$\begin{array}{c|*{6}{c}} i & 0 & 1 & 2 & 3 & 4 & 5 \\ \hline p_i & 4 & 5 & 2 & 1 & 2 & 3 \end{array}$\qquad $A_i = p_{i-1}\times p_i$}
 	\begin{flalign*}
 		L=5: \quad & m(1, 5) = \min \begin{cases}
 			                            m(1, 1) + m(2, 5) + 4 \cdot 5 \cdot 3 \\
@@ -371,8 +505,36 @@ Mamy 3 pętle (po $l, i, k$) i liczbę iteracji każdej z tych pętli można ogr
 			                                               40 + 12 + 24 \\
 			                                               30 + 6 + 12  \\
 			                                               38 + 0 + 24
-		                                               \end{cases} = \min \begin{cases} 91 \\ 76 \\ 48 \\ 62 \end{cases} = 48 &  &
+		                                               \end{cases} = \min \begin{cases} 91 \\ 76 \\ 48 \\ 62 \end{cases} = 48
 	\end{flalign*}
+
+	\medskip
+	\noindent po $L=5$ (cały ciąg -- ostatnia komórka):\\[0.7em]
+	\begin{minipage}{0.45\linewidth}
+		$m$
+		$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+				i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+				1 & 0 & 40 & 30 & 38 & \color{accentB}48 \\
+				2 & \times & 0 & 10 & 20 & 31 \\
+				3 & \times & \times & 0 & 4 & 12 \\
+				4 & \times & \times & \times & 0 & 6 \\
+				5 & \times & \times & \times & \times & 0
+			\end{bNiceArray}$
+	\end{minipage}\hfill
+	\begin{minipage}{0.45\linewidth}
+		$s$
+		$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+				i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+				1 & \times & 1 & 1 & 3 & \color{accentB}3 \\
+				2 & \times & \times & 2 & 3 & 3 \\
+				3 & \times & \times & \times & 3 & 3 \\
+				4 & \times & \times & \times & \times & 4 \\
+				5 & \times & \times & \times & \times & \times
+			\end{bNiceArray}$
+	\end{minipage}
+
+	\medskip
+	Każdy przebieg pętli po~$l$ dopisuje dokładnie jedną przekątną: w~komórce $m(i, j)$ ląduje koszt, a~w~bliźniaczej $s(i, j)$ -- zwycięskie cięcie $k$. Ostatnią obliczoną wartością jest $m(1, 5) = 48$ w~prawym górnym rogu -- szukany koszt całego ciągu.
 
 	Oto algorytm znajdowania optymalnego rozwiązania:
 	\begin{alg}{Algorytm Matrix Chain Multiply}{alg:matrixchainmultiply}
@@ -387,7 +549,6 @@ Mamy 3 pętle (po $l, i, k$) i liczbę iteracji każdej z tych pętli można ogr
 	\end{alg}
 
 	W celu znalezienia rozwiązania wywołujemy: \Call{MatrixChainMultiply}{$A, s, 1, n$}
-
 	\begin{flalign*}
 		 & A_1 \cdot A_2 \cdot A_3 \cdot A_4 \cdot A_5                                                                  &  & \\
 		 & s(1, 5) = 3 \implies (A_1 \cdot A_2 \cdot A_3)(A_4 \cdot A_5)                                                &  & \\

@@ -116,6 +116,11 @@
 % To samo w kierunku wstecznym (\\) — dla kompletu.
 \newcommand{\dbcancel}[1]{{\mathrlap{\bcancel{#1}}\mkern8mu\bcancel{\phantom{#1}}}}
 
+% \binom z XITS Math nie skaluje nawiasów wbudowanych w \genfrac — dolny
+% argument wystaje pod nawias. Owijamy bezkreskowy \genfrac w prawdziwe
+% \left(...\right), których wysokość dopasowuje się do dwuwierszowej zawartości.
+\renewcommand{\binom}[2]{\left(\genfrac{}{}{0pt}{}{#1}{#2}\right)}
+
 % ── KOMENDY ──────────────────────────────────────────────────────
 % change default thickness of brackets to .6pt
 \MHInternalSyntaxOn
