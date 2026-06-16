@@ -809,6 +809,34 @@ $m = 7$, $n = 6$.
 	\end{minipage}
 \end{table}
 
+\begin{dygresja}
+	Pełne wypełnienie tablicy to $7 \cdot 6 = 42$ powtórzenia tej samej reguły, więc
+	prześledźmy tylko po jednej komórce na każdą z~gałęzi rekurencji (pozostałe
+	liczymy analogicznie). Indeksowanie: $X = (x_1, \dots, x_7)$, $Y = (y_1, \dots, y_6)$.
+
+	\begin{itemize}
+		\item \textbf{Dopasowanie} ($\nwarrow$). Komórka $c(2, 1)$: $x_2 = B$, $y_1 = B$,
+		      więc $x_i = y_j$. Bierzemy wartość z~przekątnej i~dodajemy~$1$:
+		      $c(2, 1) = c(1, 0) + 1 = 0 + 1 = 1$. Ostatnie znaki się zgadzają,
+		      więc element wchodzi do LCS i~strzałka wskazuje $\nwarrow$.
+
+		\item \textbf{Brak dopasowania, w~górę} ($\uparrow$). Komórka $c(3, 1)$: $x_3 = C$,
+		      $y_1 = B$, więc $x_i \neq y_j$. Porównujemy sąsiadów:
+		      $c(2, 1) = 1$ (góra) oraz $c(3, 0) = 0$ (lewo). Ponieważ
+		      $c(i - 1, j) \geq c(i, j - 1)$, bierzemy $c(3, 1) = c(2, 1) = 1$ i~strzałkę $\uparrow$.
+
+		\item \textbf{Brak dopasowania, w~lewo} ($\leftarrow$). Komórka $c(2, 2)$: $x_2 = B$,
+		      $y_2 = D$, więc $x_i \neq y_j$. Sąsiedzi: $c(1, 2) = 0$ (góra) oraz
+		      $c(2, 1) = 1$ (lewo). Tym razem $c(i - 1, j) < c(i, j - 1)$, więc
+		      $c(2, 2) = c(2, 1) = 1$ i~strzałka $\leftarrow$.
+
+		\item \textbf{Remis.} Komórka $c(1, 1)$: $x_1 = A \neq B = y_1$, a~obaj sąsiedzi
+		      są równi: $c(0, 1) = c(1, 0) = 0$. Warunek $c(i - 1, j) \geq c(i, j - 1)$
+		      jest spełniony (równość), więc algorytm wybiera $\uparrow$ -- remisy
+		      rozstrzygamy zawsze na korzyść góry.
+	\end{itemize}
+\end{dygresja}
+
 \begin{alg}{Wypisywanie najdłuższego wspólnego podciągu}{alg:printlcs}
 	\FunctionNN{PrintLCS}{$b, X, Y, i, j$}
 	\If{$i = 0$ \textbf{lub} $j = 0$}
@@ -827,5 +855,27 @@ $m = 7$, $n = 6$.
 
 Żeby wypisać rozwiązanie, wywołujemy \Call{PrintLCS}{$b, X, Y, m, n$}. \\
 Dla powyższego przykładu otrzymamy: $(B, C, B, A)$.
+
+\begin{dygresja}
+	Prześledźmy to wywołanie. Zaczynamy od prawego dolnego rogu i~podążamy za
+	strzałkami z~tablicy $b$ aż do brzegu tablicy. Przy $\nwarrow$ schodzimy po
+	przekątnej do $(i - 1, j - 1)$ i~zaznaczamy znak $x_i$ jako należący do LCS;
+	przy $\uparrow$ idziemy do $(i - 1, j)$, a~przy $\leftarrow$ do $(i, j - 1)$
+	(bez wypisywania).
+	\begin{align*}
+		(7, 6) &\xrightarrow{\uparrow}     (6, 6)
+		        \xrightarrow{\nwarrow}      (5, 5) \quad[\,x_6 = A\,] \\
+		       &\xrightarrow{\uparrow}      (4, 5)
+		        \xrightarrow{\nwarrow}      (3, 4) \quad[\,x_4 = B\,] \\
+		       &\xrightarrow{\leftarrow}    (3, 3)
+		        \xrightarrow{\nwarrow}      (2, 2) \quad[\,x_3 = C\,] \\
+		       &\xrightarrow{\leftarrow}    (2, 1)
+		        \xrightarrow{\nwarrow}      (1, 0) \quad[\,x_2 = B\,]
+	\end{align*}
+	W~$(1, 0)$ mamy $j = 0$, więc rekurencja się zatrzymuje. Wypisywanie następuje
+	\emph{po} powrocie z~wywołania rekurencyjnego, więc znaki pojawiają się od
+	najgłębszego: $B$ (z~$(2,1)$), potem $C$, $B$ i~$A$ -- czyli w~kolejności
+	$(B, C, B, A)$, zgodnie z~lewym-do-prawego porządkiem oryginalnych ciągów.
+\end{dygresja}
 
 Złożoność czasowa tego algorytmu wynosi $\BT(m \cdot n)$.
