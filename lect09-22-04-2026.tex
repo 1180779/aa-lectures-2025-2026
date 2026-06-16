@@ -8,8 +8,11 @@
 	\begin{enumerate}
 		\item $S$ -- niepusty zbiór skończony,
 		\item $\mathcal{A} \subseteq 2^S$ i $\mathcal{A} \neq \emptyset$ -- czyli $\mathcal{A}$ to niepusta rodzina podzbiorów $S$,
-		\item $\forall A, B \subseteq S \quad A \in \mathcal{A} \wedge B \subseteq A \implies B \in \mathcal{A}$,
-		\item $\forall A, B \subseteq S \quad A, B \in \mathcal{A} \wedge |B| > |A| \implies \text{istnieje } x \in B \setminus A \text{ taki, że } A \cup \{x\} \in \mathcal{A}$ (własność wymiany).
+		\item \label{matroid:dziedziczność} $\forall A, B \subseteq S \quad A \in \mathcal{A} \wedge B \subseteq A \implies B \in \mathcal{A}$,
+		\item \label{matroid:wymiana} własność wymiany:
+		      \begin{flalign*}
+			       & \forall A, B \subseteq S \quad A, B \in \mathcal{A} \wedge |B| > |A| \implies \text{istnieje } x \in B \setminus A \text{ taki, że } A \cup \{x\} \in \mathcal{A}. &  &  &  &
+		      \end{flalign*}
 	\end{enumerate}
 	$\mathcal{A}$ -- rodzina zbiorów niezależnych matroidu $M$, elementy $\mathcal{A}$ -- zbiory niezależne matroidu $M$.
 \end{definition}
@@ -24,12 +27,12 @@
 	Z definicji $\emptyset \in \mathcal{A}$.
 \end{example}
 
-\begin{lemma}
+\begin{lemma} \label{lemma:matroid:liczność}
 	Niech $M = (S, \mathcal{A})$. Wszystkie maksymalne zbiory niezależne $M$ mają tę samą liczność.
 \end{lemma}
 \begin{proof}
 	Niech $A, B \in \mathcal{A}$ będą maksymalnymi zbiorami niezależnymi $M$. Przypuśćmy, że $|B| > |A|$.\\
-	Z własności 4. istnieje $x \in B \setminus A$ taki, że $A \cup \{x\} \in \mathcal{A}$ -- sprzeczność z maksymalnością $A$.
+	Z własności \ref{matroid:wymiana}. istnieje $x \in B \setminus A$ taki, że $A \cup \{x\} \in \mathcal{A}$ -- sprzeczność z maksymalnością $A$.
 \end{proof}
 
 \paragraph{Problem}
@@ -62,19 +65,19 @@ $S = \{x_1, x_2, \ldots, x_n\}$.
 	Wtedy $j < i_k$, bo w przeciwnym wypadku algorytm dodałby $x_j$ do $A$ jako $(k+1)$-szy element.\\
 	Niech $l$ będzie najmniejszą liczbą taką, że $j < i_l$.
 	Wtedy $w(x_{i_1}) \geq w(x_{i_2}) \geq \ldots \geq w(x_{i_{l-1}}) \geq w(x_j) \geq w(x_{i_l})$.\\
-	$A \cup \{x_j\} \in \mathcal{A}$, więc z własności 3. $\{x_{i_1}, x_{i_2}, \ldots, x_{i_{l-1}}, x_j\} \subseteq A \cup \{x_j\}$ jest zbiorem niezależnym.\\
+	$A \cup \{x_j\} \in \mathcal{A}$, więc z własności \ref{matroid:dziedziczność}. $\{x_{i_1}, x_{i_2}, \ldots, x_{i_{l-1}}, x_j\} \subseteq A \cup \{x_j\}$ jest zbiorem niezależnym.\\
 	Ale wtedy algorytm dodałby $x_j$ zamiast $x_{i_l}$ jako $l$-ty element dodany do $A$ -- sprzeczność.\\
 	Zatem $A$ jest maksymalnym zbiorem niezależnym.
 
 	Rozważmy zbiór niezależny $B = \{y_1, y_2, \ldots, y_m\} \in \mathcal{A}$ i załóżmy, że $w(y_1) \geq w(y_2) \geq \ldots \geq w(y_m)$.\\
-	Mamy $m \leq k$, bo $A$ jest maksymalnym zbiorem niezależnym (Stw).\\
+	Mamy $m \leq k$, bo $A$ jest maksymalnym zbiorem niezależnym (Lemat \ref{lemma:matroid:liczność}).\\
 	Pokażemy, że $w(B) \leq w(A)$.\\
 	Pokażemy, że dla każdego $j \leq m \quad w(y_j) \leq w(x_{i_j})$.\\
 	Przypuśćmy, że $w(y_j) > w(x_{i_j})$.\\
 	Rozważmy zbiory niezależne $A_{j-1} = \{x_{i_1}, \ldots, x_{i_{j-1}}\} \subseteq A$, $B_j = \{y_1, \ldots, y_j\} \subseteq B$.\\
-	$|B_j| = j > |A_{j-1}| = j-1$, więc z własności 4. istnieje $y_s \in B_j \setminus A_{j-1}$ taki, że $A_{j-1} \cup \{y_s\} \in \mathcal{A}$.\\
+	$|B_j| = j > |A_{j-1}| = j-1$, więc z własności \ref{matroid:wymiana}. istnieje $y_s \in B_j \setminus A_{j-1}$ taki, że $A_{j-1} \cup \{y_s\} \in \mathcal{A}$.\\
 	Mamy $w(y_s) \geq w(y_j) > w(x_{i_j})$, więc istnieje $t \leq j$ takie, że $w(x_{i_1}) \geq w(x_{i_2}) \geq \ldots \geq w(x_{i_{t-1}}) \geq w(y_s) > w(x_{i_t})$.\\
-	Z własności 3. $\{x_{i_1}, x_{i_2}, \ldots, x_{i_{t-1}}, y_s\} \subseteq A_{j-1} \cup \{y_s\}$ jest zbiorem niezależnym.\\
+	Z własności \ref{matroid:dziedziczność}. $\{x_{i_1}, x_{i_2}, \ldots, x_{i_{t-1}}, y_s\} \subseteq A_{j-1} \cup \{y_s\}$ jest zbiorem niezależnym.\\
 	Ale wtedy algorytm dodałby $y_s$ zamiast $x_{i_t}$ jako $t$-ty element dodany do $A$ -- sprzeczność.\\
 	Zatem
 	$\begin{rcases}
