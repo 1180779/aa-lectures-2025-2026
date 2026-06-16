@@ -6,13 +6,11 @@
 Kody prefiksowe $\iff$ regularne drzewa binarne.
 
 $C$ -- alfabet, $f: C \to \N$ funkcja częstości, $d_T(c)$ -- głębokość liścia reprezentującego $c$ w drzewie $T$ reprezentującym kod prefiksowy.
-
 \begin{flalign*}
 	B(T) = \sum_{c\in C} f(c) \cdot d_T(c) \longleftarrow \min &  &  &  &
 \end{flalign*}
 
 \begin{lemma} \label{lemma:huffman:1}
-	{Lemat 1}
 	Niech $x$ i $y$ będą najrzadziej występującymi znakami z $C$. Istnieje optymalny kod prefiksowy, w którym słowa kodowe $x$ i $y$ mają tę samą długość i różnią się tylko na ostatnim bicie.
 \end{lemma}
 
@@ -39,9 +37,40 @@ Z lematu~\ref{lemma:huffman:1} wynika, że można zacząć konstrukcję optymaln
 \textbf{Zachłanny wybór} -- w każdym kroku algorytm łączy dwa wierzchołki o najmniejszych kluczach.
 
 \begin{lemma} \label{lemma:huffman:2}
-	{Lemat 2}
-	Niech $A$ będzie alfabetem, a $f: A \to \N$ funkcją częstości. Niech $x$ i $y$ będą dwoma najrzadziej występującymi znakami w $A$. Niech $A' = (A \setminus \{x, y\}) \cup \{z\}$, gdzie $z \notin A$ i $f': A' \to \N$ będzie funkcją częstości taką, że dla każdego $c \in A' \setminus \{z\}$, $f'(c) = f(c)$ oraz $f'(z) = f(x) + f(y)$. Niech $T'$ będzie drzewem reprezentującym optymalny kod dla $(A', f')$. Niech $T$ będzie drzewem powstałym z $T'$ poprzez zastąpienie liścia $z$ wierzchołkiem wewnętrznym z dziećmi $x$ i $y$. $T$ reprezentuje optymalny kod prefiksowy dla $(A, f)$.
+	Niech $A$ będzie alfabetem z funkcją częstości $f: A \to \N$, a $x, y \in A$ — dwoma znakami o najmniejszych częstościach. Zdefiniujmy zredukowany alfabet $A' = (A \setminus \{x, y\}) \cup \{z\}$, gdzie $z \notin A$, z funkcją częstości $f'$ taką, że $f'(c) = f(c)$ dla $c \neq z$ oraz $f'(z) = f(x) + f(y)$.
+
+	Jeśli $T'$ jest optymalnym drzewem kodu prefiksowego dla $(A', f')$, to drzewo $T$ powstałe z $T'$ przez zastąpienie liścia $z$ wewnętrznym węzłem z dziećmi $x$ i $y$ jest optymalnym drzewem kodu prefiksowego dla $(A, f)$.
 \end{lemma}
+
+\begin{center}
+\begin{tikzpicture}[
+    leaf/.style={draw=none, font=\small},
+    inner/.style={circle, draw, minimum size=0.5cm, inner sep=0pt}]
+
+    % ===== T' =====
+    \begin{scope}
+        \draw (-1,0) -- (1,0) -- (0,1.5) -- cycle;     % pozostała część drzewa
+        \node[leaf] (zp) at (0,-1.1) {$z$};
+        \draw (0,0) -- (zp);
+        \node[leaf] at (0,-2.4) {$T'$};
+    \end{scope}
+
+    % ===== strzałka =====
+    \node[leaf, font=\large] at (2.6,-0.4) {$\Rightarrow$};
+
+    % ===== T =====
+    \begin{scope}[xshift=5.2cm]
+        \draw (-1,0) -- (1,0) -- (0,1.5) -- cycle;     % pozostała część drzewa
+        \node[inner] (p) at (0,-0.9) {};
+        \draw (0,0) -- (p);
+        \node[leaf] (x) at (-0.65,-1.9) {$x$};
+        \node[leaf] (y) at (0.65,-1.9) {$y$};
+        \draw (p) -- (x);
+        \draw (p) -- (y);
+        \node[leaf] at (0,-2.4) {$T$};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
 
 \begin{proof}
 	Dla $c \in A \setminus \{x, y\}$, $d_T(c) = d_{T'}(c)$ a $d_T(x) = d_T(y) = d_{T'}(z) + 1$.
