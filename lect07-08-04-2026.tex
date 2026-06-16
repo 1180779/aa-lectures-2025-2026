@@ -97,6 +97,7 @@ Słowo kodowe znaku jest ciągiem etykiet krawędzi na ścieżce od korzenia do 
 						}
 					child { node {}
 							child { node[draw=none] {n} edge from parent node[elabel left] {0} }
+							child { node[draw=none] {} edge from parent[draw=none] }
 							edge from parent node[elabel right] {1}
 						}
 					edge from parent node[elabel right] {1}
@@ -107,67 +108,71 @@ Słowo kodowe znaku jest ciągiem etykiet krawędzi na ścieżce od korzenia do 
 	\begin{minipage}{0.48\textwidth}
 		\centering
 		\textbf{2. kod 2} \\ (zmienna długość) \\[1ex]
-		\begin{tikzpicture}[mytree, every node/.append style={font=\scriptsize}]
-			\node {58}
-			child { node {33}
-					child { node {18}
-							child { node {8}
-									child { node {4}
-											child { node {3}
-													child { node[draw=none] {s} edge from parent node[elabel left] {0} }
-													child { node[draw=none] {n} edge from parent node[elabel right] {1} }
-													edge from parent node[elabel left] {0}
-												}
-											child { node[draw=none] {t} edge from parent node[elabel right] {1} }
+		\begin{tikzpicture}[mytree]
+			\node {}
+			child { node {}
+					child { node {}
+							child { node {}
+									child { node {}
+											child { node[draw=none] {s} edge from parent node[elabel left] {0} }
+											child { node[draw=none] {n} edge from parent node[elabel right] {1} }
 											edge from parent node[elabel left] {0}
 										}
-									child { node[draw=none] {a} edge from parent node[elabel right] {1} }
+									child { node[draw=none] {t} edge from parent node[elabel right] {1} }
 									edge from parent node[elabel left] {0}
 								}
-							child { node[draw=none] {e} edge from parent node[elabel right] {1} }
+							child { node[draw=none] {a} edge from parent node[elabel right] {1} }
 							edge from parent node[elabel left] {0}
 						}
-					child { node {25}
-							child { node[draw=none] {i} edge from parent node[elabel left] {0} }
-							child { node[draw=none] {r} edge from parent node[elabel right] {1} }
+					child {
+							node[draw=none] {e}
 							edge from parent node[elabel right] {1}
 						}
 					edge from parent node[elabel left] {0}
 				}
-			child { node[draw=none] {} edge from parent[draw=none] };
+			child { node {}
+					child { node[draw=none] {i} edge from parent node[elabel left] {0} }
+					child { node[draw=none] {r} edge from parent node[elabel right] {1} }
+					edge from parent node[elabel right] {1}
+				};
+			% child { node[draw=none] {} edge from parent[draw=none] };
 		\end{tikzpicture}
 	\end{minipage}
 
 	\vspace{1cm}
 	\textbf{3. kod 3} \\ (zmienna długość) \\[1ex]
-	\begin{tikzpicture}[mytree]
+	\begin{tikzpicture}[mytree, level 4/.style={sibling distance=1.4cm}, level 5/.style={sibling distance=1.0cm}]
 		\node {}
 		child { node {}
 				child { node {}
 						child { node {}
 								child { node {}
-										child { node {}
-												child { node[draw=none] {n} edge from parent node[elabel left] {0} }
-												child { node[draw=none] {s} edge from parent node[elabel right] {1} }
-												edge from parent node[elabel left] {0}
-											}
-										child { node[draw=none] {t} edge from parent node[elabel right] {1} }
+										child { node[draw=none] {} edge from parent[draw=none] }
+										child { node[draw=none] {n} edge from parent node[elabel right] {1} }
 										edge from parent node[elabel left] {0}
 									}
-								child { node[draw=none] {a} edge from parent node[elabel right] {1} }
+								child { node {t}
+										child { node[draw=none] {s} edge from parent node[elabel left] {0} }
+										child { node[draw=none] {} edge from parent[draw=none] }
+										edge from parent node[elabel right] {1}
+									}
 								edge from parent node[elabel left] {0}
 							}
-						child { node[draw=none] {e} edge from parent node[elabel right] {1} }
+						child { node[draw=none] {a} edge from parent node[elabel right] {1} }
 						edge from parent node[elabel left] {0}
 					}
-				child { node {}
-						child { node[draw=none] {i} edge from parent node[elabel left] {0} }
-						child { node[draw=none] {r} edge from parent node[elabel right] {1} }
+				child {
+						node[draw=none] {e}
 						edge from parent node[elabel right] {1}
 					}
 				edge from parent node[elabel left] {0}
 			}
-		child { node[draw=none] {} edge from parent[draw=none] };
+		child { node {}
+				child { node[draw=none] {i} edge from parent node[elabel left] {0} }
+				child { node[draw=none] {r} edge from parent node[elabel right] {1} }
+				edge from parent node[elabel right] {1}
+			};
+		% child { node[draw=none] {} edge from parent[draw=none] };
 	\end{tikzpicture}
 \end{figure}
 
@@ -294,6 +299,18 @@ gdzie $n$ jest liczbą elementów w kolejce.
 \end{alg}
 Algorytm konstruuje drzewo binarne. $z$ - wierzchołek, $left, right$ - dzieci.
 
+\begin{dygresja}
+	Intuicyjnie algorytm działa zachłannie, budując drzewo \emph{od dołu}. Każdy znak $c \in C$ jest na początku osobnym, izolowanym wierzchołkiem; będzie on liściem gotowego drzewa. Kolejka priorytetowa $Q$ przechowuje korzenie wszystkich dotąd zbudowanych poddrzew, uporządkowane wg ich łącznej częstości $f$ (im rzadszy znak, tym wcześniej zostanie wyjęty).
+
+	W każdej z $n-1$ iteracji pętli wykonujemy jeden krok łączenia:
+	\begin{itemize}[nosep]
+		\item \Call{extract\_min}{Q} dwukrotnie wybiera dwa korzenie o \emph{najmniejszej} częstości ($x$ oraz $y$);
+		\item tworzymy nowy wierzchołek $z$ i podpinamy $x$, $y$ jako jego lewe i prawe dziecko;
+		\item częstość nowego wierzchołka ustalamy jako $f(z) = f(x) + f(y)$, po czym wkładamy $z$ z powrotem do kolejki przez \Call{insert}{Q, z}.
+	\end{itemize}
+	Łącząc zawsze dwa najrzadsze poddrzewa, spychamy najrzadsze znaki najgłębiej w drzewie -- to one dostaną najdłuższe kody, a znaki częste pozostaną blisko korzenia i otrzymają kody krótkie. Każde łączenie zmniejsza liczbę poddrzew w $Q$ o jeden (dwa wyjęcia, jedno wstawienie), więc po $n-1$ iteracjach zostaje dokładnie jeden korzeń -- całe drzewo kodu, które zwracamy.
+\end{dygresja}
+
 \paragraph{Złożoność czasowa}
 \begin{itemize}[nosep]
 	\item linia 1 -- $\BO(1)$
@@ -307,101 +324,127 @@ Algorytm konstruuje drzewo binarne. $z$ - wierzchołek, $left, right$ - dzieci.
 	      \end{itemize}
 	      Wnętrze pętli zajmuje łącznie czas $\BO(\log n)$.
 \end{itemize}
-
 \begin{flalign*}
 	\BO(n) + (n - 1) \cdot \BO(\log n) = \BO(n \log n) &  &  &  &
 \end{flalign*}
-
 Złożoność czasowa algorytmu wynosi $\BO(n \log n)$.
 
 \begin{example}{Konstrukcja drzewa Huffmana} \\
 	Zaczynamy ze zbiorem wierzchołków: $(n, 1), (s, 3), (t, 4), (a, 10), (i, 12), (r, 13), (e, 15)$.
 
-	\begin{enumerate}
-		\item Łączymy $n$ i $s$: \\
-		      \begin{tikzpicture}[htree]
-			      \node {4}
-			      child { node {n,1} }
-			      child { node {s,3} };
-		      \end{tikzpicture}
-		      \quad Zostają: $(t, 4), (a, 10), (i, 12), (r, 13), (e, 15)$.
+	% Każdy krok: para minipage obok siebie (opis | drzewo). Bloki są osobnymi
+	% akapitami, więc lista łamie się między stronami. \vspace{0pt} na początku
+	% minipage wymusza wyrównanie [t] do GÓRNEJ krawędzi tekstu (nie do baseline).
+	\newcommand{\huffstep}[2]{%
+		\noindent
+		\begin{minipage}[t]{0.34\textwidth}\vspace{0pt}#1\end{minipage}%
+		\hfill
+		\begin{minipage}[t]{0.62\textwidth}\vspace{0pt}\centering#2\end{minipage}%
+		\par\vspace{2em}%
+	}
 
-		\item Łączymy $4$ i $t$: \\
-		      \begin{tikzpicture}[htree]
-			      \node {8}
-			      child { node {4}
-					      child { node {n,1} }
-					      child { node {s,3} }
-				      }
-			      child { node {t,4} };
-		      \end{tikzpicture}
-		      \quad Zostają: $(a, 10), (i, 12), (r, 13), (e, 15)$.
+	\huffstep{%
+		\textbf{1.} Łączymy $n$ i $s$. \\
+		Zostają: $(t, 4), (a, 10), (i, 12), (r, 13), (e, 15)$.
+	}{%
+		\begin{tikzpicture}[htree]
+			\node {4}
+			child { node {n,1} }
+			child { node {s,3} };
+		\end{tikzpicture}
+	}
 
-		\item Łączymy $8$ i $a$: \\
-		      \begin{tikzpicture}[htree]
-			      \node {18}
-			      child { node {8}
-					      child { node {4}
-							      child { node {n,1} }
-							      child { node {s,3} }
-						      }
-					      child { node {t,4} }
-				      }
-			      child { node {a,10} };
-		      \end{tikzpicture}
-		      \quad Zostają: $(i, 12), (r, 13), (e, 15)$.
+	\huffstep{%
+		\textbf{2.} Łączymy $4$ i $t$. \\
+		Zostają: $(a, 10), (i, 12), (r, 13), (e, 15)$.
+	}{%
+		\begin{tikzpicture}[htree]
+			\node {8}
+			child { node {4}
+					child { node {n,1} }
+					child { node {s,3} }
+				}
+			child { node {t,4} };
+		\end{tikzpicture}
+	}
 
-		\item Łączymy $i$ i $r$: \\
-		      \begin{tikzpicture}[htree]
-			      \node {25}
-			      child { node {i,12} }
-			      child { node {r,13} };
-		      \end{tikzpicture}
-		      \quad Zostaje: $(e, 15)$.
+	\huffstep{%
+		\textbf{3.} Łączymy $8$ i $a$. \\
+		Zostają: $(i, 12), (r, 13), (e, 15)$.
+	}{%
+		\begin{tikzpicture}[htree]
+			\node {18}
+			child { node {8}
+					child { node {4}
+							child { node {n,1} }
+							child { node {s,3} }
+						}
+					child { node {t,4} }
+				}
+			child { node {a,10} };
+		\end{tikzpicture}
+	}
 
-		\item Łączymy $e$ i $18$:  \\
-		      \begin{tikzpicture}[htree]
-			      \node {33}
-			      child { node {e,15} }
-			      child { node {18}
-					      child { node {8}
-							      child { node {4}
-									      child { node {n,1} }
-									      child { node {s,3} }
-								      }
-							      child { node {t,4} }
-						      }
-					      child { node {a,10} }
-				      };
-		      \end{tikzpicture}
+	\huffstep{%
+		\textbf{4.} Łączymy $i$ i $r$. \\
+		Zostaje: $(e, 15)$.
+	}{%
+		\begin{tikzpicture}[htree]
+			\node {25}
+			child { node {i,12} }
+			child { node {r,13} };
+		\end{tikzpicture}
+	}
 
-		\item Łączymy $25$ i $33$ (Ostateczne drzewo kodów): \\
-		      \begin{tikzpicture}[htree]
-			      \node {58}
-			      child { node {25}
-					      child { node {i,12} edge from parent node[elabel left] {0} }
-					      child { node {r,13} edge from parent node[elabel right] {1} }
-					      edge from parent node[elabel left] {0}
-				      }
-			      child { node {33}
-					      child { node {e,15} edge from parent node[elabel left] {0} }
-					      child { node {18}
-							      child { node {8}
-									      child { node {4}
-											      child { node {n,1} edge from parent node[elabel left] {0} }
-											      child { node {s,3} edge from parent node[elabel right] {1} }
-											      edge from parent node[elabel left] {0}
-										      }
-									      child { node {t,4} edge from parent node[elabel right] {1} }
-									      edge from parent node[elabel left] {0}
-								      }
-							      child { node {a,10} edge from parent node[elabel right] {1} }
-							      edge from parent node[elabel right] {1}
-						      }
-					      edge from parent node[elabel right] {1}
-				      };
-		      \end{tikzpicture}
-	\end{enumerate}
+	\huffstep{%
+		\textbf{5.} Łączymy $e$ i $18$.
+	}{%
+		\begin{tikzpicture}[htree]
+			\node {33}
+			child { node {e,15} }
+			child { node {18}
+					child { node {8}
+							child { node {4}
+									child { node {n,1} }
+									child { node {s,3} }
+								}
+							child { node {t,4} }
+						}
+					child { node {a,10} }
+				};
+		\end{tikzpicture}
+	}
+
+	\huffstep{%
+		\textbf{6.} Łączymy $25$ i $33$. \\
+		(ostateczne drzewo kodów)
+	}{%
+		\begin{tikzpicture}[htree]
+			\node {58}
+			child { node {25}
+					child { node {i,12} edge from parent node[elabel left] {0} }
+					child { node {r,13} edge from parent node[elabel right] {1} }
+					edge from parent node[elabel left] {0}
+				}
+			child { node {33}
+					child { node {e,15} edge from parent node[elabel left] {0} }
+					child { node {18}
+							child { node {8}
+									child { node {4}
+											child { node {n,1} edge from parent node[elabel left] {0} }
+											child { node {s,3} edge from parent node[elabel right] {1} }
+											edge from parent node[elabel left] {0}
+										}
+									child { node {t,4} edge from parent node[elabel right] {1} }
+									edge from parent node[elabel left] {0}
+								}
+							child { node {a,10} edge from parent node[elabel right] {1} }
+							edge from parent node[elabel right] {1}
+						}
+					edge from parent node[elabel right] {1}
+				};
+		\end{tikzpicture}
+	}
 
 	Odczytany kod z drzewa w kroku 6:
 	\begin{flalign*}
