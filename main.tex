@@ -47,6 +47,14 @@
 \setmathfont{XITS Math}
 \mathtoolsset{mathic=true}
 
+% Wariant ⩽/⩾ z linią równości pod tym samym kątem co < / > (jak \leqslant/\geqslant).
+% Remap odłożony do \begin{document}, bo unicode-math finalizuje tablicę symboli
+% dopiero przy starcie dokumentu i nadpisałby zwykły \let z preambuły.
+\AtBeginDocument{%
+  \let\leq\leqslant
+  \let\geq\geqslant
+}
+
 \geometry{margin=2.5cm}
 
 \definecolor{accent}{RGB}{30, 60, 100}

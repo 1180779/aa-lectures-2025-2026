@@ -15,29 +15,35 @@ $S = \{z_1, \dots, z_n\}$ -- zbiór zajęć wymagający tych samych zasobów.
 Zajęcia $z_i$ i $z_j$ nazywamy \underline{zgodnymi}, jeśli $\langle s_i, t_i) \cap \langle s_j, t_j) = \emptyset$.
 Zadanie polega na znalezieniu podzbioru o największej liczności $A \subseteq S$ parami zgodnych zajęć.
 
-\begin{table}[H]
-	\centering
-	\renewcommand{\arraystretch}{1.2}
-	\begin{NiceTabular}{c|cccccc}[margin,hvlines]
-		$i$   & 1 & 2 & 3 & 4  & 5 & 6 \\
-		\hline
-		$s_i$ & 0 & 2 & 4 & 7  & 1 & 7 \\
-		$t_i$ & 4 & 6 & 7 & 10 & 3 & 9
-	\end{NiceTabular}
-\end{table}
+\begin{example}\label{ex:zajecia}
+	Przykładowy zbiór zajęć:
+	\begin{table}[H]
+		\centering
+		\renewcommand{\arraystretch}{1.2}
+		\begin{NiceTabular}{c|cccccc}[margin,hvlines]
+			$i$   & 1 & 2 & 3 & 4  & 5 & 6 \\
+			\hline
+			$s_i$ & 0 & 2 & 4 & 7  & 1 & 7 \\
+			$t_i$ & 4 & 6 & 7 & 10 & 3 & 9
+		\end{NiceTabular}
+	\end{table}
+\end{example}
 
 Porządkujemy zajęcia w czasie niemalejącym względem czasu zakończenia. To zajmuje $\BO(n \log n)$ czasu. Od tej pory zakładamy $t_1 \leq t_2 \leq \dots \leq t_n$ (zajęcia są już posortowane).
 
-\begin{table}[H]
-	\centering
-	\renewcommand{\arraystretch}{1.2}
-	\begin{NiceTabular}{c|cccccc}[margin,hvlines]
-		$i$   & 1 & 2 & 3 & 4 & 5 & 6  \\
-		\hline
-		$s_i$ & 1 & 0 & 2 & 4 & 7 & 7  \\
-		$t_i$ & 3 & 4 & 6 & 7 & 9 & 10
-	\end{NiceTabular}
-\end{table}
+\begin{example}\label{ex:zajecia-posortowane}
+	Zajęcia z~przykładu~\ref{ex:zajecia} po posortowaniu względem czasu zakończenia:
+	\begin{table}[H]
+		\centering
+		\renewcommand{\arraystretch}{1.2}
+		\begin{NiceTabular}{c|cccccc}[margin,hvlines]
+			$i$   & 1 & 2 & 3 & 4 & 5 & 6  \\
+			\hline
+			$s_i$ & 1 & 0 & 2 & 4 & 7 & 7  \\
+			$t_i$ & 3 & 4 & 6 & 7 & 9 & 10
+		\end{NiceTabular}
+	\end{table}
+\end{example}
 
 \paragraph{Podejście programowania dynamicznego}
 Definiujemy zbiory zajęć:
@@ -48,6 +54,14 @@ Definiujemy zbiory zajęć:
 
 Dodajemy 2 sztuczne zajęcia: $z_0$ z czasem $t_0 = 0$ i $z_{n+1}$ z czasem $s_{n+1} = \infty$. Wtedy $S = S_{0, n+1}$.
 Jeśli $i \geq j$, to $S_{ij} = \emptyset$, bo $s_j < t_j \leq t_i$ (bo zajęcia są posortowane).
+
+\begin{dygresja}
+	Pokażmy dokładniej, dlaczego $S_{ij} = \emptyset$ dla $i \geq j$.
+	Przypuśćmy, że istnieje $z_k \in S_{ij}$. Z~definicji $S_{ij}$ mamy wtedy
+	$t_i \leq s_k < t_k \leq s_j$, a~ponieważ zajęcia są posortowane i~$i \geq j$,
+	to $t_j \leq t_i$, skąd $s_j < t_j \leq t_i$. Łącząc obie nierówności,
+	otrzymujemy $s_j < t_i \leq s_k < t_k \leq s_j$, czyli $s_j < s_j$ -- sprzeczność.
+\end{dygresja}
 
 Problem: znaleźć podzbiór o największej liczności zbioru $S_{ij}$ składający się z parami zgodnych zajęć dla $0 \leq i \leq j \leq n+1$.
 
@@ -79,18 +93,18 @@ Używając tego wzoru rekurencyjnego możemy skonstruować algorytm programowani
 \begin{lemma}
 	Niech $z_m \in S_{ij}$ będzie zajęciem takim, że $t_m = \min \{t_k : z_k \in S_{ij}\}$. Wtedy:
 	\begin{enumerate}
-		\item Istnieje podzbiór o największej liczności składający się z parami zgodnych zajęć zbioru $S_{ij}$ zawierający $z_m$.
-		\item $S_{im} = \emptyset$ (zatem po wybraniu $z_m$ do zbioru rozwiązania zostaje co najwyżej 1 niepusty podproblem do rozwiązania -- $S_{mj}$).
+		\item\label{lem:greedy-exists} Istnieje podzbiór o największej liczności składający się z parami zgodnych zajęć zbioru $S_{ij}$ zawierający $z_m$.
+		\item\label{lem:greedy-empty} $S_{im} = \emptyset$ (zatem po wybraniu $z_m$ do zbioru rozwiązania zostaje co najwyżej 1 niepusty podproblem do rozwiązania -- $S_{mj}$).
 	\end{enumerate}
 \end{lemma}
 
 \begin{proof}~\\
-	\textbf{Ad 2.} Przypuśćmy, że nie. Niech $z_k \in S_{im}$. Wtedy $t_i \leq s_k < t_k \leq s_m < t_m \leq s_j$. Zatem $z_k \in S_{ij}$ oraz $t_k < t_m$ -- sprzeczność z definicją zajęcia $z_m$.
-
-	\textbf{Ad 1.} Niech $A_{ij}$ będzie podzbiorem o największej liczności składającym się z zajęć parami zgodnych zbioru $S_{ij}$. Niech $z_k$ będzie zajęciem z $A_{ij}$ o najmniejszym czasie zakończenia.
+	\textbf{Ad~\ref{lem:greedy-exists}.} Niech $A_{ij}$ będzie podzbiorem o największej liczności składającym się z parami zgodnych zajęć zbioru $S_{ij}$. Niech $z_k$ będzie zajęciem z $A_{ij}$ o najmniejszym czasie zakończenia.
 	Jeśli $z_k = z_m$, to teza jest udowodniona.
 	Przypuśćmy, że $z_k \neq z_m$ i rozważmy zbiór $A'_{ij} = A_{ij} \setminus \{z_k\} \cup \{z_m\}$. Skoro $t_m \leq t_k$ oraz zajęcia z $A_{ij}$ są parami zgodne, to zajęcia z $A'_{ij}$ również są parami zgodne.
 	Mamy $|A_{ij}| = |A'_{ij}|$, więc $A'_{ij}$ jest rozwiązaniem optymalnym zawierającym $z_m$.
+
+	\textbf{Ad~\ref{lem:greedy-empty}.} Przypuśćmy, że nie. Niech $z_k \in S_{im}$. Wtedy $t_i \leq s_k < t_k \leq s_m < t_m \leq s_j$. Zatem $z_k \in S_{ij}$ oraz $t_k < t_m$ -- sprzeczność z definicją zajęcia $z_m$.
 \end{proof}
 
 Z lematu wynika, że nie musimy sprawdzać $j - i - 1$ wartości $k$, możemy wybrać zajęcie o najmniejszym czasie zakończenia $z_m \in S_{ij}$.
