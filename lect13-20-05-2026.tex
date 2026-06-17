@@ -2,59 +2,33 @@
 \subsection{Problem sumy podzbioru}
 % ════════════════════════════════════════════════════════════════
 
-Dane: $S = \{x_1, x_2, \dots, x_n\} \subseteq \N$, $t \in \N$. \\
-Znaleźć: $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i$ jest największa możliwa, ale $\le t$.
-
-\begin{alg}{Aproksymacja sumy podzbioru}{alg:approx_subset_sum}
-	\FunctionNN{ApproxSubsetSum}{$S, t, \epsilon$}
-	\State $n \Assign |S|$
-	\State $L_0 \Assign (0)$
-	\State $\delta \Assign \frac{\epsilon}{2n}$
-	\For{$i \Assign 1$ \To $n$}
-	\State $L_i \Assign \Call{MergeLists}{L_{i-1}, L_{i-1} + x_i}$
-	\State usuń z $L_i$ wszystkie elementy $> t$
-	\State $L_i \Assign \Call{Trim}{L_i, \delta}$ \Comment{$\delta = \frac{\epsilon}{2n}$}
-	\EndFor
-	\State \Return największy element z $L_n$ \Comment{$z^*$ -- liczba zwrócona przez algorytm}
-	\EndFunction
-\end{alg}
-
-\begin{alg}{Procedura Trim}{alg:trim:lect13}
-	\FunctionNN{Trim}{$L, \delta$} \Comment{$L = (y_1, \dots, y_m)$}
-	\State $m \Assign |L|$
-	\State $L' \Assign (y_1)$
-	\State $last \Assign y_1$
-	\For{$i \Assign 2$ \To $m$}
-	\If{$y_i > last \cdot (1 + \delta)$}
-	\State dodaj $y_i$ na koniec $L'$
-	\State $last \Assign y_i$
-	\EndIf
-	\EndFor
-	\State \Return $L'$
-	\EndFunction
-\end{alg}
+Kontynuujemy analizę w~pełni wielomianowego schematu aproksymacyjnego dla problemu sumy podzbiorów (Problem~\ref{problem:subsetsum}). Przypomnijmy schemat \Call{ApproxSubsetSum}{} (Algorytm~\ref{alg:approxsubsetsum}) wraz z~procedurą \Call{Trim}{} (Algorytm~\ref{alg:trim}); ustalamy $\delta = \frac{\epsilon}{2n}$. Pokażemy najpierw przykład jego działania, a~następnie dowód poprawności i~analizę złożoności.
 
 \begin{example}[Aproksymacja sumy podzbioru]
-	$S = \{205, 203, 400, 200\}$, $t = 650$, $\epsilon = 0.4$.
-	$n = 4$, $\delta = \frac{\epsilon}{2n} = \frac{0.4}{8} = 0.05$.
+	$S = \{205, 203, 400, 200\}$, $t = 650$, $\epsilon = 0{,}4$, $n = 4$.\\
+	Wtedy $\delta = \frac{\epsilon}{2n} = \frac{0{,}4}{8} = 0{,}05$, czyli próg przycinania to $1 + \delta = 1{,}05$.
+
+	Elementy $S$ przetwarzamy w~kolejności $x_1 = 205$, $x_2 = 203$, $x_3 = 400$, $x_4 = 200$. W~każdym obrocie pętli: scalamy $L_{i-1}$ z~$L_{i-1} + x_i$ (linia 4), usuwamy elementy $> t = 650$ (linia 5), a~następnie przycinamy listę procedurą \Call{Trim}{} z~progiem $1{,}05$ (linia 6). W~przycinaniu zachowany element $z$ usuwa kolejne $y$, gdy $y \leq z \cdot 1{,}05$.
+
 	\begin{flalign*}
-		L_0 & = (0)                                    &  &                     \\
-		L_1 & = (0, 205)                               &  &                     \\
-		L_2 & = (0, 203, 205, 408)                     &  & \text{(po linii 4)} \\
-		L_2 & = (0, 203, 205, 408)                     &  & \text{(po linii 5)} \\
-		L_2 & = (0, 203, 408)                          &  & \text{(po linii 6)} \\
-		L_3 & = (0, 203, 400, 408, 603, 808)           &  &                     \\
-		L_3 & = (0, 203, 400, 408, 603)                &  &                     \\
-		L_3 & = (0, 203, 400, 603)                     &  &                     \\
-		L_4 & = (0, 200, 203, 400, 403, 600, 603, 803) &  &                     \\
-		L_4 & = (0, 200, 203, 400, 403, 600, 603)      &  &                     \\
-		L_4 & = (0, 200, 400, 600)                     &  &
+		L_0 & = (0)                                                                                                       &  & \\
+		L_1 & = (0, 205)                               &  & \text{(nic do scalenia, usunięcia ani przycięcia)}            \\[0.5ex]
+		    & \quad i = 2,\ x_2 = 203:                                                                                     &  & \\
+		L_2 & = (0, 203, 205, 408)                     &  & \text{(linia 4: scalenie z~$(203, 408)$)}                    \\
+		L_2 & = (0, 203, 205, 408)                     &  & \text{(linia 5: brak elementów $> 650$)}                     \\
+		L_2 & = (0, 203, 408)                          &  & \text{(linia 6: $205 \leq 203 \cdot 1{,}05 = 213{,}15$)}     \\[0.5ex]
+		    & \quad i = 3,\ x_3 = 400:                                                                                     &  & \\
+		L_3 & = (0, 203, 400, 408, 603, 808)           &  & \text{(linia 4: scalenie z~$(400, 603, 808)$)}               \\
+		L_3 & = (0, 203, 400, 408, 603)                &  & \text{(linia 5: usuwamy $808 > 650$)}                        \\
+		L_3 & = (0, 203, 400, 603)                     &  & \text{(linia 6: $408 \leq 400 \cdot 1{,}05 = 420$)}          \\[0.5ex]
+		    & \quad i = 4,\ x_4 = 200:                                                                                     &  & \\
+		L_4 & = (0, 200, 203, 400, 403, 600, 603, 803) &  & \text{(linia 4: scalenie z~$(200, 403, 600, 803)$)}          \\
+		L_4 & = (0, 200, 203, 400, 403, 600, 603)      &  & \text{(linia 5: usuwamy $803 > 650$)}                        \\
+		L_4 & = (0, 200, 400, 600)                     &  & \text{(linia 6: $203, 403, 603$ przycięte)}
 	\end{flalign*}
 
-	$z^* = 600 \quad (600 = 400 + 200)$ \\
-	Optymalne rozwiązanie: $205 + 203 + 200 = 608$.
-
-	$\frac{608}{600} \le 1.4 = 1 + \epsilon$
+	Algorytm zwraca $z^* = 600$ (bo $600 = 400 + 200$). Optymalna suma $\leq t$ to $y^* = 205 + 203 + 200 = 608$.\\
+	Błąd względny mieści się w~gwarancji: $\frac{y^*}{z^*} = \frac{608}{600} \approx 1{,}013 \leq 1{,}4 = 1 + \epsilon$.
 \end{example}
 
 \begin{theorem}
@@ -63,14 +37,14 @@ Znaleźć: $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i$ jest największa 
 
 \begin{proof}
 	Użyjemy faktów z analizy:
-	\begin{itemize}[nosep]
-		\item[\textbf{Fakt 1}] $\left(1 + \frac{\epsilon}{2n}\right)^n$ jest ciągiem rosnącym.
-		\item[\textbf{Fakt 2}] $e^x \le 1 + x + x^2$ dla $0 \le x \le 1$.
-		\item[\textbf{Fakt 3}] $\frac{x}{1+x} \le \ln(1+x)$ dla $x \ge 0$.
-	\end{itemize}
+	\begin{enumerate}[nosep, label=\textbf{Fakt \arabic*}, ref=\arabic*, leftmargin=*, labelsep=1em]
+		\item \label{fakt:rosnacy} $\vphantom{\left(1 + \frac{\epsilon}{2n}\right)^n} \left(1 + \frac{\epsilon}{2n}\right)^n$ jest ciągiem rosnącym.
+		\item \label{fakt:exp} $\vphantom{\left(1 + \frac{\epsilon}{2n}\right)^n} e^x \le 1 + x + x^2$ dla $0 \le x \le 1$.
+		\item \label{fakt:ln} $\vphantom{\left(1 + \frac{\epsilon}{2n}\right)^n} \frac{x}{1+x} \le \ln(1+x)$ dla $x \ge 0$.
+	\end{enumerate}
 
 	Oczywiście $z^* \in P_n$, więc $z^*$ jest sumą elementów z $S$. \\
-	Niech $y^* \in P_n$ będzie optymalną sumą elementów $\le t$. \\
+	Niech $y^* \in P_n$ będzie optymalną sumą elementów $\le t$. 
 	Oczywiście $y^* \ge z^*$. Pokażemy, że $\frac{y^*}{z^*} \le 1 + \epsilon$.
 
 	Pokażemy przez indukcję po $i$, że dla każdego $y \in P_i$, $y \le t$ istnieje $z \in L_i$ taki, że:
@@ -117,8 +91,13 @@ Znaleźć: $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i$ jest największa 
 	W szczególności \eqref{eq:subset_sum_ind} zachodzi dla $y^* \in P_n$. Zatem istnieje $z \in L_n$ takie, że $\frac{y^*}{\left(1+\frac{\epsilon}{2n}\right)^n} \le z \le y^*$, więc $\frac{y^*}{z} \le \left(1+\frac{\epsilon}{2n}\right)^n$. \\
 	Ale $z^* \ge z$, więc $\frac{y^*}{z^*} \le \frac{y^*}{z} \le \left(1+\frac{\epsilon}{2n}\right)^n$. \\
 	\begin{align*}
-		\frac{y^*}{z^*} & \le \left(1+\frac{\epsilon}{2n}\right)^n \overset{\text{Fakt 1}}{\le} \lim_{n\to\infty} \left(1+\frac{\epsilon}{2n}\right)^n = \lim_{n\to\infty} \left(\left(1+\frac{\epsilon}{2n}\right)^{\frac{2n}{\epsilon}}\right)^{\frac{\epsilon}{2}} = e^{\frac{\epsilon}{2}}
+		\frac{y^*}{z^*} & \le \left(1+\frac{\epsilon}{2n}\right)^n \overset{\text{Fakt~\ref{fakt:rosnacy}}}{\le} \lim_{n\to\infty} \left(1+\frac{\epsilon}{2n}\right)^n = \lim_{n\to\infty} \left(\left(1+\frac{\epsilon}{2n}\right)^{\frac{2n}{\epsilon}}\right)^{\frac{\epsilon}{2}} = e^{\frac{\epsilon}{2}}
 	\end{align*}
+	Zakładając $\epsilon \le 1$ (mamy wtedy $\frac{\epsilon}{2} \le 1$), z~Faktu~\ref{fakt:exp} dla $x = \frac{\epsilon}{2}$ dostajemy:
+	\begin{align*}
+		\frac{y^*}{z^*} \le e^{\frac{\epsilon}{2}} \overset{\text{Fakt~\ref{fakt:exp}}}{\le} 1 + \frac{\epsilon}{2} + \frac{\epsilon^2}{4} \le 1 + \frac{\epsilon}{2} + \frac{\epsilon}{2} = 1 + \epsilon,
+	\end{align*}
+	bo $\frac{\epsilon^2}{4} \le \frac{\epsilon}{2}$ dla $\epsilon \le 2$. Zatem $\frac{y^*}{z^*} \le 1 + \epsilon$, co kończy dowód poprawności aproksymacji.
 \end{proof}
 
 Pokażemy, że algorytm działa w czasie wielomianowym względem $|I| = \BT\left(\log t + \sum_{i=1}^n \log x_i\right)$ i $\frac{1}{\epsilon}$.
@@ -136,7 +115,7 @@ Skoro $z_1 \ge 1$, to
 	\left(1 + \frac{\epsilon}{2n}\right)^{k-1}   & \le t \quad \Big| \ln                                                                                                                                                       &   & \\[1ex]
 	(k-1)\ln\left(1 + \frac{\epsilon}{2n}\right) & \le \ln t                                                                                                                                                                   &   & \\[1ex]
 	k-1                                          & \le \frac{\ln t}{\ln\left(1 + \frac{\epsilon}{2n}\right)} \quad \Big| +2                                                                                                    &   & \\[1ex]
-	k+1                                          & \le \frac{\ln t}{\ln\left(1 + \frac{\epsilon}{2n}\right)} + 2 \overset{\text{Fakt 3}}{\le} \frac{\ln t \cdot \left(1 + \frac{\epsilon}{2n}\right)}{\frac{\epsilon}{2n}} + 2
+	k+1                                          & \le \frac{\ln t}{\ln\left(1 + \frac{\epsilon}{2n}\right)} + 2 \overset{\text{Fakt~\ref{fakt:ln}}}{\le} \frac{\ln t \cdot \left(1 + \frac{\epsilon}{2n}\right)}{\frac{\epsilon}{2n}} + 2
 	= \frac{\cancel{2n}+\epsilon}{\cancel{2n}} \cdot \frac{\cancel{2n}}{\epsilon} \ln t + 2
 	\le \frac{3n \ln t}{\epsilon} + 2            &                                                                                                                                                                             &
 \end{flalign*}
