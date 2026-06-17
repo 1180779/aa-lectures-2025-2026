@@ -19,25 +19,6 @@ np.\ $L = (3, 5, 8)$ i $x = 3$: \quad $L + x = (6, 8, 11)$.
 \begin{lemma} \label{lemma:subsetsum-Pi}
 	Niech $S = \{x_1, \ldots, x_n\} \subseteq \N$. Niech $P_0 = \{0\}$ i $P_i = P_{i-1} \cup (P_{i-1} + x_i)$ dla $i \in [n]$. Zbiór $P_n$ składa się ze wszystkich możliwych sum podzbiorów zbioru $S$.
 \end{lemma}
-\begin{proof}
-	Pokażemy przez indukcję po $i$, że zbiór $P_i$ składa się ze wszystkich możliwych sum elementów ze zbioru $\{x_1, x_2, \ldots, x_i\}$.
-
-	$i = 0$: \quad $P_0 = \{0\}$ i $\sum_{x_i \in \emptyset} x_i = 0$. $\checkmark$
-
-	Załóżmy, że $P_{i-1}$ składa się ze wszystkich możliwych sum elementów z $\{x_1, \ldots, x_{i-1}\}$.\\
-	Niech $S' \subseteq \{x_1, \ldots, x_i\}$ będzie dowolnym podzbiorem o~sumie $\sigma = \sum_{x_k \in S'} x_k$. Pokażemy, że $\sigma \in P_i$.
-	\begin{itemize}[nosep]
-		\item Jeśli $x_i \notin S'$, to $S' \subseteq \{x_1, \ldots, x_{i-1}\}$, więc $\sigma = \sum_{x_k \in S'} x_k \in P_{i-1} \subseteq P_i$.
-		\item Jeśli $x_i \in S'$, to $S' \setminus \{x_i\} \subseteq \{x_1, \ldots, x_{i-1}\}$, więc
-		      \begin{flalign*}
-			      \sigma = \sum_{x_k \in S'} x_k = \sum_{x_k \in S' \setminus \{x_i\}} x_k + x_i \in P_{i-1} + x_i \subseteq P_i &  &  &  &
-		      \end{flalign*}
-	\end{itemize}
-	Zatem $P_i$ zawiera wszystkie możliwe sumy elementów z $\{x_1, \ldots, x_i\}$.\\
-	$P_i$ nie zawiera innych elementów, bo $P_{i-1}$ składa się z sum elementów z $\{x_1, \ldots, x_{i-1}\}$ a $P_{i-1} + x_i$ zawiera tylko sumy elementów z $\{x_1, \ldots, x_{i-1}, x_i\} \subseteq \{x_1, \ldots, x_i\}$.\\
-	Dla $i = n$ mamy tezę.
-\end{proof}
-
 Lemat \ref{lemma:subsetsum-Pi} podsuwa algorytm: wystarczy liczyć kolejne zbiory $P_i$. Reprezentujemy je posortowanymi listami $L_i$ bez duplikatów, a rekurencję $P_i = P_{i-1} \cup (P_{i-1} + x_i)$ realizujemy scalaniem list. Dodatkowo z $L_i$ usuwamy elementy $> t$ -- żadna suma większa od $t$ nie może być rozwiązaniem, więc nie wpływa to na wynik.
 
 Załóżmy, że mamy procedurę $\Call{MergeLists}{L, L'}$, która dla posortowanych list liczb naturalnych $L$, $L'$ zwraca posortowaną listę elementów z $L$ i~$L'$ i~usuwa duplikaty. Złożoność czasowa $\Call{MergeLists}{L, L'}$ wynosi $\BT(|L| + |L'|)$.

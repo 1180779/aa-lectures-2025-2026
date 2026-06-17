@@ -2,7 +2,7 @@
 \subsection{Problem sumy podzbioru}
 % ════════════════════════════════════════════════════════════════
 
-Kontynuujemy analizę w~pełni wielomianowego schematu aproksymacyjnego dla problemu sumy podzbiorów (Problem~\ref{problem:subsetsum}). Przypomnijmy schemat \Call{ApproxSubsetSum}{} (Algorytm~\ref{alg:approxsubsetsum}) wraz z~procedurą \Call{Trim}{} (Algorytm~\ref{alg:trim}); ustalamy $\delta = \frac{\epsilon}{2n}$. Pokażemy najpierw przykład jego działania, a~następnie dowód poprawności i~analizę złożoności.
+Analizujemy schemat \Call{ApproxSubsetSum}{} (Algorytm~\ref{alg:approxsubsetsum}) z~procedurą \Call{Trim}{} (Algorytm~\ref{alg:trim}); ustalamy $\delta = \frac{\epsilon}{2n}$.
 
 \begin{example}[Aproksymacja sumy podzbioru]
 	$S = \{205, 203, 400, 200\}$, $t = 650$, $\epsilon = 0{,}4$, $n = 4$.\\
@@ -35,71 +35,6 @@ Kontynuujemy analizę w~pełni wielomianowego schematu aproksymacyjnego dla prob
 	Algorytm \textnormal{\Call{ApproxSubsetSum}{}} jest w pełni wielomianowym schematem aproksymacyjnym dla problemu sumy podzbioru.
 \end{theorem}
 
-\begin{proof}
-	Użyjemy faktów z analizy:
-	\begin{enumerate}[nosep, label=\textbf{Fakt \arabic*}, ref=\arabic*, leftmargin=*, labelsep=1em]
-		\item \label{fakt:rosnacy} $\vphantom{\left(1 + \frac{\epsilon}{2n}\right)^n} \left(1 + \frac{\epsilon}{2n}\right)^n$ jest ciągiem rosnącym.
-		\item \label{fakt:exp} $\vphantom{\left(1 + \frac{\epsilon}{2n}\right)^n} e^x \le 1 + x + x^2$ dla $0 \le x \le 1$.
-		\item \label{fakt:ln} $\vphantom{\left(1 + \frac{\epsilon}{2n}\right)^n} \frac{x}{1+x} \le \ln(1+x)$ dla $x \ge 0$.
-	\end{enumerate}
-
-	Oczywiście $z^* \in P_n$, więc $z^*$ jest sumą elementów z $S$. \\
-	Niech $y^* \in P_n$ będzie optymalną sumą elementów $\le t$.
-	Oczywiście $y^* \ge z^*$. Pokażemy, że $\frac{y^*}{z^*} \le 1 + \epsilon$.
-
-	Pokażemy przez indukcję po $i$, że dla każdego $y \in P_i$, $y \le t$ istnieje $z \in L_i$ taki, że:
-	\begin{equation} \label{eq:subset_sum_ind}
-		\frac{y}{\left(1 + \frac{\epsilon}{2n}\right)^i} \le z \le y \quad \text{(po $i$-tym obrocie pętli)}
-	\end{equation}
-
-	Dla $i = 1$: $P_1 = \{0, x_1\}$, $L_1 = (0, x_1)$ -- zachodzi oczywiście.
-
-	Załóżmy, że \eqref{eq:subset_sum_ind} zachodzi dla jakiegoś $i < n$. Pokażemy, że \eqref{eq:subset_sum_ind} zachodzi dla $i + 1$. \\
-	Niech $y \in P_{i+1} = P_i \cup (P_i + x_{i+1})$.
-
-	\textbf{Przypadek 1:} $y \in P_i$. \\
-	Z założenia indukcyjnego istnieje $z \in L_i$ takie, że $\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} \le z \le y$.
-
-	Jeśli $z \in L_{i+1}$, to $\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^{i+1}} \le \frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} \le z \le y$, więc \eqref{eq:subset_sum_ind} zachodzi.
-
-	Jeśli $z \notin L_{i+1}$ (został usunięty przez Trim), to istnieje $z' \in L_{i+1}$ takie, że $z' \le z \le z'\left(1+\frac{\epsilon}{2n}\right)$, więc $\frac{z}{1+\frac{\epsilon}{2n}} \le z' \le z$. \\
-	Mamy:
-	\[
-		\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^{i+1}} = \frac{1}{1+\frac{\epsilon}{2n}} \frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} \overset{\text{zał. ind.}}{\le} \frac{z}{1+\frac{\epsilon}{2n}} \le z' \le z \le y,
-	\]
-	więc \eqref{eq:subset_sum_ind} zachodzi.
-
-	\textbf{Przypadek 2:} $y \in P_i + x_{i+1}$. \\
-	Wtedy $y = y' + x_{i+1}$, gdzie $y' \in P_i$. \\
-	Z założenia indukcyjnego istnieje $z \in L_i$ takie, że $\frac{y'}{\left(1+\frac{\epsilon}{2n}\right)^i} \le z \le y'$.
-
-	Jeśli $z + x_{i+1} \in L_{i+1}$, to
-	\[
-		\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^{i+1}} \le \frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} = \frac{y' + x_{i+1}}{\left(1+\frac{\epsilon}{2n}\right)^i} \le \frac{y'}{\left(1+\frac{\epsilon}{2n}\right)^i} + x_{i+1} \le z + x_{i+1} \le y' + x_{i+1} = y,
-	\]
-	więc \eqref{eq:subset_sum_ind} zachodzi.
-
-	Jeśli $z + x_{i+1} \notin L_{i+1}$ (został usunięty przez Trim), to istnieje $z' \in L_{i+1}$ takie, że $z' \le z + x_{i+1} \le z'\left(1+\frac{\epsilon}{2n}\right)$, więc $\frac{z+x_{i+1}}{1+\frac{\epsilon}{2n}} \le z' \le z + x_{i+1}$. \\
-	Mamy:
-	\begin{align*}
-		\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^{i+1}} & = \frac{1}{1+\frac{\epsilon}{2n}}\frac{y}{\left(1+\frac{\epsilon}{2n}\right)^i} = \frac{1}{1+\frac{\epsilon}{2n}} \frac{y' + x_{i+1}}{\left(1+\frac{\epsilon}{2n}\right)^i}            \\
-		                                                   & \le \frac{1}{1+\frac{\epsilon}{2n}}\left(\frac{y'}{\left(1+\frac{\epsilon}{2n}\right)^i} + x_{i+1}\right) \overset{\text{zał. ind.}}{\le} \frac{1}{1+\frac{\epsilon}{2n}}(z + x_{i+1}) \\
-		                                                   & \le z' \le z + x_{i+1} \le y' + x_{i+1} = y
-	\end{align*}
-	Więc \eqref{eq:subset_sum_ind} zachodzi.
-
-	W szczególności \eqref{eq:subset_sum_ind} zachodzi dla $y^* \in P_n$. Zatem istnieje $z \in L_n$ takie, że $\frac{y^*}{\left(1+\frac{\epsilon}{2n}\right)^n} \le z \le y^*$, więc $\frac{y^*}{z} \le \left(1+\frac{\epsilon}{2n}\right)^n$. \\
-	Ale $z^* \ge z$, więc $\frac{y^*}{z^*} \le \frac{y^*}{z} \le \left(1+\frac{\epsilon}{2n}\right)^n$. \\
-	\begin{align*}
-		\frac{y^*}{z^*} & \le \left(1+\frac{\epsilon}{2n}\right)^n \overset{\text{Fakt~\ref{fakt:rosnacy}}}{\le} \lim_{n\to\infty} \left(1+\frac{\epsilon}{2n}\right)^n = \lim_{n\to\infty} \left(\left(1+\frac{\epsilon}{2n}\right)^{\frac{2n}{\epsilon}}\right)^{\frac{\epsilon}{2}} = e^{\frac{\epsilon}{2}}
-	\end{align*}
-	Zakładając $\epsilon \le 1$ (mamy wtedy $\frac{\epsilon}{2} \le 1$), z~Faktu~\ref{fakt:exp} dla $x = \frac{\epsilon}{2}$ dostajemy:
-	\begin{align*}
-		\frac{y^*}{z^*} \le e^{\frac{\epsilon}{2}} \overset{\text{Fakt~\ref{fakt:exp}}}{\le} 1 + \frac{\epsilon}{2} + \frac{\epsilon^2}{4} \le 1 + \frac{\epsilon}{2} + \frac{\epsilon}{2} = 1 + \epsilon,
-	\end{align*}
-	bo $\frac{\epsilon^2}{4} \le \frac{\epsilon}{2}$ dla $\epsilon \le 2$. Zatem $\frac{y^*}{z^*} \le 1 + \epsilon$, co kończy dowód poprawności aproksymacji.
-\end{proof}
-
 Pokażemy, że algorytm działa w czasie wielomianowym względem $|I| = \BT\left(\log t + \sum_{i=1}^n \log x_i\right)$ i $\frac{1}{\epsilon}$.
 
 Na każdej liście $L_i$ po linii 6 elementy $z_0=0, z_1, \dots, z_k$ spełniają warunek $z_{j+1} > z_j\left(1 + \frac{\epsilon}{2n}\right)$ dla $j \ge 1$.
@@ -110,12 +45,12 @@ Zatem
 \begin{flalign*}
 	z_1\left(1 + \frac{\epsilon}{2n}\right)^{k-1} & < z_k \le t &  &
 \end{flalign*}
-Skoro $z_1 \ge 1$, to
+Skoro $z_1 \ge 1$, to (korzystając z~$\frac{x}{1+x} \le \ln(1+x)$ dla $x \ge 0$)
 \begin{flalign*}
 	\left(1 + \frac{\epsilon}{2n}\right)^{k-1}   & \le t \quad \Big| \ln                                                                                                                                                                   &   & \\[1ex]
 	(k-1)\ln\left(1 + \frac{\epsilon}{2n}\right) & \le \ln t                                                                                                                                                                               &   & \\[1ex]
 	k-1                                          & \le \frac{\ln t}{\ln\left(1 + \frac{\epsilon}{2n}\right)} \quad \Big| +2                                                                                                                &   & \\[1ex]
-	k+1                                          & \le \frac{\ln t}{\ln\left(1 + \frac{\epsilon}{2n}\right)} + 2 \overset{\text{Fakt~\ref{fakt:ln}}}{\le} \frac{\ln t \cdot \left(1 + \frac{\epsilon}{2n}\right)}{\frac{\epsilon}{2n}} + 2
+	k+1                                          & \le \frac{\ln t}{\ln\left(1 + \frac{\epsilon}{2n}\right)} + 2 \le \frac{\ln t \cdot \left(1 + \frac{\epsilon}{2n}\right)}{\frac{\epsilon}{2n}} + 2
 	= \frac{\cancel{2n}+\epsilon}{\cancel{2n}} \cdot \frac{\cancel{2n}}{\epsilon} \ln t + 2
 	\le \frac{3n \ln t}{\epsilon} + 2            &                                                                                                                                                                                         &
 \end{flalign*}

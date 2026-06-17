@@ -44,49 +44,10 @@ Porządkujemy zajęcia w czasie niemalejącym względem czasu zakończenia. To z
 	\end{table}
 \end{example}
 
-\paragraph{Podejście programowania dynamicznego}
-Definiujemy zbiory zajęć:
-\begin{flalign*}
-	S_{ij} = \{ z_k \in S : t_i \leq s_k < t_k \leq s_j \} &  &  &  &
-\end{flalign*}
-(zbiór zajęć zaczynających się po czasie zakończenia zajęcia $z_i$ i kończących się przed czasem rozpoczęcia zajęcia $z_j$).
-
-Dodajemy 2 sztuczne zajęcia: $z_0$ z czasem $t_0 = 0$ i $z_{n+1}$ z czasem $s_{n+1} = \infty$. Wtedy $S = S_{0, n+1}$.
-Jeśli $i \geq j$, to $S_{ij} = \emptyset$, bo $s_j < t_j \leq t_i$ (bo zajęcia są posortowane).
-
-\begin{dygresja}
-	Pokażmy dokładniej, dlaczego $S_{ij} = \emptyset$ dla $i \geq j$.
-	Przypuśćmy, że istnieje $z_k \in S_{ij}$. Z~definicji $S_{ij}$ mamy wtedy
-	$t_i \leq s_k < t_k \leq s_j$, a~ponieważ zajęcia są posortowane i~$i \geq j$,
-	to $t_j \leq t_i$, skąd $s_j < t_j \leq t_i$. Łącząc obie nierówności,
-	otrzymujemy $s_j < t_i \leq s_k < t_k \leq s_j$, czyli $s_j < s_j$ -- sprzeczność.
-\end{dygresja}
-
-Problem: znaleźć podzbiór o największej liczności zbioru $S_{ij}$ składający się z parami zgodnych zajęć dla $0 \leq i \leq j \leq n+1$.
-
-Niech $A_{ij}$ będzie jakimkolwiek podzbiorem największej liczności składającym się z parami zgodnych zajęć zbioru $S_{ij}$ oraz niech $c(i, j) = |A_{ij}|$.
-
-\paragraph{Podproblem $S_{ij}$:}
-Załóżmy, że $z_k \in S_{ij}$. Jeśli wybierzemy $z_k$ do zbioru rozwiązania, to otrzymamy dwa zbiory (podproblemy):
-\begin{itemize}
-	\item $S_{ik}$ (zbiór zajęć, które zaczynają się po zakończeniu zajęcia $z_i$ i kończą się przed rozpoczęciem zajęcia $z_k$),
-	\item $S_{kj}$ (zbiór zajęć, które zaczynają się po zakończeniu zajęcia $z_k$ i kończą przed rozpoczęciem zajęcia $z_j$).
-\end{itemize}
-Rozwiązanie dla $S_{ij}$ będzie sumą rozwiązań dla $S_{ik}$ oraz $S_{kj}$ oraz elementu $\{z_k\}$.
-
-\paragraph{Własność optymalnej podstruktury:}
-Załóżmy, że $z_k \in A_{ij}$. Wtedy $A_{ij} = A_{ik} \cup \{z_k\} \cup A_{kj}$. Gdyby istniało rozwiązanie $A'_{ik}$ dla $S_{ik}$ takie, że $|A'_{ik}| > |A_{ik}|$, to zbiór $A'_{ij} = A'_{ik} \cup \{z_k\} \cup A_{kj}$ byłby rozwiązaniem dla $S_{ij}$ takim, że $|A'_{ij}| > |A_{ij}|$. Sprzeczność. Analogicznie dla $S_{kj}$.
-Zatem $A_{ik}$ oraz $A_{kj}$ muszą być rozwiązaniami optymalnymi dla odpowiednio $S_{ik}$ i $S_{kj}$.
-
-Stąd wzór rekurencyjny:
-\begin{flalign*}
-	 & \begin{cases}
-		   c(i, j) = 0 & \text{dla } i \geq j \\
-		   c(i, j) = \max_{i < k < j} \{ c(i, k) + c(k, j) + 1 \}
-	   \end{cases} &  &  &  &
-\end{flalign*}
-
-Używając tego wzoru rekurencyjnego możemy skonstruować algorytm programowania dynamicznego. Mamy $\BO(n^2)$ podproblemów. Dla $j > i$ mamy $j - i - 1$ wartości $k$ do sprawdzenia, czyli rozwiązanie jednego podproblemu zajmie czas liniowy. Otrzymujemy algorytm o złożoności $\BO(n^3)$.
+Problem ma optymalną podstrukturę: jeśli $z_k$ należy do rozwiązania optymalnego, to po obu stronach
+$z_k$ pozostają niezależne podproblemy, których rozwiązania też muszą być optymalne. Daje to algorytm
+programowania dynamicznego o~złożoności $\BO(n^3)$, ale -- jak pokazuje poniższy lemat -- wystarczy podejście
+zachłanne.
 
 \paragraph{Algorytm zachłanny}
 \begin{lemma}
@@ -96,15 +57,6 @@ Używając tego wzoru rekurencyjnego możemy skonstruować algorytm programowani
 		\item\label{lem:greedy-empty} $S_{im} = \emptyset$ (zatem po wybraniu $z_m$ do zbioru rozwiązania zostaje co najwyżej 1 niepusty podproblem do rozwiązania -- $S_{mj}$).
 	\end{enumerate}
 \end{lemma}
-
-\begin{proof}~\\
-	\textbf{Ad~\ref{lem:greedy-exists}.} Niech $A_{ij}$ będzie podzbiorem o największej liczności składającym się z parami zgodnych zajęć zbioru $S_{ij}$. Niech $z_k$ będzie zajęciem z $A_{ij}$ o najmniejszym czasie zakończenia.
-	Jeśli $z_k = z_m$, to teza jest udowodniona.
-	Przypuśćmy, że $z_k \neq z_m$ i rozważmy zbiór $A'_{ij} = A_{ij} \setminus \{z_k\} \cup \{z_m\}$. Skoro $t_m \leq t_k$ oraz zajęcia z $A_{ij}$ są parami zgodne, to zajęcia z $A'_{ij}$ również są parami zgodne.
-	Mamy $|A_{ij}| = |A'_{ij}|$, więc $A'_{ij}$ jest rozwiązaniem optymalnym zawierającym $z_m$.
-
-	\textbf{Ad~\ref{lem:greedy-empty}.} Przypuśćmy, że nie. Niech $z_k \in S_{im}$. Wtedy $t_i \leq s_k < t_k \leq s_m < t_m \leq s_j$. Zatem $z_k \in S_{ij}$ oraz $t_k < t_m$ -- sprzeczność z definicją zajęcia $z_m$.
-\end{proof}
 
 Z lematu wynika, że nie musimy sprawdzać $j - i - 1$ wartości $k$, możemy wybrać zajęcie o najmniejszym czasie zakończenia $z_m \in S_{ij}$.
 Żeby rozwiązać podproblem $S_{ij}$ możemy dodać $z_m$ do zbioru rozwiązania a następnie dodać do zbioru rozwiązania rozwiązanie optymalne podproblemu $S_{mj}$. Zaczynamy z $S = S_{0, n+1}$ i $t_0 = 0$. W pierwszym kroku algorytm wybiera $z_1$.

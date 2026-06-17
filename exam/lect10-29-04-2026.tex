@@ -105,11 +105,8 @@ Niech $\Pi$ -- problem optymalizacyjny znalezienia maksimum lub minimum pewnej f
 	\item $D_\Pi$ -- zbiór instancji problemu $\Pi$.
 	\item $I \in D_\Pi$ -- instancja $\Pi$.
 	\item $S(I)$ -- zbiór rozwiązań dopuszczalnych dla instancji $I$.
-	\item $f: \bigcup_{I \in D_\Pi} S(I) \to \R$ -- funkcja celu. Możemy założyć, że
-	      \begin{flalign*}
-		      \forall I \in D_\Pi\ \forall s \in S(I)\ f(s) > 0 &  &  &  &
-	      \end{flalign*}
-	      czyli każde rozwiązanie dopuszczalne każdej instancji ma dodatni koszt. Założenie to nie ogranicza ogólności: jakość aproksymacji mierzymy ilorazem $c(I)/c^*(I)$ (poniżej), a~iloraz ma sens tylko dla wartości tego samego znaku i~niezerowych. Dla typowych problemów (np. minimalizacja długości trasy, liczby maszyn czy rozmiaru pokrycia) koszt jest z~natury dodatni, więc warunek jest spełniony automatycznie.
+	\item $f: \bigcup_{I \in D_\Pi} S(I) \to \R$ -- funkcja celu. Zakładamy $f(s) > 0$ dla każdego rozwiązania
+	      dopuszczalnego (potrzebne, by iloraz jakości miał sens; dla typowych problemów koszt jest z~natury dodatni).
 \end{itemize}
 
 Niech $c^*(I)$ oznacza wartość rozwiązania optymalnego instancji $I$, $c^*(I) > 0$.\\

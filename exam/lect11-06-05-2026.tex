@@ -126,10 +126,6 @@ AVC zwraca pokrycie złożone z $2m$ wierzchołków, natomiast optymalne pokryci
 	\EndFunction
 \end{alg}
 
-\begin{dygresja}
-	Idea jest zachłanna: w~każdym kroku patrzymy wyłącznie na bieżący stan i~dokładamy do rozwiązania ten zbiór $S \in \mathcal{F}$, który pokrywa najwięcej spośród jeszcze niepokrytych elementów (maksymalizuje $|S \cap U|$), nie przejmując się skutkami dla kolejnych kroków. Zmienna $U$ trzyma elementy pozostające do pokrycia: startuje od całego $X$, a~po każdym wyborze odejmujemy od niej wybrany zbiór ($U \Assign U \setminus S$), więc kryterium $|S \cap U|$ premiuje zbiory wnoszące jak najwięcej \emph{nowych} elementów. Pętla kręci się, aż $U$ opustoszeje, czyli aż $\mathcal{A}$ pokryje całe $X$. Zachłanność nie gwarantuje rozwiązania optymalnego (do tego wrócimy przy analizie współczynnika aproksymacji), ale daje pokrycie szybko i~prosto.
-\end{dygresja}
-
 \paragraph{Poprawność}
 Pętla wykonuje się, dopóki istnieją niepokryte elementy, a~w~każdej iteracji co najmniej jeden z~nich zostaje pokryty, więc po skończonej liczbie kroków $U$ pustoszeje.
 

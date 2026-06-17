@@ -199,74 +199,6 @@ Drzewo binarne nazywamy \uemph{regularnym}, jeśli każdy wierzchołek wewnętrz
 	Drzewo binarne reprezentujące optymalny kod jest regularne.
 \end{theorem}
 
-\begin{proof}
-	Niech $T$ będzie drzewem binarnym reprezentującym optymalny kod prefixowy. Przypuśćmy, że $T$ nie jest regularne. Wtedy istnieje wierzchołek wewnętrzny $v$ z dokładnie jednym dzieckiem $w$. Niech $u$ będzie rodzicem $v$ (jeśli $v$ nie jest korzeniem $T$).
-
-	\begin{figure}[H]
-		\centering
-		\begin{minipage}{0.4\textwidth}
-			\centering
-			\begin{tikzpicture}[mytree]
-				\node {u}
-				child { node {}
-						child { node {}
-								child { node[draw=none] {a} edge from parent node[elabel left] {0} }
-								child { node[draw=none] {b} edge from parent node[elabel right] {1} }
-								edge from parent node[elabel left] {0}
-							}
-						child { node {}
-								child { node[draw=none] {c} edge from parent node[elabel left] {0} }
-								child { node[draw=none] {d} edge from parent node[elabel right] {1} }
-								edge from parent node[elabel right] {1}
-							}
-						edge from parent node[elabel left] {0}
-					}
-				child { node {v}
-						child[missing] {}
-						child { node {w}
-								child { node[draw=none] {e} edge from parent node[elabel left] {0} }
-								child { node[draw=none] {f} edge from parent node[elabel right] {1} }
-								edge from parent node[elabel right] {1}
-							}
-						edge from parent node[elabel right] {1}
-					};
-				\node[draw=none] at (-2, 0) {$T$};
-			\end{tikzpicture}
-		\end{minipage}
-		\hfill
-		$\longrightarrow$
-		\hfill
-		\begin{minipage}{0.4\textwidth}
-			\centering
-			\begin{tikzpicture}[mytree]
-				\node {u}
-				child { node {}
-						child { node {}
-								child { node[draw=none] {a} edge from parent node[elabel left] {0} }
-								child { node[draw=none] {b} edge from parent node[elabel right] {1} }
-								edge from parent node[elabel left] {0}
-							}
-						child { node {}
-								child { node[draw=none] {c} edge from parent node[elabel left] {0} }
-								child { node[draw=none] {d} edge from parent node[elabel right] {1} }
-								edge from parent node[elabel right] {1}
-							}
-						edge from parent node[elabel left] {0}
-					}
-				child { node {w}
-						child { node[draw=none] {e} edge from parent node[elabel left] {0} }
-						child { node[draw=none] {f} edge from parent node[elabel right] {1} }
-						edge from parent node[elabel right] {1}
-					};
-				\node[draw=none] at (-2, 0) {$T'$};
-			\end{tikzpicture}
-		\end{minipage}
-	\end{figure}
-
-	Niech $T'$ będzie drzewem powstałym z $T$ przez usunięcie $v$ i dodanie krawędzi $uw$, jeśli $v$ nie był korzeniem $T$.
-	$T'$ reprezentuje kod prefixowy i $B(T') < B(T)$ -- sprzeczność z optymalnością $T$.
-\end{proof}
-
 % ════════════════════════════════════════════════════════════════
 \subsection{Algorytm Huffmana}
 % ════════════════════════════════════════════════════════════════
@@ -297,18 +229,6 @@ gdzie $n$ jest liczbą elementów w kolejce.
 	\EndFunction
 \end{alg}
 Algorytm konstruuje drzewo binarne. $z$ - wierzchołek, $left, right$ - dzieci.
-
-\begin{dygresja}
-	Intuicyjnie algorytm działa zachłannie, budując drzewo \emph{od dołu}. Każdy znak $c \in C$ jest na początku osobnym, izolowanym wierzchołkiem; będzie on liściem gotowego drzewa. Kolejka priorytetowa $Q$ przechowuje korzenie wszystkich dotąd zbudowanych poddrzew, uporządkowane wg ich łącznej częstości $f$ (im rzadszy znak, tym wcześniej zostanie wyjęty).
-
-	W każdej z $n-1$ iteracji pętli wykonujemy jeden krok łączenia:
-	\begin{itemize}[nosep]
-		\item \Call{extract\_min}{Q} dwukrotnie wybiera dwa korzenie o \emph{najmniejszej} częstości ($x$ oraz $y$);
-		\item tworzymy nowy wierzchołek $z$ i podpinamy $x$, $y$ jako jego lewe i prawe dziecko;
-		\item częstość nowego wierzchołka ustalamy jako $f(z) = f(x) + f(y)$, po czym wkładamy $z$ z powrotem do kolejki przez \Call{insert}{Q, z}.
-	\end{itemize}
-	Łącząc zawsze dwa najrzadsze poddrzewa, spychamy najrzadsze znaki najgłębiej w drzewie -- to one dostaną najdłuższe kody, a znaki częste pozostaną blisko korzenia i otrzymają kody krótkie. Każde łączenie zmniejsza liczbę poddrzew w $Q$ o jeden (dwa wyjęcia, jedno wstawienie), więc po $n-1$ iteracjach zostaje dokładnie jeden korzeń -- całe drzewo kodu, które zwracamy.
-\end{dygresja}
 
 \paragraph{Złożoność czasowa}
 \begin{itemize}[nosep]
