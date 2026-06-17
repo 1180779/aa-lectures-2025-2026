@@ -10,7 +10,8 @@ i Nauk Informacyjnych Politechniki Warszawskiej (semestr letni 2025/2026).
 |------------------|------------------------------------------------------------------------------|
 | `notes/`         | Pełne notatki &mdash; wszystkie wykłady w całości.                                 |
 | `exam/`          | Wersja egzaminacyjna &mdash; okrojona do materiału obowiązującego na egzaminie.    |
-| `preamble.tex`   | Wspólna preambuła (`\documentclass`, pakiety, środowiska) dzielona przez obie wersje. |
+| `exam_highlighted/` | Wersja egzaminacyjna z wyróżnieniami &mdash; jak `exam/`, ale fragmenty obowiązkowe (twierdzenia wraz z dowodami) mają wyróżniające tło dla lepszej czytelności tego, co najważniejsze. |
+| `preamble.tex`   | Wspólna preambuła (`\documentclass`, pakiety, środowiska) dzielona przez wszystkie wersje. |
 
 Każdy katalog zawiera `main.tex`, który dołącza wspólną preambułę przez
 `\input{../preamble}` oraz poszczególne pliki wykładów `lectXX-DD-MM-2026.tex`.
@@ -18,7 +19,7 @@ Każdy katalog zawiera `main.tex`, który dołącza wspólną preambułę przez
 ## Kompilacja
 
 Dokumenty kompiluje się przy użyciu **LuaLaTeX** (nie pdfLaTeX — używane są
-fonty OpenType / `fontspec`). Z katalogu `notes/` lub `exam/`:
+fonty OpenType / `fontspec`). Z katalogu `notes/`, `exam/` lub `exam_highlighted/`:
 
 ```sh
 latexmk main.tex

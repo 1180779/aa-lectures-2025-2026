@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Build both versions of the notes, refresh the versioned PDFs in the repo
+# Build all versions of the notes, refresh the versioned PDFs in the repo
 # root, and clean up all build artefacts.
 #
 # Usage:  ./build.sh [-v|--verbose] [VERSION]
@@ -31,13 +31,17 @@ VERSION="${VERSION:-$(git describe --tags --abbrev=0 2>/dev/null || echo dev)}"
 declare -A OUTNAME=(
 	[notes]="AZ_lectures"
 	[exam]="AZ_exam_notes"
+	[exam_highlighted]="AZ_exam_notes_highlighted"
 )
 
-# ── compile both versions ────────────────────────────────────────
+# directories to build, in order
+TARGETS=(notes exam exam_highlighted)
+
+# ── compile all versions ─────────────────────────────────────────
 # latexmk is run inside each directory so that \input{../preamble}
 # resolves relative to the current working directory. Each directory
 # carries its own .latexmkrc selecting LuaLaTeX ($pdf_mode = 4).
-for dir in notes exam; do
+for dir in "${TARGETS[@]}"; do
 	echo "==> Compiling $dir/main.tex"
 	if [ "$VERBOSE" -eq 1 ]; then
 		( cd "$dir" && latexmk main.tex )
@@ -59,17 +63,17 @@ done
 echo "==> Removing old root PDFs"
 rm -f AZ_*.pdf
 
-for dir in notes exam; do
+for dir in "${TARGETS[@]}"; do
 	dest="${OUTNAME[$dir]}_${VERSION}.pdf"
 	echo "==> Copying $dir/main.pdf -> $dest"
 	cp "$dir/main.pdf" "$dest"
 done
 
-# ── clean build artefacts from both directories ──────────────────
+# ── clean build artefacts from all directories ───────────────────
 # latexmk -C removes auxiliary files *and* the generated main.pdf
 # (already copied out and git-ignored). indent.log is left behind by
 # latexindent, so remove it explicitly.
-for dir in notes exam; do
+for dir in "${TARGETS[@]}"; do
 	echo "==> Cleaning $dir"
 	( cd "$dir" && latexmk -C >/dev/null )
 	rm -f "$dir/indent.log"

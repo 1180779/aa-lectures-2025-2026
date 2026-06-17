@@ -1,0 +1,252 @@
+Przypomnijmy, że $S = \{z_1, \ldots, z_n\}$ to zbiór wszystkich $n$ zadań, czyli $n = |S|$.
+
+Zbiór $A \subseteq S$ nazywamy \uemph{wolnym od kar}, jeśli istnieje harmonogram zbioru $A$, w którym wszystkie zadania są terminowe.
+
+Dla $t \in \{0, 1, \ldots, n\}$ niech
+\begin{flalign*}
+	N_t(A) = |\{z_i \in A : d_i \leq t\}| &  &  &  &
+\end{flalign*}
+-- liczba zadań w $A$ o deadlinie $\leq t$.
+
+\begin{lemma} \label{lemma:wolny-od-kar}
+	Niech $A \subseteq S$. Następujące warunki są równoważne:
+	\begin{enumerate}
+		\item $A$ jest wolny od kar.
+		\item $N_t(A) \leq t$ dla każdego $t \in \{1, 2, \ldots, n\}$.
+		\item \label{lemma:wolny-od-kar:sort} Jeśli zadania z $A$ są posortowane w kolejności niemalejącej ze względu na deadliny, to żadne zadanie nie jest spóźnione.
+	\end{enumerate}
+\end{lemma}
+
+\begin{obowiazkowy}
+\begin{theorem}
+	Niech $S$ -- zbiór zadań o jednostkowym czasie wykonania, a $\mathcal{A}$ -- rodzina zbiorów wolnych od kar. Wtedy $(S, \mathcal{A})$ jest matroidem.
+\end{theorem}
+\begin{proof}
+	Sprawdzamy własności z definicji matroidu (Definicja~\ref{def:matroid}):
+	\begin{enumerate}
+		\item[(wł.\ \ref{matroid:skończoność})] Oczywiste. $\checkmark$
+		\item[(wł.\ \ref{matroid:niepustość})] Dla każdego $i \in [n]$ zachodzi $\{z_i\} \in \mathcal{A}$, więc $\mathcal{A} \neq \emptyset$. $\checkmark$
+		\item[(wł.\ \ref{matroid:dziedziczność})] Niech $A \in \mathcal{A}$ (czyli $A$ jest wolny od kar) i $B \subseteq A$. Z~definicji istnieje harmonogram zbioru $A$, w którym wszystkie zadania są terminowe. Usuwając z~tego harmonogramu zadania należące do $A \setminus B$, otrzymujemy harmonogram zbioru $B$, w którym wszystkie zadania nadal są terminowe (usunięcie zadań nie opóźnia pozostałych). Zatem $B$ jest wolny od kar, czyli $B \in \mathcal{A}$.
+		\item[(wł.\ \ref{matroid:wymiana})] Niech $A, B \in \mathcal{A}$, $|B| > |A|$.\\
+		      Niech $k \in \{0, 1, \ldots, n\}$ będzie największą liczbą $t$ taką, że $N_t(B) \leq N_t(A)$.\\
+		      $k$ jest dobrze zdefiniowane, bo $N_0(B) = 0 = N_0(A)$.\\
+		      Mamy $N_n(B) = |B| > |A| = N_n(A)$, więc $k < n$.\\
+		      Dla $j \in \{k+1, k+2, \ldots, n\}$ mamy $N_j(B) > N_j(A)$, więc $N_j(B) \geq N_j(A) + 1$.
+		      \begin{flalign*}
+			      \left.
+			      \begin{array}{l}
+				      N_{k+1}(B) > N_{k+1}(A) \\
+				      N_k(B) \leq N_k(A)
+			      \end{array}
+			      \right\} \implies \text{istnieje zadanie } z \in B \setminus A \text{ o deadlinie } = k+1 &  &  &  &
+		      \end{flalign*}
+		      Niech $A' = A \cup \{z\}$. Pokażemy, że $A'$ jest wolny od kar, używając lematu \ref{lemma:wolny-od-kar}.
+		      \begin{itemize}[nosep]
+			      \item Dla $t \in \{1, 2, \ldots, k\}$:\quad $N_t(A') = N_t(A) \leq t$, bo $A$ jest wolny od kar.
+			      \item Dla $t \in \{k+1, k+2, \ldots, n\}$:\quad $N_t(A') = N_t(A) + 1 \leq N_t(B) \leq t$, bo $B$ jest wolny od kar.
+		      \end{itemize}
+		      Zatem $A'$ jest wolny od kar.
+	\end{enumerate}
+	Pokazaliśmy, że $(S, \mathcal{A})$ jest matroidem.
+\end{proof}
+\end{obowiazkowy}
+
+Możemy do rozwiązania problemu szeregowania zadań użyć algorytmu Greedy (Algorytm \ref{alg:greedy}) dla matroidu $(S, \mathcal{A})$ maksymalizującego $\sum_{z_i \in A} w_i$ (czyli minimalizującego sumę kar zadań spóźnionych).
+
+Z twierdzenia~\ref{thm:rado-edmonds} (Rado, Edmonds) algorytm Greedy użyty do tego problemu zwraca rozwiązanie optymalne. Warunek z linii~\ref{line:greedy-niezaleznosc} algorytmu Greedy (tzn. czy $A \cup \{x_i\} \in \mathcal{A}$) można sprawdzić w czasie $\BO(n)$ -- lemat \ref{lemma:wolny-od-kar}, warunek~\ref{lemma:wolny-od-kar:sort}.
+
+Złożoność czasowa algorytmu wynosi:
+\begin{flalign*}
+	\BO(n \log n + n \cdot n) = \BO(n^2) &  &  &  &
+\end{flalign*}
+
+\begin{example}[Szeregowanie zadań z deadlinami]
+	Rozważmy zadania o~następujących deadlinach i~karach:
+	\begin{center}
+		\addvspace{\medskipamount}
+		\renewcommand{\arraystretch}{1.2}
+		\begin{NiceTabular}{c|cccccccc}[margin,hvlines]
+			$i$   & 1  & 2  & 3  & 4  & 5  & 6  & 7  & 8  \\
+			\hline
+			$d_i$ & 3  & 2  & 2  & 3  & 1  & 4  & 6  & 5  \\
+			$w_i$ & 80 & 70 & 60 & 50 & 40 & 30 & 20 & 10
+		\end{NiceTabular}
+
+		\addvspace{\medskipamount}
+	\end{center}
+
+	Zadania są już posortowane w porządku nierosnącym względem wagi ($w_1 \geq w_2 \geq \ldots \geq w_8$). Kolejne iteracje algorytmu Greedy (poniżej $A$ wypisane w kolejności niemalejącej po deadlinach; po prawej profil $N(A) = (N_1, \ldots, N_8)$, który musi spełniać $N_t \leq t$, czyli nie przekraczać $(1, 2, \ldots, 8)$):
+	\begin{enumerate}[nosep]
+		\item $A = (z_1)$ \hfill $N(A) = (0, 0, 1, 1, 1, 1, 1, 1)$
+		\item $A = (z_2, z_1)$ \hfill $N(A) = (0, 1, 2, 2, 2, 2, 2, 2)$
+		\item $A = (z_2, z_3, z_1)$ \hfill $N(A) = (0, 2, 3, 3, 3, 3, 3, 3)$
+		\item $A = (z_2, z_3, z_1)$ \quad ($z_4$ nie dodajemy, bo $N_3(A \cup \{z_4\}) = 4 > 3$)
+		\item $A = (z_2, z_3, z_1)$ \quad ($z_5$ nie dodajemy, bo $N_2(A \cup \{z_5\}) = 3 > 2$)
+		\item $A = (z_2, z_3, z_1, z_6)$ \hfill $N(A) = (0, 2, 3, 4, 4, 4, 4, 4)$
+		\item $A = (z_2, z_3, z_1, z_6, z_7)$ \hfill $N(A) = (0, 2, 3, 4, 4, 5, 5, 5)$
+		\item $A = (z_2, z_3, z_1, z_6, z_8, z_7)$ \hfill $N(A) = (0, 2, 3, 4, 5, 6, 6, 6)$
+	\end{enumerate}
+
+	Harmonogram (zadania terminowe posortowane po deadlinach, potem zadania spóźnione):
+	\begin{flalign*}
+		(z_2,\ z_3,\ z_1,\ z_6,\ z_8,\ z_7,\ z_4,\ z_5) &  &  &  &
+	\end{flalign*}
+	\begin{flalign*}
+		\text{Suma kar} = w_4 + w_5 = 50 + 40 = 90 &  &  &  &
+	\end{flalign*}
+\end{example}
+
+% ════════════════════════════════════════════════════════════════
+\section{Algorytmy aproksymacyjne}
+% ════════════════════════════════════════════════════════════════
+
+Algorytmy aproksymacyjne stosuje się do problemów, dla których jest mała szansa na znalezienie algorytmu dokładnego (np. wielomianowego). Zamiast szukać rozwiązania optymalnego, szukamy rozwiązania ,,prawie optymalnego''.
+
+Niech $\Pi$ -- problem optymalizacyjny znalezienia maksimum lub minimum pewnej funkcji celu $f$.
+\begin{itemize}[nosep]
+	\item $D_\Pi$ -- zbiór instancji problemu $\Pi$.
+	\item $I \in D_\Pi$ -- instancja $\Pi$.
+	\item $S(I)$ -- zbiór rozwiązań dopuszczalnych dla instancji $I$.
+	\item $f: \bigcup_{I \in D_\Pi} S(I) \to \R$ -- funkcja celu. Zakładamy $f(s) > 0$ dla każdego rozwiązania
+	      dopuszczalnego (potrzebne, by iloraz jakości miał sens; dla typowych problemów koszt jest z~natury dodatni).
+\end{itemize}
+
+Niech $c^*(I)$ oznacza wartość rozwiązania optymalnego instancji $I$, $c^*(I) > 0$.\\
+$A$ -- algorytm aproksymacyjny rozwiązujący $\Pi$.\\
+$c(I)$ -- wartość rozwiązania znalezionego przez algorytm $A$ dla instancji $I$, $c(I) > 0$.
+
+\begin{definition}
+	Mówimy, że algorytm $A$ ma \uemph{współczynnik aproksymacji} $\rho(n)$, jeśli dla każdej instancji $I \in D_\Pi$ rozmiaru $n$ zachodzi
+	\begin{flalign*}
+		\max\left\{\frac{c(I)}{c^*(I)},\ \frac{c^*(I)}{c(I)}\right\} \leq \rho(n) &  &  &  &
+	\end{flalign*}
+	Wtedy $A$ nazywamy algorytmem $\rho(n)$-aproksymacyjnym.
+\end{definition}
+
+Zauważmy, że:
+\begin{flalign*}
+	\left.
+	\begin{array}{ll}
+		\text{dla problemu maksymalizacji:} & 0 < c(I) \leq c^*(I) \\[0.5ex]
+		\text{dla problemu minimalizacji:}  & 0 < c^*(I) \leq c(I)
+	\end{array}
+	\right\} \implies \max\left\{\frac{c(I)}{c^*(I)},\ \frac{c^*(I)}{c(I)}\right\} \geq 1 &  &  &  &
+\end{flalign*}
+
+Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \uemph{współczynnik aproksymacji} algorytmu $A$ wynosi $\rho$ i $A$ nazywamy algorytmem $\rho$-aproksymacyjnym.
+
+% ════════════════════════════════════════════════════════════════
+\subsection{Problem pokrycia wierzchołkowego}
+% ════════════════════════════════════════════════════════════════
+
+\begin{definition}
+	Niech $G = (V, E)$ -- graf. \uemph{Pokryciem wierzchołkowym} (Vertex Cover, VC) grafu $G$ nazywamy zbiór $W \subseteq V$ taki, że dla każdej krawędzi $e \in E$ zachodzi $W \cap e \neq \emptyset$ -- czyli każda krawędź $G$ ma co najmniej jeden koniec w $W$.
+\end{definition}
+
+\begin{problem}[pokrycia wierzchołkowego] \leavevmode
+	\vspace{-\baselineskip}
+	\begin{itemize}[nosep]
+		\item Instancja: graf $G$.
+		\item Problem: znaleźć pokrycie wierzchołkowe grafu $G$ o minimalnej liczbie wierzchołków.
+	\end{itemize}
+\end{problem}
+
+\begin{example}[Pokrycie wierzchołkowe]
+	Rozważmy graf $G$ przedstawiony poniżej:
+	\begin{center}
+		\begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.6cm, inner sep=1pt}]
+			\node[fill=accent!25] (a) at (0, 2) {$a$};
+			\node              (b) at (2, 2) {$b$};
+			\node[fill=accent!25] (e) at (1, 1) {$e$};
+			\node              (c) at (0, 0) {$c$};
+			\node[fill=accent!25] (d) at (2, 0) {$d$};
+			\node[fill=accent!25] (f) at (4, 1) {$f$};
+			\draw (a) -- (b);
+			\draw (a) -- (c);
+			\draw (a) -- (e);
+			\draw (b) -- (d);
+			\draw (b) -- (e);
+			\draw (c) -- (d);
+			\draw (d) -- (e);
+			\draw (d) -- (f);
+		\end{tikzpicture}
+	\end{center}
+	$W = \{a, e, d, f\}$ jest pokryciem wierzchołkowym powyższego grafu $G$ (zaznaczone wyróżnione wierzchołki).
+\end{example}
+
+\paragraph{Algorytm Approx Vertex Cover}
+
+\begin{alg}{Approx Vertex Cover}{alg:avc}
+	\FunctionNN{AVC}{$G$}
+	\State $C \Assign \emptyset$ \Comment{$C$ -- rozwiązanie}
+	\State $F \Assign E(G)$ \Comment{$F$ -- zbiór dotychczas niepokrytych krawędzi}
+	\While{$F \neq \emptyset$}
+	\State wybierz dowolną krawędź $uv \in F$
+	\State $C \Assign C \cup \{u, v\}$
+	\State usuń z $F$ wszystkie krawędzie incydentne z $u$ lub z $v$
+	\EndWhile
+	\State \Return $C$
+	\EndFunction
+\end{alg}
+
+% Pomocnicze makra do rysowania kolejnych kroków AVC na grafie z poprzedniego
+% przykładu. sel = krawędź wybrana, gone = usunięta z F, cov = wierzchołek w pokryciu.
+\tikzset{
+	avcnode/.style={circle, draw, minimum size=0.5cm, inner sep=1pt, font=\small},
+	cov/.style={fill=accent!25},
+	sel/.style={accentB, line width=1.2pt},
+	gone/.style={gray!45, dashed},
+}
+% #1..#6: dodatkowe style wierzchołków a,b,e,c,d,f (cov albo puste)
+\newcommand{\avcnodes}[6]{%
+	\node[avcnode,#1] (a) at (0,2) {$a$};
+	\node[avcnode,#2] (b) at (2,2) {$b$};
+	\node[avcnode,#3] (e) at (1,1) {$e$};
+	\node[avcnode,#4] (c) at (0,0) {$c$};
+	\node[avcnode,#5] (d) at (2,0) {$d$};
+	\node[avcnode,#6] (f) at (4,1) {$f$};
+}
+% #1..#8: style krawędzi ab,ac,ae,bd,be,cd,de,df (sel/gone albo puste = nadal w F)
+\newcommand{\avcedges}[8]{%
+	\draw[#1] (a)--(b); \draw[#2] (a)--(c); \draw[#3] (a)--(e);
+	\draw[#4] (b)--(d); \draw[#5] (b)--(e); \draw[#6] (c)--(d);
+	\draw[#7] (d)--(e); \draw[#8] (d)--(f);
+}
+\newcommand{\avcpanel}[1]{%
+	\begin{tikzpicture}[scale=0.6, baseline=(current bounding box.center)]#1\end{tikzpicture}}
+\newcommand{\avclabel}[1]{\node[font=\footnotesize] at (2,-0.9) {#1};}
+
+\begin{example}[Algorytm AVC -- przykład]
+	Rozważmy graf z poprzedniego przykładu.
+
+	Pierwszy przebieg algorytmu może wybrać kolejno krawędzie $ab$ i $cd$:
+	\begin{itemize}[nosep]
+		\item Po wybraniu $ab$ usuwamy z $F$ krawędzie $ab, ac, ae, bd, be$, zostają $cd, de, df$.
+		\item Po wybraniu $cd$ usuwamy z $F$ krawędzie $cd, de, df$ -- $F = \emptyset$.
+	\end{itemize}
+	Algorytm zwraca $C = \{a, b, c, d\}$.
+	\begin{center}
+		\avcpanel{\avcnodes{}{}{}{}{}{}\avcedges{}{}{}{}{}{}{}{}\avclabel{start}}%
+		\;$\rightarrow$\;%
+		\avcpanel{\avcnodes{cov}{cov}{}{}{}{}\avcedges{sel}{gone}{gone}{gone}{gone}{}{}{}\avclabel{wybór $ab$}}%
+		\;$\rightarrow$\;%
+		\avcpanel{\avcnodes{cov}{cov}{}{cov}{cov}{}\avcedges{sel}{gone}{gone}{gone}{gone}{sel}{gone}{gone}\avclabel{wybór $cd$}}
+	\end{center}
+
+	Inny przebieg algorytmu może wybrać kolejno krawędzie $df$, $be$ i $ac$:
+	\begin{itemize}[nosep]
+		\item Po wybraniu $df$ usuwamy z $F$ krawędzie $df, de, bd, cd$.
+		\item Po wybraniu $be$ usuwamy z $F$ krawędzie $be, ae, ab$.
+		\item Po wybraniu $ac$ usuwamy ostatnią krawędź $ac$ -- $F = \emptyset$.
+	\end{itemize}
+	Algorytm zwraca $C = \{d, f, e, b, a, c\}$.
+	\begin{center}
+		\avcpanel{\avcnodes{}{}{}{}{}{}\avcedges{}{}{}{}{}{}{}{}\avclabel{start}}%
+		\;$\rightarrow$\;%
+		\avcpanel{\avcnodes{}{}{}{}{cov}{cov}\avcedges{}{}{}{gone}{}{gone}{gone}{sel}\avclabel{wybór $df$}}%
+		\;$\rightarrow$\;%
+		\avcpanel{\avcnodes{}{cov}{cov}{}{cov}{cov}\avcedges{gone}{}{gone}{gone}{sel}{gone}{gone}{sel}\avclabel{wybór $be$}}%
+		\;$\rightarrow$\;%
+		\avcpanel{\avcnodes{cov}{cov}{cov}{cov}{cov}{cov}\avcedges{gone}{sel}{gone}{gone}{sel}{gone}{gone}{sel}\avclabel{wybór $ac$}}
+	\end{center}
+\end{example}

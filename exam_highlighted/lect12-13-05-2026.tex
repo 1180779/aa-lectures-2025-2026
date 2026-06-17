@@ -1,0 +1,106 @@
+% ════════════════════════════════════════════════════════════════
+\subsection{Problem sumy podzbiorów}
+% ════════════════════════════════════════════════════════════════
+
+\begin{problem}[sumy podzbiorów (Subset-Sum)] \label{problem:subsetsum}
+	Instancja: $S = \{x_1, x_2, \ldots, x_n\} \subseteq \N$, $t \in \N$.
+	\begin{itemize}[nosep]
+		\item \emph{Wersja decyzyjna:} czy istnieje $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i = t$?
+		\item \emph{Wersja optymalizacyjna:} znaleźć $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i$ jest największą możliwą liczbą $\leq t$.
+	\end{itemize}
+\end{problem}
+
+Dla zbioru $P \subseteq \N$ i $x \in \N$ oznaczamy $P + x = \{s + x : s \in P\}$.\\
+np.\ dla $P = \{1, 2, 3, 6\}$ i $x = 2$: \quad $P + x = \{3, 4, 5, 8\}$.
+
+Dla listy $L$ liczb naturalnych i $x \in \N$ przez $L + x$ oznaczamy listę powstałą z $L$ przez dodanie $x$ do każdego elementu.\\
+np.\ $L = (3, 5, 8)$ i $x = 3$: \quad $L + x = (6, 8, 11)$.
+
+\begin{lemma} \label{lemma:subsetsum-Pi}
+	Niech $S = \{x_1, \ldots, x_n\} \subseteq \N$. Niech $P_0 = \{0\}$ i $P_i = P_{i-1} \cup (P_{i-1} + x_i)$ dla $i \in [n]$. Zbiór $P_n$ składa się ze wszystkich możliwych sum podzbiorów zbioru $S$.
+\end{lemma}
+Lemat \ref{lemma:subsetsum-Pi} podsuwa algorytm: wystarczy liczyć kolejne zbiory $P_i$. Reprezentujemy je posortowanymi listami $L_i$ bez duplikatów, a rekurencję $P_i = P_{i-1} \cup (P_{i-1} + x_i)$ realizujemy scalaniem list. Dodatkowo z $L_i$ usuwamy elementy $> t$ -- żadna suma większa od $t$ nie może być rozwiązaniem, więc nie wpływa to na wynik.
+
+Załóżmy, że mamy procedurę $\Call{MergeLists}{L, L'}$, która dla posortowanych list liczb naturalnych $L$, $L'$ zwraca posortowaną listę elementów z $L$ i~$L'$ i~usuwa duplikaty. Złożoność czasowa $\Call{MergeLists}{L, L'}$ wynosi $\BT(|L| + |L'|)$.
+
+\begin{alg}{Exact Subset Sum}{alg:exactsubsetsum}
+	\FunctionNN{ExactSubsetSum}{$S, t$}
+	\State $n \Assign |S|$
+	\State $L_0 \Assign (0)$
+	\For{$i \Assign 1$ \To $n$}
+	\State $L_i \Assign \Call{MergeLists}{L_{i-1}, L_{i-1} + x_i}$
+	\State usuń z $L_i$ wszystkie liczby $> t$
+	\EndFor
+	\State \Return największy element $L_n$
+	\EndFunction
+\end{alg}
+
+Poprawność: indukcyjnie $L_i$ to posortowana lista tych elementów $P_i$, które są $\leq t$. Na mocy lematu \ref{lemma:subsetsum-Pi} $P_n$ zawiera wszystkie sumy podzbiorów $S$, więc największy element $L_n$ jest największą taką sumą $\leq t$ -- czyli rozwiązaniem wersji optymalizacyjnej.
+
+\paragraph{Złożoność czasowa}
+Długość listy $L_i$ może być wykładnicza względem $i$, nawet $2^i$. Dla $I = (S, t)$:
+\begin{flalign*}
+	|I| = \BT\left(\log t + \sum_{i=1}^{n} \log x_i\right) &  &  &  &
+\end{flalign*}
+Jeśli liczby $t$ i $x_i$ są $n$-cyfrowe, to $\log t, \log x_i = \BT(n)$ i~wtedy $|I| = \BT(n + n^2) = \BT(n^2)$. Skoro $L_n$ może mieć długość $2^n$, to \Call{ExactSubsetSum}{} (Algorytm~\ref{alg:exactsubsetsum}) jest algorytmem wykładniczym.
+
+Jeśli liczba $t$ jest ograniczona przez funkcję wielomianową od $n = |S|$, czyli $t = \BO(n^p)$ dla jakiegoś $p \in \N$, to długość $L_i$ jest ograniczona przez $\BO(t) = \BO(n^p)$ i w tym przypadku algorytm działa w czasie wielomianowym.
+
+\paragraph{Schemat aproksymacyjny}
+Pokażemy w~pełni wielomianowy schemat aproksymacyjny dla problemu sumy podzbiorów (Problem~\ref{problem:subsetsum}).
+
+\paragraph{Pomysł:} będziemy skracać listy $L_i$. Dla $0 < \delta < 1$ z listy $L$ robimy krótszą listę $L'$ taką, że dla każdego elementu $y$ usuniętego z $L$ istnieje element $z$ w $L'$, który jest blisko niego, dokładnie $\frac{y}{1 + \delta} \leq z \leq y$.
+
+\begin{example}[Procedura Trim]
+	$L = (15, 16, 17, 25, 27, 28, 35, 36, 37)$, $\delta = 0{,}1$ (czyli próg $1 + \delta = 1{,}1$).
+
+	Idziemy po liście od lewej; ostatni zachowany element nazwijmy $z$. Kolejny $y$ zachowujemy tylko wtedy, gdy $y > z \cdot 1{,}1$ -- w~przeciwnym razie $y$ jest na tyle blisko $z$, że $z$ go reprezentuje ($\frac{y}{1{,}1} \leq z \leq y$).
+	\begin{itemize}[nosep]
+		\item $15$ -- pierwszy element, zachowujemy; $z = 15$.
+		\item $16 \leq 15 \cdot 1{,}1 = 16{,}5$ -- usuwamy, reprezentuje je $15$.
+		\item $17 > 16{,}5$ -- zachowujemy; $z = 17$.
+		\item $25 > 17 \cdot 1{,}1 = 18{,}7$ -- zachowujemy; $z = 25$.
+		\item $27 \leq 25 \cdot 1{,}1 = 27{,}5$ -- usuwamy, reprezentuje je $25$.
+		\item $28 > 27{,}5$ -- zachowujemy; $z = 28$.
+		\item $35 > 28 \cdot 1{,}1 = 30{,}8$ -- zachowujemy; $z = 35$.
+		\item $36 \leq 35 \cdot 1{,}1 = 38{,}5$ -- usuwamy, reprezentuje je $35$.
+		\item $37 \leq 38{,}5$ -- usuwamy, reprezentuje je $35$.
+	\end{itemize}
+	Stąd $L' = (15, 17, 25, 28, 35)$.
+\end{example}
+
+Następująca procedura $\Call{Trim}{L, \delta}$ realizuje ten pomysł.\\
+$L = (y_1, \ldots, y_m)$ -- posortowana rosnąco lista, $0 < \delta < 1$.
+
+\begin{alg}{Trim}{alg:trim}
+	\FunctionNN{Trim}{$L, \delta$}
+	\State $m \Assign |L|$
+	\State $L' \Assign (y_1)$
+	\State $last \Assign y_1$
+	\For{$i \Assign 2$ \To $m$}
+	\If{$y_i > last \cdot (1 + \delta)$}
+	\State dołącz $y_i$ na koniec $L'$
+	\State $last \Assign y_i$
+	\EndIf
+	\EndFor
+	\State \Return $L'$
+	\EndFunction
+\end{alg}
+
+Czas działania $\Call{Trim}{L, \delta}$ wynosi $\BT(|L|)$.
+
+Oto schemat aproksymacyjny:
+
+\begin{alg}{Approx Subset Sum}{alg:approxsubsetsum}
+	\FunctionNN{ApproxSubsetSum}{$S, t, \varepsilon$}
+	\State $n \Assign |S|$
+	\State $L_0 \Assign (0)$
+	\For{$i \Assign 1$ \To $n$}
+	\State $L_i \Assign \Call{MergeLists}{L_{i-1}, L_{i-1} + x_i}$
+	\State usuń z $L_i$ liczby $> t$
+	\State $L_i \Assign \Call{Trim}{L_i, \frac{\varepsilon}{2n}}$ \Comment{$\delta = \frac{\varepsilon}{2n}$}
+	\EndFor
+	\State \Return największy element $z \in L_n$ \Comment{$z^*$}
+	\EndFunction
+\end{alg}
+

@@ -1,0 +1,378 @@
+% ════════════════════════════════════════════════════════════════
+\subsection{Kody Huffmana}
+% ════════════════════════════════════════════════════════════════
+
+Często znaki są reprezentowane przy użyciu 8 bitów (np. ASCII). Skoro częstość znaków się różni, lepiej reprezentować znaki występujące często przy użyciu krótszych ciągów bitów, a znaki występujące rzadko przy użyciu dłuższych ciągów bitów.
+\begin{flalign*}
+	\text{częstość} = \text{liczba wystąpień} &  &  &  &
+\end{flalign*}
+
+\paragraph{Przykład}
+W pliku jest 58 znaków. Każdy znak jest elementem zbioru $\{a, e, i, s, t, r, n\}$.
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.2}
+	\begin{NiceTabular}{c|l|c|c|c|c|c|c|c}[margin,hvlines]
+		\multicolumn{2}{c|}{}         & $a$                          & $e$ & $i$ & $s$ & $t$ & $r$ & $n$ \\
+		\hline
+		\multicolumn{2}{c|}{częstość} & 10                           & 15  & 12  & 3   & 4   & 13  & 1   \\
+		\hline
+		kod 1                         & \makecell[l]{stała długość                                       \\ słowa kodowego} & 000 & 001 & 010 & 011 & 100 & 101 & 110 \\
+		\hline
+		kod 2                         & \makecell[l]{zmienna długość                                     \\ słowa kodowego} & 001 & 01 & 10 & 00000 & 0001 & 11 & 00001 \\
+		\hline
+		kod 3                         & \makecell[l]{zmienna długość                                     \\ słowa kodowego} & 001 & 01 & 10 & 00010 & 0001 & 11 & 00001
+	\end{NiceTabular}
+\end{table}
+
+Jeśli użyjemy kodu o stałej długości słowa kodowego (kod 1) to zakodowany plik ma: $58 \cdot 3 = 174$ bity. \\
+Jeśli użyjemy kodu o zmiennej długości słowa kodowego (kod 2 lub kod 3) to zakodowany plik ma:
+\begin{flalign*}
+	10 \cdot 3 + 15 \cdot 2 + 12 \cdot 2 + 3 \cdot 5 + 4 \cdot 4 + 13 \cdot 2 + 1 \cdot 5 = 146 \text{ bitów.} &  &  &  &
+\end{flalign*}
+
+Jeśli używamy kodu o zmiennej długości słowa kodowego, to chcemy aby spełniony był warunek: \textbf{żadne słowo kodowe nie jest prefixem innego słowa kodowego}. \\
+Takie kody nazywa się \uemph{kodami prefixowymi} (chociaż powinno być bezprefixowe).
+
+Rozważmy kod 3. Ciąg $0001001$ można odkodować na dwa sposoby:
+\begin{itemize}[nosep]
+	\item $00010 \quad 01 \implies s \quad e$
+	\item $0001 \quad 001 \implies t \quad a$
+\end{itemize}
+Tutaj $0001$ jest prefixem $00010$, czyli słowo kodowe znaku $t$ jest prefixem słowa kodowego znaku $s$.
+
+\paragraph{Reprezentacja drzewowa kodów}
+Słowo kodowe znaku jest ciągiem etykiet krawędzi na ścieżce od korzenia do wierzchołka zaetykietowanego tym znakiem.
+
+\tikzset{
+	mytree/.style={
+			level distance=0.8cm,
+			level 1/.style={sibling distance=4.0cm},
+			level 2/.style={sibling distance=1.8cm},
+			level 3/.style={sibling distance=1.2cm},
+			level 4/.style={sibling distance=0.9cm},
+			level 5/.style={sibling distance=0.7cm},
+			every node/.style={circle, draw, minimum size=0.4cm, inner sep=1pt},
+			elabel left/.style={draw=none, font=\scriptsize, inner sep=1pt, midway, sloped, above},
+			elabel right/.style={draw=none, font=\scriptsize, inner sep=1pt, midway, sloped, above},
+		}
+}
+% Wariant dla kroków konstrukcji: jednakowe, okrągłe węzły (etykiety typu "n,1")
+\tikzset{
+	htree/.style={
+			mytree,
+			level distance=0.95cm,
+			level 4/.style={sibling distance=1.0cm},
+			level 5/.style={sibling distance=0.85cm},
+			every node/.style={circle, draw, minimum size=0.7cm, inner sep=0pt, font=\footnotesize, align=center},
+		}
+}
+\begin{figure}[ht]
+	\centering
+	\begin{minipage}{0.48\textwidth}
+		\centering
+		\textbf{1. kod 1} \\ (stała długość) \\[1ex]
+		\begin{tikzpicture}[mytree]
+			\node {}
+			child { node {}
+					child { node {}
+							child { node[draw=none] {a} edge from parent node[elabel left] {0} }
+							child { node[draw=none] {e} edge from parent node[elabel right] {1} }
+							edge from parent node[elabel left] {0}
+						}
+					child { node {}
+							child { node[draw=none] {i} edge from parent node[elabel left] {0} }
+							child { node[draw=none] {s} edge from parent node[elabel right] {1} }
+							edge from parent node[elabel right] {1}
+						}
+					edge from parent node[elabel left] {0}
+				}
+			child { node {}
+					child { node {}
+							child { node[draw=none] {t} edge from parent node[elabel left] {0} }
+							child { node[draw=none] {r} edge from parent node[elabel right] {1} }
+							edge from parent node[elabel left] {0}
+						}
+					child { node {}
+							child { node[draw=none] {n} edge from parent node[elabel left] {0} }
+							child { node[draw=none] {} edge from parent[draw=none] }
+							edge from parent node[elabel right] {1}
+						}
+					edge from parent node[elabel right] {1}
+				};
+		\end{tikzpicture}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.48\textwidth}
+		\centering
+		\textbf{2. kod 2} \\ (zmienna długość) \\[1ex]
+		\begin{tikzpicture}[mytree]
+			\node {}
+			child { node {}
+					child { node {}
+							child { node {}
+									child { node {}
+											child { node[draw=none] {s} edge from parent node[elabel left] {0} }
+											child { node[draw=none] {n} edge from parent node[elabel right] {1} }
+											edge from parent node[elabel left] {0}
+										}
+									child { node[draw=none] {t} edge from parent node[elabel right] {1} }
+									edge from parent node[elabel left] {0}
+								}
+							child { node[draw=none] {a} edge from parent node[elabel right] {1} }
+							edge from parent node[elabel left] {0}
+						}
+					child {
+							node[draw=none] {e}
+							edge from parent node[elabel right] {1}
+						}
+					edge from parent node[elabel left] {0}
+				}
+			child { node {}
+					child { node[draw=none] {i} edge from parent node[elabel left] {0} }
+					child { node[draw=none] {r} edge from parent node[elabel right] {1} }
+					edge from parent node[elabel right] {1}
+				};
+			% child { node[draw=none] {} edge from parent[draw=none] };
+		\end{tikzpicture}
+	\end{minipage}
+
+	\vspace{1cm}
+	\textbf{3. kod 3} \\ (zmienna długość) \\[1ex]
+	\begin{tikzpicture}[mytree, level 4/.style={sibling distance=1.4cm}, level 5/.style={sibling distance=1.0cm}]
+		\node {}
+		child { node {}
+				child { node {}
+						child { node {}
+								child { node {}
+										child { node[draw=none] {} edge from parent[draw=none] }
+										child { node[draw=none] {n} edge from parent node[elabel right] {1} }
+										edge from parent node[elabel left] {0}
+									}
+								child { node {t}
+										child { node[draw=none] {s} edge from parent node[elabel left] {0} }
+										child { node[draw=none] {} edge from parent[draw=none] }
+										edge from parent node[elabel right] {1}
+									}
+								edge from parent node[elabel left] {0}
+							}
+						child { node[draw=none] {a} edge from parent node[elabel right] {1} }
+						edge from parent node[elabel left] {0}
+					}
+				child {
+						node[draw=none] {e}
+						edge from parent node[elabel right] {1}
+					}
+				edge from parent node[elabel left] {0}
+			}
+		child { node {}
+				child { node[draw=none] {i} edge from parent node[elabel left] {0} }
+				child { node[draw=none] {r} edge from parent node[elabel right] {1} }
+				edge from parent node[elabel right] {1}
+			};
+		% child { node[draw=none] {} edge from parent[draw=none] };
+	\end{tikzpicture}
+\end{figure}
+
+\begin{remark}
+	Żadne słowo kodowe nie jest prefixem innego słowa kodowego $\iff$ wszystkie znaki są reprezentowane przez liście w reprezentacji drzewowej kodu.
+\end{remark}
+
+Etykietujemy wierzchołki w następujący sposób: każdy wierzchołek $v$ dostaje etykietę będącą sumą wystąpień znaków, które są reprezentowane przez liście poddrzewa ukorzenionego w $v$.
+
+Niech $C$ będzie alfabetem, $f: C \to \N_+$, $f(c) =$ częstość znaku $c \in C$.
+\begin{flalign*}
+	d_T(c) & \text{ -- głębokość liścia reprezentującego znak } c \in C \text{ w drzewie } T                 &  & \\
+	d_T(c) & = \text{długość słowa kodowego znaku } c \in C \text{ w kodzie reprezentowanym przez drzewo } T &  &
+\end{flalign*}
+Liczba bitów w zakodowanym pliku (kod reprezentowany przez drzewo $T$) wynosi:
+\begin{flalign*}
+	B(T) = \sum_{c \in C} f(c) \cdot d_T(c) &  &  &  &
+\end{flalign*}
+
+Kod prefixowy reprezentowany przez drzewo $T$ nazywamy \uemph{optymalnym}, jeśli $B(T)$ jest najmniejsze możliwe. \\
+Drzewo ukorzenione nazywamy \uemph{binarnym}, jeśli każdy wierzchołek ma co najwyżej dwoje dzieci. \\
+Drzewo binarne nazywamy \uemph{regularnym}, jeśli każdy wierzchołek wewnętrzny ma dokładnie dwoje dzieci.
+
+\begin{theorem}
+	Drzewo binarne reprezentujące optymalny kod jest regularne.
+\end{theorem}
+
+% ════════════════════════════════════════════════════════════════
+\subsection{Algorytm Huffmana}
+% ════════════════════════════════════════════════════════════════
+
+Algorytm konstruuje drzewo reprezentujące optymalny kod prefixowy dla $(C, f)$.
+Zaczynamy od $|C|$ wierzchołków izolowanych (które staną się liśćmi) i wykonujemy $|C|-1$ operacji łączenia zaczynając od najrzadszych znaków (będą miały największą głębokość w drzewie).
+
+Będziemy używać kolejki priorytetowej z kluczem $f(c)$. Kolejkę priorytetową możemy zaimplementować używając kopca binarnego. Wtedy koszty operacji wynoszą:
+\begin{itemize}[nosep]
+	\item \Call{insert}{} -- $\BO(\log n)$
+	\item \Call{extract\_min}{} -- $\BO(\log n)$
+	\item \Call{create}{} -- $\BO(n)$
+\end{itemize}
+gdzie $n$ jest liczbą elementów w kolejce.
+
+\begin{alg}{Algorytm Huffmana}{alg:huffman}
+	\FunctionNN{Huffman}{$C, f$}
+	\State $n \Assign |C|$
+	\State $Q \Assign \Call{create}{C, f}$ \Comment{$Q$ - kolejka priorytetowa}
+	\For{$i \Assign 1$ \To $n - 1$}
+	\State $z \Assign \Call{new\_node}{}$
+	\State $x \Assign \Call{left}{z} \Assign \Call{extract\_min}{Q}$
+	\State $y \Assign \Call{right}{z} \Assign \Call{extract\_min}{Q}$
+	\State $f(z) \Assign f(x) + f(y)$
+	\State \Call{insert}{Q, z}
+	\EndFor
+	\State \Return \Call{extract\_min}{Q}
+	\EndFunction
+\end{alg}
+Algorytm konstruuje drzewo binarne. $z$ - wierzchołek, $left, right$ - dzieci.
+
+\paragraph{Złożoność czasowa}
+\begin{itemize}[nosep]
+	\item linia 1 -- $\BO(1)$
+	\item linia 2 -- $\BO(n)$
+	\item wnętrze pętli z linii 3 wykona się $n - 1$ razy:
+	      \begin{itemize}[nosep]
+		      \item linia 4 -- $\BO(1)$
+		      \item linie 5, 6 -- $\BO(\log n)$
+		      \item linia 7 -- $\BO(1)$
+		      \item linia 8 -- $\BO(\log n)$
+	      \end{itemize}
+	      Wnętrze pętli zajmuje łącznie czas $\BO(\log n)$.
+\end{itemize}
+\begin{flalign*}
+	\BO(n) + (n - 1) \cdot \BO(\log n) = \BO(n \log n) &  &  &  &
+\end{flalign*}
+Złożoność czasowa algorytmu wynosi $\BO(n \log n)$.
+
+\begin{example}[Konstrukcja drzewa Huffmana]
+	Zaczynamy ze zbiorem wierzchołków: $(n, 1), (s, 3), (t, 4), (a, 10), (i, 12), (r, 13), (e, 15)$.
+
+	% Każdy krok: para minipage obok siebie (opis | drzewo). Bloki są osobnymi
+	% akapitami, więc lista łamie się między stronami. \vspace{0pt} na początku
+	% minipage wymusza wyrównanie [t] do GÓRNEJ krawędzi tekstu (nie do baseline).
+	\newcommand{\huffstep}[2]{%
+		\noindent
+		\begin{minipage}[t]{0.34\textwidth}\vspace{0pt}#1\end{minipage}%
+		\hfill
+		\begin{minipage}[t]{0.62\textwidth}\vspace{0pt}\centering#2\end{minipage}%
+		\par\vspace{2em}%
+	}
+
+	\huffstep{%
+		\textbf{1.} Łączymy $n$ i $s$. \\
+		Zostają: $(t, 4), (a, 10), (i, 12), (r, 13), (e, 15)$.
+	}{%
+		\begin{tikzpicture}[htree]
+			\node {4}
+			child { node {n,1} }
+			child { node {s,3} };
+		\end{tikzpicture}
+	}
+
+	\huffstep{%
+		\textbf{2.} Łączymy $4$ i $t$. \\
+		Zostają: $(a, 10), (i, 12), (r, 13), (e, 15)$.
+	}{%
+		\begin{tikzpicture}[htree]
+			\node {8}
+			child { node {4}
+					child { node {n,1} }
+					child { node {s,3} }
+				}
+			child { node {t,4} };
+		\end{tikzpicture}
+	}
+
+	\huffstep{%
+		\textbf{3.} Łączymy $8$ i $a$. \\
+		Zostają: $(i, 12), (r, 13), (e, 15)$.
+	}{%
+		\begin{tikzpicture}[htree]
+			\node {18}
+			child { node {8}
+					child { node {4}
+							child { node {n,1} }
+							child { node {s,3} }
+						}
+					child { node {t,4} }
+				}
+			child { node {a,10} };
+		\end{tikzpicture}
+	}
+
+	\huffstep{%
+		\textbf{4.} Łączymy $i$ i $r$. \\
+		Zostaje: $(e, 15)$.
+	}{%
+		\begin{tikzpicture}[htree]
+			\node {25}
+			child { node {i,12} }
+			child { node {r,13} };
+		\end{tikzpicture}
+	}
+
+	\huffstep{%
+		\textbf{5.} Łączymy $e$ i $18$.
+	}{%
+		\begin{tikzpicture}[htree]
+			\node {33}
+			child { node {e,15} }
+			child { node {18}
+					child { node {8}
+							child { node {4}
+									child { node {n,1} }
+									child { node {s,3} }
+								}
+							child { node {t,4} }
+						}
+					child { node {a,10} }
+				};
+		\end{tikzpicture}
+	}
+
+	\huffstep{%
+		\textbf{6.} Łączymy $25$ i $33$. \\
+		(ostateczne drzewo kodów)
+	}{%
+		\begin{tikzpicture}[htree]
+			\node {58}
+			child { node {25}
+					child { node {i,12} edge from parent node[elabel left] {0} }
+					child { node {r,13} edge from parent node[elabel right] {1} }
+					edge from parent node[elabel left] {0}
+				}
+			child { node {33}
+					child { node {e,15} edge from parent node[elabel left] {0} }
+					child { node {18}
+							child { node {8}
+									child { node {4}
+											child { node {n,1} edge from parent node[elabel left] {0} }
+											child { node {s,3} edge from parent node[elabel right] {1} }
+											edge from parent node[elabel left] {0}
+										}
+									child { node {t,4} edge from parent node[elabel right] {1} }
+									edge from parent node[elabel left] {0}
+								}
+							child { node {a,10} edge from parent node[elabel right] {1} }
+							edge from parent node[elabel right] {1}
+						}
+					edge from parent node[elabel right] {1}
+				};
+		\end{tikzpicture}
+	}
+
+	Odczytany kod z drzewa w kroku 6:
+	\begin{flalign*}
+		i & \implies 00    &  & \\
+		r & \implies 01    &  & \\
+		e & \implies 10    &  & \\
+		n & \implies 11000 &  & \\
+		s & \implies 11001 &  & \\
+		t & \implies 1101  &  & \\
+		a & \implies 111   &  &
+	\end{flalign*}
+\end{example}

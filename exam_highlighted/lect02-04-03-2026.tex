@@ -1,0 +1,40 @@
+% ════════════════════════════════════════════════════════════════
+\section{Dziel i zwyciężaj}
+% ════════════════════════════════════════════════════════════════
+Algorytm typu \textit{dziel i zwyciężaj} składa się z trzech części
+\begin{enumerate}[nosep]
+	\item \textit{Dziel} -- problem jest dzielony na mniejsze (zwykle rozłączne) podproblemy,
+	\item \textit{Zwyciężaj} -- podproblemy są rozwiązywane rekurencyjnie,
+	\item \textit{Połącz} -- rozwiązanie całego problemu jest konstruowane z rozwiązań podproblemów.
+\end{enumerate}
+
+Złożoność opisuje równanie rekurencyjne $T(n) = a\cdot T\!\left(\frac{n}{b}\right) + f(n)$, które rozwiązujemy uniwersalnym twierdzeniem o rekurencji.
+
+\begin{theorem}[CLRS -- Uniwersalne Twierdzenie o Rekurencji] \label{theorem:utor}
+	Niech $a \geq 1,\ b > 1$ będą stałymi, $f(n)$ funkcją i $T(n) = a\cdot T\left(\frac{n}{b}\right) + f(n)$ (gdzie $\frac{n}{b}$ znaczy $\left\lfloor \frac{n}{b} \right\rfloor$ lub $\left\lceil \frac{n}{b}\right\rceil$).
+	Wtedy
+	\begin{flalign*}
+		T(n) = \begin{cases}
+			       \BT(n^{\log_b a})        & \text{gdy } f(n) = \BO(n^{\log_b a - \epsilon}) \text{ dla pewnego } \epsilon > 0 \\[1ex]
+			       \BT(n^{\log_b a} \log n) & \text{gdy } f(n) = \BT(n^{\log_b a})                                              \\[1ex]
+			       \BT(f(n))                & \text{gdy } \substack{
+			       f(n) = \BM(n^{\log_b a + \epsilon}) \text{ dla pewnego } \epsilon > 0                                        \\
+				       a\cdot f(n/b) \leq c\cdot f(n) \text{ dla pewnej stałej } c < 1 \text{ dla dużych } n
+			       }
+		       \end{cases} &  &  &  &
+	\end{flalign*}
+\end{theorem}
+
+W praktyce, gdy człon nierekurencyjny jest wielomianowy ($f(n) = \BT(n^k)$), wystarczy porównać $b^k$ z $a$:
+
+\begin{conclusion}
+	Niech $a\geq 1,\ b>1$ będą stałymi, a $f(n) = \BT(n^k)$ oraz $T(n) = a\cdot T\left(\frac{n}{b}\right) + f(n)$.
+	Wtedy
+	\begin{flalign*}
+		T(n) = \begin{cases}
+			       \BT(n^{\log_b a}) & \text{gdy } b^k < a \\[1ex]
+			       \BT(n^k \log n)   & \text{gdy } b^k = a \\[1ex]
+			       \BT(n^k)          & \text{gdy } b^k > a
+		       \end{cases} &  &  &  &
+	\end{flalign*}
+\end{conclusion}

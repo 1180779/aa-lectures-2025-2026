@@ -26,7 +26,7 @@
 \usetikzlibrary{patterns}
 
 \usepackage{tcolorbox}
-\tcbuselibrary{breakable}
+\tcbuselibrary{breakable,skins}
 
 \usepackage{caption}
 
@@ -66,6 +66,75 @@
 \definecolor{placeholdercolor}{RGB}{160, 160, 160}
 \definecolor{rowA}{RGB}{235, 242, 250}
 \definecolor{dygresjagray}{RGB}{105, 105, 105}% treść dygresji — wyszarzona, materiał opcjonalny
+\definecolor{obowiazkowybg}{RGB}{255, 252, 245}% tło dowodów obowiązkowych na egzaminie
+\definecolor{obowiazkowyline}{RGB}{230, 200, 150}% nasycona linia na granicy podświetlenia
+
+% Pełnoszerokościowe podświetlenie (do krawędzi strony) materiału obowiązkowego.
+% Tło rozlewa się na marginesy (margin=2.5cm), a treść pozostaje w bloku tekstu.
+% breakable: poprawnie łamie się między stronami.
+\newtcolorbox{obowiazkowy}{%
+  breakable, enhanced jigsaw,
+  colback=obowiazkowybg,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  grow to left by=2.5cm, grow to right by=2.5cm,
+  left=2.5cm, right=2.5cm,
+  top=8pt, bottom=8pt,
+  boxsep=0pt,
+  % Na stronach w całości objętych ramką tło dochodzi do górnej i dolnej
+  % krawędzi kartki: w miejscach łamania strony dorysowujemy pas tła na
+  % marginesie -- na dole strony, która się łamie, i na górze kontynuacji.
+  % Pierwsza strona zaczyna się przy tekście, ostatnia kończy przy tekście.
+  % (3cm > margines 2.5cm, więc pas pewnie dochodzi do krawędzi kartki.)
+  % Margines górny/dolny zalewamy tłem tylko wtedy, gdy segment realnie sięga
+  % krawędzi bloku tekstu (tj. strona jest w całości objęta ramką). tcolorbox
+  % bywa, że krótką ramkę dzieli na „first” + pusty „last” -- taki krótki segment
+  % traktujemy jak zakończenie (linia), a nie jak łamanie (zalanie marginesu).
+  % \obyy = wysokość bieżącego segmentu (north - south).
+  % Linia górna na początku, dolna na końcu; nasycony kolor = lepszy kontrast.
+  % \obyy = wysokość segmentu (north-south); zawiera padding (\(\approx\)16pt),
+  % więc „pusty ogon” ma ok. 0,5cm. Próg 0,9cm odrzuca takie segmenty-widma
+  % (rysujemy nic). Próg 4cm = segment realnie wypełnia stronę (zalewamy margines).
+  overlay unbroken={%
+    \pgfpointdiff{\pgfpointanchor{frame}{south}}{\pgfpointanchor{frame}{north}}%
+    \pgfgetlastxy{\obxx}{\obyy}%
+    \ifdim\obyy>0.9cm\relax
+      \fill[obowiazkowyline] (frame.north west) rectangle ([yshift=-1.5pt]frame.north east);
+      \fill[obowiazkowyline] (frame.south west) rectangle ([yshift=1.5pt]frame.south east);
+    \fi},
+  overlay first={%
+    \pgfpointdiff{\pgfpointanchor{frame}{south}}{\pgfpointanchor{frame}{north}}%
+    \pgfgetlastxy{\obxx}{\obyy}%
+    \ifdim\obyy>4cm\relax
+      \fill[obowiazkowyline] (frame.north west) rectangle ([yshift=-1.5pt]frame.north east);
+      \fill[obowiazkowybg] (frame.south west) rectangle ([yshift=-3cm]frame.south east);
+    \else\ifdim\obyy>0.9cm\relax
+      \fill[obowiazkowyline] (frame.north west) rectangle ([yshift=-1.5pt]frame.north east);
+      \fill[obowiazkowyline] (frame.south west) rectangle ([yshift=1.5pt]frame.south east);
+    \fi\fi},
+  overlay middle={%
+    \pgfpointdiff{\pgfpointanchor{frame}{south}}{\pgfpointanchor{frame}{north}}%
+    \pgfgetlastxy{\obxx}{\obyy}%
+    \ifdim\obyy>0.9cm\relax
+      \fill[obowiazkowybg] (frame.south west) rectangle ([yshift=-3cm]frame.south east);
+      \fill[obowiazkowybg] (frame.north west) rectangle ([yshift=3cm]frame.north east);
+    \fi},
+  overlay last={%
+    \pgfpointdiff{\pgfpointanchor{frame}{south}}{\pgfpointanchor{frame}{north}}%
+    \pgfgetlastxy{\obxx}{\obyy}%
+    \ifdim\obyy>0.9cm\relax
+      \fill[obowiazkowybg] (frame.north west) rectangle ([yshift=3cm]frame.north east);
+      \fill[obowiazkowyline] (frame.south west) rectangle ([yshift=1.5pt]frame.south east);
+    \fi},
+}
+% Usuń resztkowy odstęp pionowy na końcu ramki (np. \topsep zamykający proof),
+% który potrafi przelać się na kolejną stronę jako pusty segment tcolorbox
+% i zostawić blady pasek tła (colback rysuje się dla każdego segmentu).
+\AtEndEnvironment{obowiazkowy}{\par\removelastskip}
+% Zarezerwuj miejsce PRZED otwarciem ramki. Inaczej \azNeedSpace twierdzenia
+% wewnątrz świeżo otwartej ramki wymusza łamanie strony przy pustej zawartości,
+% tworząc pusty pierwszy segment (blady pasek tła u góry/dołu strony).
+\BeforeBeginEnvironment{obowiazkowy}{\Needspace*{6\baselineskip}}
 
 \titleformat{\section}{\large\bfseries\color{accent}}{}{0em}{}[\titlerule]
 \titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
