@@ -1,3 +1,5 @@
+Przypomnijmy, że $S = \{z_1, \ldots, z_n\}$ to zbiór wszystkich $n$ zadań, czyli $n = |S|$.
+
 Zbiór $A \subseteq S$ nazywamy \uemph{wolnym od kar}, jeśli istnieje harmonogram zbioru $A$, w którym wszystkie zadania są terminowe.
 
 Dla $t \in \{0, 1, \ldots, n\}$ niech
@@ -19,12 +21,12 @@ Dla $t \in \{0, 1, \ldots, n\}$ niech
 	Niech $S$ -- zbiór zadań o jednostkowym czasie wykonania, a $\mathcal{A}$ -- rodzina zbiorów wolnych od kar. Wtedy $(S, \mathcal{A})$ jest matroidem.
 \end{theorem}
 \begin{proof}
-	Sprawdzamy własności z definicji matroidu:
+	Sprawdzamy własności z definicji matroidu (Definicja~\ref{def:matroid}):
 	\begin{enumerate}
-		\item Oczywiste. $\checkmark$
-		\item Dla każdego $i \in [n]$ zachodzi $\{z_i\} \in \mathcal{A}$, więc $\mathcal{A} \neq \emptyset$. $\checkmark$
-		\item Niech $A \in \mathcal{A}$, $B \subseteq A$. Istnieje harmonogram zbioru $A$, w którym wszystkie zadania są terminowe. Harmonogram zbioru $B$ powstały z usunięcia z tego harmonogramu zadań z $A \setminus B$ jest harmonogramem zbioru $B$, w którym wszystkie zadania są terminowe. Zatem $B \in \mathcal{A}$.
-		\item Niech $A, B \in \mathcal{A}$, $|B| > |A|$.\\
+		\item[(wł.\ \ref{matroid:skończoność})] Oczywiste. $\checkmark$
+		\item[(wł.\ \ref{matroid:niepustość})] Dla każdego $i \in [n]$ zachodzi $\{z_i\} \in \mathcal{A}$, więc $\mathcal{A} \neq \emptyset$. $\checkmark$
+		\item[(wł.\ \ref{matroid:dziedziczność})] Niech $A \in \mathcal{A}$ (czyli $A$ jest wolny od kar) i $B \subseteq A$. Z~definicji istnieje harmonogram zbioru $A$, w którym wszystkie zadania są terminowe. Usuwając z~tego harmonogramu zadania należące do $A \setminus B$, otrzymujemy harmonogram zbioru $B$, w którym wszystkie zadania nadal są terminowe (usunięcie zadań nie opóźnia pozostałych). Zatem $B$ jest wolny od kar, czyli $B \in \mathcal{A}$.
+		\item[(wł.\ \ref{matroid:wymiana})] Niech $A, B \in \mathcal{A}$, $|B| > |A|$.\\
 		      Niech $k \in \{0, 1, \ldots, n\}$ będzie największą liczbą $t$ taką, że $N_t(B) \leq N_t(A)$.\\
 		      $k$ jest dobrze zdefiniowane, bo $N_0(B) = 0 = N_0(A)$.\\
 		      Mamy $N_n(B) = |B| > |A| = N_n(A)$, więc $k < n$.\\
@@ -57,8 +59,9 @@ Złożoność czasowa algorytmu wynosi:
 \end{flalign*}
 
 \begin{example}[Szeregowanie zadań z deadlinami]
-	\begin{table}[H]
-		\centering
+	Rozważmy zadania o~następujących deadlinach i~karach:
+	\begin{center}
+		\addvspace{\medskipamount}
 		\renewcommand{\arraystretch}{1.2}
 		\begin{NiceTabular}{c|cccccccc}[margin,hvlines]
 			$i$   & 1  & 2  & 3  & 4  & 5  & 6  & 7  & 8  \\
@@ -66,18 +69,20 @@ Złożoność czasowa algorytmu wynosi:
 			$d_i$ & 3  & 2  & 2  & 3  & 1  & 4  & 6  & 5  \\
 			$w_i$ & 80 & 70 & 60 & 50 & 40 & 30 & 20 & 10
 		\end{NiceTabular}
-	\end{table}
 
-	Zadania są już posortowane w porządku nierosnącym względem wagi ($w_1 \geq w_2 \geq \ldots \geq w_8$). Kolejne iteracje algorytmu Greedy (poniżej $A$ wypisane w kolejności niemalejącej po deadlinach):
+		\addvspace{\medskipamount}
+	\end{center}
+
+	Zadania są już posortowane w porządku nierosnącym względem wagi ($w_1 \geq w_2 \geq \ldots \geq w_8$). Kolejne iteracje algorytmu Greedy (poniżej $A$ wypisane w kolejności niemalejącej po deadlinach; po prawej profil $N(A) = (N_1, \ldots, N_8)$, który musi spełniać $N_t \leq t$, czyli nie przekraczać $(1, 2, \ldots, 8)$):
 	\begin{enumerate}[nosep]
-		\item $A = (z_1)$
-		\item $A = (z_2, z_1)$
-		\item $A = (z_2, z_3, z_1)$
+		\item $A = (z_1)$ \hfill $N(A) = (0, 0, 1, 1, 1, 1, 1, 1)$
+		\item $A = (z_2, z_1)$ \hfill $N(A) = (0, 1, 2, 2, 2, 2, 2, 2)$
+		\item $A = (z_2, z_3, z_1)$ \hfill $N(A) = (0, 2, 3, 3, 3, 3, 3, 3)$
 		\item $A = (z_2, z_3, z_1)$ \quad ($z_4$ nie dodajemy, bo $N_3(A \cup \{z_4\}) = 4 > 3$)
 		\item $A = (z_2, z_3, z_1)$ \quad ($z_5$ nie dodajemy, bo $N_2(A \cup \{z_5\}) = 3 > 2$)
-		\item $A = (z_2, z_3, z_1, z_6)$
-		\item $A = (z_2, z_3, z_1, z_6, z_7)$
-		\item $A = (z_2, z_3, z_1, z_6, z_8, z_7)$
+		\item $A = (z_2, z_3, z_1, z_6)$ \hfill $N(A) = (0, 2, 3, 4, 4, 4, 4, 4)$
+		\item $A = (z_2, z_3, z_1, z_6, z_7)$ \hfill $N(A) = (0, 2, 3, 4, 4, 5, 5, 5)$
+		\item $A = (z_2, z_3, z_1, z_6, z_8, z_7)$ \hfill $N(A) = (0, 2, 3, 4, 5, 6, 6, 6)$
 	\end{enumerate}
 
 	Harmonogram (zadania terminowe posortowane po deadlinach, potem zadania spóźnione):
