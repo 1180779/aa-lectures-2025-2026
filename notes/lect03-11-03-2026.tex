@@ -99,7 +99,7 @@ Opis algorytmu:
 	\item[jeśli $|P| > 3$] ~
 	      \begin{itemize}
 		      \item[\uemph{Dziel:}] Dzielimy punkty $P$ pionową prostą $l$ na dwa podzbiory $P_L$ i $P_R$ na lewo i na prawo
-		            od $l$ tak, że $|P_L| = \left\lceil \frac{P}{2} \right\rceil,\ |P_R| = \left\lfloor \frac{P}{2} \right\rfloor$.
+		            od $l$ tak, że $|P_L| = \left\lceil \frac{|P|}{2} \right\rceil,\ |P_R| = \left\lfloor \frac{|P|}{2} \right\rfloor$.
 		            Dzielimy tablicę $X$ na $X_L$ i $X_R$ zawierające punkty odpowiednio $P_L$ i $P_R$ posortowane w porządku
 		            niemalejącym względem pierwszej współrzędnej. Podobnie dzielimy $Y$ na $Y_L$ i $Y_R$ zawierające
 		            odpowiednio punkty z $P_L$ i $P_R$ posortowane w porządku niemalejącym po drugiej współrzędnej.
@@ -126,8 +126,8 @@ Opis algorytmu:
 				            \fill[red!70!black] \p circle (2.6pt);
 			            \end{tikzpicture}
 			            \caption{Podział zbioru $P$ pionową prostą $l$ na podzbiory $P_L$
-				            (na~lewo) i~$P_R$ (na~prawo) o~rozmiarach $|P_L| = \left\lceil \frac{P}{2} \right\rceil$
-				            oraz $|P_R| = \left\lfloor \frac{P}{2} \right\rfloor$.}
+				            (na~lewo) i~$P_R$ (na~prawo) o~rozmiarach $|P_L| = \left\lceil \frac{|P|}{2} \right\rceil$
+				            oraz $|P_R| = \left\lfloor \frac{|P|}{2} \right\rfloor$.}
 			            \label{fig:closestpoints:split}
 		            \end{figure}
 
@@ -147,7 +147,7 @@ Opis algorytmu:
 		            \begin{enumerate}
 			            \item Tworzymy tablicę $Y'$ otrzymaną z $Y$ poprzez usunięcie punktów spoza pasa. $Y'$ jest
 			                  posortowany w porządku niemalejącym względem drugiej współrzędnej.
-			            \item Dla każedego punktu $p$ z $Y'$ sprawdzamy odległość między $p$, a $p'$ dla $7$ kolejnych
+			            \item Dla każdego punktu $p$ z $Y'$ sprawdzamy odległość między $p$, a $p'$ dla $7$ kolejnych
 			                  punktów $p'$ z $Y'$. Algorytm oblicza najmniejszą odległość $\delta'$ i zapamiętuje ją i odpowiednią
 			                  parę punktów.
 			            \item Jeśli $\delta' < \delta$ to pionowy pas zawiera parę punktów w mniejszej odległości niż pary znalezione
@@ -159,11 +159,11 @@ Opis algorytmu:
 
 \begin{proof}[Dowód poprawności]
 	Jedyną rzeczą, która nie jest oczywista jest fakt, że sprawdzamy tylko $7$ następnych punktów po $p$ w $Y'$ w fazie połącz.
-	Przypuśćmy, że $p, q$ są parą punktów w najmniejszej odległości w $P$ i $\delta(p,q) = \delta'$. Niech
+	Przypuśćmy, że $p, q$ są parą punktów w najmniejszej odległości w $P$ i $d(p,q) = \delta'$. Niech
 	$p = (x_p, y_p),\ q = (x_q, y_q)$. Bez straty ogólności załóżmy $y_p \leq y_q$. Pokażemy, że algorytm znajdzie
 	tę parę punktów. Przypuśćmy, że nie. Wtedy istnieje co najmniej $7$ punktów pomiędzy $p$ i $q$ w $Y'$.
 	Niech $r = (x_r, y_r)$ będzie jednym z nich. Skoro $d(p,q) < \delta$ to
-	$y_q - y_p = |y_q - y_p| \leq \sqrt{(x_p - x_q)^2 + (y_p - y_q)^2} = \delta(p, q) \leq \delta$.
+	$y_q - y_p = |y_q - y_p| \leq \sqrt{(x_p - x_q)^2 + (y_p - y_q)^2} = d(p, q) < \delta$.
 	Ponadto $y_r$ musi być między $y_p$ i $y_q$: $y_p \leq y_r \leq y_q$, więc $y_r - y_p \leq y_q - y_p < \delta$
 	zatem co najmniej 9 punktów z $P$ w prostokącie $2\delta\times\delta$ ograniczonym poziomymi liniami
 	$y = y_p,\ y = y_p + \delta$.
@@ -258,6 +258,16 @@ Opis algorytmu:
 
 	Zatem wystarczy sprawdzić tylko $7$ następnych punktów po $p$ w $Y'$.
 \end{proof}
+
+\begin{dygresja}
+	Powyższy dowód prowadzimy \emph{nie wprost}, ale tę samą granicę $7$ można dostać równie dobrze \emph{wprost}, zliczając punkty. Oba rozumowania korzystają z tego samego faktu geometrycznego (w~kwadracie $\delta\times\delta$ mieści się co najwyżej $4$ punkty parami oddalone o~co najmniej $\delta$) i~są równoważne -- różnią się jedynie sposobem zliczania.
+
+	\textbf{Wersja wprost.} Ustalmy punkt $p$ z~$Y'$. Każdy punkt $p'$, którego odległość od $p$ chcemy sprawdzić, leży w~prostokącie $2\delta\times\delta$ ograniczonym pasem szerokości $2\delta$ wokół $l$ oraz liniami $y = y_p$ i~$y = y_p + \delta$ (bo $Y'$ jest posortowane względem~$y$, więc patrzymy tylko w~stronę rosnącego~$y$). Podzielmy ten prostokąt prostą~$l$ na lewy i~prawy kwadrat $\delta\times\delta$. Lewy kwadrat leży w~całości w~$P_L$, więc wszystkie jego punkty są parami oddalone o~co najmniej $\delta_L \geq \delta$; tak samo prawy w~$P_R$. Stąd w~każdym kwadracie jest co najwyżej $4$ punkty, czyli w~całym prostokącie co najwyżej $8$. Jednym z~nich jest samo $p$, więc pozostaje co najwyżej $7$ punktów do sprawdzenia.
+
+	Zauważmy, że podział prostą~$l$ jest tu istotny: gdyby traktować prostokąt $2\delta\times\delta$ jako jeden blok, mógłby on zawierać więcej niż $8$ punktów parami oddalonych o~$\geq\delta$ (bo punkty z~$P_L$ i~$P_R$ mogą być blisko siebie). Dopiero rozbicie na dwa kwadraty $\delta\times\delta$, z~których każdy leży po jednej stronie~$l$, gwarantuje ograniczenie $4$.
+
+	Granice $8$ (wprost) i~$9$ (nie wprost) nie są sprzeczne: w~dowodzie nie wprost zakładamy, że algorytm \emph{pomija} parę $p,q$, co wymusiłoby co najmniej $9$ punktów w~prostokącie, a~więc $\geq 5$ w~jednym kwadracie -- co jest niemożliwe. Wersja wprost mówi natomiast, że więcej niż $8$ (a~więc i~$9$) punktów po~prostu się tam nie zmieści.
+\end{dygresja}
 
 \paragraph{Analiza złożoności czasowej}
 Na początku musimy posortować tablicę $X$ i $Y$. To zajmuje $\BO(n\log n)$. Jeśli $X$ i $Y$ są już posortowane

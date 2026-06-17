@@ -47,7 +47,7 @@ AVC zwraca pokrycie złożone z $2m$ wierzchołków, natomiast optymalne pokryci
 \begin{definition}
 	Niech $X$ -- zbiór skończony, $|X| = n$, $\mathcal{F} \subseteq 2^X$ -- rodzina podzbiorów zbioru $X$ taka, że $\bigcup_{S \in \mathcal{F}} S = X$ (każdy element $X$ należy do co najmniej jednego zbioru z $\mathcal{F}$).
 
-	Rodzina $\mathcal{A} \subseteq \mathcal{F}$ jest \uemph{pokryciem} zbioru $X$, jeśli $\bigcup_{S \in \mathcal{A}} S = X$.
+	Rodzina $\mathcal{C} \subseteq \mathcal{F}$ jest \uemph{pokryciem}\footnote{Oznaczenia za CLRS: $X$ -- zbiór bazowy, $\mathcal{F}$ (\emph{family}) -- rodzina dostępnych podzbiorów, $\mathcal{C}$ (\emph{cover}) -- wybrane pokrycie.} zbioru $X$, jeśli $\bigcup_{S \in \mathcal{C}} S = X$.
 \end{definition}
 
 \definecolor{Scol1}{HTML}{1F77B4}  % blue
@@ -103,7 +103,7 @@ AVC zwraca pokrycie złożone z $2m$ wierzchołków, natomiast optymalne pokryci
 	\vspace{-\baselineskip}
 	\begin{itemize}[nosep]
 		\item Instancja: $(X, \mathcal{F})$, gdzie $X$ -- zbiór skończony, $|X| = n$, $\mathcal{F} \subseteq 2^X$ taki, że $\bigcup_{S \in \mathcal{F}} S = X$.
-		\item Problem: znaleźć pokrycie $\mathcal{A} \subseteq \mathcal{F}$ minimalizujące $|\mathcal{A}|$.
+		\item Problem: znaleźć pokrycie $\mathcal{C} \subseteq \mathcal{F}$ minimalizujące $|\mathcal{C}|$.
 	\end{itemize}
 \end{problem}
 
@@ -116,18 +116,18 @@ AVC zwraca pokrycie złożone z $2m$ wierzchołków, natomiast optymalne pokryci
 \begin{alg}{Greedy Set Cover}{alg:gsc}
 	\FunctionNN{GSC}{$X, \mathcal{F}$}
 	\State $U \Assign X$ \Comment{$U$ -- zbiór jeszcze niepokrytych elementów}
-	\State $\mathcal{A} \Assign \emptyset$ \Comment{$\mathcal{A}$ -- rozwiązanie}
+	\State $\mathcal{C} \Assign \emptyset$ \Comment{$\mathcal{C}$ -- rozwiązanie}
 	\While{$U \neq \emptyset$}
 	\State wybierz $S \in \mathcal{F}$ maksymalizujący $|S \cap U|$
-	\State $\mathcal{A} \Assign \mathcal{A} \cup \{S\}$
+	\State $\mathcal{C} \Assign \mathcal{C} \cup \{S\}$
 	\State $U \Assign U \setminus S$
 	\EndWhile
-	\State \Return $\mathcal{A}$
+	\State \Return $\mathcal{C}$
 	\EndFunction
 \end{alg}
 
 \begin{dygresja}
-	Idea jest zachłanna: w~każdym kroku patrzymy wyłącznie na bieżący stan i~dokładamy do rozwiązania ten zbiór $S \in \mathcal{F}$, który pokrywa najwięcej spośród jeszcze niepokrytych elementów (maksymalizuje $|S \cap U|$), nie przejmując się skutkami dla kolejnych kroków. Zmienna $U$ trzyma elementy pozostające do pokrycia: startuje od całego $X$, a~po każdym wyborze odejmujemy od niej wybrany zbiór ($U \Assign U \setminus S$), więc kryterium $|S \cap U|$ premiuje zbiory wnoszące jak najwięcej \emph{nowych} elementów. Pętla kręci się, aż $U$ opustoszeje, czyli aż $\mathcal{A}$ pokryje całe $X$. Zachłanność nie gwarantuje rozwiązania optymalnego (do tego wrócimy przy analizie współczynnika aproksymacji), ale daje pokrycie szybko i~prosto.
+	Idea jest zachłanna: w~każdym kroku patrzymy wyłącznie na bieżący stan i~dokładamy do rozwiązania ten zbiór $S \in \mathcal{F}$, który pokrywa najwięcej spośród jeszcze niepokrytych elementów (maksymalizuje $|S \cap U|$), nie przejmując się skutkami dla kolejnych kroków. Zmienna $U$ trzyma elementy pozostające do pokrycia: startuje od całego $X$, a~po każdym wyborze odejmujemy od niej wybrany zbiór ($U \Assign U \setminus S$), więc kryterium $|S \cap U|$ premiuje zbiory wnoszące jak najwięcej \emph{nowych} elementów. Pętla kręci się, aż $U$ opustoszeje, czyli aż $\mathcal{C}$ pokryje całe $X$. Zachłanność nie gwarantuje rozwiązania optymalnego (do tego wrócimy przy analizie współczynnika aproksymacji), ale daje pokrycie szybko i~prosto.
 \end{dygresja}
 
 \paragraph{Poprawność}
@@ -156,26 +156,26 @@ Ostatecznie złożoność GSC wynosi $\BO(|X| \cdot |\mathcal{F}| \cdot \min\{|X
 \end{theorem}
 \begin{proof}
 	Niech $(X, \mathcal{F})$ będzie instancją wejściową.\\
-	$\mathcal{A}^*$ -- optymalne pokrycie dla $(X, \mathcal{F})$.\\
-	$\mathcal{A}$ -- pokrycie dla $(X, \mathcal{F})$ znalezione przez GSC.
+	$\mathcal{C}^*$ -- optymalne pokrycie dla $(X, \mathcal{F})$.\\
+	$\mathcal{C}$ -- pokrycie dla $(X, \mathcal{F})$ znalezione przez GSC.
 
 	Niech $S_i$ będzie zbiorem wybranym przez algorytm w~linii 4 w~$i$-tej iteracji pętli. Przyznajemy koszt
 	\begin{flalign*}
 		c_x = \frac{1}{|S_i \setminus (S_1 \cup S_2 \cup \ldots \cup S_{i-1})|} &  &  &  &
 	\end{flalign*}
-	każdemu elementowi $x \in S_i \setminus (S_1 \cup \ldots \cup S_{i-1})$ ($S_i \setminus (S_1 \cup \ldots \cup S_{i-1})$ to zbiór elementów pokrytych po raz pierwszy w~$i$-tej iteracji pętli). Całkowity koszt przyznany podczas jednej iteracji wynosi $1$, a~ponieważ $|\mathcal{A}|$ jest liczbą iteracji pętli, to
+	każdemu elementowi $x \in S_i \setminus (S_1 \cup \ldots \cup S_{i-1})$ ($S_i \setminus (S_1 \cup \ldots \cup S_{i-1})$ to zbiór elementów pokrytych po raz pierwszy w~$i$-tej iteracji pętli). Całkowity koszt przyznany podczas jednej iteracji wynosi $1$, a~ponieważ $|\mathcal{C}|$ jest liczbą iteracji pętli, to
 	\begin{flalign*}
-		|\mathcal{A}| = \sum_{x \in X} c_x &  &  &  &
+		|\mathcal{C}| = \sum_{x \in X} c_x &  &  &  &
 	\end{flalign*}
 
-	Rozważmy sumę $\sum_{S \in \mathcal{A}^*} \sum_{x \in S} c_x$. Skoro $\mathcal{A}^*$ jest pokryciem, każdy $x \in X$ występuje w tej sumie co najmniej raz, więc
+	Rozważmy sumę $\sum_{S \in \mathcal{C}^*} \sum_{x \in S} c_x$. Skoro $\mathcal{C}^*$ jest pokryciem, każdy $x \in X$ występuje w tej sumie co najmniej raz, więc
 	\begin{flalign*}
-		\sum_{S \in \mathcal{A}^*} \sum_{x \in S} c_x \geq \sum_{x \in X} c_x = |\mathcal{A}| &  &  &  &
+		\sum_{S \in \mathcal{C}^*} \sum_{x \in S} c_x \geq \sum_{x \in X} c_x = |\mathcal{C}| &  &  &  &
 	\end{flalign*}
 
 	Pokażemy, że $\sum_{x \in S} c_x \leq H(|S|)$ dla każdego $S \in \mathcal{F}$.
 
-	Niech $S \in \mathcal{F}$. Dla $i \in \{1, 2, \ldots, |\mathcal{A}|\}$ niech $n_i = |S \setminus (S_1 \cup \ldots \cup S_i)|$ (liczba elementów w~$S$, które nie są pokryte po $i$-tej iteracji pętli) i~niech $n_0 = |S|$.
+	Niech $S \in \mathcal{F}$. Dla $i \in \{1, 2, \ldots, |\mathcal{C}|\}$ niech $n_i = |S \setminus (S_1 \cup \ldots \cup S_i)|$ (liczba elementów w~$S$, które nie są pokryte po $i$-tej iteracji pętli) i~niech $n_0 = |S|$.
 
 	Niech $k$ będzie najmniejszą liczbą taką, że $n_k = 0$. Wtedy $S$ jest pokryty przez $S_1 \cup S_2 \cup \ldots \cup S_k$. Oczywiście $n_{i-1} \geq n_i$ dla $i \in [k]$, a~$n_{i-1} - n_i$ to liczba elementów z~$S$ pokrytych po raz pierwszy przez $S_i$.
 
@@ -197,11 +197,11 @@ Ostatecznie złożoność GSC wynosi $\BO(|X| \cdot |\mathcal{F}| \cdot \min\{|X
 
 	Ostatecznie mamy:
 	\begin{align*}
-		|\mathcal{A}| = \sum_{x \in X} c_x \leq \sum_{S \in \mathcal{A}^*} \sum_{x \in S} c_x & \leq \sum_{S \in \mathcal{A}^*} H(|S|) \leq \sum_{S \in \mathcal{A}^*} \max\{H(|S|) : S \in \mathcal{A}^*\}                                                            \\
-		                                                                                      & = \vphantom{\sum_{S \in \mathcal{A}^*} H(|S|)} |\mathcal{A}^*| \cdot \max\{H(|S|) : S \in \mathcal{A}^*\}                                                              \\
-		                                                                                      & \leq \vphantom{\sum_{S \in \mathcal{A}^*} H(|S|)} |\mathcal{A}^*| \cdot \max\{H(|S|) : S \in \mathcal{F}\} = |\mathcal{A}^*| \cdot H(\max\{|S| : S \in \mathcal{F}\}),
+		|\mathcal{C}| = \sum_{x \in X} c_x \leq \sum_{S \in \mathcal{C}^*} \sum_{x \in S} c_x & \leq \sum_{S \in \mathcal{C}^*} H(|S|) \leq \sum_{S \in \mathcal{C}^*} \max\{H(|S|) : S \in \mathcal{C}^*\}                                                            \\
+		                                                                                      & = \vphantom{\sum_{S \in \mathcal{C}^*} H(|S|)} |\mathcal{C}^*| \cdot \max\{H(|S|) : S \in \mathcal{C}^*\}                                                              \\
+		                                                                                      & \leq \vphantom{\sum_{S \in \mathcal{C}^*} H(|S|)} |\mathcal{C}^*| \cdot \max\{H(|S|) : S \in \mathcal{F}\} = |\mathcal{C}^*| \cdot H(\max\{|S| : S \in \mathcal{F}\}),
 	\end{align*}
-	więc $\dfrac{|\mathcal{A}|}{|\mathcal{A}^*|} \leq H(\max\{|S| : S \in \mathcal{F}\})$.
+	więc $\dfrac{|\mathcal{C}|}{|\mathcal{C}^*|} \leq H(\max\{|S| : S \in \mathcal{F}\})$.
 \end{proof}
 
 \begin{conclusion}

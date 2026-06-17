@@ -6,12 +6,12 @@ Czasami gdy zaimplementujemy jakąś formę rekurencyjną dostajemy algorytm dzi
 Powodem może być to, że jakieś wartości obliczane są wielokrotnie.
 
 \begin{problem}[liczb Fibonacciego]
-	\begin{flalign*}
-		\begin{cases}
-			F_0 = F_1 = 1               & n = 0, 1 \\[0.5ex]
-			F_n = F_{n - 1} + F_{n - 2} & n \geq 2
-		\end{cases} &  & \text{Zadanie: Obliczyć } n\text{-tą liczbę Fibonacciego} &  &
-	\end{flalign*}
+\begin{flalign*}
+	\begin{cases}
+		F_0 = F_1 = 1               & n = 0, 1 \\[0.5ex]
+		F_n = F_{n - 1} + F_{n - 2} & n \geq 2
+	\end{cases} &  & \text{Zadanie: Obliczyć } n\text{-tą liczbę Fibonacciego} &  &
+\end{flalign*}
 \end{problem}
 
 \begin{alg}{Algorytm naiwny Fib1}{alg:fib1}
@@ -187,7 +187,7 @@ Operacją dominującą jest mnożenie w linii 5. Mamy $p \cdot q \cdot r$ mnoże
 \end{example}
 
 \begin{problem}[mnożenia ciągu macierzy]
-	Dla danego ciągu macierzy $(A_1, A_2, \dots, A_n)$, gdzie $A_i$ jest macierzą $p_{i-1} \times p_i$ (cały ciąg wymiarów zapisujemy jednym ciągiem $p = (p_0, p_1, \dots, p_n)$ -- kolejne macierze dzielą wspólny wymiar, więc $n$ macierzy opisuje $n + 1$ liczb), znajdź kolejność wykonywania mnożeń minimalizującą liczbę mnożeń skalarnych użytych do obliczenia iloczynu $A_1 \cdot A_2 \cdot \dots \cdot A_n$.
+Dla danego ciągu macierzy $(A_1, A_2, \dots, A_n)$, gdzie $A_i$ jest macierzą $p_{i-1} \times p_i$ (cały ciąg wymiarów zapisujemy jednym ciągiem $p = (p_0, p_1, \dots, p_n)$ -- kolejne macierze dzielą wspólny wymiar, więc $n$ macierzy opisuje $n + 1$ liczb), znajdź kolejność wykonywania mnożeń minimalizującą liczbę mnożeń skalarnych użytych do obliczenia iloczynu $A_1 \cdot A_2 \cdot \dots \cdot A_n$.
 \end{problem}
 
 Ile jest różnych sposobów obliczenia tego iloczynu? Innymi słowy, na ile sposobów możemy poprawnie wstawić nawiasy w iloczynie $A_1 \cdot A_2 \cdot \dots \cdot A_n$?
@@ -625,8 +625,8 @@ $Z = (z_1, \dots, z_k)$ jest podciągiem $X$, jeśli istnieje rosnący ciąg ind
 \end{example}
 
 \begin{problem}[najdłuższego wspólnego podciągu]
-	Dane są ciągi $X = (x_1, \dots, x_m)$ oraz $Y = (y_1, \dots, y_n)$.
-	Należy znaleźć najdłuższy wspólny podciąg (LCS -- \textit{Longest Common Subsequence}) $X$ i $Y$, czyli najdłuższy ciąg, który jest podciągiem zarówno $X$, jak i $Y$.
+Dane są ciągi $X = (x_1, \dots, x_m)$ oraz $Y = (y_1, \dots, y_n)$.
+Należy znaleźć najdłuższy wspólny podciąg (LCS -- \textit{Longest Common Subsequence}) $X$ i $Y$, czyli najdłuższy ciąg, który jest podciągiem zarówno $X$, jak i $Y$.
 \end{problem}
 
 Wszystkich podciągów $X$ jest $2^m$, więc algorytm sprawdzający wszystkie podciągi $X$ działa w czasie wykładniczym.
@@ -737,7 +737,7 @@ Niech $c(i, j)$ oznacza długość LCS ciągów $X_i$ i $Y_j$.
 \end{flalign*}
 
 Będziemy też używać tablicy $b(i, j)$, aby znaleźć sam podciąg LCS.
-Tablice mają wymiary: $c[0 \dots m, 0 \dots n]$ oraz $b[1 \dots m, 1 \dots n]$. Wartości w tablicy kierunków to $b(i, j) \in \{\nwarrow, \uparrow, \leftarrow\}$.
+Tablica $c$ ma wymiary $(m+1) \times (n+1)$ (indeksowana od $0$), a~$b$ -- $m \times n$ (indeksowana od $1$). Wartości w tablicy kierunków to $b(i, j) \in \{\nwarrow, \uparrow, \leftarrow\}$.
 
 \begin{alg}{Algorytm obliczający długość LCS}{alg:lcs}
 	\FunctionNN{LCS}{$X, Y$}
@@ -865,14 +865,14 @@ Dla powyższego przykładu otrzymamy: $(B, C, B, A)$.
 	przy $\uparrow$ idziemy do $(i - 1, j)$, a~przy $\leftarrow$ do $(i, j - 1)$
 	(bez wypisywania).
 	\begin{align*}
-		(7, 6) &\xrightarrow{\uparrow}     (6, 6)
-		        \xrightarrow{\nwarrow}      (5, 5) \quad[\,x_6 = A\,] \\
-		       &\xrightarrow{\uparrow}      (4, 5)
-		        \xrightarrow{\nwarrow}      (3, 4) \quad[\,x_4 = B\,] \\
-		       &\xrightarrow{\leftarrow}    (3, 3)
-		        \xrightarrow{\nwarrow}      (2, 2) \quad[\,x_3 = C\,] \\
-		       &\xrightarrow{\leftarrow}    (2, 1)
-		        \xrightarrow{\nwarrow}      (1, 0) \quad[\,x_2 = B\,]
+		(7, 6) & \xrightarrow{\uparrow}     (6, 6)
+		\xrightarrow{\nwarrow}      (5, 5) \quad[\,x_6 = A\,] \\
+		       & \xrightarrow{\uparrow}      (4, 5)
+		\xrightarrow{\nwarrow}      (3, 4) \quad[\,x_4 = B\,] \\
+		       & \xrightarrow{\leftarrow}    (3, 3)
+		\xrightarrow{\nwarrow}      (2, 2) \quad[\,x_3 = C\,] \\
+		       & \xrightarrow{\leftarrow}    (2, 1)
+		\xrightarrow{\nwarrow}      (1, 0) \quad[\,x_2 = B\,]
 	\end{align*}
 	W~$(1, 0)$ mamy $j = 0$, więc rekurencja się zatrzymuje. Wypisywanie następuje
 	\emph{po} powrocie z~wywołania rekurencyjnego, więc znaki pojawiają się od

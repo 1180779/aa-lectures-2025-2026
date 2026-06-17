@@ -3,17 +3,19 @@
 % ════════════════════════════════════════════════════════════════
 
 \begin{definition} \label{def:matroid}
-	\uemph{Matroid} to para $M = (S, \mathcal{A})$ taka, że:
+	\uemph{Matroid} to para $M = (S, \mathcal{I})$\footnote{Oznaczenia za CLRS: $S$ (\emph{set}) -- zbiór bazowy, $\mathcal{I}$ (\emph{independent}) -- rodzina zbiorów niezależnych. Uwaga: ,,niezależność'' jest tu cechą \emph{pojedynczego} zbioru ($A \in \mathcal{I}$ znaczy, że $A$ jest sam w~sobie niezależny), a~nie relacją między zbiorami -- dziedziczność (wł.\ \ref{matroid:dziedziczność}) mówi tylko, że podzbiór zbioru niezależnego też jest niezależny.} taka, że:
 	\begin{enumerate}
 		\item \label{matroid:skończoność} $S$ -- niepusty zbiór skończony,
-		\item \label{matroid:niepustość} $\mathcal{A} \subseteq 2^S$ i $\mathcal{A} \neq \emptyset$ -- czyli $\mathcal{A}$ to niepusta rodzina podzbiorów $S$,
-		\item \label{matroid:dziedziczność} $\forall A, B \subseteq S \quad A \in \mathcal{A} \wedge B \subseteq A \implies B \in \mathcal{A}$,
+		\item \label{matroid:niepustość} $\mathcal{I} \subseteq 2^S$ i $\mathcal{I} \neq \emptyset$ -- czyli $\mathcal{I}$ to niepusta rodzina podzbiorów $S$,
+		\item \label{matroid:dziedziczność} $\forall A, B \subseteq S \quad A \in \mathcal{I} \wedge B \subseteq A \implies B \in \mathcal{I}$,
 		\item \label{matroid:wymiana} własność wymiany:
 		      \begin{flalign*}
-			       & \forall A, B \subseteq S \quad A, B \in \mathcal{A} \wedge |B| > |A| \implies \text{istnieje } x \in B \setminus A \text{ taki, że } A \cup \{x\} \in \mathcal{A}. &  &  &  &
+			       & \forall A, B \subseteq S \quad A, B \in \mathcal{I} \wedge |B| > |A| \implies \text{istnieje } x \in B \setminus A \text{ taki, że } A \cup \{x\} \in \mathcal{I}. &  &  &  &
 		      \end{flalign*}
 	\end{enumerate}
-	$\mathcal{A}$ -- rodzina zbiorów niezależnych matroidu $M$, elementy $\mathcal{A}$ -- zbiory niezależne matroidu $M$.
+	$\mathcal{I}$ -- rodzina zbiorów niezależnych matroidu $M$, elementy $\mathcal{I}$ -- zbiory niezależne matroidu $M$.
+
+	Zbiór niezależny $A \in \mathcal{I}$ nazywamy \uemph{maksymalnym} (lub \uemph{bazą} matroidu $M$), jeśli nie da się go powiększyć, pozostając niezależnym, tzn.\ dla każdego $x \in S \setminus A$ zachodzi $A \cup \{x\} \notin \mathcal{I}$.
 \end{definition}
 
 \begin{dygresja}
@@ -24,16 +26,16 @@
 
 \begin{example} \label{ex:matroid-podstawowe} \leavevmode
 	\begin{enumerate}[ref=\thedefinition.\arabic*]
-		\item \label{ex:matroid:wektorowy} $A$ -- macierz, $S$ -- zbiór wierszy $A$, $\mathcal{A} = \{R \subseteq S : R \text{ tworzy zbiór liniowo niezależny}\}$.\\
-		      Wtedy $(S, \mathcal{A})$ to matroid.
-		\item \label{ex:matroid:grafowy} $G = (V, E)$ -- graf, $\mathcal{A} = \{F \subseteq E : G[F] \text{ jest acykliczny}\}$.\\
-		      Wtedy $(E, \mathcal{A})$ to matroid zwany matroidem grafowym.
+		\item \label{ex:matroid:wektorowy} $A$ -- macierz, $S$ -- zbiór wierszy $A$, $\mathcal{I} = \{R \subseteq S : R \text{ tworzy zbiór liniowo niezależny}\}$.\\
+		      Wtedy $(S, \mathcal{I})$ to matroid.
+		\item \label{ex:matroid:grafowy} $G = (V, E)$ -- graf, $\mathcal{I} = \{F \subseteq E : G[F] \text{ jest acykliczny}\}$.\\
+		      Wtedy $(E, \mathcal{I})$ to matroid zwany matroidem grafowym.
 	\end{enumerate}
-	Z definicji $\emptyset \in \mathcal{A}$.
+	Z definicji $\emptyset \in \mathcal{I}$.
 \end{example}
 
 \begin{dygresja}
-	Wspólna intuicja obu przykładów: $S$ to zbiór ,,kawałków'', a $\mathcal{A}$ wyróżnia te podzbiory, w~których \emph{nie ma nadmiarowości}. Dla macierzy nadmiarowość to liniowa zależność wierszy, dla grafu --- cykl (krawędź, którą można usunąć bez rozspójniania tego, co już połączone). Dziedziczność (wł.\ \ref{matroid:dziedziczność}) mówi, że usunięcie kawałka z~niezależnego zbioru nie tworzy nadmiarowości; własność wymiany (wł.\ \ref{matroid:wymiana}) --- że mniejszy zbiór niezależny zawsze da się powiększyć o~element z~większego.
+	Wspólna intuicja obu przykładów: $S$ to zbiór ,,kawałków'', a $\mathcal{I}$ wyróżnia te podzbiory, w~których \emph{nie ma nadmiarowości}. Dla macierzy nadmiarowość to liniowa zależność wierszy, dla grafu --- cykl (krawędź, którą można usunąć bez rozspójniania tego, co już połączone). Dziedziczność (wł.\ \ref{matroid:dziedziczność}) mówi, że usunięcie kawałka z~niezależnego zbioru nie tworzy nadmiarowości; własność wymiany (wł.\ \ref{matroid:wymiana}) --- że mniejszy zbiór niezależny zawsze da się powiększyć o~element z~większego.
 
 	Dla matroidu grafowego: zbiór krawędzi jest niezależny dokładnie wtedy, gdy tworzy las (jest acykliczny). Po lewej --- niezależny zbiór (las, krawędzie wyróżnione); po prawej --- ten sam zbiór z~dołożoną krawędzią $e_3$ zamykającą cykl $a\,b\,c$, więc już zależny:
 	\begin{figure}[H]
@@ -48,7 +50,7 @@
 				\draw[accent, very thick] (a) -- (b) node[draw=none, midway, above] {$e_1$};
 				\draw[accent, very thick] (b) -- (c) node[draw=none, midway, right=1pt] {$e_2$};
 				\draw[accent, very thick] (c) -- (d) node[draw=none, midway, below] {$e_4$};
-				\node[draw=none] at (0.9, -0.6) {$F = \{e_1, e_2, e_4\} \in \mathcal{A}$};
+				\node[draw=none] at (0.9, -0.6) {$F = \{e_1, e_2, e_4\} \in \mathcal{I}$};
 			\end{scope}
 			% prawa: cykl (zależny)
 			\begin{scope}[xshift=5cm]
@@ -60,7 +62,7 @@
 				\draw[accent, very thick] (b) -- (c) node[draw=none, midway, right=1pt] {$e_2$};
 				\draw[accent, very thick] (c) -- (d) node[draw=none, midway, below] {$e_4$};
 				\draw[accentB, very thick] (a) -- (c) node[draw=none, midway, left=1pt] {$e_3$};
-				\node[draw=none] at (0.9, -0.6) {$F \cup \{e_3\} \notin \mathcal{A}$};
+				\node[draw=none] at (0.9, -0.6) {$F \cup \{e_3\} \notin \mathcal{I}$};
 			\end{scope}
 		\end{tikzpicture}
 	\end{figure}
@@ -73,29 +75,29 @@
 			\begin{scope}
 				\draw[->, accent, very thick] (0,0) -- (1.6, 0.3) node[above right] {$v_1$};
 				\draw[->, accent, very thick] (0,0) -- (0.5, 1.5) node[above] {$v_2$};
-				\node at (1.0, -0.8) {$\{v_1, v_2\} \in \mathcal{A}$};
+				\node at (1.0, -0.8) {$\{v_1, v_2\} \in \mathcal{I}$};
 			\end{scope}
 			% prawa: trzy wektory zależne
 			\begin{scope}[xshift=5cm]
 				\draw[->, accent, very thick] (0,0) -- (1.6, 0.3) node[above right] {$v_1$};
 				\draw[->, accent, very thick] (0,0) -- (0.5, 1.5) node[above] {$v_2$};
 				\draw[->, accentB, very thick] (0,0) -- (1.5, 1.2) node[right] {$v_3$};
-				\node at (1.0, -0.8) {$\{v_1, v_2, v_3\} \notin \mathcal{A}$};
+				\node at (1.0, -0.8) {$\{v_1, v_2, v_3\} \notin \mathcal{I}$};
 			\end{scope}
 		\end{tikzpicture}
 	\end{figure}
 \end{dygresja}
 
 \begin{lemma} \label{lemma:matroid:liczność}
-	Niech $M = (S, \mathcal{A})$. Wszystkie maksymalne zbiory niezależne $M$ mają tę samą liczność.
+	Niech $M = (S, \mathcal{I})$. Wszystkie maksymalne zbiory niezależne $M$ mają tę samą liczność.
 \end{lemma}
 \begin{proof}
-	Niech $A, B \in \mathcal{A}$ będą maksymalnymi zbiorami niezależnymi $M$. Przypuśćmy, że $|B| > |A|$.\\
-	Z własności \ref{matroid:wymiana}. istnieje $x \in B \setminus A$ taki, że $A \cup \{x\} \in \mathcal{A}$ -- sprzeczność z maksymalnością $A$.
+	Niech $A, B \in \mathcal{I}$ będą maksymalnymi zbiorami niezależnymi $M$. Przypuśćmy, że $|B| > |A|$.\\
+	Z własności \ref{matroid:wymiana}. istnieje $x \in B \setminus A$ taki, że $A \cup \{x\} \in \mathcal{I}$ -- sprzeczność z maksymalnością $A$.
 \end{proof}
 
 \begin{problem}
-	$M = (S, \mathcal{A})$ -- matroid, $w: S \to \Rp$ -- funkcja wagi.\\
+	$M = (S, \mathcal{I})$ -- matroid, $w: S \to \Rp$ -- funkcja wagi.\\
 	Dla $A \subseteq S$ niech $w(A) = \sum_{x \in A} w(x)$ -- waga $A$.\\
 	Znaleźć zbiór niezależny o maksymalnej wadze w $M$.\\
 	$S = \{x_1, x_2, \ldots, x_n\}$.
@@ -107,7 +109,7 @@
 	\State $A \Assign \emptyset$ \Comment{$A$ -- rozwiązanie}
 	\State posortuj $S$ w porządku nierosnącym względem wagi, tak żeby $w(x_1) \geq w(x_2) \geq \ldots \geq w(x_n)$
 	\For{$i \Assign 1$ \To $n$}
-	\If{$A \cup \{x_i\} \in \mathcal{A}$} \label{line:greedy-niezaleznosc}
+	\If{$A \cup \{x_i\} \in \mathcal{I}$} \label{line:greedy-niezaleznosc}
 	\State $A \Assign A \cup \{x_i\}$
 	\EndIf
 	\EndFor
@@ -118,7 +120,7 @@
 \begin{dygresja}
 	Idea jest możliwie najprostsza: skoro chcemy dużej wagi, bierzmy elementy od najcięższego do najlżejszego i~dokładajmy każdy z~nich do rozwiązania, o~ile tylko nie psuje to niezależności (warunek z~linii \ref{line:greedy-niezaleznosc}). Raz dodanego elementu nigdy nie wycofujemy --- stąd nazwa \emph{zachłanny}: na każdym kroku podejmujemy lokalnie najlepszą decyzję i~się jej trzymamy, nie martwiąc się o~przyszłość.
 
-	Dla dowolnej rodziny $\mathcal{A}$ taka krótkowzroczność zwykle zawodzi, bo wczesny ciężki wybór może zablokować dwa lepsze późniejsze. To, co ratuje algorytm tutaj, to struktura matroidu. Własność wymiany (wł.\ \ref{matroid:wymiana}) gwarantuje, że zachłanny wybór nigdy nas nie ,,zamknie'' w~gorszym rozwiązaniu: jeśli istnieje cięższy zbiór niezależny, to zawsze da się go wykorzystać do ulepszenia bieżącego --- dokładnie ten argument napędza dowód twierdzenia \ref{thm:rado-edmonds}. Co więcej, działa to też w~drugą stronę: zachłanność daje optimum dla \uemph{każdej} funkcji wagi \emph{wtedy i~tylko wtedy}, gdy rodzina $\mathcal{A}$ jest matroidem --- to właśnie czyni matroidy ,,naturalnym'' środowiskiem dla algorytmów zachłannych.
+	Dla dowolnej rodziny $\mathcal{I}$ taka krótkowzroczność zwykle zawodzi, bo wczesny ciężki wybór może zablokować dwa lepsze późniejsze. To, co ratuje algorytm tutaj, to struktura matroidu. Własność wymiany (wł.\ \ref{matroid:wymiana}) gwarantuje, że zachłanny wybór nigdy nas nie ,,zamknie'' w~gorszym rozwiązaniu: jeśli istnieje cięższy zbiór niezależny, to zawsze da się go wykorzystać do ulepszenia bieżącego --- dokładnie ten argument napędza dowód twierdzenia \ref{thm:rado-edmonds}. Co więcej, działa to też w~drugą stronę: zachłanność daje optimum dla \uemph{każdej} funkcji wagi \emph{wtedy i~tylko wtedy}, gdy rodzina $\mathcal{I}$ jest matroidem --- to właśnie czyni matroidy ,,naturalnym'' środowiskiem dla algorytmów zachłannych.
 \end{dygresja}
 
 \begin{theorem}[Rado, Edmonds] \label{thm:rado-edmonds}
@@ -128,18 +130,18 @@
 	Niech $A = \{x_{i_1}, x_{i_2}, \ldots, x_{i_k}\}$ będzie zbiorem zwróconym przez algorytm, przy czym $w(x_{i_1}) \geq w(x_{i_2}) \geq \ldots \geq w(x_{i_k})$. Dowód przebiega w~dwóch krokach: najpierw pokazujemy, że $A$ jest maksymalny, a~następnie, że żaden zbiór niezależny nie ma większej wagi.
 
 	\emph{Krok 1: $A$ jest maksymalnym zbiorem niezależnym.}
-	Przypuśćmy przeciwnie, że istnieje $x_j \in S \setminus A$ taki, że $A \cup \{x_j\} \in \mathcal{A}$. Wtedy $j < i_k$, bo w~przeciwnym wypadku algorytm dodałby $x_j$ do $A$ jako $(k+1)$-szy element. Niech $l$ będzie najmniejszą liczbą taką, że $j < i_l$; wówczas
+	Przypuśćmy przeciwnie, że istnieje $x_j \in S \setminus A$ taki, że $A \cup \{x_j\} \in \mathcal{I}$. Wtedy $j < i_k$, bo w~przeciwnym wypadku algorytm dodałby $x_j$ do $A$ jako $(k+1)$-szy element. Niech $l$ będzie najmniejszą liczbą taką, że $j < i_l$; wówczas
 	\[
 		w(x_{i_1}) \geq \ldots \geq w(x_{i_{l-1}}) \geq w(x_j) \geq w(x_{i_l}).
 	\]
-	Ponieważ $A \cup \{x_j\} \in \mathcal{A}$, z~własności \ref{matroid:dziedziczność} zbiór $\{x_{i_1}, \ldots, x_{i_{l-1}}, x_j\} \subseteq A \cup \{x_j\}$ jest niezależny. Ale wtedy algorytm dodałby $x_j$ zamiast $x_{i_l}$ jako $l$-ty element --- sprzeczność. Zatem $A$ jest maksymalnym zbiorem niezależnym.
+	Ponieważ $A \cup \{x_j\} \in \mathcal{I}$, z~własności \ref{matroid:dziedziczność} zbiór $\{x_{i_1}, \ldots, x_{i_{l-1}}, x_j\} \subseteq A \cup \{x_j\}$ jest niezależny. Ale wtedy algorytm dodałby $x_j$ zamiast $x_{i_l}$ jako $l$-ty element --- sprzeczność. Zatem $A$ jest maksymalnym zbiorem niezależnym.
 
 	\emph{Krok 2: $w(B) \leq w(A)$ dla każdego zbioru niezależnego $B$.}
-	Rozważmy zbiór niezależny $B = \{y_1, y_2, \ldots, y_m\} \in \mathcal{A}$ z~$w(y_1) \geq w(y_2) \geq \ldots \geq w(y_m)$. Z~maksymalności $A$ (Lemat \ref{lemma:matroid:liczność}) mamy $m \leq k$. Pokażemy, że
+	Rozważmy zbiór niezależny $B = \{y_1, y_2, \ldots, y_m\} \in \mathcal{I}$ z~$w(y_1) \geq w(y_2) \geq \ldots \geq w(y_m)$. Z~maksymalności $A$ (Lemat \ref{lemma:matroid:liczność}) mamy $m \leq k$. Pokażemy, że
 	\[
 		w(y_j) \leq w(x_{i_j}) \qquad \text{dla każdego } j \leq m.
 	\]
-	Przypuśćmy przeciwnie, że $w(y_j) > w(x_{i_j})$ dla pewnego $j$, i~rozważmy zbiory niezależne $A_{j-1} = \{x_{i_1}, \ldots, x_{i_{j-1}}\} \subseteq A$ oraz $B_j = \{y_1, \ldots, y_j\} \subseteq B$. Ponieważ $|B_j| = j > j-1 = |A_{j-1}|$, z~własności \ref{matroid:wymiana} istnieje $y_s \in B_j \setminus A_{j-1}$ taki, że $A_{j-1} \cup \{y_s\} \in \mathcal{A}$. Ponieważ $y_s \in B_j$, a~wagi $B$ są nierosnące, mamy $w(y_s) \geq w(y_j)$, skąd $w(y_s) \geq w(y_j) > w(x_{i_j})$; istnieje więc $t \leq j$ takie, że
+	Przypuśćmy przeciwnie, że $w(y_j) > w(x_{i_j})$ dla pewnego $j$, i~rozważmy zbiory niezależne $A_{j-1} = \{x_{i_1}, \ldots, x_{i_{j-1}}\} \subseteq A$ oraz $B_j = \{y_1, \ldots, y_j\} \subseteq B$. Ponieważ $|B_j| = j > j-1 = |A_{j-1}|$, z~własności \ref{matroid:wymiana} istnieje $y_s \in B_j \setminus A_{j-1}$ taki, że $A_{j-1} \cup \{y_s\} \in \mathcal{I}$. Ponieważ $y_s \in B_j$, a~wagi $B$ są nierosnące, mamy $w(y_s) \geq w(y_j)$, skąd $w(y_s) \geq w(y_j) > w(x_{i_j})$; istnieje więc $t \leq j$ takie, że
 	\[
 		w(x_{i_1}) \geq \ldots \geq w(x_{i_{t-1}}) \geq w(y_s) > w(x_{i_t}).
 	\]
@@ -167,7 +169,7 @@ Pętla wykonuje $n$ iteracji, a~każda kosztuje $f(n) + \BO(1)$, co daje koszt p
 \[
 	\BO\bigl(n \log n + n \cdot f(n)\bigr),
 \]
-gdzie $f(n)$ to czas sprawdzenia niezależności $A \cup \{x_i\} \in \mathcal{A}$ (linia \ref{line:greedy-niezaleznosc}). Złożoność zależy więc od reprezentacji matroidu: dla matroidów, w~których test niezależności jest wielomianowy, cały algorytm działa w~czasie wielomianowym.
+gdzie $f(n)$ to czas sprawdzenia niezależności $A \cup \{x_i\} \in \mathcal{I}$ (linia \ref{line:greedy-niezaleznosc}). Złożoność zależy więc od reprezentacji matroidu: dla matroidów, w~których test niezależności jest wielomianowy, cały algorytm działa w~czasie wielomianowym.
 
 % ════════════════════════════════════════════════════════════════
 \subsection{Problem szeregowania zadań}

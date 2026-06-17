@@ -18,15 +18,15 @@ Dla $t \in \{0, 1, \ldots, n\}$ niech
 \end{lemma}
 
 \begin{theorem}
-	Niech $S$ -- zbiór zadań o jednostkowym czasie wykonania, a $\mathcal{A}$ -- rodzina zbiorów wolnych od kar. Wtedy $(S, \mathcal{A})$ jest matroidem.
+	Niech $S$ -- zbiór zadań o jednostkowym czasie wykonania, a $\mathcal{I}$ -- rodzina zbiorów wolnych od kar. Wtedy $(S, \mathcal{I})$ jest matroidem.
 \end{theorem}
 \begin{proof}
 	Sprawdzamy własności z definicji matroidu (Definicja~\ref{def:matroid}):
 	\begin{enumerate}
 		\item[(wł.\ \ref{matroid:skończoność})] Oczywiste. $\checkmark$
-		\item[(wł.\ \ref{matroid:niepustość})] Dla każdego $i \in [n]$ zachodzi $\{z_i\} \in \mathcal{A}$, więc $\mathcal{A} \neq \emptyset$. $\checkmark$
-		\item[(wł.\ \ref{matroid:dziedziczność})] Niech $A \in \mathcal{A}$ (czyli $A$ jest wolny od kar) i $B \subseteq A$. Z~definicji istnieje harmonogram zbioru $A$, w którym wszystkie zadania są terminowe. Usuwając z~tego harmonogramu zadania należące do $A \setminus B$, otrzymujemy harmonogram zbioru $B$, w którym wszystkie zadania nadal są terminowe (usunięcie zadań nie opóźnia pozostałych). Zatem $B$ jest wolny od kar, czyli $B \in \mathcal{A}$.
-		\item[(wł.\ \ref{matroid:wymiana})] Niech $A, B \in \mathcal{A}$, $|B| > |A|$.\\
+		\item[(wł.\ \ref{matroid:niepustość})] Dla każdego $i \in [n]$ zachodzi $\{z_i\} \in \mathcal{I}$, więc $\mathcal{I} \neq \emptyset$. $\checkmark$
+		\item[(wł.\ \ref{matroid:dziedziczność})] Niech $A \in \mathcal{I}$ (czyli $A$ jest wolny od kar) i $B \subseteq A$. Z~definicji istnieje harmonogram zbioru $A$, w którym wszystkie zadania są terminowe. Usuwając z~tego harmonogramu zadania należące do $A \setminus B$, otrzymujemy harmonogram zbioru $B$, w którym wszystkie zadania nadal są terminowe (usunięcie zadań nie opóźnia pozostałych). Zatem $B$ jest wolny od kar, czyli $B \in \mathcal{I}$.
+		\item[(wł.\ \ref{matroid:wymiana})] Niech $A, B \in \mathcal{I}$, $|B| > |A|$.\\
 		      Niech $k \in \{0, 1, \ldots, n\}$ będzie największą liczbą $t$ taką, że $N_t(B) \leq N_t(A)$.\\
 		      $k$ jest dobrze zdefiniowane, bo $N_0(B) = 0 = N_0(A)$.\\
 		      Mamy $N_n(B) = |B| > |A| = N_n(A)$, więc $k < n$.\\
@@ -46,12 +46,12 @@ Dla $t \in \{0, 1, \ldots, n\}$ niech
 		      \end{itemize}
 		      Zatem $A'$ jest wolny od kar.
 	\end{enumerate}
-	Pokazaliśmy, że $(S, \mathcal{A})$ jest matroidem.
+	Pokazaliśmy, że $(S, \mathcal{I})$ jest matroidem.
 \end{proof}
 
-Możemy do rozwiązania problemu szeregowania zadań użyć algorytmu Greedy (Algorytm \ref{alg:greedy}) dla matroidu $(S, \mathcal{A})$ maksymalizującego $\sum_{z_i \in A} w_i$ (czyli minimalizującego sumę kar zadań spóźnionych).
+Możemy do rozwiązania problemu szeregowania zadań użyć algorytmu Greedy (Algorytm \ref{alg:greedy}) dla matroidu $(S, \mathcal{I})$ maksymalizującego $\sum_{z_i \in A} w_i$ (czyli minimalizującego sumę kar zadań spóźnionych).
 
-Z twierdzenia~\ref{thm:rado-edmonds} (Rado, Edmonds) algorytm Greedy użyty do tego problemu zwraca rozwiązanie optymalne. Warunek z linii~\ref{line:greedy-niezaleznosc} algorytmu Greedy (tzn. czy $A \cup \{x_i\} \in \mathcal{A}$) można sprawdzić w czasie $\BO(n)$ -- lemat \ref{lemma:wolny-od-kar}, warunek~\ref{lemma:wolny-od-kar:sort}.
+Z twierdzenia~\ref{thm:rado-edmonds} (Rado, Edmonds) algorytm Greedy użyty do tego problemu zwraca rozwiązanie optymalne. Warunek z linii~\ref{line:greedy-niezaleznosc} algorytmu Greedy (tzn. czy $A \cup \{x_i\} \in \mathcal{I}$) można sprawdzić w czasie $\BO(n)$ -- lemat \ref{lemma:wolny-od-kar}, warunek~\ref{lemma:wolny-od-kar:sort}.
 
 Złożoność czasowa algorytmu wynosi:
 \begin{flalign*}
