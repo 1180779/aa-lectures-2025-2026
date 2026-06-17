@@ -8,26 +8,48 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Download release assets
+      - name: Download release source archive
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdir assets
+          mkdir -p src
           gh release download "${{ github.event.release.tag_name }}" \
             --repo "${{ github.repository }}" \
-            --pattern "*.pdf" \
-            --dir assets
+            --archive=tar.gz \
+            --output src/source.tar.gz
+
+      - name: Extract committed PDFs from source
+        run: |
+          mkdir -p assets
+          tar -xzf src/source.tar.gz -C src
+          # the archive unpacks into a single top-level dir: <repo>-<tag>/
+          ROOT=$(find src -mindepth 1 -maxdepth 1 -type d | head -n 1)
+          # flatten every committed PDF, deriving the name from its repo path
+          # so that e.g. notes/main.pdf and exam/main.pdf don't collide
+          find "$ROOT" -name '*.pdf' -print0 | while IFS= read -r -d '' f; do
+            rel="${f#"$ROOT"/}"
+            cp "$f" "assets/${rel//\//_}"
+          done
+          echo "Collected PDFs:"
+          ls -1 assets || true
+
       - name: Send to Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
           RELEASE_BODY: ${{ github.event.release.body }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
-          PDF_FILE=$(find assets -name "*.pdf" | head -n 1)
+          mapfile -t PDFS < <(find assets -name '*.pdf' | sort)
 
-          if [ -z "$PDF_FILE" ]; then
-            echo "No PDF found in release assets"
+          if [ "${#PDFS[@]}" -eq 0 ]; then
+            echo "No PDF found in source archive"
             exit 1
+          fi
+
+          # Discord accepts up to 10 attachments per message
+          if [ "${#PDFS[@]}" -gt 10 ]; then
+            echo "::warning::Found ${#PDFS[@]} PDFs; only the first 10 will be sent"
+            PDFS=("${PDFS[@]:0:10}")
           fi
 
           # Use jq to safely build the JSON payload with proper escaping
@@ -36,7 +58,15 @@ jobs:
             --arg body "$(echo "$RELEASE_BODY" | head -c 1800)" \
             '{content: "🚀 **New Release: \($tag)**\n\n\($body)"}')
 
+          # one -F files[n] argument per PDF
+          FILE_ARGS=()
+          i=0
+          for f in "${PDFS[@]}"; do
+            FILE_ARGS+=(-F "files[$i]=@${f}")
+            i=$((i + 1))
+          done
+
           curl -f \
             -F "payload_json=$PAYLOAD" \
-            -F "file=@${PDF_FILE}" \
+            "${FILE_ARGS[@]}" \
             "$DISCORD_WEBHOOK"

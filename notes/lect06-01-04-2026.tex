@@ -1,0 +1,164 @@
+% ════════════════════════════════════════════════════════════════
+\section{Algorytmy zachłanne}
+% ════════════════════════════════════════════════════════════════
+
+\textbf{Pomysł:} Algorytm w każdym kroku dokonuje lokalnie najlepszego wyboru (najlepszego w danym momencie).
+
+\begin{problem}[wyboru zajęć]
+	$S = \{z_1, \dots, z_n\}$ -- zbiór zajęć wymagający tych samych zasobów.
+	\begin{flalign*}
+		s_i & \text{ -- czas rozpoczęcia zajęcia } z_i &  & s_i, t_i \in \N, \quad s_i < t_i &  & \\
+		t_i & \text{ -- czas zakończenia zajęcia } z_i &  &                                  &  &
+	\end{flalign*}
+	Zajęcia $z_i$ i $z_j$ nazywamy \uemph{zgodnymi}, jeśli $\langle s_i, t_i) \cap \langle s_j, t_j) = \emptyset$.
+	Zadanie polega na znalezieniu podzbioru o największej liczności $A \subseteq S$ parami zgodnych zajęć.
+\end{problem}
+
+\begin{example}\label{ex:zajecia}
+	Przykładowy zbiór zajęć:
+	\begin{table}[H]
+		\centering
+		\renewcommand{\arraystretch}{1.2}
+		\begin{NiceTabular}{c|cccccc}[margin,hvlines]
+			$i$   & 1 & 2 & 3 & 4  & 5 & 6 \\
+			\hline
+			$s_i$ & 0 & 2 & 4 & 7  & 1 & 7 \\
+			$t_i$ & 4 & 6 & 7 & 10 & 3 & 9
+		\end{NiceTabular}
+	\end{table}
+\end{example}
+
+Porządkujemy zajęcia w czasie niemalejącym względem czasu zakończenia. To zajmuje $\BO(n \log n)$ czasu. Od tej pory zakładamy $t_1 \leq t_2 \leq \dots \leq t_n$ (zajęcia są już posortowane).
+
+\begin{example}\label{ex:zajecia-posortowane}
+	Zajęcia z~przykładu~\ref{ex:zajecia} po posortowaniu względem czasu zakończenia:
+	\begin{table}[H]
+		\centering
+		\renewcommand{\arraystretch}{1.2}
+		\begin{NiceTabular}{c|cccccc}[margin,hvlines]
+			$i$   & 1 & 2 & 3 & 4 & 5 & 6  \\
+			\hline
+			$s_i$ & 1 & 0 & 2 & 4 & 7 & 7  \\
+			$t_i$ & 3 & 4 & 6 & 7 & 9 & 10
+		\end{NiceTabular}
+	\end{table}
+\end{example}
+
+\paragraph{Podejście programowania dynamicznego}
+Definiujemy zbiory zajęć:
+\begin{flalign*}
+	S_{ij} = \{ z_k \in S : t_i \leq s_k < t_k \leq s_j \} &  &  &  &
+\end{flalign*}
+(zbiór zajęć zaczynających się po czasie zakończenia zajęcia $z_i$ i kończących się przed czasem rozpoczęcia zajęcia $z_j$).
+
+Dodajemy 2 sztuczne zajęcia: $z_0$ z czasem $t_0 = 0$ i $z_{n+1}$ z czasem $s_{n+1} = \infty$. Wtedy $S = S_{0, n+1}$.
+Jeśli $i \geq j$, to $S_{ij} = \emptyset$, bo $s_j < t_j \leq t_i$ (bo zajęcia są posortowane).
+
+\begin{dygresja}
+	Pokażmy dokładniej, dlaczego $S_{ij} = \emptyset$ dla $i \geq j$.
+	Przypuśćmy, że istnieje $z_k \in S_{ij}$. Z~definicji $S_{ij}$ mamy wtedy
+	$t_i \leq s_k < t_k \leq s_j$, a~ponieważ zajęcia są posortowane i~$i \geq j$,
+	to $t_j \leq t_i$, skąd $s_j < t_j \leq t_i$. Łącząc obie nierówności,
+	otrzymujemy $s_j < t_i \leq s_k < t_k \leq s_j$, czyli $s_j < s_j$ -- sprzeczność.
+\end{dygresja}
+
+Problem: znaleźć podzbiór o największej liczności zbioru $S_{ij}$ składający się z parami zgodnych zajęć dla $0 \leq i \leq j \leq n+1$.
+
+Niech $A_{ij}$ będzie jakimkolwiek podzbiorem największej liczności składającym się z parami zgodnych zajęć zbioru $S_{ij}$ oraz niech $c(i, j) = |A_{ij}|$.
+
+\paragraph{Podproblem $S_{ij}$:}
+Załóżmy, że $z_k \in S_{ij}$. Jeśli wybierzemy $z_k$ do zbioru rozwiązania, to otrzymamy dwa zbiory (podproblemy):
+\begin{itemize}
+	\item $S_{ik}$ (zbiór zajęć, które zaczynają się po zakończeniu zajęcia $z_i$ i kończą się przed rozpoczęciem zajęcia $z_k$),
+	\item $S_{kj}$ (zbiór zajęć, które zaczynają się po zakończeniu zajęcia $z_k$ i kończą przed rozpoczęciem zajęcia $z_j$).
+\end{itemize}
+Rozwiązanie dla $S_{ij}$ będzie sumą rozwiązań dla $S_{ik}$ oraz $S_{kj}$ oraz elementu $\{z_k\}$.
+
+\paragraph{Własność optymalnej podstruktury:}
+Załóżmy, że $z_k \in A_{ij}$. Wtedy $A_{ij} = A_{ik} \cup \{z_k\} \cup A_{kj}$. Gdyby istniało rozwiązanie $A'_{ik}$ dla $S_{ik}$ takie, że $|A'_{ik}| > |A_{ik}|$, to zbiór $A'_{ij} = A'_{ik} \cup \{z_k\} \cup A_{kj}$ byłby rozwiązaniem dla $S_{ij}$ takim, że $|A'_{ij}| > |A_{ij}|$. Sprzeczność. Analogicznie dla $S_{kj}$.
+Zatem $A_{ik}$ oraz $A_{kj}$ muszą być rozwiązaniami optymalnymi dla odpowiednio $S_{ik}$ i $S_{kj}$.
+
+Stąd wzór rekurencyjny:
+\begin{flalign*}
+	 & \begin{cases}
+		   c(i, j) = 0 & \text{dla } i \geq j \\
+		   c(i, j) = \max_{i < k < j} \{ c(i, k) + c(k, j) + 1 \}
+	   \end{cases} &  &  &  &
+\end{flalign*}
+
+Używając tego wzoru rekurencyjnego możemy skonstruować algorytm programowania dynamicznego. Mamy $\BO(n^2)$ podproblemów. Dla $j > i$ mamy $j - i - 1$ wartości $k$ do sprawdzenia, czyli rozwiązanie jednego podproblemu zajmie czas liniowy. Otrzymujemy algorytm o złożoności $\BO(n^3)$.
+
+\paragraph{Algorytm zachłanny}
+\begin{lemma}
+	Niech $z_m \in S_{ij}$ będzie zajęciem takim, że $t_m = \min \{t_k : z_k \in S_{ij}\}$. Wtedy:
+	\begin{enumerate}
+		\item\label{lem:greedy-exists} Istnieje podzbiór o największej liczności składający się z parami zgodnych zajęć zbioru $S_{ij}$ zawierający $z_m$.
+		\item\label{lem:greedy-empty} $S_{im} = \emptyset$ (zatem po wybraniu $z_m$ do zbioru rozwiązania zostaje co najwyżej 1 niepusty podproblem do rozwiązania -- $S_{mj}$).
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}~\\
+	\textbf{Ad~\ref{lem:greedy-exists}.} Niech $A_{ij}$ będzie podzbiorem o największej liczności składającym się z parami zgodnych zajęć zbioru $S_{ij}$. Niech $z_k$ będzie zajęciem z $A_{ij}$ o najmniejszym czasie zakończenia.
+	Jeśli $z_k = z_m$, to teza jest udowodniona.
+	Przypuśćmy, że $z_k \neq z_m$ i rozważmy zbiór $A'_{ij} = A_{ij} \setminus \{z_k\} \cup \{z_m\}$. Skoro $t_m \leq t_k$ oraz zajęcia z $A_{ij}$ są parami zgodne, to zajęcia z $A'_{ij}$ również są parami zgodne.
+	Mamy $|A_{ij}| = |A'_{ij}|$, więc $A'_{ij}$ jest rozwiązaniem optymalnym zawierającym $z_m$.
+
+	\textbf{Ad~\ref{lem:greedy-empty}.} Przypuśćmy, że nie. Niech $z_k \in S_{im}$. Wtedy $t_i \leq s_k < t_k \leq s_m < t_m \leq s_j$. Zatem $z_k \in S_{ij}$ oraz $t_k < t_m$ -- sprzeczność z definicją zajęcia $z_m$.
+\end{proof}
+
+Z lematu wynika, że nie musimy sprawdzać $j - i - 1$ wartości $k$, możemy wybrać zajęcie o najmniejszym czasie zakończenia $z_m \in S_{ij}$.
+Żeby rozwiązać podproblem $S_{ij}$ możemy dodać $z_m$ do zbioru rozwiązania a następnie dodać do zbioru rozwiązania rozwiązanie optymalne podproblemu $S_{mj}$. Zaczynamy z $S = S_{0, n+1}$ i $t_0 = 0$. W pierwszym kroku algorytm wybiera $z_1$.
+
+\begin{alg}{Zachłanny wybór zajęć}{alg:greedyactivity}
+	\FunctionNN{GreedyActivitySelector}{$s, t$} \Comment{zajęcia są posortowane po czasie zakończeń}
+	\State $n \Assign \Length{s}$
+	\State $A \Assign \{z_1\}$ \Comment{$A$ - zbiór rozwiązań}
+	\State $j \Assign 1$
+	\For{$i \Assign 2$ \To $n$}
+	\If{$s_i \geq t_j$}
+	\State $A \Assign A \cup \{z_i\}$
+	\State $j \Assign i$
+	\EndIf
+	\EndFor
+	\State \Return $A$
+	\EndFunction
+\end{alg}
+
+Algorytm zachłanny w każdym kroku wybiera zajęcie zgodne ze wszystkimi zajęciami poprzednio wybranymi, o najmniejszym czasie zakończenia, aby zostawić jak najwięcej miejsca dla zajęć następnych (algorytm zachłanny). Skoro one są posortowane, jeśli $j < k$ i $z_k$ jest zgodne z $z_j$, to $z_k$ jest też zgodne z $z_i$ dla każdego $1 \leq i < j$.
+
+\paragraph{Analiza poprawności:}
+Algorytm zwraca zbiór parami zgodnych zajęć, bo dodaje do zbioru rozwiązania zajęcie tylko jeśli jest zgodne ze wszystkimi zajęciami dodanymi wcześniej.
+
+Pokażemy przez indukcję po $n$, że algorytm znajduje rozwiązanie optymalne.
+\begin{itemize}
+	\item Dla $n = 1$ oczywiste $\checkmark$
+	\item Niech $n > 1$. Z lematu istnieje optymalne rozwiązanie $A_1$ takie, że $z_1 \in A_1$. \\
+	      Rozważmy problem dla $S' = \{z_i \in S : s_i \geq t_1\}$. Oczywiście zachodzi $|S'| < |S|$. \\
+	      Dla każdego $z_j \in A_1 \setminus \{z_1\}$, mamy $z_j \in S'$, bo $s_j \geq t_1$, co wynika z faktu, że $A_1$ jest rozwiązaniem dla $S$. \\
+	      Pokażemy, że $A_1 \setminus \{z_1\}$ jest rozwiązaniem optymalnym dla $S'$. \\
+	      Przypuśćmy, że istnieje rozwiązanie $B$ dla $S'$ takie, że $|B| > |A_1 \setminus \{z_1\}|$. Wtedy $\{z_1\} \cup B$ byłoby rozwiązaniem dla $S$ takim, że:
+	      \begin{flalign*}
+		      |\{z_1\} \cup B| = 1 + |B| > 1 + |A_1 \setminus \{z_1\}| = |A_1| &  &  &  &
+	      \end{flalign*}
+	      Otrzymujemy sprzeczność, bo $A_1$ jest z założenia rozwiązaniem optymalnym. \\
+	      Z założenia indukcyjnego nasz algorytm znajduje rozwiązanie optymalne $B'$ dla $S'$. Wtedy $|B'| = |A_1 \setminus \{z_1\}| = |A_1| - 1$. \\
+	      Zbiór $\{z_1\} \cup B'$ jest rozwiązaniem znalezionym przez algorytm dla $S$ i:
+	      \begin{flalign*}
+		      |\{z_1\} \cup B'| = 1 + |B'| = 1 + |A_1| - 1 = |A_1| &  &  &  &
+	      \end{flalign*}
+	      Więc $\{z_1\} \cup B'$ jest rozwiązaniem optymalnym.
+\end{itemize}
+
+\paragraph{Złożoność czasowa}
+\begin{itemize}[nosep]
+	\item linia 1 -- $\BO(n)$
+	\item linia 2 -- $\BO(1)$
+	\item iteracji pętli w linii 3 jest $n - 1$
+	\item wnętrze pętli zajmuje czas $\BO(1)$
+\end{itemize}
+
+Całość zajmuje $\BT(n)$, jeśli zajęcia są już posortowane po czasie zakończenia.
+Ostatecznie złożoność algorytmu wynosi (uwzględniając początkowe sortowanie):
+\begin{flalign*}
+	\BO(n \log n) + \BT(n) = \BO(n \log n) &  &  &  &
+\end{flalign*}

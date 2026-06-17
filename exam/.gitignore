@@ -1,3 +1,6 @@
+## Pdf files as well here
+*.pdf
+
 ## Claude Code:
 .claude/
 
