@@ -205,15 +205,29 @@ W problemie \ref{prob:szeregowanieZadanTrzy} (dla $3 \mid n$) dla uszeregowania 
 \end{flalign*}
 
 \begin{lemma}
-	Niech $A_1 \geq A_2 \geq \dots \geq A_n$. Dla dowolnej permutacji $\Pi = (i_1, \dots, i_n)$ zbioru $[n]$ niech $f(\Pi) = \sum_{j=1}^n A_j \cdot t_{i_j}$. $f(\Pi)$ jest najmniejsze dla dowolnej permutacji $\Pi = (i_1, \dots, i_n)$ takiej, że $t_{i_1} \leq t_{i_2} \leq \dots \leq t_{i_n}$.
+	Niech $A_1 \geq A_2 \geq \dots \geq A_n$. Dla dowolnej permutacji $\Pi = (i_1, \dots, i_n)$ zbioru $[n]$ niech $f(\Pi) = \sum_{j=1}^n A_j \cdot t_{i_j}$. Wtedy $f$ osiąga minimum na każdej permutacji ustawiającej czasy niemalejąco, tzn. takiej, że $t_{i_1} \leq t_{i_2} \leq \dots \leq t_{i_n}$.
 \end{lemma}
 
+\begin{dygresja}
+	Współczynniki $A_1 \geq \dots \geq A_n$ są \emph{ustalone} i zadane malejąco --- są to wagi pozycji. Permutacja $\Pi$ decyduje, który czas $t_{i_j}$ trafi na pozycję $j$ (o wadze $A_j$). Lemat to przypadek nierówności o przestawieniach: aby zminimalizować $\sum_j A_j t_{i_j}$, największą wagę łączymy z najmniejszym czasem, czyli ustawiamy czasy rosnąco względem malejących wag.
+
+	Dla naszych problemów współczynnikiem przy $t_{i_j}$ jest $n + 1 - j$ (str.\ wcześniej) lub $\left\lceil \frac{n+1-j}{3} \right\rceil$ --- oba maleją z~$j$, więc odgrywają rolę $A_j$. Stąd minimalizacja sumy czasów zakończeń sprowadza się do szeregowania zadań od najkrótszego. „Każda” permutacja w tezie --- bo przy remisach czasów istnieje kilka równie optymalnych uporządkowań.
+\end{dygresja}
+
 \begin{proof}
-	Niech $\Pi = (i_1, \dots, i_n)$ będzie permutacją minimalizującą $f$. Przypuśćmy, że dla pewnych $k, l \in [n]$, $k < l$ ale $t_{i_k} > t_{i_l}$. Niech $\Pi' = (i'_1, i'_2, \dots, i'_n)$ będzie permutacją powstałą z $\Pi$ poprzez zamianę $i_k$ z $i_l$, tzn. $i'_j = i_j$ dla $j \in [n] \setminus \{k, l\}$, $i'_k = i_l$, $i'_l = i_k$. Wtedy:
+	Niech $\Pi = (i_1, \dots, i_n)$ będzie permutacją minimalizującą $f$. Przypuśćmy, że dla pewnych $k, l \in [n]$, $k < l$ ale $t_{i_k} > t_{i_l}$. Niech $\Pi' = (i'_1, i'_2, \dots, i'_n)$ będzie permutacją powstałą z $\Pi$ poprzez zamianę $i_k$ z $i_l$, tzn.
 	\begin{flalign*}
-		f(\Pi) - f(\Pi') & = \sum_{j=1}^n A_j \cdot t_{i_j} - \sum_{j=1}^n A_j \cdot t_{i'_j} = A_k \cdot t_{i_k} + A_l \cdot t_{i_l} - A_k \cdot t_{i'_k} - A_l \cdot t_{i'_l} =      &  & \\
-		                 & = \vphantom{\sum_{j=1}^n} A_k \cdot t_{i_k} + A_l \cdot t_{i_l} - A_k \cdot t_{i_l} - A_l \cdot t_{i_k} = A_k(t_{i_k} - t_{i_l}) - A_l(t_{i_k} - t_{i_l}) = &  & \\
-		                 & = \vphantom{\sum_{j=1}^n} \underbrace{(t_{i_k} - t_{i_l})}_{> 0} \cdot \underbrace{(A_k - A_l)}_{\geq 0} \geq 0                                             &  &
+		 &  & \begin{cases}
+			      i'_k = i_l, \quad i'_l = i_k & \text{(zamieniane pozycje)} \\
+			      i'_j = i_j                   & \text{dla\ } j \in [n] \setminus \{k, l\}
+		      \end{cases}\text{. Wtedy:} &  &  &  &  &  &
+	\end{flalign*}
+	\begin{flalign*}
+		f(\Pi) - f(\Pi') & = \sum_{j=1}^n A_j \cdot t_{i_j} - \sum_{j=1}^n A_j \cdot t_{i'_j} =                                            &  & \\
+		                 & = \vphantom{\sum_{j=1}^n} A_k \cdot t_{i_k} + A_l \cdot t_{i_l} - A_k \cdot t_{i'_k} - A_l \cdot t_{i'_l} =     &  & \\
+		                 & = \vphantom{\sum_{j=1}^n} A_k \cdot t_{i_k} + A_l \cdot t_{i_l} - A_k \cdot t_{i_l} - A_l \cdot t_{i_k}  =      &  & \\
+		                 & = \vphantom{\sum_{j=1}^n} A_k(t_{i_k} - t_{i_l}) - A_l(t_{i_k} - t_{i_l}) =                                     &  & \\
+		                 & = \vphantom{\sum_{j=1}^n} \underbrace{(t_{i_k} - t_{i_l})}_{> 0} \cdot \underbrace{(A_k - A_l)}_{\geq 0} \geq 0 &  &
 	\end{flalign*}
 	Zatem $f(\Pi') \leq f(\Pi)$, ale $\Pi$ minimalizuje $f$, więc $f(\Pi') = f(\Pi)$ i $\Pi'$ też minimalizuje $f$.
 	Po pewnej liczbie takich zamian otrzymujemy permutację $\Pi_0 = (j_1, \dots, j_n)$ minimalizującą $f$ taką, że $t_{j_1} \leq t_{j_2} \leq \dots \leq t_{j_n}$.
