@@ -65,8 +65,8 @@ AVC zwraca pokrycie złożone z $2m$ wierzchołków, natomiast optymalne pokryci
 \newcommand{\Ssix}{\textcolor{Scol6}{S_6}}
 
 \begin{example}[Pokrycie zbioru]
-	\begin{figure}[H]
-		\centering
+	Rozważmy zbiór $X$ i~rodzinę podzbiorów przedstawione poniżej:
+	\begin{center}
 		\begin{tikzpicture}[scale=0.9, thick]
 			% Współrzędne elementów (siatka 3x3)
 			\coordinate (e1) at (-2.4, 2);  \coordinate (e2) at (0, 2);  \coordinate (e3) at (2.4, 2);
@@ -94,12 +94,13 @@ AVC zwraca pokrycie złożone z $2m$ wierzchołków, natomiast optymalne pokryci
 					\fill (\p) circle (2pt);
 				}
 		\end{tikzpicture}
-	\end{figure}
+	\end{center}
 	$\mathcal{F} = \{\Sone, \Stwo, \Sthree, \Sfour, \Sfive, \Ssix\}$. \quad
 	$\{\Sone, \Stwo, \Sthree\}$ -- pokrycie.
 \end{example}
 
-\begin{problem}[pokrycia zbioru]
+\begin{problem}[pokrycia zbioru] \leavevmode
+	\vspace{-\baselineskip}
 	\begin{itemize}[nosep]
 		\item Instancja: $(X, \mathcal{F})$, gdzie $X$ -- zbiór skończony, $|X| = n$, $\mathcal{F} \subseteq 2^X$ taki, że $\bigcup_{S \in \mathcal{F}} S = X$.
 		\item Problem: znaleźć pokrycie $\mathcal{A} \subseteq \mathcal{F}$ minimalizujące $|\mathcal{A}|$.
@@ -125,8 +126,12 @@ AVC zwraca pokrycie złożone z $2m$ wierzchołków, natomiast optymalne pokryci
 	\EndFunction
 \end{alg}
 
+\begin{dygresja}
+	Idea jest zachłanna: w~każdym kroku patrzymy wyłącznie na bieżący stan i~dokładamy do rozwiązania ten zbiór $S \in \mathcal{F}$, który pokrywa najwięcej spośród jeszcze niepokrytych elementów (maksymalizuje $|S \cap U|$), nie przejmując się skutkami dla kolejnych kroków. Zmienna $U$ trzyma elementy pozostające do pokrycia: startuje od całego $X$, a~po każdym wyborze odejmujemy od niej wybrany zbiór ($U \Assign U \setminus S$), więc kryterium $|S \cap U|$ premiuje zbiory wnoszące jak najwięcej \emph{nowych} elementów. Pętla kręci się, aż $U$ opustoszeje, czyli aż $\mathcal{A}$ pokryje całe $X$. Zachłanność nie gwarantuje rozwiązania optymalnego (do tego wrócimy przy analizie współczynnika aproksymacji), ale daje pokrycie szybko i~prosto.
+\end{dygresja}
+
 \paragraph{Poprawność}
-Pętla obraca się dopóki są jeszcze niepokryte elementy, a w każdym obrocie pętli jakieś jeszcze niepokryte elementy zostają pokryte.
+Pętla wykonuje się, dopóki istnieją niepokryte elementy, a~w~każdej iteracji co najmniej jeden z~nich zostaje pokryty, więc po skończonej liczbie kroków $U$ pustoszeje.
 
 \paragraph{Złożoność czasowa}
 \begin{itemize}[nosep]
@@ -154,11 +159,11 @@ Ostatecznie złożoność GSC wynosi $\BO(|X| \cdot |\mathcal{F}| \cdot \min\{|X
 	$\mathcal{A}^*$ -- optymalne pokrycie dla $(X, \mathcal{F})$.\\
 	$\mathcal{A}$ -- pokrycie dla $(X, \mathcal{F})$ znalezione przez GSC.
 
-	Niech $S_i$ będzie zbiorem wybranym przez algorytm w linii 4 w $i$-tej iteracji pętli. Przyznajemy koszt
+	Niech $S_i$ będzie zbiorem wybranym przez algorytm w~linii 4 w~$i$-tej iteracji pętli. Przyznajemy koszt
 	\begin{flalign*}
 		c_x = \frac{1}{|S_i \setminus (S_1 \cup S_2 \cup \ldots \cup S_{i-1})|} &  &  &  &
 	\end{flalign*}
-	każdemu elementowi $x \in S_i \setminus (S_1 \cup \ldots \cup S_{i-1})$ ($S_i \setminus (S_1 \cup \ldots \cup S_{i-1})$ to zbiór elementów pokrytych po raz pierwszy w $i$-tej iteracji pętli). Całkowity koszt przyznany podczas jednej iteracji pętli wynosi $1$. Skoro $|\mathcal{A}|$ jest liczbą iteracji pętli, to
+	każdemu elementowi $x \in S_i \setminus (S_1 \cup \ldots \cup S_{i-1})$ ($S_i \setminus (S_1 \cup \ldots \cup S_{i-1})$ to zbiór elementów pokrytych po raz pierwszy w~$i$-tej iteracji pętli). Całkowity koszt przyznany podczas jednej iteracji wynosi $1$, a~ponieważ $|\mathcal{A}|$ jest liczbą iteracji pętli, to
 	\begin{flalign*}
 		|\mathcal{A}| = \sum_{x \in X} c_x &  &  &  &
 	\end{flalign*}
@@ -170,16 +175,16 @@ Ostatecznie złożoność GSC wynosi $\BO(|X| \cdot |\mathcal{F}| \cdot \min\{|X
 
 	Pokażemy, że $\sum_{x \in S} c_x \leq H(|S|)$ dla każdego $S \in \mathcal{F}$.
 
-	Niech $S \in \mathcal{F}$. Dla $i \in \{1, 2, \ldots, |\mathcal{A}|\}$ niech $n_i = |S \setminus (S_1 \cup \ldots \cup S_i)|$ (liczba elementów w $S$, które nie są pokryte po $i$-tej iteracji pętli) i niech $n_0 = |S|$.
+	Niech $S \in \mathcal{F}$. Dla $i \in \{1, 2, \ldots, |\mathcal{A}|\}$ niech $n_i = |S \setminus (S_1 \cup \ldots \cup S_i)|$ (liczba elementów w~$S$, które nie są pokryte po $i$-tej iteracji pętli) i~niech $n_0 = |S|$.
 
-	Niech $k$ będzie najmniejszą liczbą taką, że $n_k = 0$. Wtedy $S$ jest pokryty przez $S_1 \cup S_2 \cup \ldots \cup S_k$. Oczywiście $n_{i-1} \geq n_i$ dla $i \in [k]$, a $n_{i-1} - n_i$ to liczba elementów z $S$ pokrytych po raz pierwszy przez $S_i$.
+	Niech $k$ będzie najmniejszą liczbą taką, że $n_k = 0$. Wtedy $S$ jest pokryty przez $S_1 \cup S_2 \cup \ldots \cup S_k$. Oczywiście $n_{i-1} \geq n_i$ dla $i \in [k]$, a~$n_{i-1} - n_i$ to liczba elementów z~$S$ pokrytych po raz pierwszy przez $S_i$.
 
 	Zatem
 	\begin{flalign*}
 		\sum_{x \in S} c_x = \sum_{i = 1}^{k} (n_{i-1} - n_i) \cdot \frac{1}{|S_i \setminus (S_1 \cup \ldots \cup S_{i-1})|} &  &  &  &
 	\end{flalign*}
 
-	Na podstawie wyboru zachłannego w linii 4 mamy $|S_i \setminus (S_1 \cup \ldots \cup S_{i-1})| \geq |S \setminus (S_1 \cup \ldots \cup S_{i-1})| = n_{i-1}$ dla każdego $S \in \mathcal{F} \setminus \{S_1, \ldots, S_{i-1}\}$.
+	Na podstawie wyboru zachłannego w~linii 4 mamy $|S_i \setminus (S_1 \cup \ldots \cup S_{i-1})| \geq |S \setminus (S_1 \cup \ldots \cup S_{i-1})| = n_{i-1}$ dla każdego $S \in \mathcal{F} \setminus \{S_1, \ldots, S_{i-1}\}$.
 
 	Mamy:
 	\begin{align*}
@@ -211,7 +216,7 @@ Ostatecznie złożoność GSC wynosi $\BO(|X| \cdot |\mathcal{F}| \cdot \min\{|X
 
 VC jest szczególnym przypadkiem problemu pokrycia zbiorów. Dla $G = (V, E)$ kładziemy $X = E$, $\mathcal{F} = \{E(v) : v \in V\}$, gdzie $E(v) = \{e \in E : v \in e\}$, $|E(v)| = d(v)$. Wtedy $\max\{|E(v)| : E(v) \in \mathcal{F}\} = \Delta(G)$, więc GSC zastosowany do VC ma współczynnik aproksymacji $H(\Delta(G))$.
 
-Dla grafów o maksymalnym stopniu $\leq 3$ ($H(3) < 2 < H(4)$) oszacowanie współczynnika aproksymacyjnego GSC jest lepsze niż oszacowanie dla AVC.
+Dla grafów o~maksymalnym stopniu $\leq 3$ ($H(3) < 2 < H(4)$) oszacowanie współczynnika aproksymacyjnego GSC jest lepsze niż oszacowanie dla AVC.
 
 % ════════════════════════════════════════════════════════════════
 \subsection{Schematy aproksymacyjne}

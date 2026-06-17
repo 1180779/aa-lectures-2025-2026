@@ -109,6 +109,7 @@ Niech $\Pi$ -- problem optymalizacyjny znalezienia maksimum lub minimum pewnej f
 	      \begin{flalign*}
 		      \forall I \in D_\Pi\ \forall s \in S(I)\ f(s) > 0 &  &  &  &
 	      \end{flalign*}
+	      czyli każde rozwiązanie dopuszczalne każdej instancji ma dodatni koszt. Założenie to nie ogranicza ogólności: jakość aproksymacji mierzymy ilorazem $c(I)/c^*(I)$ (poniżej), a~iloraz ma sens tylko dla wartości tego samego znaku i~niezerowych. Dla typowych problemów (np. minimalizacja długości trasy, liczby maszyn czy rozmiaru pokrycia) koszt jest z~natury dodatni, więc warunek jest spełniony automatycznie.
 \end{itemize}
 
 Niech $c^*(I)$ oznacza wartość rozwiązania optymalnego instancji $I$, $c^*(I) > 0$.\\
@@ -143,7 +144,8 @@ Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \uemph{współczyn
 	Niech $G = (V, E)$ -- graf. \uemph{Pokryciem wierzchołkowym} (Vertex Cover, VC) grafu $G$ nazywamy zbiór $W \subseteq V$ taki, że dla każdej krawędzi $e \in E$ zachodzi $W \cap e \neq \emptyset$ -- czyli każda krawędź $G$ ma co najmniej jeden koniec w $W$.
 \end{definition}
 
-\begin{problem}[pokrycia wierzchołkowego]
+\begin{problem}[pokrycia wierzchołkowego] \leavevmode
+	\vspace{-\baselineskip}
 	\begin{itemize}[nosep]
 		\item Instancja: graf $G$.
 		\item Problem: znaleźć pokrycie wierzchołkowe grafu $G$ o minimalnej liczbie wierzchołków.
@@ -151,8 +153,8 @@ Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \uemph{współczyn
 \end{problem}
 
 \begin{example}[Pokrycie wierzchołkowe]
-	\begin{figure}[H]
-		\centering
+	Rozważmy graf $G$ przedstawiony poniżej:
+	\begin{center}
 		\begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.6cm, inner sep=1pt}]
 			\node[fill=accent!25] (a) at (0, 2) {$a$};
 			\node              (b) at (2, 2) {$b$};
@@ -169,7 +171,7 @@ Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \uemph{współczyn
 			\draw (d) -- (e);
 			\draw (d) -- (f);
 		\end{tikzpicture}
-	\end{figure}
+	\end{center}
 	$W = \{a, e, d, f\}$ jest pokryciem wierzchołkowym powyższego grafu $G$ (zaznaczone wyróżnione wierzchołki).
 \end{example}
 
@@ -188,6 +190,33 @@ Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \uemph{współczyn
 	\EndFunction
 \end{alg}
 
+% Pomocnicze makra do rysowania kolejnych kroków AVC na grafie z poprzedniego
+% przykładu. sel = krawędź wybrana, gone = usunięta z F, cov = wierzchołek w pokryciu.
+\tikzset{
+	avcnode/.style={circle, draw, minimum size=0.5cm, inner sep=1pt, font=\small},
+	cov/.style={fill=accent!25},
+	sel/.style={accentB, line width=1.2pt},
+	gone/.style={gray!45, dashed},
+}
+% #1..#6: dodatkowe style wierzchołków a,b,e,c,d,f (cov albo puste)
+\newcommand{\avcnodes}[6]{%
+	\node[avcnode,#1] (a) at (0,2) {$a$};
+	\node[avcnode,#2] (b) at (2,2) {$b$};
+	\node[avcnode,#3] (e) at (1,1) {$e$};
+	\node[avcnode,#4] (c) at (0,0) {$c$};
+	\node[avcnode,#5] (d) at (2,0) {$d$};
+	\node[avcnode,#6] (f) at (4,1) {$f$};
+}
+% #1..#8: style krawędzi ab,ac,ae,bd,be,cd,de,df (sel/gone albo puste = nadal w F)
+\newcommand{\avcedges}[8]{%
+	\draw[#1] (a)--(b); \draw[#2] (a)--(c); \draw[#3] (a)--(e);
+	\draw[#4] (b)--(d); \draw[#5] (b)--(e); \draw[#6] (c)--(d);
+	\draw[#7] (d)--(e); \draw[#8] (d)--(f);
+}
+\newcommand{\avcpanel}[1]{%
+	\begin{tikzpicture}[scale=0.6, baseline=(current bounding box.center)]#1\end{tikzpicture}}
+\newcommand{\avclabel}[1]{\node[font=\footnotesize] at (2,-0.9) {#1};}
+
 \begin{example}[Algorytm AVC -- przykład]
 	Rozważmy graf z poprzedniego przykładu.
 
@@ -197,6 +226,13 @@ Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \uemph{współczyn
 		\item Po wybraniu $cd$ usuwamy z $F$ krawędzie $cd, de, df$ -- $F = \emptyset$.
 	\end{itemize}
 	Algorytm zwraca $C = \{a, b, c, d\}$.
+	\begin{center}
+		\avcpanel{\avcnodes{}{}{}{}{}{}\avcedges{}{}{}{}{}{}{}{}\avclabel{start}}%
+		\;$\rightarrow$\;%
+		\avcpanel{\avcnodes{cov}{cov}{}{}{}{}\avcedges{sel}{gone}{gone}{gone}{gone}{}{}{}\avclabel{wybór $ab$}}%
+		\;$\rightarrow$\;%
+		\avcpanel{\avcnodes{cov}{cov}{}{cov}{cov}{}\avcedges{sel}{gone}{gone}{gone}{gone}{sel}{gone}{gone}\avclabel{wybór $cd$}}
+	\end{center}
 
 	Inny przebieg algorytmu może wybrać kolejno krawędzie $df$, $be$ i $ac$:
 	\begin{itemize}[nosep]
@@ -205,4 +241,13 @@ Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \uemph{współczyn
 		\item Po wybraniu $ac$ usuwamy ostatnią krawędź $ac$ -- $F = \emptyset$.
 	\end{itemize}
 	Algorytm zwraca $C = \{d, f, e, b, a, c\}$.
+	\begin{center}
+		\avcpanel{\avcnodes{}{}{}{}{}{}\avcedges{}{}{}{}{}{}{}{}\avclabel{start}}%
+		\;$\rightarrow$\;%
+		\avcpanel{\avcnodes{}{}{}{}{cov}{cov}\avcedges{}{}{}{gone}{}{gone}{gone}{sel}\avclabel{wybór $df$}}%
+		\;$\rightarrow$\;%
+		\avcpanel{\avcnodes{}{cov}{cov}{}{cov}{cov}\avcedges{gone}{}{gone}{gone}{sel}{gone}{gone}{sel}\avclabel{wybór $be$}}%
+		\;$\rightarrow$\;%
+		\avcpanel{\avcnodes{cov}{cov}{cov}{cov}{cov}{cov}\avcedges{gone}{sel}{gone}{gone}{sel}{gone}{gone}{sel}\avclabel{wybór $ac$}}
+	\end{center}
 \end{example}
