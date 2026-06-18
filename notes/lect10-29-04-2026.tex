@@ -18,37 +18,46 @@ Dla $t \in \{0, 1, \ldots, n\}$ niech
 \end{lemma}
 
 \begin{obowiazkowy}
-\begin{theorem}
-	Niech $S$ -- zbiór zadań o jednostkowym czasie wykonania, a $\mathcal{I}$ -- rodzina zbiorów wolnych od kar. Wtedy $(S, \mathcal{I})$ jest matroidem.
-\end{theorem}
-\begin{proof}
-	Sprawdzamy własności z definicji matroidu (Definicja~\ref{def:matroid}):
-	\begin{enumerate}
-		\item[(wł.\ \ref{matroid:skończoność})] Oczywiste. $\checkmark$
-		\item[(wł.\ \ref{matroid:niepustość})] Dla każdego $i \in [n]$ zachodzi $\{z_i\} \in \mathcal{I}$, więc $\mathcal{I} \neq \emptyset$. $\checkmark$
-		\item[(wł.\ \ref{matroid:dziedziczność})] Niech $A \in \mathcal{I}$ (czyli $A$ jest wolny od kar) i $B \subseteq A$. Z~definicji istnieje harmonogram zbioru $A$, w którym wszystkie zadania są terminowe. Usuwając z~tego harmonogramu zadania należące do $A \setminus B$, otrzymujemy harmonogram zbioru $B$, w którym wszystkie zadania nadal są terminowe (usunięcie zadań nie opóźnia pozostałych). Zatem $B$ jest wolny od kar, czyli $B \in \mathcal{I}$.
-		\item[(wł.\ \ref{matroid:wymiana})] Niech $A, B \in \mathcal{I}$, $|B| > |A|$.\\
-		      Niech $k \in \{0, 1, \ldots, n\}$ będzie największą liczbą $t$ taką, że $N_t(B) \leq N_t(A)$.\\
-		      $k$ jest dobrze zdefiniowane, bo $N_0(B) = 0 = N_0(A)$.\\
-		      Mamy $N_n(B) = |B| > |A| = N_n(A)$, więc $k < n$.\\
-		      Dla $j \in \{k+1, k+2, \ldots, n\}$ mamy $N_j(B) > N_j(A)$, więc $N_j(B) \geq N_j(A) + 1$.
-		      \begin{flalign*}
-			      \left.
-			      \begin{array}{l}
-				      N_{k+1}(B) > N_{k+1}(A) \\
-				      N_k(B) \leq N_k(A)
-			      \end{array}
-			      \right\} \implies \text{istnieje zadanie } z \in B \setminus A \text{ o deadlinie } = k+1 &  &  &  &
-		      \end{flalign*}
-		      Niech $A' = A \cup \{z\}$. Pokażemy, że $A'$ jest wolny od kar, używając lematu \ref{lemma:wolny-od-kar}.
-		      \begin{itemize}[nosep]
-			      \item Dla $t \in \{1, 2, \ldots, k\}$:\quad $N_t(A') = N_t(A) \leq t$, bo $A$ jest wolny od kar.
-			      \item Dla $t \in \{k+1, k+2, \ldots, n\}$:\quad $N_t(A') = N_t(A) + 1 \leq N_t(B) \leq t$, bo $B$ jest wolny od kar.
-		      \end{itemize}
-		      Zatem $A'$ jest wolny od kar.
-	\end{enumerate}
-	Pokazaliśmy, że $(S, \mathcal{I})$ jest matroidem.
-\end{proof}
+	\begin{theorem}
+		Niech $S$ -- zbiór zadań o jednostkowym czasie wykonania, a $\mathcal{I}$ -- rodzina zbiorów wolnych od kar. Wtedy $(S, \mathcal{I})$ jest matroidem.
+	\end{theorem}
+	\begin{proof}
+		Sprawdzamy własności z definicji matroidu (Definicja~\ref{def:matroid}):
+		\newlength\labelw
+		\settowidth\labelw{(wł.\ 1)\ }
+		\begin{enumerate}[
+				label=(wł.\ \arabic*),
+				align=left,
+				labelwidth=\labelw,
+				labelsep=0pt,
+				leftmargin=\dimexpr\labelw-2em\relax,  % wrapped lines hang 1em LEFT of first-line text
+				itemindent=2em
+			]
+			\item[(wł.\ \ref{matroid:skończoność})] Oczywiste. $\checkmark$
+			\item[(wł.\ \ref{matroid:niepustość})] Dla każdego $i \in [n]$ zachodzi $\{z_i\} \in \mathcal{I}$, więc $\mathcal{I} \neq \emptyset$. $\checkmark$
+			\item[(wł.\ \ref{matroid:dziedziczność})] Niech $A \in \mathcal{I}$ (czyli $A$ jest wolny od kar) i $B \subseteq A$. Z~definicji istnieje harmonogram zbioru $A$, w którym wszystkie zadania są terminowe. Usuwając z~tego harmonogramu zadania należące do $A \setminus B$, otrzymujemy harmonogram zbioru $B$, w którym wszystkie zadania nadal są terminowe (usunięcie zadań nie opóźnia pozostałych). Zatem $B$ jest wolny od kar, czyli $B \in \mathcal{I}$.
+			\item[(wł.\ \ref{matroid:wymiana})] Niech $A, B \in \mathcal{I}$, $|B| > |A|$.\\
+			      Niech $k \in \{0, 1, \ldots, n\}$ będzie największą liczbą $t$ taką, że $N_t(B) \leq N_t(A)$.\\
+			      $k$ jest dobrze zdefiniowane, bo $N_0(B) = 0 = N_0(A)$.\\
+			      Mamy $N_n(B) = |B| > |A| = N_n(A)$, więc $k < n$.\\
+			      Dla $j \in \{k+1, k+2, \ldots, n\}$ mamy $N_j(B) > N_j(A)$, więc $N_j(B) \geq N_j(A) + 1$.
+			      \begin{flalign*}
+				      \left.
+				      \begin{array}{l}
+					      N_{k+1}(B) > N_{k+1}(A) \\
+					      N_k(B) \leq N_k(A)
+				      \end{array}
+				      \right\} \implies \text{istnieje zadanie } z \in B \setminus A \text{ o deadlinie } = k+1 &  &  &  &
+			      \end{flalign*}
+			      Niech $A' = A \cup \{z\}$. Pokażemy, że $A'$ jest wolny od kar, używając lematu \ref{lemma:wolny-od-kar}.
+			      \begin{itemize}[nosep]
+				      \item Dla $t \in \{1, 2, \ldots, k\}$:\quad $N_t(A') = N_t(A) \leq t$, bo $A$ jest wolny od kar.
+				      \item Dla $t \in \{k+1, k+2, \ldots, n\}$:\quad $N_t(A') = N_t(A) + 1 \leq N_t(B) \leq t$, bo $B$ jest wolny od kar.
+			      \end{itemize}
+			      Zatem $A'$ jest wolny od kar.
+		\end{enumerate}
+		Pokazaliśmy, że $(S, \mathcal{I})$ jest matroidem.
+	\end{proof}
 \end{obowiazkowy}
 
 Możemy do rozwiązania problemu szeregowania zadań użyć algorytmu Greedy (Algorytm \ref{alg:greedy}) dla matroidu $(S, \mathcal{I})$ maksymalizującego $\sum_{z_i \in A} w_i$ (czyli minimalizującego sumę kar zadań spóźnionych).
@@ -147,11 +156,11 @@ Niech $\rho = \sup_{n \in \N}\{\rho(n)\}$. Wtedy mówimy, że \uemph{współczyn
 \end{definition}
 
 \begin{problem}[pokrycia wierzchołkowego] \leavevmode
-	\vspace{-\baselineskip}
-	\begin{itemize}[nosep]
-		\item Instancja: graf $G$.
-		\item Problem: znaleźć pokrycie wierzchołkowe grafu $G$ o minimalnej liczbie wierzchołków.
-	\end{itemize}
+\vspace{-\baselineskip}
+\begin{itemize}[nosep]
+	\item Instancja: graf $G$.
+	\item Problem: znaleźć pokrycie wierzchołkowe grafu $G$ o minimalnej liczbie wierzchołków.
+\end{itemize}
 \end{problem}
 
 \begin{example}[Pokrycie wierzchołkowe]
