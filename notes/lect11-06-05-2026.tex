@@ -8,6 +8,7 @@ $n = |V(G)|$, $m = |E(G)|$.
 \end{itemize}
 Złożoność czasowa AVC wynosi $\BO(m)$.
 
+\begin{obowiazkowy}
 \begin{theorem}
 	AVC jest algorytmem $2$-aproksymacyjnym.
 \end{theorem}
@@ -24,9 +25,10 @@ Złożoność czasowa AVC wynosi $\BO(m)$.
 		c(G) = 2|B| \leq 2 \cdot c^*(G) \implies \frac{c(G)}{c^*(G)} \leq 2 &  &  &  &
 	\end{flalign*}
 \end{proof}
+\end{obowiazkowy}
 
 Pokażemy, że ograniczenie $2$ jest osiągane. Rozważmy graf złożony z $m$ rozłącznych krawędzi:
-\begin{figure}[H]
+\begin{azfigure}
 	\centering
 	\begin{tikzpicture}[every node/.style={circle, draw, fill=black, inner sep=1.5pt}]
 		\foreach \x in {0,1,2,3} {
@@ -37,7 +39,7 @@ Pokażemy, że ograniczenie $2$ jest osiągane. Rozważmy graf złożony z $m$ r
 		\node[draw=none, fill=none] at (4.8, 0.5) {$\ldots$};
 		\draw [decorate, decoration={brace, amplitude=5pt, mirror}] (-0.2, -0.3) -- (5.0, -0.3) node[midway, draw=none, fill=none, below=5pt] {$m$};
 	\end{tikzpicture}
-\end{figure}
+\end{azfigure}
 AVC zwraca pokrycie złożone z $2m$ wierzchołków, natomiast optymalne pokrycie ma rozmiar $m$ (po jednym końcu z każdej krawędzi). Stąd $\frac{c(G)}{c^*(G)} = 2$.
 
 % ════════════════════════════════════════════════════════════════
@@ -148,6 +150,7 @@ Pętla wykonuje się, dopóki istnieją niepokryte elementy, a~w~każdej iteracj
 \end{itemize}
 Ostatecznie złożoność GSC wynosi $\BO(|X| \cdot |\mathcal{F}| \cdot \min\{|X|, |\mathcal{F}|\})$.
 
+\begin{obowiazkowy}
 \begin{theorem}
 	GSC jest algorytmem $H(\max\{|S| : S \in \mathcal{F}\})$-aproksymacyjnym, gdzie
 	\begin{flalign*}
@@ -203,7 +206,9 @@ Ostatecznie złożoność GSC wynosi $\BO(|X| \cdot |\mathcal{F}| \cdot \min\{|X
 	\end{align*}
 	więc $\dfrac{|\mathcal{C}|}{|\mathcal{C}^*|} \leq H(\max\{|S| : S \in \mathcal{F}\})$.
 \end{proof}
+\end{obowiazkowy}
 
+\begin{obowiazkowy}
 \begin{conclusion}
 	GSC jest algorytmem $(\ln|X| + 1)$-aproksymacyjnym.
 \end{conclusion}
@@ -213,6 +218,7 @@ Ostatecznie złożoność GSC wynosi $\BO(|X| \cdot |\mathcal{F}| \cdot \min\{|X
 		H(\max\{|S| : S \in \mathcal{F}\}) \leq H(|X|) \leq \ln|X| + 1 &  &  &  &
 	\end{flalign*}
 \end{proof}
+\end{obowiazkowy}
 
 VC jest szczególnym przypadkiem problemu pokrycia zbiorów. Dla $G = (V, E)$ kładziemy $X = E$, $\mathcal{F} = \{E(v) : v \in V\}$, gdzie $E(v) = \{e \in E : v \in e\}$, $|E(v)| = d(v)$. Wtedy $\max\{|E(v)| : E(v) \in \mathcal{F}\} = \Delta(G)$, więc GSC zastosowany do VC ma współczynnik aproksymacji $H(\Delta(G))$.
 

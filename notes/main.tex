@@ -1,3 +1,10 @@
+% ════════════════════════════════════════════════════════════════
+% Pełne notatki z wykładów. Jedno źródło, dwie wersje PDF: zwykła oraz
+% z wyróżnieniami materiału obowiązkowego na egzaminie (twierdzenia wraz
+% z dowodami). Wersję z wyróżnieniami włącza zmienna środowiskowa
+% AZ_HIGHLIGHT=1 przy kompilacji (patrz build.sh / README).
+% ════════════════════════════════════════════════════════════════
+
 \input{../preamble}
 
 \begin{document}
@@ -8,8 +15,17 @@
 	\centering
 	\vspace*{2cm}
 	{\LARGE\bfseries\color{accent} Algorytmy Zaawansowane}\\[0.5cm]
-	%{\large }\\[0.3cm]
+	\ifbool{azhighlight}{{\large\bfseries\color{accentB} Wersja z wyróżnieniami}\\[0.5cm]}{}
 	{\normalsize Opracowane na podstawie wykładów Michała Tuczyńskiego}\\[2cm]
+
+	\ifbool{azhighlight}{%
+		{\small\itshape Fragmenty wyróżnione tłem}\\
+		\begin{obowiazkowy}
+			\centering\small\itshape
+			wskazują materiał, który trzeba znać szczególnie dobrze ---
+			twierdzenia wraz z dowodami obowiązkowymi na egzaminie.
+		\end{obowiazkowy}
+	}{}
 
 	\vfill
 	{\small Algorytmy Zaawansowane\\

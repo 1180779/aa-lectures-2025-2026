@@ -205,7 +205,7 @@ Oto schemat aproksymacyjny:
 	$\Phi = C_1 \wedge C_2 \wedge C_3 \wedge C_4$. \quad $n = 3$, $m = 4$.
 
 	Wszystkie liczby są $7$-cyfrowe: $3$ pozycje zmiennych i~$4$ pozycje klauzul. Cel:
-	\begin{table}[H]
+	\begin{aztable}
 		\centering
 		\renewcommand{\arraystretch}{1.2}
 		\begin{NiceTabular}{c|ccc|cccc}[margin,hvlines]
@@ -213,10 +213,10 @@ Oto schemat aproksymacyjny:
 			\hline
 			$t$ & 1     & 1     & 1     & 4     & 4     & 4     & 4     \\
 		\end{NiceTabular}
-	\end{table}
+	\end{aztable}
 
 	\emph{Liczby zmiennych.} Para $r_i, r_i'$ ma $1$ na pozycji $x_i$ (więc do sumy $1$ trafia dokładnie jedna z~nich). Na pozycjach klauzul $1$ pojawia się tam, gdzie odpowiedni literał występuje w~klauzuli -- np.\ $r_1$ ($x_1$) ma $1$ w~$C_1$ i~$C_4$, bo $x_1 \in C_1, C_4$.
-	\begin{table}[H]
+	\begin{aztable}
 		\centering
 		\renewcommand{\arraystretch}{1.2}
 		\begin{NiceTabular}{c|ccc|cccc}[margin,hvlines]
@@ -229,10 +229,10 @@ Oto schemat aproksymacyjny:
 			$r_3$  & 0     & 0     & 1     & 0     & 0     & 1     & 1     \\
 			$r_3'$ & 0     & 0     & 1     & 1     & 1     & 0     & 0     \\
 		\end{NiceTabular}
-	\end{table}
+	\end{aztable}
 
 	\emph{Liczby dopełniające.} Para $s_j, s_j'$ ma niezerowe cyfry ($1$ i~$2$) tylko na pozycji $C_j$ -- służy do dobicia tej pozycji do~$4$.
-	\begin{table}[H]
+	\begin{aztable}
 		\centering
 		\renewcommand{\arraystretch}{1.2}
 		\begin{NiceTabular}{c|ccc|cccc}[margin,hvlines]
@@ -247,10 +247,10 @@ Oto schemat aproksymacyjny:
 			$s_4$  & 0     & 0     & 0     & 0     & 0     & 0     & 1     \\
 			$s_4'$ & 0     & 0     & 0     & 0     & 0     & 0     & 2     \\
 		\end{NiceTabular}
-	\end{table}
+	\end{aztable}
 
 	\emph{Pełny obraz.} Weźmy spełniające wartościowanie $x_1 = 1$, $x_2 = 0$, $x_3 = 0$: bierzemy $r_1$ (bo $x_1 = 1$) oraz $r_2', r_3'$ (bo $x_2 = x_3 = 0$), a~na każdej pozycji klauzuli dobieramy $s_j, s_j'$ tak, by uzbierać $4$. Wybrane liczby ($S'$) zaznaczono; ostatni wiersz to ich suma.
-	\begin{table}[H]
+	\begin{aztable}
 		\centering
 		\renewcommand{\arraystretch}{1.2}
 		\begin{NiceTabular}{c|ccc|cccc}[margin,hvlines,color-inside]
@@ -275,6 +275,6 @@ Oto schemat aproksymacyjny:
 			\hline
 			$\sum$     & 1     & 1     & 1     & 4     & 4     & 4     & 4     \\
 		\end{NiceTabular}
-	\end{table}
+	\end{aztable}
 	Suma wybranych liczb równa się $t$, więc $S' = \{r_1, r_2', r_3', s_1, s_2', s_3, s_3', s_4, s_4'\}$ jest rozwiązaniem.
 \end{example}

@@ -118,7 +118,7 @@ Jak uszeregować zadania tak, aby średni czas ukończenia był jak najmniejszy?
 
 \begin{example}[Szeregowanie zadań -- jeden procesor] \label{prob:szeregowanieZadan}
 	\leavevmode
-	\begin{table}[H]
+	\begin{aztable}
 		\centering
 		\renewcommand{\arraystretch}{1.2}
 		\begin{NiceTabular}{c|c|c}[margin,hvlines]
@@ -129,7 +129,7 @@ Jak uszeregować zadania tak, aby średni czas ukończenia był jak najmniejszy?
 			3   & $z_3$   & 3     \\
 			4   & $z_4$   & 10
 		\end{NiceTabular}
-	\end{table}
+	\end{aztable}
 
 	Rozważmy uszeregowanie $z_1, z_2, z_3, z_4$:
 	\begin{flalign*}
@@ -150,7 +150,7 @@ Mamy 3 procesory. Pytanie jak poprzednio (por. \ref{prob:szeregowanieZadan}).
 
 \begin{example}[Szeregowanie zadań -- trzy procesory]
 	\leavevmode
-	\begin{table}[H]
+	\begin{aztable}
 		\centering
 		\renewcommand{\arraystretch}{1.2}
 		\begin{NiceTabular}{c|c|c|c|c|c|c|c|c|c}[margin,hvlines]
@@ -158,11 +158,11 @@ Mamy 3 procesory. Pytanie jak poprzednio (por. \ref{prob:szeregowanieZadan}).
 			\hline
 			$t_i$   & 3     & 5     & 6     & 10    & 11    & 14    & 15    & 18    & 20
 		\end{NiceTabular}
-	\end{table}
+	\end{aztable}
 
 	\textbf{Rozwiązanie:} Przydzielaj zadania do pierwszego wolnego procesora w kolejności od najkrótszego do najdłuższego.
 
-	\begin{figure}[H]
+	\begin{azfigure}
 		\centering
 		\begin{tikzpicture}[x=0.35cm, y=0.8cm, font=\small]
 			% P1
@@ -189,7 +189,7 @@ Mamy 3 procesory. Pytanie jak poprzednio (por. \ref{prob:szeregowanieZadan}).
 					\draw[gray, dotted] (\x, 3) -- (\x, 0);
 				}
 		\end{tikzpicture}
-	\end{figure}
+	\end{azfigure}
 \end{example}
 
 W problemie \ref{prob:szeregowanieZadan} dla uszeregowania $z_{i_1}, z_{i_2}, \dots, z_{i_n}$ suma zakończeń zadań wynosi:

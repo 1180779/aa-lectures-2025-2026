@@ -37,7 +37,7 @@ Zobaczmy jak jest obliczane np. \Call{Fib1}{$5$}. W drzewie wywołań poszczegó
 	f1/.style={fill=green!28},
 	f0/.style={fill=accent!8},
 }
-\begin{figure}[ht]
+\begin{azfigure}
 	\centering
 	\begin{tikzpicture}[fibtree]
 		\node {$F_5$}
@@ -66,7 +66,7 @@ Zobaczmy jak jest obliczane np. \Call{Fib1}{$5$}. W drzewie wywołań poszczegó
 		kolorze odpowiadają temu samemu podproblemowi, liczonemu wielokrotnie od zera:
 		$F_3$ jest wyznaczane $2$~razy, $F_2$ -- $3$~razy, a~$F_1$ -- $5$~razy.}
 	\label{fig:fib:tree}
-\end{figure}
+\end{azfigure}
 
 \begin{flalign*}
 	 & \begin{array}{lc}
@@ -652,7 +652,7 @@ Niech $X_i = (x_1, \dots, x_i)$ dla $i \in \{1, \dots, m\}$ i dodatkowo $X_0 = (
 	sub/.style={accentB, thick, dashed, rounded corners=2pt},
 }
 
-\begin{figure}[ht]
+\begin{azfigure}
 	\centering
 	% ----- Przypadek 1: x_m = y_n -----
 	\begin{minipage}[t]{0.31\textwidth}
@@ -714,7 +714,7 @@ Niech $X_i = (x_1, \dots, x_i)$ dla $i \in \{1, \dots, m\}$ i dodatkowo $X_0 = (
 		przekreślona komórka -- element odrzucony, nienależący do tego LCS;
 		przerywana pomarańczowa ramka -- podproblem(y), do których redukuje się zadanie.}
 	\label{fig:lcs:cases}
-\end{figure}
+\end{azfigure}
 
 \begin{proof} ~
 	\begin{enumerate}
@@ -772,7 +772,7 @@ $X = (A, {\color{accent}B}, {\color{accent}C}, {\color{accent}B}, D, {\color{acc
 	({\color{accent}B}, D, {\color{accent}C}, A, {\color{accent}B}, {\color{accent}A})$. \\
 $m = 7$, $n = 6$.
 
-\begin{table}[H]
+\begin{aztable}
 	\centering
 	\renewcommand{\arraystretch}{1.2}
 	\begin{minipage}{0.48\linewidth}
@@ -809,7 +809,7 @@ $m = 7$, $n = 6$.
 			7   & $B$   &       & $\nwarrow$ & $\uparrow$   & $\uparrow$   & $\uparrow$   & $\nwarrow$   & $\uparrow$   \\
 		\end{NiceTabular}
 	\end{minipage}
-\end{table}
+\end{aztable}
 
 \begin{dygresja}
 	Pełne wypełnienie tablicy to $7 \cdot 6 = 42$ powtórzenia tej samej reguły, więc

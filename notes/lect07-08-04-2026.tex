@@ -10,7 +10,7 @@ Często znaki są reprezentowane przy użyciu 8 bitów (np. ASCII). Skoro częst
 \paragraph{Przykład}
 W pliku jest 58 znaków. Każdy znak jest elementem zbioru $\{a, e, i, s, t, r, n\}$.
 
-\begin{table}[H]
+\begin{aztable}
 	\centering
 	\renewcommand{\arraystretch}{1.2}
 	\begin{NiceTabular}{c|l|c|c|c|c|c|c|c}[margin,hvlines]
@@ -24,7 +24,7 @@ W pliku jest 58 znaków. Każdy znak jest elementem zbioru $\{a, e, i, s, t, r, 
 		\hline
 		kod 3                         & \makecell[l]{zmienna długość                                     \\ słowa kodowego} & 001 & 01 & 10 & 00010 & 0001 & 11 & 00001
 	\end{NiceTabular}
-\end{table}
+\end{aztable}
 
 Jeśli użyjemy kodu o stałej długości słowa kodowego (kod 1) to zakodowany plik ma: $58 \cdot 3 = 174$ bity. \\
 Jeśli użyjemy kodu o zmiennej długości słowa kodowego (kod 2 lub kod 3) to zakodowany plik ma:
@@ -68,7 +68,7 @@ Słowo kodowe znaku jest ciągiem etykiet krawędzi na ścieżce od korzenia do 
 			every node/.style={circle, draw, minimum size=0.7cm, inner sep=0pt, font=\footnotesize, align=center},
 		}
 }
-\begin{figure}[ht]
+\begin{azfigure}
 	\centering
 	\begin{minipage}{0.48\textwidth}
 		\centering
@@ -173,7 +173,7 @@ Słowo kodowe znaku jest ciągiem etykiet krawędzi na ścieżce od korzenia do 
 			};
 		% child { node[draw=none] {} edge from parent[draw=none] };
 	\end{tikzpicture}
-\end{figure}
+\end{azfigure}
 
 \begin{remark}
 	Żadne słowo kodowe nie jest prefixem innego słowa kodowego $\iff$ wszystkie znaki są reprezentowane przez liście w reprezentacji drzewowej kodu.
@@ -202,7 +202,7 @@ Drzewo binarne nazywamy \uemph{regularnym}, jeśli każdy wierzchołek wewnętrz
 \begin{proof}
 	Niech $T$ będzie drzewem binarnym reprezentującym optymalny kod prefixowy. Przypuśćmy, że $T$ nie jest regularne. Wtedy istnieje wierzchołek wewnętrzny $v$ z dokładnie jednym dzieckiem $w$. Niech $u$ będzie rodzicem $v$ (jeśli $v$ nie jest korzeniem $T$).
 
-	\begin{figure}[H]
+	\begin{azfigure}
 		\centering
 		\begin{minipage}{0.4\textwidth}
 			\centering
@@ -261,7 +261,7 @@ Drzewo binarne nazywamy \uemph{regularnym}, jeśli każdy wierzchołek wewnętrz
 				\node[draw=none] at (-2, 0) {$T'$};
 			\end{tikzpicture}
 		\end{minipage}
-	\end{figure}
+	\end{azfigure}
 
 	Niech $T'$ będzie drzewem powstałym z $T$ przez usunięcie $v$ i dodanie krawędzi $uw$, jeśli $v$ nie był korzeniem $T$.
 	$T'$ reprezentuje kod prefixowy i $B(T') < B(T)$ -- sprzeczność z optymalnością $T$.

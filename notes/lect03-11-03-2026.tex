@@ -79,6 +79,7 @@ Optymalne rozwiązanie problemu jest funkcją optymalnych rozwiązań podproblem
 	\item podproblemy są rozłączne
 \end{enumerate}
 
+\begin{obowiazkowy}
 \subsection{Znajdywanie pary najbliższych punktów}
 $Q$ - zbiór $n \geq 2$ punktów na płaszczyźnie
 \begin{flalign*}
@@ -94,17 +95,16 @@ W tablicy $X$ punkty są posortowane w porządku niemalejącym względem pierwsz
 a w tablicy $Y$ po drugiej współrzędnej.
 
 Opis algorytmu:
-\begin{itemize}
-	\item[jeśli $|P| \leq 3$] sprawdzamy wszystkie pary
-	\item[jeśli $|P| > 3$] ~
-	      \begin{itemize}
-		      \item[\uemph{Dziel:}] Dzielimy punkty $P$ pionową prostą $l$ na dwa podzbiory $P_L$ i $P_R$ na lewo i na prawo
+
+Jeśli $|P| \leq 3$, sprawdzamy wszystkie pary. W~przeciwnym razie ($|P| > 3$) postępujemy następująco:
+\begin{itemize}[align=left, widest={\uemph{Zwyciężaj:}}, leftmargin=!, labelsep=0.5em]
+	\item[\uemph{Dziel:}] Dzielimy punkty $P$ pionową prostą $l$ na dwa podzbiory $P_L$ i $P_R$ na lewo i na prawo
 		            od $l$ tak, że $|P_L| = \left\lceil \frac{|P|}{2} \right\rceil,\ |P_R| = \left\lfloor \frac{|P|}{2} \right\rfloor$.
 		            Dzielimy tablicę $X$ na $X_L$ i $X_R$ zawierające punkty odpowiednio $P_L$ i $P_R$ posortowane w porządku
 		            niemalejącym względem pierwszej współrzędnej. Podobnie dzielimy $Y$ na $Y_L$ i $Y_R$ zawierające
 		            odpowiednio punkty z $P_L$ i $P_R$ posortowane w porządku niemalejącym po drugiej współrzędnej.
 
-		            \begin{figure}[ht]
+		            \begin{azfigure}
 			            \centering
 			            \begin{tikzpicture}[>=stealth, font=\small, scale=0.8]
 				            % pionowa prosta l dzielaca P
@@ -129,7 +129,7 @@ Opis algorytmu:
 				            (na~lewo) i~$P_R$ (na~prawo) o~rozmiarach $|P_L| = \left\lceil \frac{|P|}{2} \right\rceil$
 				            oraz $|P_R| = \left\lfloor \frac{|P|}{2} \right\rfloor$.}
 			            \label{fig:closestpoints:split}
-		            \end{figure}
+		            \end{azfigure}
 
 		      \item[\uemph{Zwyciężaj:}] Wywołujemy rekurencyjnie algorytm dla wejścia $P_L,\ X_L,\ Y_L$ i $P_R,\ X_R,\ Y_R$.
 		            Algorytm znajduje pary najbliższych punktów w $P_L$ i $P_R$. Niech $\delta_L$ i $\delta_R$ będą
@@ -154,7 +154,6 @@ Opis algorytmu:
 			                  w wywołaniach rekurencyjnych. Algorytm zwraca $\delta'$ i odpowiednią parę punktów. Wpp. zwraca $\delta$
 			                  i odpowiednią parę punktów.
 		            \end{enumerate}
-	      \end{itemize}
 \end{itemize}
 
 \begin{proof}[Dowód poprawności]
@@ -168,7 +167,7 @@ Opis algorytmu:
 	zatem co najmniej 9 punktów z $P$ w prostokącie $2\delta\times\delta$ ograniczonym poziomymi liniami
 	$y = y_p,\ y = y_p + \delta$.
 
-	\begin{figure}[ht]
+	\begin{azfigure}
 		\centering
 		\begin{tikzpicture}[>=stealth, font=\small, scale=0.9]
 			\def\d{2} % delta
@@ -209,7 +208,7 @@ Opis algorytmu:
 			$y = y_p + \delta$. Zacieniowany lewy kwadrat $\delta\times\delta$
 			zawiera co najmniej $5$ punktów z~$P$.}
 		\label{fig:closestpoints:rectangle}
-	\end{figure}
+	\end{azfigure}
 
 	Wtedy w lewym lub prawym kwadracie $\delta\times\delta$ jest przynajmniej $5$ punktów z $P$. Przypuśćmy,
 	że to lewy kwadrat. Zatem istnieje kwadrat $\delta\times\delta$ z $5$ punktami z $P$ w $P_L$.
@@ -217,7 +216,7 @@ Opis algorytmu:
 	w kwadracie $\delta\times\delta$ $5$ punktów dla których odległość między dowolnymi dwoma
 	jest mniejsza niż $\delta$. Sprzeczność (bo najmniejsza odległość w $P_L$ to $\delta_L \geq \delta$).
 
-	\begin{figure}[ht]
+	\begin{azfigure}
 		\centering
 		\begin{tikzpicture}[>=stealth, font=\small, scale=1.6]
 			\def\d{2} % delta
@@ -254,10 +253,11 @@ Opis algorytmu:
 			od któregoś z nich (dwa z~$5$ punktów trafiają do tej samej ćwiartki
 			$\frac{\delta}{2}\times\frac{\delta}{2}$).}
 		\label{fig:closestpoints:fivepoints}
-	\end{figure}
+	\end{azfigure}
 
 	Zatem wystarczy sprawdzić tylko $7$ następnych punktów po $p$ w $Y'$.
 \end{proof}
+\end{obowiazkowy}
 
 \begin{dygresja}
 	Powyższy dowód prowadzimy \emph{nie wprost}, ale tę samą granicę $7$ można dostać równie dobrze \emph{wprost}, zliczając punkty. Oba rozumowania korzystają z tego samego faktu geometrycznego (w~kwadracie $\delta\times\delta$ mieści się co najwyżej $4$ punkty parami oddalone o~co najmniej $\delta$) i~są równoważne -- różnią się jedynie sposobem zliczania.

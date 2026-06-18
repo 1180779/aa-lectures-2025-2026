@@ -25,7 +25,7 @@ jobs:
           # the archive unpacks into a single top-level dir: <repo>-<tag>/
           ROOT=$(find src -mindepth 1 -maxdepth 1 -type d | head -n 1)
           # flatten every committed PDF, deriving the name from its repo path
-          # so that e.g. notes/main.pdf and exam/main.pdf don't collide
+          # so that PDFs in different directories can't collide
           find "$ROOT" -name '*.pdf' -print0 | while IFS= read -r -d '' f; do
             rel="${f#"$ROOT"/}"
             cp "$f" "assets/${rel//\//_}"

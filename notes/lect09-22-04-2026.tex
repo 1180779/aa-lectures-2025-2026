@@ -38,7 +38,7 @@
 	Wspólna intuicja obu przykładów: $S$ to zbiór ,,kawałków'', a $\mathcal{I}$ wyróżnia te podzbiory, w~których \emph{nie ma nadmiarowości}. Dla macierzy nadmiarowość to liniowa zależność wierszy, dla grafu --- cykl (krawędź, którą można usunąć bez rozspójniania tego, co już połączone). Dziedziczność (wł.\ \ref{matroid:dziedziczność}) mówi, że usunięcie kawałka z~niezależnego zbioru nie tworzy nadmiarowości; własność wymiany (wł.\ \ref{matroid:wymiana}) --- że mniejszy zbiór niezależny zawsze da się powiększyć o~element z~większego.
 
 	Dla matroidu grafowego: zbiór krawędzi jest niezależny dokładnie wtedy, gdy tworzy las (jest acykliczny). Po lewej --- niezależny zbiór (las, krawędzie wyróżnione); po prawej --- ten sam zbiór z~dołożoną krawędzią $e_3$ zamykającą cykl $a\,b\,c$, więc już zależny:
-	\begin{figure}[H]
+	\begin{azfigure}
 		\centering
 		\begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.6cm, inner sep=1pt}, baseline]
 			% lewa: las (niezależny)
@@ -65,10 +65,10 @@
 				\node[draw=none] at (0.9, -0.6) {$F \cup \{e_3\} \notin \mathcal{I}$};
 			\end{scope}
 		\end{tikzpicture}
-	\end{figure}
+	\end{azfigure}
 
 	Ten sam obraz dla matroidu wektorowego (przykład \ref{ex:matroid:wektorowy}) w~$\R^2$: $S = \{v_1, v_2, v_3\}$, niezależność = liniowa niezależność. Dwa niewspółliniowe wektory są niezależne, ale dowolne trzy wektory w~$\R^2$ są już zależne --- każdy zbiór $\geq 3$ elementów jest zależny, więc bazami są wszystkie pary niewspółliniowe (rząd $2$):
-	\begin{figure}[H]
+	\begin{azfigure}
 		\centering
 		\begin{tikzpicture}[>=stealth, baseline]
 			% lewa: para niezależna
@@ -85,7 +85,7 @@
 				\node at (1.0, -0.8) {$\{v_1, v_2, v_3\} \notin \mathcal{I}$};
 			\end{scope}
 		\end{tikzpicture}
-	\end{figure}
+	\end{azfigure}
 \end{dygresja}
 
 \begin{lemma} \label{lemma:matroid:liczność}
@@ -201,7 +201,7 @@ Nie płacimy kar za zadania terminowe, płacimy kary za zadania spóźnione.
 		      \end{itemize}
 		      Po pewnej liczbie takich zamian otrzymujemy harmonogram o tej samej sumie kar, w którym wszystkie zadania terminowe poprzedzają wszystkie zadania spóźnione.
 
-		      \begin{figure}[H]
+		      \begin{azfigure}
 			      \centering
 			      \begin{tikzpicture}[
 					      slot/.style={rectangle, draw, minimum width=0.95cm, minimum height=0.7cm, inner sep=1pt, font=\small},
@@ -233,7 +233,7 @@ Nie płacimy kar za zadania terminowe, płacimy kary za zadania spóźnione.
 				      \draw[->, gray] (0.6,-0.65) -- (6.5,-0.65) node[right, font=\small, text=gray] {czas};
 			      \end{tikzpicture}
 			      \caption*{Zadanie spóźnione $z_i$ (\textcolor{accentB}{pomarańczowe}) poprzedza zadanie terminowe $z_j$ (\textcolor{accent}{niebieskie}). Po zamianie $z_i$ kończy się jeszcze później (nadal spóźnione), a~$z_j$ wcześniej (nadal terminowe) --- suma kar bez zmian. Krok~2 to ten sam ruch między dwoma zadaniami terminowymi w~złej kolejności deadlinów.}
-		      \end{figure}
+		      \end{azfigure}
 
 		\item Niech $z_i, z_j$ będą zadaniami terminowymi takimi, że $z_i$ jest ukończone w chwili $l_i \leq d_i$, $z_j$ jest ukończone w chwili $l_j \leq d_j$, $l_i < l_j$, ale $d_i > d_j$.\\
 		      Zamieniamy miejscami $z_i$ i $z_j$. Po zamianie:

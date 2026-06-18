@@ -175,7 +175,7 @@ Niech $M$ będzie ustalonym skojarzeniem w $G$.
 \end{itemize}
 
 \uemph{Ścieżka powiększająca} (względem $M$) to naprzemienna ścieżka składająca się z wolnych i skojarzonych krawędzi o wolnych końcach.
-\begin{figure}[H]
+\begin{azfigure}
 	\centering
 	\begin{tikzpicture}[x=1.1cm]
 		\begin{scope}
@@ -211,9 +211,10 @@ Niech $M$ będzie ustalonym skojarzeniem w $G$.
 			\node[right] at (7.3, 0) {$|M'|=4$};
 		\end{scope}
 	\end{tikzpicture}
-\end{figure}
+\end{azfigure}
 Możemy użyć ścieżki powiększającej i różnicy symetrycznej do zwiększenia liczności skojarzenia.
 
+\begin{obowiazkowy}
 \begin{theorem}[Berge'a]
 	Niech $G=(V,E)$ -- graf, $M$ -- skojarzenie w $G$. \\
 	$M$ jest najliczniejszym skojarzeniem w $G \iff$ nie istnieje ścieżka powiększająca względem $M$.
@@ -236,3 +237,4 @@ Możemy użyć ścieżki powiększającej i różnicy symetrycznej do zwiększen
 	      Skoro $|M'| > |M|$, to istnieje składowa $H$, która jest ścieżką zawierającą więcej krawędzi z $M'$ niż z $M$, więc ta ścieżka zaczyna się i kończy krawędzią z $M'$. Ta ścieżka jest ścieżką powiększającą względem $M$.
 \end{itemize}
 \end{proof}
+\end{obowiazkowy}

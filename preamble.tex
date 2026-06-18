@@ -69,72 +69,46 @@
 \definecolor{obowiazkowybg}{RGB}{255, 252, 245}% tło dowodów obowiązkowych na egzaminie
 \definecolor{obowiazkowyline}{RGB}{230, 200, 150}% nasycona linia na granicy podświetlenia
 
-% Pełnoszerokościowe podświetlenie (do krawędzi strony) materiału obowiązkowego.
-% Tło rozlewa się na marginesy (margin=2.5cm), a treść pozostaje w bloku tekstu.
-% breakable: poprawnie łamie się między stronami.
-\newtcolorbox{obowiazkowy}{%
-  breakable, enhanced jigsaw,
+% Podświetlenie materiału obowiązkowego jako zamknięte pudełko w bloku tekstu
+% (nie rozlewa się na marginesy). Delikatna ramka + akcentowy pasek z lewej dają
+% czytelny sygnał „to obowiązkowe” bez agresywnego tła do krawędzi kartki.
+% breakable: poprawnie łamie się między stronami (enhanced rysuje ładne górne/
+% dolne krawędzie segmentów). Stranded rysunek może zostawić trochę tła u dołu
+% łamanego segmentu, ale w zamkniętym pudełku jest to znacznie mniej rażące.
+\newtcolorbox{obowiazkowybox}{%
+  breakable, enhanced,
   colback=obowiazkowybg,
-  frame hidden, boxrule=0pt,
-  arc=0pt, outer arc=0pt,
-  grow to left by=2.5cm, grow to right by=2.5cm,
-  left=2.5cm, right=2.5cm,
-  top=8pt, bottom=8pt,
+  colframe=obowiazkowyline,
+  boxrule=0.5pt, % jednolita cienka ramka ze wszystkich stron
+  arc=2pt, outer arc=2pt,
+  left=10pt, right=10pt, top=8pt, bottom=8pt,
   boxsep=0pt,
-  % Na stronach w całości objętych ramką tło dochodzi do górnej i dolnej
-  % krawędzi kartki: w miejscach łamania strony dorysowujemy pas tła na
-  % marginesie -- na dole strony, która się łamie, i na górze kontynuacji.
-  % Pierwsza strona zaczyna się przy tekście, ostatnia kończy przy tekście.
-  % (3cm > margines 2.5cm, więc pas pewnie dochodzi do krawędzi kartki.)
-  % Margines górny/dolny zalewamy tłem tylko wtedy, gdy segment realnie sięga
-  % krawędzi bloku tekstu (tj. strona jest w całości objęta ramką). tcolorbox
-  % bywa, że krótką ramkę dzieli na „first” + pusty „last” -- taki krótki segment
-  % traktujemy jak zakończenie (linia), a nie jak łamanie (zalanie marginesu).
-  % \obyy = wysokość bieżącego segmentu (north - south).
-  % Linia górna na początku, dolna na końcu; nasycony kolor = lepszy kontrast.
-  % \obyy = wysokość segmentu (north-south); zawiera padding (\(\approx\)16pt),
-  % więc „pusty ogon” ma ok. 0,5cm. Próg 0,9cm odrzuca takie segmenty-widma
-  % (rysujemy nic). Próg 4cm = segment realnie wypełnia stronę (zalewamy margines).
-  overlay unbroken={%
-    \pgfpointdiff{\pgfpointanchor{frame}{south}}{\pgfpointanchor{frame}{north}}%
-    \pgfgetlastxy{\obxx}{\obyy}%
-    \ifdim\obyy>0.9cm\relax
-      \fill[obowiazkowyline] (frame.north west) rectangle ([yshift=-1.5pt]frame.north east);
-      \fill[obowiazkowyline] (frame.south west) rectangle ([yshift=1.5pt]frame.south east);
-    \fi},
-  overlay first={%
-    \pgfpointdiff{\pgfpointanchor{frame}{south}}{\pgfpointanchor{frame}{north}}%
-    \pgfgetlastxy{\obxx}{\obyy}%
-    \ifdim\obyy>4cm\relax
-      \fill[obowiazkowyline] (frame.north west) rectangle ([yshift=-1.5pt]frame.north east);
-      \fill[obowiazkowybg] (frame.south west) rectangle ([yshift=-3cm]frame.south east);
-    \else\ifdim\obyy>0.9cm\relax
-      \fill[obowiazkowyline] (frame.north west) rectangle ([yshift=-1.5pt]frame.north east);
-      \fill[obowiazkowyline] (frame.south west) rectangle ([yshift=1.5pt]frame.south east);
-    \fi\fi},
-  overlay middle={%
-    \pgfpointdiff{\pgfpointanchor{frame}{south}}{\pgfpointanchor{frame}{north}}%
-    \pgfgetlastxy{\obxx}{\obyy}%
-    \ifdim\obyy>0.9cm\relax
-      \fill[obowiazkowybg] (frame.south west) rectangle ([yshift=-3cm]frame.south east);
-      \fill[obowiazkowybg] (frame.north west) rectangle ([yshift=3cm]frame.north east);
-    \fi},
-  overlay last={%
-    \pgfpointdiff{\pgfpointanchor{frame}{south}}{\pgfpointanchor{frame}{north}}%
-    \pgfgetlastxy{\obxx}{\obyy}%
-    \ifdim\obyy>0.9cm\relax
-      \fill[obowiazkowybg] (frame.north west) rectangle ([yshift=3cm]frame.north east);
-      \fill[obowiazkowyline] (frame.south west) rectangle ([yshift=1.5pt]frame.south east);
-    \fi},
+  pad at break*=6pt,
 }
 % Usuń resztkowy odstęp pionowy na końcu ramki (np. \topsep zamykający proof),
 % który potrafi przelać się na kolejną stronę jako pusty segment tcolorbox
 % i zostawić blady pasek tła (colback rysuje się dla każdego segmentu).
-\AtEndEnvironment{obowiazkowy}{\par\removelastskip}
+\AtEndEnvironment{obowiazkowybox}{\par\removelastskip}
 % Zarezerwuj miejsce PRZED otwarciem ramki. Inaczej \azNeedSpace twierdzenia
 % wewnątrz świeżo otwartej ramki wymusza łamanie strony przy pustej zawartości,
 % tworząc pusty pierwszy segment (blady pasek tła u góry/dołu strony).
-\BeforeBeginEnvironment{obowiazkowy}{\Needspace*{6\baselineskip}}
+\BeforeBeginEnvironment{obowiazkowybox}{\Needspace*{6\baselineskip}}
+
+% ── WERSJA Z WYRÓŻNIENIAMI ───────────────────────────────────────
+% Flaga \azhighlight włącza tło materiału obowiązkowego. Sterowana zmienną
+% środowiskową AZ_HIGHLIGHT=1 (czytaną przez LuaTeX przy starcie) — ten sam
+% plik źródłowy daje wersję zwykłą i wersję z wyróżnieniami.
+\newbool{azhighlight}
+\edef\azHighlightEnv{\directlua{tex.sprint(os.getenv("AZ_HIGHLIGHT") or "0")}}
+\ifdefstring{\azHighlightEnv}{1}{\booltrue{azhighlight}}{}
+
+% Środowisko obowiazkowy: w wersji z wyróżnieniami otwiera ramkę
+% obowiazkowybox, w zwykłej wersji jest przezroczyste (treść składana
+% normalnie, bez tła). Dzięki temu twierdzenia obowiązkowe oznaczamy raz,
+% a obie wersje generujemy z jednego źródła.
+\newenvironment{obowiazkowy}
+  {\ifbool{azhighlight}{\begin{obowiazkowybox}}{}}
+  {\ifbool{azhighlight}{\end{obowiazkowybox}}{}}
 
 \titleformat{\section}{\large\bfseries\color{accent}}{}{0em}{}[\titlerule]
 \titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
@@ -303,4 +277,32 @@
   \par\addvspace{\bigskipamount}% breathing room after the box
 }
 \makeatother
+
+% ── RYSUNKI I TABELE BEZ PŁYWANIA ────────────────────────────────
+% Zamiast pływających środowisk figure/table (i tak używanych prawie zawsze
+% z [H], co przekreśla sens pływania) — wstawiamy treść dokładnie tam, gdzie
+% jest napisana. Dzięki temu rysunek/tabela może też znaleźć się WEWNĄTRZ
+% wyróżnienia obowiazkowy (pływak by z niego uciekł). \captionsetup{type=...}
+% sprawia, że zwykłe \caption / \caption* numeruje się i etykietuje (\label,
+% spis) tak samo jak w pływaku — tyle że bez pływania.
+\newenvironment{azfigure}{%
+  \par\addvspace{\bigskipamount}%
+  \begingroup
+  \captionsetup{type=figure}%
+  \centering
+}{%
+  \par
+  \endgroup
+  \addvspace{\bigskipamount}%
+}
+\newenvironment{aztable}{%
+  \par\addvspace{\bigskipamount}%
+  \begingroup
+  \captionsetup{type=table}%
+  \centering
+}{%
+  \par
+  \endgroup
+  \addvspace{\bigskipamount}%
+}
 % ─────────────────────────────────────────────────────────────────

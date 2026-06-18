@@ -8,24 +8,34 @@ i Nauk Informacyjnych Politechniki Warszawskiej (semestr letni 2025/2026).
 
 | Ścieżka          | Opis                                                                         |
 |------------------|------------------------------------------------------------------------------|
-| `notes/`         | Pełne notatki &mdash; wszystkie wykłady w całości.                                 |
-| `exam/`          | Wersja egzaminacyjna &mdash; okrojona do materiału obowiązującego na egzaminie.    |
-| `exam_highlighted/` | Wersja egzaminacyjna z wyróżnieniami &mdash; jak `exam/`, ale fragmenty obowiązkowe (twierdzenia wraz z dowodami) mają wyróżniające tło dla lepszej czytelności tego, co najważniejsze. |
-| `preamble.tex`   | Wspólna preambuła (`\documentclass`, pakiety, środowiska) dzielona przez wszystkie wersje. |
+| `notes/`         | Pełne notatki &mdash; wszystkie wykłady w całości (jedyne źródło).                 |
+| `preamble.tex`   | Wspólna preambuła (`\documentclass`, pakiety, środowiska) dołączana przez `notes/main.tex`. |
 
-Każdy katalog zawiera `main.tex`, który dołącza wspólną preambułę przez
+Katalog `notes/` zawiera `main.tex`, który dołącza wspólną preambułę przez
 `\input{../preamble}` oraz poszczególne pliki wykładów `lectXX-DD-MM-2026.tex`.
+
+## Wersje
+
+Z jednego źródła powstają **dwie** wersje PDF, sterowane zmienną środowiskową
+`AZ_HIGHLIGHT` (czytaną przez preambułę):
+
+| Wersja | `AZ_HIGHLIGHT` | Opis |
+|--------|----------------|------|
+| `AZ_lectures` | (brak / `0`) | Zwykłe notatki. |
+| `AZ_lectures_highlighted` | `1` | Materiał obowiązkowy (twierdzenia wraz z dowodami) na wyróżniającym tle &mdash; dla lepszej czytelności tego, co najważniejsze na egzaminie. |
 
 ## Kompilacja
 
 Dokumenty kompiluje się przy użyciu **LuaLaTeX** (nie pdfLaTeX — używane są
-fonty OpenType / `fontspec`). Z katalogu `notes/`, `exam/` lub `exam_highlighted/`:
+fonty OpenType / `fontspec`). Z katalogu `notes/`:
 
 ```sh
-latexmk main.tex
+latexmk main.tex                    # wersja zwykła
+AZ_HIGHLIGHT=1 latexmk -g main.tex  # wersja z wyróżnieniami
 ```
 
-(konfiguracja silnika znajduje się w `.latexmkrc`).
+(konfiguracja silnika znajduje się w `.latexmkrc`). Najwygodniej zbudować obie
+wersje naraz skryptem `./build.sh` w katalogu głównym.
 
 ## Wydania
 
