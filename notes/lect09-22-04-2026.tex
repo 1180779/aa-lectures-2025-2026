@@ -97,10 +97,10 @@
 \end{proof}
 
 \begin{problem}
-	$M = (S, \mathcal{I})$ -- matroid, $w: S \to \Rp$ -- funkcja wagi.\\
-	Dla $A \subseteq S$ niech $w(A) = \sum_{x \in A} w(x)$ -- waga $A$.\\
-	Znaleźć zbiór niezależny o maksymalnej wadze w $M$.\\
-	$S = \{x_1, x_2, \ldots, x_n\}$.
+$M = (S, \mathcal{I})$ -- matroid, $w: S \to \Rp$ -- funkcja wagi.\\
+Dla $A \subseteq S$ niech $w(A) = \sum_{x \in A} w(x)$ -- waga $A$.\\
+Znaleźć zbiór niezależny o maksymalnej wadze w $M$.\\
+$S = \{x_1, x_2, \ldots, x_n\}$.
 \end{problem}
 
 \begin{alg}{Algorytm Greedy}{alg:greedy}
@@ -180,9 +180,9 @@ gdzie $f(n)$ to czas sprawdzenia niezależności $A \cup \{x_i\} \in \mathcal{I}
 	\item $d_1, d_2, \ldots, d_n$ -- deadliny, $d_i \in \{1, \ldots, n\}$ dla $i \in [n]$
 	\item $w_1, w_2, \ldots, w_n$ -- kary, $w_i \geq 0$ dla $i \in [n]$
 \end{itemize}
-Płacimy karę $w_i$ za zadanie $z_i$, jeżeli nie jest skończone w momencie $d_i$.\\
+Płacimy karę $w_i$ za zadanie $z_i$, jeżeli nie jest skończone w momencie $d_i$.
 \begin{problem}[szeregowania zadań z karami]
-	Znaleźć kolejność wykonania zadań minimalizującą sumę kar.
+Znaleźć kolejność wykonania zadań minimalizującą sumę kar.
 \end{problem}
 
 Załóżmy, że mamy pewien harmonogram. Zadanie $z_i$ nazywamy \uemph{terminowym} w tym harmonogramie, jeśli jest zakończone do chwili $d_i$, w przeciwnym razie nazywamy je \uemph{spóźnionym}.\\

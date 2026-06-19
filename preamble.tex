@@ -53,12 +53,18 @@
 % Remap odłożony do \begin{document}, bo unicode-math finalizuje tablicę symboli
 % dopiero przy starcie dokumentu i nadpisałby zwykły \let z preambuły.
 \AtBeginDocument{%
-  \let\leq\leqslant
-  \let\geq\geqslant
-  \allowdisplaybreaks
+	\let\leq\leqslant
+	\let\geq\geqslant
+	\allowdisplaybreaks
 }
 
-\geometry{margin=2.5cm}
+\geometry{margin=2.5cm, headheight=12.7pt}
+
+% Ostatnia deska ratunku przy łamaniu akapitów: pozwala TeX-owi rozciągnąć
+% trudny wiersz zamiast wypychać go poza margines (usuwa drobne Overfull \hbox
+% w gęstym tekście z wtrąceniami matematycznymi).
+\emergencystretch=2em
+\hfuzz=0.6pt% toleruj przepełnienia poniżej ~0,2 mm (niewidoczne, a generują ostrzeżenia)
 
 \definecolor{accent}{RGB}{30, 60, 100}
 \definecolor{accentA}{RGB}{255, 187, 0}
@@ -77,14 +83,14 @@
 % dolne krawędzie segmentów). Stranded rysunek może zostawić trochę tła u dołu
 % łamanego segmentu, ale w zamkniętym pudełku jest to znacznie mniej rażące.
 \newtcolorbox{obowiazkowybox}{%
-  breakable, enhanced,
-  colback=obowiazkowybg,
-  colframe=obowiazkowyline,
-  boxrule=0.5pt, % jednolita cienka ramka ze wszystkich stron
-  arc=2pt, outer arc=2pt,
-  left=10pt, right=10pt, top=8pt, bottom=8pt,
-  boxsep=0pt,
-  pad at break*=6pt,
+	breakable, enhanced,
+	colback=obowiazkowybg,
+	colframe=obowiazkowyline,
+	boxrule=0.5pt, % jednolita cienka ramka ze wszystkich stron
+	arc=2pt, outer arc=2pt,
+	left=10pt, right=10pt, top=8pt, bottom=8pt,
+	boxsep=0pt,
+	pad at break*=6pt,
 }
 % Usuń resztkowy odstęp pionowy na końcu ramki (np. \topsep zamykający proof),
 % który potrafi przelać się na kolejną stronę jako pusty segment tcolorbox
@@ -108,8 +114,8 @@
 % normalnie, bez tła). Dzięki temu twierdzenia obowiązkowe oznaczamy raz,
 % a obie wersje generujemy z jednego źródła.
 \newenvironment{obowiazkowy}
-  {\ifbool{azhighlight}{\begin{obowiazkowybox}}{}}
-  {\ifbool{azhighlight}{\end{obowiazkowybox}}{}}
+{\ifbool{azhighlight}{\begin{obowiazkowybox}}{}}
+			{\ifbool{azhighlight}{\end{obowiazkowybox}}{}}
 
 \titleformat{\section}{\large\bfseries\color{accent}}{}{0em}{}[\titlerule]
 \titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
@@ -130,26 +136,26 @@
 % wypisz ją w nawiasie i przełam wiersz przed treścią; bez nazwy nagłówek
 % pozostaje w jednej linii (run-in). \azThmHead{name}{number}{note}.
 \newcommand{\azThmHead}[3]{%
-  \thmname{#1}\thmnumber{ #2}%
-  \def\azNote{#3}%
-  \ifx\azNote\empty. \else\ (#3).\newline\fi}
+	\thmname{#1}\thmnumber{ #2}%
+	\def\azNote{#3}%
+	\ifx\azNote\empty. \else\ (#3).\newline\fi}
 
 % Większy odstęp przed/po + wspólny nagłówek z przełamaniem dla nazwanych.
 % Wariant „definition” (treść prosta) i „plain” (treść kursywą).
 \newtheoremstyle{azdefinition}%
-  {14pt plus 3pt minus 2pt}{12pt plus 3pt minus 2pt}%  odstęp przed / po
-  {\normalfont}%                                        czcionka treści
-  {0pt}%                                                wcięcie
-  {\bfseries}%                                          czcionka nagłówka
-  {}{0pt}%                                              interpunkcja i odstęp obsłużone w \azThmHead (headsep = 0)
-  {\azThmHead{#1}{#2}{#3}}%                          nagłówek
+{14pt plus 3pt minus 2pt}{12pt plus 3pt minus 2pt}%  odstęp przed / po
+{\normalfont}%                                        czcionka treści
+{0pt}%                                                wcięcie
+{\bfseries}%                                          czcionka nagłówka
+{}{0pt}%                                              interpunkcja i odstęp obsłużone w \azThmHead (headsep = 0)
+{\azThmHead{#1}{#2}{#3}}%                          nagłówek
 \newtheoremstyle{azplain}%
-  {14pt plus 3pt minus 2pt}{12pt plus 3pt minus 2pt}%
-  {\itshape}%
-  {0pt}%
-  {\bfseries}%
-  {}{0pt}%
-  {\azThmHead{#1}{#2}{#3}}%
+{14pt plus 3pt minus 2pt}{12pt plus 3pt minus 2pt}%
+{\itshape}%
+{0pt}%
+{\bfseries}%
+{}{0pt}%
+{\azThmHead{#1}{#2}{#3}}%
 
 \theoremstyle{azdefinition}
 \newtheorem{definition}{Definicja}[section]
@@ -180,11 +186,11 @@
 % Dygresja: wolniejsze rozwinięcie kroku dla czytelnika, który gubi się w rachunkach.
 % Wyszarzona treść sygnalizuje materiał opcjonalny (można pominąć przy powtórce).
 \newtheoremstyle{dygresjastyle}%
-  {\topsep}{\topsep}%                       odstęp przed / po
-  {\color{dygresjagray}}%                    czcionka treści (wyszarzona)
-  {0pt}%                                     wcięcie
-  {\color{dygresjagray}\itshape}%            czcionka nagłówka
-  {.}{.5em}{}%                               interpunkcja, odstęp po nagłówku, spec.
+{\topsep}{\topsep}%                       odstęp przed / po
+{\color{dygresjagray}}%                    czcionka treści (wyszarzona)
+{0pt}%                                     wcięcie
+{\color{dygresjagray}\itshape}%            czcionka nagłówka
+{.}{.5em}{}%                               interpunkcja, odstęp po nagłówku, spec.
 \theoremstyle{dygresjastyle}
 \newtheorem*{dygresja}{Dygresja}
 
@@ -218,14 +224,14 @@
 % change default thickness of brackets to .6pt
 \MHInternalSyntaxOn
 \xpatchcmd\upbracketfill
-  {\sbox\z@{$\braceld$}\edef\l_MT_bracketheight_fdim{\the\ht\z@}}
-  {\edef\l_MT_bracketheight_fdim{.6pt}}
-  {}{\fail}
+{\sbox\z@{$\braceld$}\edef\l_MT_bracketheight_fdim{\the\ht\z@}}
+{\edef\l_MT_bracketheight_fdim{.6pt}}
+{}{\fail}
 
 \xpatchcmd\downbracketfill
-  {\sbox\z@{$\braceld$}\edef\l_MT_bracketheight_fdim{\the\ht\z@}}
-  {\edef\l_MT_bracketheight_fdim{.6pt}}
-  {}{\fail}
+{\sbox\z@{$\braceld$}\edef\l_MT_bracketheight_fdim{\the\ht\z@}}
+{\edef\l_MT_bracketheight_fdim{.6pt}}
+{}{\fail}
 \MHInternalSyntaxOff
 
 % ── KOMENDY ──────────────────────────────────────────────────────
@@ -238,44 +244,44 @@
 
 \makeatletter
 \newcommand{\FunctionNN}[2]{%
-  \let\OldAlgLineNum\alglinenumber%
-  \renewcommand{\alglinenumber}[1]{}%
-  \Function{#1}{#2}%
-  \let\alglinenumber\OldAlgLineNum%
-  \addtocounter{ALG@line}{-1}% 
+	\let\OldAlgLineNum\alglinenumber%
+	\renewcommand{\alglinenumber}[1]{}%
+	\Function{#1}{#2}%
+	\let\alglinenumber\OldAlgLineNum%
+	\addtocounter{ALG@line}{-1}% 
 }
 \makeatother
 
 \makeatletter
 \newenvironment{alg}[3][]{% #1=optional tcolorbox options, #2=caption, #3=label
-  \if@noskipsec \leavevmode \fi% flush a pending run-in heading (\paragraph) so it stays above the box
-  \par
-  \addvspace{\bigskipamount}% breathing room before the box
-  \refstepcounter{algorithm}\label{#3}% step the float counter + set ref/hyperref target
-  \addcontentsline{\csname ext@algorithm\endcsname}{algorithm}% list-of-algorithms entry
-    {\protect\numberline{\thealgorithm}{\ignorespaces #2}}%
-  \small%
-\begin{tcolorbox}[
-    breakable,
-    sharp corners,
-    boxrule=1pt,
-    colback=white,
-    colframe=black,
-    colbacktitle=accent,
-    coltitle=white,
-    fonttitle=\bfseries,
-    title={\csname fnum@algorithm\endcsname:\ \mdseries #2},% "Algorytm N: caption"
-    left=2mm,
-    right=2mm,
-    top=2mm,
-    bottom=2mm,
-    #1%                    pass through any caller-supplied options
-  ]%
-  \begin{algorithmic}[1]%
-}{%
-  \end{algorithmic}%
-  \end{tcolorbox}%
-  \par\addvspace{\bigskipamount}% breathing room after the box
+	\if@noskipsec \leavevmode \fi% flush a pending run-in heading (\paragraph) so it stays above the box
+	\par
+	\addvspace{\bigskipamount}% breathing room before the box
+	\refstepcounter{algorithm}\label{#3}% step the float counter + set ref/hyperref target
+	\addcontentsline{\csname ext@algorithm\endcsname}{algorithm}% list-of-algorithms entry
+	{\protect\numberline{\thealgorithm}{\ignorespaces #2}}%
+	\small%
+	\begin{tcolorbox}[
+			breakable,
+			sharp corners,
+			boxrule=1pt,
+			colback=white,
+			colframe=black,
+			colbacktitle=accent,
+			coltitle=white,
+			fonttitle=\bfseries,
+			title={\csname fnum@algorithm\endcsname:\ \mdseries #2},% "Algorytm N: caption"
+			left=2mm,
+			right=2mm,
+			top=2mm,
+			bottom=2mm,
+			#1%                    pass through any caller-supplied options
+		]%
+		\begin{algorithmic}[1]%
+			}{%
+		\end{algorithmic}%
+	\end{tcolorbox}%
+	\par\addvspace{\bigskipamount}% breathing room after the box
 }
 \makeatother
 
@@ -287,23 +293,23 @@
 % sprawia, że zwykłe \caption / \caption* numeruje się i etykietuje (\label,
 % spis) tak samo jak w pływaku — tyle że bez pływania.
 \newenvironment{azfigure}{%
-  \par\addvspace{\bigskipamount}%
-  \begingroup
-  \captionsetup{type=figure}%
-  \centering
+	\par\addvspace{\bigskipamount}%
+	\begingroup
+	\captionsetup{type=figure}%
+	\centering
 }{%
-  \par
-  \endgroup
-  \addvspace{\bigskipamount}%
+	\par
+	\endgroup
+	\addvspace{\bigskipamount}%
 }
 \newenvironment{aztable}{%
-  \par\addvspace{\bigskipamount}%
-  \begingroup
-  \captionsetup{type=table}%
-  \centering
+	\par\addvspace{\bigskipamount}%
+	\begingroup
+	\captionsetup{type=table}%
+	\centering
 }{%
-  \par
-  \endgroup
-  \addvspace{\bigskipamount}%
+	\par
+	\endgroup
+	\addvspace{\bigskipamount}%
 }
 % ─────────────────────────────────────────────────────────────────

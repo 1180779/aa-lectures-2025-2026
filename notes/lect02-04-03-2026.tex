@@ -131,14 +131,14 @@ Zakładamy, że (zazwyczaj) w fazie \textit{dziel} problem jest dzielony na co n
 	\end{flalign}
 
 	\begin{flalign*}
-		& T(n) = f(n) + a\cdot T\left(\frac{n}{b}\right)
-		  = f(n) + a\left(f\left(\frac{n}{b}\right) + aT\left(\frac{n}{b^2}\right)\right)                                                                                 &  &  &  & \\[1.5ex]
-		& = f(n) + af\left(\frac{n}{b}\right) + a^2 T\left(\frac{n}{b^2}\right)
-		  = f(n) + af\left(\frac{n}{b}\right) + a^2\left(f\left(\frac{n}{b^2}\right) + aT\left(\frac{n}{b^3}\right)\right)                                                &  &  &  & \\[1.5ex]
-		& = f(n) + af\left(\frac{n}{b}\right) + a^2 f\left(\frac{n}{b^2}\right) + \cdots + a^{\log_b n - 1} f\left(\frac{n}{b^{\log_b n}}\right) + a^{\log_b n} T(1)      &  &  &  & \\[1.5ex]
-		& \overset{\ref{eq:utor:star}}{=} \cdots + a^{\log_b n} T(1)
-		  = \cdots + n^{\log_b a} T(1)
-		  = \BT\left(n^{\log_b a}\right) + \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)                                                                   &  &  &  & \qedhere
+		                                                                                                                 & T(n) = f(n) + a\cdot T\left(\frac{n}{b}\right)
+		= f(n) + a\left(f\left(\frac{n}{b}\right) + aT\left(\frac{n}{b^2}\right)\right)                                  &                                                                                                                                                            &  &  &                   \\[1.5ex]
+		                                                                                                                 & = f(n) + af\left(\frac{n}{b}\right) + a^2 T\left(\frac{n}{b^2}\right)
+		= f(n) + af\left(\frac{n}{b}\right) + a^2\left(f\left(\frac{n}{b^2}\right) + aT\left(\frac{n}{b^3}\right)\right) &                                                                                                                                                            &  &  &                   \\[1.5ex]
+		                                                                                                                 & = f(n) + af\left(\frac{n}{b}\right) + a^2 f\left(\frac{n}{b^2}\right) + \cdots + a^{\log_b n - 1} f\left(\frac{n}{b^{\log_b n}}\right) + a^{\log_b n} T(1) &  &  &                 & \\[1.5ex]
+		                                                                                                                 & \overset{\ref{eq:utor:star}}{=} \cdots + a^{\log_b n} T(1)
+		= \cdots + n^{\log_b a} T(1)
+		= \BT\left(n^{\log_b a}\right) + \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)                     &                                                                                                                                                            &  &  & \tag*{\qedhere}
 	\end{flalign*}
 \end{proof}
 
@@ -149,61 +149,61 @@ Przeprowadzimy teraz dowód uniwersalnego twierdzenia o rekurencji (\ref{theorem
 	\begin{enumerate}
 		\item Gdy $f(n) = \BO\left(n^{\log_b a - \epsilon}\right)$. Wtedy
 		      \begin{flalign*}
-			      & f\left(\frac{n}{b^j}\right) = \BO\left(\left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}\right)                                  &  &  &  & \\[1.5ex]
-			      & \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
-			        = \sum_{j = 0}^{\log_b n - 1} a^j \BO\left(\left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}\right)
-			        = \BO\left(\underbracket{\sum_{j = 0}^{\log_b n - 1} a^j \left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}}_{\blacktriangle}\right) &  &  &  & \\[1.5ex]
-			      & \blacktriangle
-			        = \sum_{j = 0}^{\log_b n - 1} a^j \frac{n^{\log_b a - \epsilon}}{b^{j(\log_b a - \epsilon)}}
-			        = n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} a^j \frac{b^{j\epsilon}}{b^{j\log_b a}}                                  &  &  &  & \\[1.5ex]
-			      & = n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} \left(\frac{a\cdot b^{\epsilon}}{\underbracket{b^{\log_b a}}_{= a}}\right)^j
-			        = n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} b^{\epsilon j} \quad \text{(wzór na ciąg geometryczny)}                  &  &  &  & \\[1.5ex]
-			      & = n^{\log_b a - \epsilon} \frac{b^{\epsilon \log_b n} - 1}{b^\epsilon - 1}
-			        = n^{\log_b a - \epsilon} \frac{n^\epsilon - 1}{\underbracket{b^\epsilon - 1}_{\text{stała}}}                                 &  &  &  & \\[1.5ex]
-			      & = n^{\log_b a - \epsilon} \BO(n^\epsilon - 1)
-			        = \BO\left(n^{\log_b a - \epsilon}\cdot n^\epsilon - 1\right)
-			        = \BO\left(n^{\log_b a}\right)                                                                                                &  &  &  & \\[1.5ex]
-			      & \text{Z lematu: } T(n)
-			        = \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT\left(n^{\log_b a}\right)
-			        = \BO\left(n^{\log_b a}\right) + \BT\left(n^{\log_b a}\right)
-			        = \BT\left(n^{\log_b a}\right)                                                                                                &  &  &  &
+			                                                                                                                                         & f\left(\frac{n}{b^j}\right) = \BO\left(\left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}\right)                                     &  &  &   & \\[1.5ex]
+			                                                                                                                                         & \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
+			      = \sum_{j = 0}^{\log_b n - 1} a^j \BO\left(\left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}\right)
+			      = \BO\left(\underbracket{\sum_{j = 0}^{\log_b n - 1} a^j \left(\frac{n}{b^j}\right)^{\log_b a - \epsilon}}_{\blacktriangle}\right) &                                                                                                                                    &  &  &     \\[1.5ex]
+			                                                                                                                                         & \blacktriangle
+			      = \sum_{j = 0}^{\log_b n - 1} a^j \frac{n^{\log_b a - \epsilon}}{b^{j(\log_b a - \epsilon)}}
+			      = n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} a^j \frac{b^{j\epsilon}}{b^{j\log_b a}}                                      &                                                                                                                                    &  &  &     \\[1.5ex]
+			                                                                                                                                         & = n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} \left(\frac{a\cdot b^{\epsilon}}{\underbracket{b^{\log_b a}}_{= a}}\right)^j
+			      = n^{\log_b a - \epsilon} \sum_{j = 0}^{\log_b n - 1} b^{\epsilon j} \quad \text{(wzór na ciąg geometryczny)}                      &                                                                                                                                    &  &  &     \\[1.5ex]
+			                                                                                                                                         & = n^{\log_b a - \epsilon} \frac{b^{\epsilon \log_b n} - 1}{b^\epsilon - 1}
+			      = n^{\log_b a - \epsilon} \frac{n^\epsilon - 1}{\underbracket{b^\epsilon - 1}_{\text{stała}}}                                      &                                                                                                                                    &  &  &     \\[1.5ex]
+			                                                                                                                                         & = n^{\log_b a - \epsilon} \BO(n^\epsilon - 1)
+			      = \BO\left(n^{\log_b a - \epsilon}\cdot n^\epsilon - 1\right)
+			      = \BO\left(n^{\log_b a}\right)                                                                                                     &                                                                                                                                    &  &  &     \\[1.5ex]
+			                                                                                                                                         & \text{Z lematu: } T(n)
+			      = \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT\left(n^{\log_b a}\right)
+			      = \BO\left(n^{\log_b a}\right) + \BT\left(n^{\log_b a}\right)
+			      = \BT\left(n^{\log_b a}\right)                                                                                                     &                                                                                                                                    &  &  &
 		      \end{flalign*}
 
 		\item Gdy $f(n) = \BT\left(n^{\log_b a}\right)$. Wtedy:
 		      \begin{flalign*}
-			      & f\left(\frac{n}{b^j}\right) = \BT\left(\left(\frac{n}{b^j}\right)^{\log_b a}\right)                                            &  &  &  & \\[1.5ex]
-			      & \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
-			        = \sum_{j = 0}^{\log_b n - 1} a^j \BT\left(\left(\frac{n}{b^j}\right)^{\log_b a}\right)
-			        = \BT\left(\sum_{j = 0}^{\log_b n - 1} a^j \left(\frac{n}{b^j}\right)^{\log_b a}\right)                                        &  &  &  & \\[1.5ex]
-			      & = \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} a^j \frac{1}{b^{j\log_b a}}\right)
-			        = \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} a^j \frac{1}{\underbracket{b^{\log_b a^j}}_{=a^j}}\right)                  &  &  &  & \\[1.5ex]
-			      & = \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} 1 \right)
-			        = \BT\left(n^{\log_b a} \log_b n\right)                                                                                       &  &  &  & \\[1.5ex]
-			      & \text{Z lematu: } T(n)
-			        = \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT\left(n^{\log_b a}\right)
-			        = \BO\left(n^{\log_b a}\log n\right) + \BT\left(n^{\log_b a}\right)
-			        = \BT\left(n^{\log_b a}\log n\right)                                                                                          &  &  &  &
+			                                                                                                                    & f\left(\frac{n}{b^j}\right) = \BT\left(\left(\frac{n}{b^j}\right)^{\log_b a}\right)    &  &  &   & \\[1.5ex]
+			                                                                                                                    & \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
+			      = \sum_{j = 0}^{\log_b n - 1} a^j \BT\left(\left(\frac{n}{b^j}\right)^{\log_b a}\right)
+			      = \BT\left(\sum_{j = 0}^{\log_b n - 1} a^j \left(\frac{n}{b^j}\right)^{\log_b a}\right)                       &                                                                                        &  &  &     \\[1.5ex]
+			                                                                                                                    & = \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} a^j \frac{1}{b^{j\log_b a}}\right)
+			      = \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} a^j \frac{1}{\underbracket{b^{\log_b a^j}}_{=a^j}}\right) &                                                                                        &  &  &     \\[1.5ex]
+			                                                                                                                    & = \BT\left(n^{\log_b a} \sum_{j = 0}^{\log_b n - 1} 1 \right)
+			      = \BT\left(n^{\log_b a} \log_b n\right)                                                                       &                                                                                        &  &  &     \\[1.5ex]
+			                                                                                                                    & \text{Z lematu: } T(n)
+			      = \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT\left(n^{\log_b a}\right)                  &                                                                                        &  &  &     \\[1.5ex]
+			                                                                                                                    & = \BO\left(n^{\log_b a}\log n\right) + \BT\left(n^{\log_b a}\right)
+			      = \BT\left(n^{\log_b a}\log n\right)                                                                          &                                                                                        &  &  &
 		      \end{flalign*}
 
 		\item Gdy $f(n) = \BM\left(n^{\log_b a + \epsilon}\right)$ oraz $a \cdot f\left(\frac{n}{b}\right) \leq c\cdot f(n)$ dla jakiegoś $c < 1$ i odpowiednio dużych $n$.
 
 		      Z założenia $f\left(\frac{n}{b}\right) \leq \frac{c}{a}f(n)$, więc drogą iteracji:
 		      \begin{flalign*}
-			      & f\left(\frac{n}{b^j}\right) \overset{(\star)}{\leq} \left(\frac{c}{a}\right)^j f(n) = \frac{c^j}{a^j}f(n)                      &  &  &  & \\[1.5ex]
-			      & (\star) \,\, f\left(\frac{n}{b^j}\right) \leq \frac{c}{a} f\left(\frac{n}{b^{j-1}}\right) \leq \left(\frac{c}{a}\right)^2 f\left(\frac{n}{b^{j-2}}\right) \leq \dots \leq \left(\frac{c}{a}\right)^j f(n) &  &  &  & \\[1.5ex]
-			      & \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
-			        \leq \sum_{j = 0}^{\log_b n - 1} \cancel{a^j} \frac{c^j}{\cancel{a^j}} f(n) + \BO(1)
-			        \leq f(n) \sum_{j = 0}^{\log_b n - 1} c^j + \BO(1)                                                                            &  &  &  & \\[1.5ex]
-			      & \leq f(n) \sum_{j = 0}^{\infty} c^j + \BO(1)
-			        \leq f(n) \frac{1}{1 - c} + \BO(1)
-			        \leq f(n) \BO(1)
-			        = \BO(f(n))                                                                                                                   &  &  &  & \\[1.5ex]
-			      & \text{Z drugiej strony: } \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
-			        = a^0 f\left(\frac{n}{b^0}\right) + \underbracket{\sum_{j = 1}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)}_{\geq 0}
-			        = \BM(f(n))                                                                                                                   &  &  &  & \\[1.5ex]
-			      & \text{Z lematu: } T(n)
-			        = \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT(n^{\log_b a})
-			        = \BT(f(n)) + \BT(n^{\log_b a}) = \BT(f(n))                                                                                   &  &  &  & \qedhere
+			                                                         & f\left(\frac{n}{b^j}\right) \overset{(\star)}{\leq} \left(\frac{c}{a}\right)^j f(n) = \frac{c^j}{a^j}f(n)                                                                                                 &  &  &                 & \\[1.5ex]
+			                                                         & (\star) \,\, f\left(\frac{n}{b^j}\right) \leq \frac{c}{a} f\left(\frac{n}{b^{j-1}}\right) \leq \left(\frac{c}{a}\right)^2 f\left(\frac{n}{b^{j-2}}\right) \leq \dots \leq \left(\frac{c}{a}\right)^j f(n) &  &  &                 & \\[1.5ex]
+			                                                         & \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
+			      \leq \sum_{j = 0}^{\log_b n - 1} \cancel{a^j} \frac{c^j}{\cancel{a^j}} f(n) + \BO(1)
+			      \leq f(n) \sum_{j = 0}^{\log_b n - 1} c^j + \BO(1) &                                                                                                                                                                                                           &  &  &                   \\[1.5ex]
+			                                                         & \leq f(n) \sum_{j = 0}^{\infty} c^j + \BO(1)
+			      \leq f(n) \frac{1}{1 - c} + \BO(1)
+			      \leq f(n) \BO(1)
+			      = \BO(f(n))                                        &                                                                                                                                                                                                           &  &  &                   \\[1.5ex]
+			                                                         & \text{Z drugiej strony: } \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)
+			      = a^0 f\left(\frac{n}{b^0}\right) + \underbracket{\sum_{j = 1}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right)}_{\geq 0}
+			      = \BM(f(n))                                        &                                                                                                                                                                                                           &  &  &                   \\[1.5ex]
+			                                                         & \text{Z lematu: } T(n)
+			      = \sum_{j = 0}^{\log_b n - 1} a^j f\left(\frac{n}{b^j}\right) + \BT(n^{\log_b a})
+			      = \BT(f(n)) + \BT(n^{\log_b a}) = \BT(f(n))        &                                                                                                                                                                                                           &  &  & \tag*{\qedhere}
 		      \end{flalign*}
 	\end{enumerate}
 \end{proof}

@@ -3,11 +3,11 @@
 % ════════════════════════════════════════════════════════════════
 
 \begin{problem}[sumy podzbiorów (Subset-Sum)] \label{problem:subsetsum}
-	Instancja: $S = \{x_1, x_2, \ldots, x_n\} \subseteq \N$, $t \in \N$.
-	\begin{itemize}[nosep]
-		\item \emph{Wersja decyzyjna:} czy istnieje $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i = t$?
-		\item \emph{Wersja optymalizacyjna:} znaleźć $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i$ jest największą możliwą liczbą $\leq t$.
-	\end{itemize}
+Instancja: $S = \{x_1, x_2, \ldots, x_n\} \subseteq \N$, $t \in \N$.
+\begin{itemize}[nosep]
+	\item \emph{Wersja decyzyjna:} czy istnieje $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i = t$?
+	\item \emph{Wersja optymalizacyjna:} znaleźć $S' \subseteq S$ takie, że $\sum_{x_i \in S'} x_i$ jest największą możliwą liczbą $\leq t$.
+\end{itemize}
 \end{problem}
 
 Dla zbioru $P \subseteq \N$ i $x \in \N$ oznaczamy $P + x = \{s + x : s \in P\}$.\\
@@ -154,11 +154,11 @@ Oto schemat aproksymacyjny:
 	Schematycznie (każda komórka to cyfra danej liczby na danej pozycji):
 	\begin{center}
 		\begin{tblr}{colspec={l|cc|cc}, row{1}={font=\itshape}, vline{2,4}, hline{2}}
-			               & pozycja $x_i$ & inne poz.\ zmiennych & pozycja $C_j$           & inne poz.\ klauzul \\
-			$r_i$          & $1$           & $0$                  & $1$ gdy $x_i \in C_j$   & $0$ \\
-			$r_i'$         & $1$           & $0$                  & $1$ gdy $\overline{x_i} \in C_j$ & $0$ \\
-			$s_j$          & $0$           & $0$                  & $1$                     & $0$ \\
-			$s_j'$         & $0$           & $0$                  & $2$                     & $0$ \\
+			       & pozycja $x_i$ & inne poz.\ zmiennych & pozycja $C_j$                    & inne poz.\ klauzul \\
+			$r_i$  & $1$           & $0$                  & $1$ gdy $x_i \in C_j$            & $0$                \\
+			$r_i'$ & $1$           & $0$                  & $1$ gdy $\overline{x_i} \in C_j$ & $0$                \\
+			$s_j$  & $0$           & $0$                  & $1$                              & $0$                \\
+			$s_j'$ & $0$           & $0$                  & $2$                              & $0$                \\
 		\end{tblr}
 	\end{center}
 	Liczby $r_i, r_i', s_j, s_j'$ są parami różne -- z konstrukcji i założeń o $\Phi$.\\
@@ -254,26 +254,26 @@ Oto schemat aproksymacyjny:
 		\centering
 		\renewcommand{\arraystretch}{1.2}
 		\begin{NiceTabular}{c|ccc|cccc}[margin,hvlines,color-inside]
-			           & $x_1$ & $x_2$ & $x_3$ & $C_1$ & $C_2$ & $C_3$ & $C_4$ \\
+			                          & $x_1$ & $x_2$ & $x_3$ & $C_1$ & $C_2$ & $C_3$ & $C_4$ \\
 			\hline
-			$t$        & 1     & 1     & 1     & 4     & 4     & 4     & 4     \\
+			$t$                       & 1     & 1     & 1     & 4     & 4     & 4     & 4     \\
 			\hline
-			\rowcolor{gray!18} $r_1$  & 1 & 0 & 0 & 1 & 0 & 0 & 1 \\
-			$r_1'$     & 1     & 0     & 0     & 0     & 1     & 1     & 0     \\
-			$r_2$      & 0     & 1     & 0     & 0     & 0     & 0     & 1     \\
-			\rowcolor{gray!18} $r_2'$ & 0 & 1 & 0 & 1 & 1 & 1 & 0 \\
-			$r_3$      & 0     & 0     & 1     & 0     & 0     & 1     & 1     \\
-			\rowcolor{gray!18} $r_3'$ & 0 & 0 & 1 & 1 & 1 & 0 & 0 \\
-			\rowcolor{gray!18} $s_1$  & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
-			$s_1'$     & 0     & 0     & 0     & 2     & 0     & 0     & 0     \\
-			$s_2$      & 0     & 0     & 0     & 0     & 1     & 0     & 0     \\
-			\rowcolor{gray!18} $s_2'$ & 0 & 0 & 0 & 0 & 2 & 0 & 0 \\
-			\rowcolor{gray!18} $s_3$  & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
-			\rowcolor{gray!18} $s_3'$ & 0 & 0 & 0 & 0 & 0 & 2 & 0 \\
-			\rowcolor{gray!18} $s_4$  & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
-			\rowcolor{gray!18} $s_4'$ & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
+			\rowcolor{gray!18} $r_1$  & 1     & 0     & 0     & 1     & 0     & 0     & 1     \\
+			$r_1'$                    & 1     & 0     & 0     & 0     & 1     & 1     & 0     \\
+			$r_2$                     & 0     & 1     & 0     & 0     & 0     & 0     & 1     \\
+			\rowcolor{gray!18} $r_2'$ & 0     & 1     & 0     & 1     & 1     & 1     & 0     \\
+			$r_3$                     & 0     & 0     & 1     & 0     & 0     & 1     & 1     \\
+			\rowcolor{gray!18} $r_3'$ & 0     & 0     & 1     & 1     & 1     & 0     & 0     \\
+			\rowcolor{gray!18} $s_1$  & 0     & 0     & 0     & 1     & 0     & 0     & 0     \\
+			$s_1'$                    & 0     & 0     & 0     & 2     & 0     & 0     & 0     \\
+			$s_2$                     & 0     & 0     & 0     & 0     & 1     & 0     & 0     \\
+			\rowcolor{gray!18} $s_2'$ & 0     & 0     & 0     & 0     & 2     & 0     & 0     \\
+			\rowcolor{gray!18} $s_3$  & 0     & 0     & 0     & 0     & 0     & 1     & 0     \\
+			\rowcolor{gray!18} $s_3'$ & 0     & 0     & 0     & 0     & 0     & 2     & 0     \\
+			\rowcolor{gray!18} $s_4$  & 0     & 0     & 0     & 0     & 0     & 0     & 1     \\
+			\rowcolor{gray!18} $s_4'$ & 0     & 0     & 0     & 0     & 0     & 0     & 2     \\
 			\hline
-			$\sum$     & 1     & 1     & 1     & 4     & 4     & 4     & 4     \\
+			$\sum$                    & 1     & 1     & 1     & 4     & 4     & 4     & 4     \\
 		\end{NiceTabular}
 	\end{aztable}
 	Suma wybranych liczb równa się $t$, więc $S' = \{r_1, r_2', r_3', s_1, s_2', s_3, s_3', s_4, s_4'\}$ jest rozwiązaniem.

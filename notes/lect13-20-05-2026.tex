@@ -88,8 +88,8 @@ Kontynuujemy analizę w~pełni wielomianowego schematu aproksymacyjnego dla prob
 	\end{align*}
 	Więc \eqref{eq:subset_sum_ind} zachodzi.
 
-	W szczególności \eqref{eq:subset_sum_ind} zachodzi dla $y^* \in P_n$. Zatem istnieje $z \in L_n$ takie, że $\frac{y^*}{\left(1+\frac{\epsilon}{2n}\right)^n} \le z \le y^*$, więc $\frac{y^*}{z} \le \left(1+\frac{\epsilon}{2n}\right)^n$. \\
-	Ale $z^* \ge z$, więc $\frac{y^*}{z^*} \le \frac{y^*}{z} \le \left(1+\frac{\epsilon}{2n}\right)^n$. \\
+	W szczególności \eqref{eq:subset_sum_ind} zachodzi dla $y^* \in P_n$. Zatem istnieje $z \in L_n$ takie, że $\frac{y^*}{\left(1+\frac{\epsilon}{2n}\right)^n} \le z \le y^*$, więc $\frac{y^*}{z} \le \left(1+\frac{\epsilon}{2n}\right)^n$.
+	Ale $z^* \ge z$, więc $\frac{y^*}{z^*} \le \frac{y^*}{z} \le \left(1+\frac{\epsilon}{2n}\right)^n$.
 	\begin{align*}
 		\frac{y^*}{z^*} & \le \left(1+\frac{\epsilon}{2n}\right)^n \overset{\text{Fakt~\ref{fakt:rosnacy}}}{\le} \lim_{n\to\infty} \left(1+\frac{\epsilon}{2n}\right)^n = \lim_{n\to\infty} \left(\left(1+\frac{\epsilon}{2n}\right)^{\frac{2n}{\epsilon}}\right)^{\frac{\epsilon}{2}} = e^{\frac{\epsilon}{2}}
 	\end{align*}
@@ -115,8 +115,8 @@ Skoro $z_1 \ge 1$, to
 	\left(1 + \frac{\epsilon}{2n}\right)^{k-1}   & \le t \quad \Big| \ln                                                                                                                                                                   &   & \\[1ex]
 	(k-1)\ln\left(1 + \frac{\epsilon}{2n}\right) & \le \ln t                                                                                                                                                                               &   & \\[1ex]
 	k-1                                          & \le \frac{\ln t}{\ln\left(1 + \frac{\epsilon}{2n}\right)} \quad \Big| +2                                                                                                                &   & \\[1ex]
-	k+1                                          & \le \frac{\ln t}{\ln\left(1 + \frac{\epsilon}{2n}\right)} + 2 \overset{\text{Fakt~\ref{fakt:ln}}}{\le} \frac{\ln t \cdot \left(1 + \frac{\epsilon}{2n}\right)}{\frac{\epsilon}{2n}} + 2
-	= \frac{\cancel{2n}+\epsilon}{\cancel{2n}} \cdot \frac{\cancel{2n}}{\epsilon} \ln t + 2
+	k+1                                          & \le \frac{\ln t}{\ln\left(1 + \frac{\epsilon}{2n}\right)} + 2 \overset{\text{Fakt~\ref{fakt:ln}}}{\le} \frac{\ln t \cdot \left(1 + \frac{\epsilon}{2n}\right)}{\frac{\epsilon}{2n}} + 2 &   & \\[1ex]
+	                                             & = \frac{\cancel{2n}+\epsilon}{\cancel{2n}} \cdot \frac{\cancel{2n}}{\epsilon} \ln t + 2
 	\le \frac{3n \ln t}{\epsilon} + 2            &                                                                                                                                                                                         &
 \end{flalign*}
 Skoro długość $L_i$ po linii 6 wynosi $k+1 \le \frac{3n \ln t}{\epsilon} + 2$, a po $(i+1)$-szej linii 4 może być co najwyżej $2$ razy dłuższa i $|I| = \BM(\ln t + n)$, to złożoność czasowa algorytmu jest wielomianowa względem $|I|$ i $\frac{1}{\epsilon}$.
@@ -133,8 +133,8 @@ $G$ jest \uemph{dwudzielny} jeśli istnieje podział $V$ na dwa niepuste podzbio
 Skojarzenie jest \uemph{najliczniejsze} jeśli ma największą liczność.
 
 \begin{problem}[najliczniejszego skojarzenia w grafie dwudzielnym] \label{problem:matching}
-	Instancja: graf dwudzielny $G = (V_1, V_2; E)$. \\
-	Znaleźć: najliczniejsze skojarzenie w $G$.
+Instancja: graf dwudzielny $G = (V_1, V_2; E)$. \\
+Znaleźć: najliczniejsze skojarzenie w $G$.
 \end{problem}
 
 \begin{example} ~ \\
@@ -215,26 +215,26 @@ Niech $M$ będzie ustalonym skojarzeniem w $G$.
 Możemy użyć ścieżki powiększającej i różnicy symetrycznej do zwiększenia liczności skojarzenia.
 
 \begin{obowiazkowy}
-\begin{theorem}[Berge'a]
-	Niech $G=(V,E)$ -- graf, $M$ -- skojarzenie w $G$. \\
-	$M$ jest najliczniejszym skojarzeniem w $G \iff$ nie istnieje ścieżka powiększająca względem $M$.
-\end{theorem}
+	\begin{theorem}[Berge'a]
+		Niech $G=(V,E)$ -- graf, $M$ -- skojarzenie w $G$. \\
+		$M$ jest najliczniejszym skojarzeniem w $G \iff$ nie istnieje ścieżka powiększająca względem $M$.
+	\end{theorem}
 
-\begin{proof} ~
-\begin{itemize}
-	\item[$\implies$]
-	      Przypuśćmy, że istnieje ścieżka powiększająca $P$ względem $M$. \\
-	      Wtedy $M' = M \div E(P)$ jest skojarzeniem i $|M'| > |M|$, więc $M$ nie jest skojarzeniem najliczniejszym.
-	\item[$\impliedby$]
-	      Przypuśćmy, że $M$ nie jest najliczniejszym skojarzeniem w $G$. \\
-	      Niech $M'$ będzie skojarzeniem takim, że $|M'| > |M|$. \\
-	      Niech $H$ będzie podgrafem $G$ indukowanym przez $M' \div M$, czyli $H = (V(G), M' \div M)$. \\
-	      $M, M'$ to skojarzenia, więc stopień wierzchołka $d_H(v) \le 2$ dla każdego $v \in V(G)$.
+	\begin{proof} ~
+		\begin{itemize}
+			\item[$\implies$]
+			      Przypuśćmy, że istnieje ścieżka powiększająca $P$ względem $M$. \\
+			      Wtedy $M' = M \div E(P)$ jest skojarzeniem i $|M'| > |M|$, więc $M$ nie jest skojarzeniem najliczniejszym.
+			\item[$\impliedby$]
+			      Przypuśćmy, że $M$ nie jest najliczniejszym skojarzeniem w $G$. \\
+			      Niech $M'$ będzie skojarzeniem takim, że $|M'| > |M|$. \\
+			      Niech $H$ będzie podgrafem $G$ indukowanym przez $M' \div M$, czyli $H = (V(G), M' \div M)$. \\
+			      $M, M'$ to skojarzenia, więc stopień wierzchołka $d_H(v) \le 2$ dla każdego $v \in V(G)$.
 
-	      Każda składowa $H$ jest ścieżką lub cyklem. \\
-	      $M, M'$ to skojarzenia, więc nie ma cykli nieparzystych w $H$. \\
-	      Każda składowa $H$ jest ścieżką lub cyklem parzystym. \\
-	      Skoro $|M'| > |M|$, to istnieje składowa $H$, która jest ścieżką zawierającą więcej krawędzi z $M'$ niż z $M$, więc ta ścieżka zaczyna się i kończy krawędzią z $M'$. Ta ścieżka jest ścieżką powiększającą względem $M$. \hfill $\qedhere$
-\end{itemize}
-\end{proof}
+			      Każda składowa $H$ jest ścieżką lub cyklem. \\
+			      $M, M'$ to skojarzenia, więc nie ma cykli nieparzystych w $H$. \\
+			      Każda składowa $H$ jest ścieżką lub cyklem parzystym. \\
+			      Skoro $|M'| > |M|$, to istnieje składowa $H$, która jest ścieżką zawierającą więcej krawędzi z $M'$ niż z $M$, więc ta ścieżka zaczyna się i kończy krawędzią z $M'$. Ta ścieżka jest ścieżką powiększającą względem $M$. \qedhere
+		\end{itemize}
+	\end{proof}
 \end{obowiazkowy}

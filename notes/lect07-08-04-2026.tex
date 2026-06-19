@@ -206,60 +206,60 @@ Drzewo binarne nazywamy \uemph{regularnym}, jeśli każdy wierzchołek wewnętrz
 		\centering
 		\begin{minipage}{0.4\textwidth}
 			\centering
-			\begin{tikzpicture}[mytree]
-				\node {u}
-				child { node {}
-						child { node {}
-								child { node[draw=none] {a} edge from parent node[elabel left] {0} }
-								child { node[draw=none] {b} edge from parent node[elabel right] {1} }
-								edge from parent node[elabel left] {0}
-							}
-						child { node {}
-								child { node[draw=none] {c} edge from parent node[elabel left] {0} }
-								child { node[draw=none] {d} edge from parent node[elabel right] {1} }
-								edge from parent node[elabel right] {1}
-							}
-						edge from parent node[elabel left] {0}
-					}
-				child { node {v}
-						child[missing] {}
-						child { node {w}
-								child { node[draw=none] {e} edge from parent node[elabel left] {0} }
-								child { node[draw=none] {f} edge from parent node[elabel right] {1} }
-								edge from parent node[elabel right] {1}
-							}
-						edge from parent node[elabel right] {1}
-					};
-				\node[draw=none] at (-2, 0) {$T$};
-			\end{tikzpicture}
+			\resizebox{\linewidth}{!}{\begin{tikzpicture}[mytree]
+					\node {u}
+					child { node {}
+							child { node {}
+									child { node[draw=none] {a} edge from parent node[elabel left] {0} }
+									child { node[draw=none] {b} edge from parent node[elabel right] {1} }
+									edge from parent node[elabel left] {0}
+								}
+							child { node {}
+									child { node[draw=none] {c} edge from parent node[elabel left] {0} }
+									child { node[draw=none] {d} edge from parent node[elabel right] {1} }
+									edge from parent node[elabel right] {1}
+								}
+							edge from parent node[elabel left] {0}
+						}
+					child { node {v}
+							child[missing] {}
+							child { node {w}
+									child { node[draw=none] {e} edge from parent node[elabel left] {0} }
+									child { node[draw=none] {f} edge from parent node[elabel right] {1} }
+									edge from parent node[elabel right] {1}
+								}
+							edge from parent node[elabel right] {1}
+						};
+					\node[draw=none] at (-2, 0) {$T$};
+				\end{tikzpicture}}
 		\end{minipage}
 		\hfill
 		$\longrightarrow$
 		\hfill
 		\begin{minipage}{0.4\textwidth}
 			\centering
-			\begin{tikzpicture}[mytree]
-				\node {u}
-				child { node {}
-						child { node {}
-								child { node[draw=none] {a} edge from parent node[elabel left] {0} }
-								child { node[draw=none] {b} edge from parent node[elabel right] {1} }
-								edge from parent node[elabel left] {0}
-							}
-						child { node {}
-								child { node[draw=none] {c} edge from parent node[elabel left] {0} }
-								child { node[draw=none] {d} edge from parent node[elabel right] {1} }
-								edge from parent node[elabel right] {1}
-							}
-						edge from parent node[elabel left] {0}
-					}
-				child { node {w}
-						child { node[draw=none] {e} edge from parent node[elabel left] {0} }
-						child { node[draw=none] {f} edge from parent node[elabel right] {1} }
-						edge from parent node[elabel right] {1}
-					};
-				\node[draw=none] at (-2, 0) {$T'$};
-			\end{tikzpicture}
+			\resizebox{\linewidth}{!}{\begin{tikzpicture}[mytree]
+					\node {u}
+					child { node {}
+							child { node {}
+									child { node[draw=none] {a} edge from parent node[elabel left] {0} }
+									child { node[draw=none] {b} edge from parent node[elabel right] {1} }
+									edge from parent node[elabel left] {0}
+								}
+							child { node {}
+									child { node[draw=none] {c} edge from parent node[elabel left] {0} }
+									child { node[draw=none] {d} edge from parent node[elabel right] {1} }
+									edge from parent node[elabel right] {1}
+								}
+							edge from parent node[elabel left] {0}
+						}
+					child { node {w}
+							child { node[draw=none] {e} edge from parent node[elabel left] {0} }
+							child { node[draw=none] {f} edge from parent node[elabel right] {1} }
+							edge from parent node[elabel right] {1}
+						};
+					\node[draw=none] at (-2, 0) {$T'$};
+				\end{tikzpicture}}
 		\end{minipage}
 	\end{azfigure}
 
@@ -336,7 +336,7 @@ Złożoność czasowa algorytmu wynosi $\BO(n \log n)$.
 	% minipage wymusza wyrównanie [t] do GÓRNEJ krawędzi tekstu (nie do baseline).
 	\newcommand{\huffstep}[2]{%
 		\noindent
-		\begin{minipage}[t]{0.34\textwidth}\vspace{0pt}#1\end{minipage}%
+		\begin{minipage}[t]{0.34\textwidth}\vspace{0pt}\raggedright #1\end{minipage}%
 		\hfill
 		\begin{minipage}[t]{0.62\textwidth}\vspace{0pt}\centering#2\end{minipage}%
 		\par\vspace{2em}%
