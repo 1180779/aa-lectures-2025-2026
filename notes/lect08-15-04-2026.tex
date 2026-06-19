@@ -43,8 +43,17 @@ Z lematu~\ref{lemma:huffman:1} wynika, że można zacząć konstrukcję optymaln
 
 \begin{center}
 	\begin{tikzpicture}[
-			leaf/.style={draw=none, font=\small},
-			inner/.style={circle, draw, minimum size=0.5cm, inner sep=0pt}]
+			leaf/.style={
+					draw=none,
+					font=\small
+				},
+			inner/.style={
+					circle,
+					draw,
+					minimum size=0.5cm,
+					inner sep=0pt
+				}
+		]
 
 		% ===== T' =====
 		\begin{scope}
@@ -220,7 +229,7 @@ W problemie \ref{prob:szeregowanieZadanTrzy} (dla $3 \mid n$) dla uszeregowania 
 	Niech $\Pi = (i_1, \dots, i_n)$ będzie permutacją minimalizującą $f$. Przypuśćmy, że dla pewnych $k, l \in [n]$, $k < l$ ale $t_{i_k} > t_{i_l}$. Niech $\Pi' = (i'_1, i'_2, \dots, i'_n)$ będzie permutacją powstałą z $\Pi$ poprzez zamianę $i_k$ z $i_l$, tzn.
 	\begin{flalign*}
 		 &  & \begin{cases}
-			      i'_k = i_l, \quad i'_l = i_k & \text{(zamieniane pozycje)} \\
+			      i'_k = i_l, \quad i'_l = i_k & \text{(zamieniane pozycje)}               \\
 			      i'_j = i_j                   & \text{dla\ } j \in [n] \setminus \{k, l\}
 		      \end{cases}\text{. Wtedy:} &  &  &  &  &  &
 	\end{flalign*}

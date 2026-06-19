@@ -125,31 +125,39 @@ to iloczyn skalarny $i$-tego wiersza macierzy $A$ oraz $j$-tej kolumny macierzy 
 \[
 	C(i, j) = \sum_{k = 1}^{q} A(i, k) \cdot B(k, j).
 \]
+
+\newcommand{\mmI}[1]{{\color{accentA}#1}}
+\newcommand{\mmII}[1]{{\color{accentB}#1}}
+\newcommand{\mmIII}[1]{{\color{accentC}#1}}
+% \renewcommand{\mmI}[1]{\boxed{#1}}
+% \renewcommand{\mmII}[1]{\underline{#1}}
+% \renewcommand{\mmIII}[1]{\overline{#1}}
+
 Biorąc dla przykładu $p = 2$, $q = 3$, $r = 2$ i~obliczając wyróżniony element $C(1, 1)$:
 \[
 	\underbrace{\begin{bmatrix}
-			{\color{accentA}1} & {\color{accentA}2} & {\color{accentA}3} \\
-			4                  & 5                  & 6
+			\mmI{1} & \mmII{2} & \mmIII{3} \\
+			4       & 5        & 6
 		\end{bmatrix}}_{A:\ p \times q}
 	\cdot
 	\underbrace{\begin{bmatrix}
-			{\color{accentB}7}  & 8  \\
-			{\color{accentB}9}  & 10 \\
-			{\color{accentB}11} & 12
+			\mmI{7}    & 8  \\
+			\mmII{9}   & 10 \\
+			\mmIII{11} & 12
 		\end{bmatrix}}_{B:\ q \times r}
 	=
 	\underbrace{\begin{bmatrix}
-			{\color{accentA}58} & 64  \\
-			139                 & 154
+			58  & 64  \\
+			139 & 154
 		\end{bmatrix}}_{C:\ p \times r}
 \]
 \[
-	C(1, 1) = {\color{accentA}1} \cdot {\color{accentB}7} + {\color{accentA}2} \cdot {\color{accentB}9}
-	+ {\color{accentA}3} \cdot {\color{accentB}11} = 7 + 18 + 33 = 58.
+	C(1, 1) = \mmI{1} \cdot \mmI{7} + \mmII{2} \cdot \mmII{9}
+	+ \mmIII{3} \cdot \mmIII{11} = 7 + 18 + 33 = 58.
 \]
-Kolorowy wiersz macierzy $A$ i~ kolorowa kolumna macierzy $B$ dają kolorowy element macierzy $C$;
-sumowanie po~$k = 1, \dots, q$ to wewnętrzna pętla algorytmu. Każdy z~$p \cdot r$ elementów macierzy
-$C$ wymaga $q$ mnożeń.
+Każdy czynnik $i$-tego wiersza macierzy $A$ tworzy iloczyn z~odpowiadającym mu (tym samym stylem)
+czynnikiem $j$-tej kolumny macierzy $B$; ich suma po~$k = 1, \dots, q$ daje element $C(i, j)$ i~jest
+zarazem wewnętrzną pętlą algorytmu. Każdy z~$p \cdot r$ elementów macierzy $C$ wymaga $q$ mnożeń.
 
 \begin{alg}{Naiwne mnożenie macierzy}{alg:matmul}
 	\FunctionNN{MatrixMultiply}{$A, B$}
