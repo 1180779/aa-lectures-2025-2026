@@ -59,7 +59,7 @@ Kontynuujemy analizę w~pełni wielomianowego schematu aproksymacyjnego dla prob
 	Zwracamy największy element $z = 600$ (podzbiór $\{400, 200\}$). Optimum to $z^* = 608$ (podzbiór $\{205, 203, 200\}$). Iloraz $\frac{z^*}{z} = \frac{608}{600} \approx 1{,}013 \leq 1 + \varepsilon = 1{,}4$ -- zgodnie z~gwarancją.
 \end{example}
 
-\begin{example}[ApproxSubsetSum od początku do końca]
+\begin{example}[Aproksymacja sumy podzbioru]
 	$S = \{104, 102, 201, 101\}$ (w~tej kolejności $x_1, \ldots, x_4$), $t = 308$, $\varepsilon = 0{,}4$. Wtedy $n = 4$ i~próg przycinania to $\delta = \frac{\varepsilon}{2n} = \frac{0{,}4}{8} = 0{,}05$ (czyli mnożnik $1 + \delta = 1{,}05$). Startujemy z~$L_0 = (0)$.
 
 	W~każdej iteracji najpierw scalamy $L_{i-1}$ z~$L_{i-1} + x_i$, potem usuwamy elementy $> t = 308$, a~na końcu przycinamy. Przy przycinaniu zachowujemy element $y$, gdy $y > last \cdot 1{,}05$, gdzie $last$ to ostatnio zachowany element.

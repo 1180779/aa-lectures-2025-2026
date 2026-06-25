@@ -75,6 +75,9 @@
 \definecolor{dygresjagray}{RGB}{105, 105, 105}% treść dygresji — wyszarzona, materiał opcjonalny
 \definecolor{obowiazkowybg}{RGB}{255, 252, 245}% tło dowodów obowiązkowych na egzaminie
 \definecolor{obowiazkowyline}{RGB}{230, 200, 150}% nasycona linia na granicy podświetlenia
+\definecolor{pomijalnybg}{RGB}{250, 250, 250}% tło dowodów pomijalnych przy powtórce
+\definecolor{pomijalnyline}{RGB}{240, 240, 240}% szara linia na granicy podświetlenia
+\definecolor{pomijalnytext}{RGB}{120, 120, 120}% przygaszony tekst dowodów pomijalnych
 
 % Podświetlenie materiału obowiązkowego jako zamknięte pudełko w bloku tekstu
 % (nie rozlewa się na marginesy). Delikatna ramka + akcentowy pasek z lewej dają
@@ -116,6 +119,37 @@
 \newenvironment{obowiazkowy}
 {\ifbool{azhighlight}{\begin{obowiazkowybox}}{}}
 			{\ifbool{azhighlight}{\end{obowiazkowybox}}{}}
+
+% Dowody nieobowiązkowe: w wersji z wyróżnieniami szare tło sygnalizuje, że
+% można je pominąć przy powtórce do egzaminu. Zamiast oznaczać każdy dowód
+% ręcznie, w wersji z wyróżnieniami opakowujemy CAŁE środowisko proof w szare
+% pudełko — z wyjątkiem dowodów leżących już w ramce obowiazkowy (te są
+% istotne i mają tło cream). Flaga \c@inobow śledzi, czy jesteśmy w obowiazkowy.
+% W wersji zwykłej \tcolorboxenvironment nie jest wołane → proof bez zmian.
+\newbool{inobow}
+\AtBeginEnvironment{obowiazkowybox}{\booltrue{inobow}}
+\AtEndEnvironment{obowiazkowybox}{\boolfalse{inobow}}
+\tcbset{
+	pomijalnystyle/.style={%
+		breakable, enhanced,
+		colback=pomijalnybg,
+		colframe=pomijalnyline,
+		coltext=pomijalnytext,
+		boxrule=0.5pt,
+		arc=2pt, outer arc=2pt,
+		left=10pt, right=10pt, top=8pt, bottom=8pt,
+		boxsep=0pt,
+		pad at break*=6pt,
+		before skip=10pt plus 2pt, after skip=10pt plus 2pt,
+	},
+	% dowód w ramce obowiazkowy: bez szarego pudełka (zostaje na tle cream)
+	pomijalnypusty/.style={blanker, before skip=\topsep, after skip=\topsep},
+	% Rozstrzygamy styl jako KOD (a nie listę kluczy) w chwili czytania opcji
+	% pudełka — wtedy \ifbool widzi już ustawione inobow (otwarte obowiazkowybox),
+	% a problem dzielenia listy po przecinkach znika.
+	proofbox/.code={\ifbool{inobow}{\tcbset{pomijalnypusty}}{\tcbset{pomijalnystyle}}},
+}
+\ifbool{azhighlight}{\tcolorboxenvironment{proof}{proofbox}}{}
 
 \titleformat{\section}{\large\bfseries\color{accent}}{}{0em}{}[\titlerule]
 \titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
