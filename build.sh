@@ -8,6 +8,8 @@
 # highlight on or off:
 #   AZ_HIGHLIGHT unset/0 → AZ_lectures             (plain)
 #   AZ_HIGHLIGHT=1       → AZ_lectures_highlighted  (obligatory material on a tint)
+# AZ_SKIP=1 additionally drops the non-obligatory proofs entirely:
+#   AZ_HIGHLIGHT=1 AZ_SKIP=1 → AZ_lectures_exam     (quick-revision: essentials only)
 #
 # Usage:  ./build.sh [-v|--verbose] [VERSION]
 #   -v, --verbose  stream the full latexmk output (default: only show it
@@ -35,10 +37,14 @@ VERSION="${VERSION:-$(git describe --tags --abbrev=0 2>/dev/null || echo dev)}"
 
 SRC=notes
 
-# builds to produce: "output base name:AZ_HIGHLIGHT value"
+# builds to produce: "output base name:AZ_HIGHLIGHT:AZ_SKIP"
+#   plain        — wszystko, bez wyróżnień
+#   highlighted  — materiał obowiązkowy na tle, nieobowiązkowe dowody w szarych ramkach
+#   exam         — wyróżnienia + nieobowiązkowe dowody wycięte (szybka powtórka)
 BUILDS=(
-	"AZ_lectures:0"
-	"AZ_lectures_highlighted:1"
+	"AZ_lectures:0:0"
+	"AZ_lectures_highlighted:1:0"
+	"AZ_lectures_exam:1:1"
 )
 
 # ── refresh the versioned PDFs in the repo root ──────────────────
@@ -52,18 +58,17 @@ rm -f AZ_*.pdf
 # cannot tell them apart from file timestamps — we force a rebuild with -g and
 # copy main.pdf out before the next build overwrites it.
 for entry in "${BUILDS[@]}"; do
-	name="${entry%%:*}"
-	hl="${entry##*:}"
+	IFS=: read -r name hl skip <<<"$entry"
 	dest="${name}_${VERSION}.pdf"
-	echo "==> Compiling $SRC/main.tex (AZ_HIGHLIGHT=$hl) -> $dest"
+	echo "==> Compiling $SRC/main.tex (AZ_HIGHLIGHT=$hl AZ_SKIP=$skip) -> $dest"
 	if [ "$VERBOSE" -eq 1 ]; then
-		( cd "$SRC" && AZ_HIGHLIGHT="$hl" latexmk -g main.tex )
+		( cd "$SRC" && AZ_HIGHLIGHT="$hl" AZ_SKIP="$skip" latexmk -g main.tex )
 	else
 		# Stay quiet on success; dump the captured output only if the
 		# compile fails (warnings and hints are not worth printing).
 		log="$(mktemp)"
-		if ! ( cd "$SRC" && AZ_HIGHLIGHT="$hl" latexmk -g main.tex ) >"$log" 2>&1; then
-			echo "!!! Compile failed ($SRC, AZ_HIGHLIGHT=$hl) — latexmk output:" >&2
+		if ! ( cd "$SRC" && AZ_HIGHLIGHT="$hl" AZ_SKIP="$skip" latexmk -g main.tex ) >"$log" 2>&1; then
+			echo "!!! Compile failed ($SRC, AZ_HIGHLIGHT=$hl AZ_SKIP=$skip) — latexmk output:" >&2
 			cat "$log" >&2
 			rm -f "$log"
 			exit 1

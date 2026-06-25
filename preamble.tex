@@ -33,6 +33,7 @@
 \usepackage{mathtools}
 \usepackage{etoolbox}
 \usepackage{xpatch}
+\usepackage{environ}% \RenewEnviron: przechwycenie treści dowodu do pominięcia (AZ_SKIP)
 
 \usepackage[noend]{algpseudocode}
 \usepackage{algorithm}
@@ -112,6 +113,12 @@
 \edef\azHighlightEnv{\directlua{tex.sprint(os.getenv("AZ_HIGHLIGHT") or "0")}}
 \ifdefstring{\azHighlightEnv}{1}{\booltrue{azhighlight}}{}
 
+% Flaga \azskip (AZ_SKIP=1): wycina nieobowiązkowe dowody w całości — wersja do
+% szybkiej powtórki, w której zostają tylko dowody obowiązkowe.
+\newbool{azskip}
+\edef\azSkipEnv{\directlua{tex.sprint(os.getenv("AZ_SKIP") or "0")}}
+\ifdefstring{\azSkipEnv}{1}{\booltrue{azskip}}{}
+
 % Środowisko obowiazkowy: w wersji z wyróżnieniami otwiera ramkę
 % obowiazkowybox, w zwykłej wersji jest przezroczyste (treść składana
 % normalnie, bez tła). Dzięki temu twierdzenia obowiązkowe oznaczamy raz,
@@ -126,9 +133,12 @@
 % pudełko — z wyjątkiem dowodów leżących już w ramce obowiazkowy (te są
 % istotne i mają tło cream). Flaga \c@inobow śledzi, czy jesteśmy w obowiazkowy.
 % W wersji zwykłej \tcolorboxenvironment nie jest wołane → proof bez zmian.
+% inobow śledzi „jesteśmy w materiale obowiązkowym”. Ustawiamy go na środowisku
+% obowiazkowy (a nie obowiazkowybox), żeby działał też bez wyróżnień — wersja
+% z pominięciem dowodów potrzebuje tej informacji niezależnie od AZ_HIGHLIGHT.
 \newbool{inobow}
-\AtBeginEnvironment{obowiazkowybox}{\booltrue{inobow}}
-\AtEndEnvironment{obowiazkowybox}{\boolfalse{inobow}}
+\AtBeginEnvironment{obowiazkowy}{\booltrue{inobow}}
+\AtEndEnvironment{obowiazkowy}{\boolfalse{inobow}}
 \tcbset{
 	pomijalnystyle/.style={%
 		breakable, enhanced,
@@ -149,7 +159,16 @@
 	% a problem dzielenia listy po przecinkach znika.
 	proofbox/.code={\ifbool{inobow}{\tcbset{pomijalnypusty}}{\tcbset{pomijalnystyle}}},
 }
-\ifbool{azhighlight}{\tcolorboxenvironment{proof}{proofbox}}{}
+% AZ_SKIP wygrywa: nieobowiązkowe dowody znikają zupełnie (przechwytujemy treść
+% przez \BODY i nie składamy jej). Obowiązkowe składamy normalnie oryginalnym
+% środowiskiem proof. Inaczej — w trybie wyróżnień — szare pudełka jak wyżej.
+\ifbool{azskip}{%
+	\let\azoldproof\proof
+	\let\azoldendproof\endproof
+	\RenewEnviron{proof}[1][\proofname]{%
+		\ifbool{inobow}{\azoldproof[#1]\BODY\azoldendproof}{}%
+	}%
+}{\ifbool{azhighlight}{\tcolorboxenvironment{proof}{proofbox}}{}}
 
 \titleformat{\section}{\large\bfseries\color{accent}}{}{0em}{}[\titlerule]
 \titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
