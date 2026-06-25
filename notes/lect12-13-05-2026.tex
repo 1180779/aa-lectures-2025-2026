@@ -123,60 +123,7 @@ Oto schemat aproksymacyjny:
 	\EndFunction
 \end{alg}
 
-\begin{example}[ApproxSubsetSum od początku do końca]
-	$S = \{104, 102, 201, 101\}$ (w~tej kolejności $x_1, \ldots, x_4$), $t = 308$, $\varepsilon = 0{,}4$. Wtedy $n = 4$ i~próg przycinania to $\delta = \frac{\varepsilon}{2n} = \frac{0{,}4}{8} = 0{,}05$ (czyli mnożnik $1 + \delta = 1{,}05$). Startujemy z~$L_0 = (0)$.
-
-	W~każdej iteracji najpierw scalamy $L_{i-1}$ z~$L_{i-1} + x_i$, potem usuwamy elementy $> t = 308$, a~na końcu przycinamy. Przy przycinaniu zachowujemy element $y$, gdy $y > last \cdot 1{,}05$, gdzie $last$ to ostatnio zachowany element.
-	\begin{itemize}[nosep]
-		\item \textbf{$i = 1$, $x_1 = 104$.} \\
-		      scalenie: $(0) \cup (104) = (0, 104)$; \\
-          po usunięciu $> 308$: $(0, 104)$; \\
-          przycinanie: \\
-		      \begin{tblr}{colspec={r c l l}, column{4}={font=\itshape}, rowsep=1pt}
-			      $0$   &       &                       & zachowane, $last = 0$   \\
-			      $104$ & $>$   & $0 \cdot 1{,}05 = 0$   & zachowane, $last = 104$ \\
-		      \end{tblr} \\
-		      $L_1 = (0, 104)$.
-		\item \textbf{$i = 2$, $x_2 = 102$.} \\
-		      scalenie: $(0, 104) \cup (102, 206) = (0, 102, 104, 206)$;\\
-          po usunięciu $> 308$: bez zmian; \\
-          przycinanie: \\
-		      \begin{tblr}{colspec={r c l l}, column{4}={font=\itshape}, rowsep=1pt}
-			      $0$   & $ $       &                          & zachowane, $last = 0$   \\
-			      $102$ & $>$      & $0$                      & zachowane, $last = 102$ \\
-			      $104$ & $\leq$   & $102 \cdot 1{,}05 = 107{,}1$ & usunięte             \\
-			      $206$ & $>$      & $107{,}1$                & zachowane, $last = 206$ \\
-		      \end{tblr} \\
-		      $L_2 = (0, 102, 206)$.
-		\item \textbf{$i = 3$, $x_3 = 201$.} \\
-		      scalenie: $(0, 102, 206) \cup (201, 303, 407) = (0, 102, 201, 206, 303, 407)$; \\
-          po usunięciu $> 308$: $(0, 102, 201, 206, 303)$; \\
-          przycinanie: \\
-		      \begin{tblr}{colspec={r c l l}, column{4}={font=\itshape}, rowsep=1pt}
-			      $0$   & $ $       &                              & zachowane, $last = 0$   \\
-			      $102$ & $>$      & $0$                          & zachowane, $last = 102$ \\
-			      $201$ & $>$      & $102 \cdot 1{,}05 = 107{,}1$ & zachowane, $last = 201$ \\
-			      $206$ & $\leq$   & $201 \cdot 1{,}05 = 211{,}05$ & usunięte               \\
-			      $303$ & $>$      & $211{,}05$                   & zachowane, $last = 303$ \\
-		      \end{tblr} \\
-		      $L_3 = (0, 102, 201, 303)$.
-		\item \textbf{$i = 4$, $x_4 = 101$.} \\
-		      scalenie: $(0, 102, 201, 303) \cup (101, 203, 302, 404) = (0, 101, 102, 201, 203, 302, 303, 404)$; \\
-          po usunięciu $> 308$: $(0, 101, 102, 201, 203, 302, 303)$; \\
-          przycinanie: \\ 
-		      \begin{tblr}{colspec={r c l l}, column{4}={font=\itshape}, rowsep=1pt}
-			      $0$   & $ $       &                              & zachowane, $last = 0$   \\
-			      $101$ & $>$      & $0$                          & zachowane, $last = 101$ \\
-			      $102$ & $\leq$   & $101 \cdot 1{,}05 = 106{,}05$ & usunięte               \\
-			      $201$ & $>$      & $106{,}05$                   & zachowane, $last = 201$ \\
-			      $203$ & $\leq$   & $201 \cdot 1{,}05 = 211{,}05$ & usunięte               \\
-			      $302$ & $>$      & $211{,}05$                   & zachowane, $last = 302$ \\
-			      $303$ & $\leq$   & $302 \cdot 1{,}05 = 317{,}1$ & usunięte                \\
-		      \end{tblr} \\
-		      $L_4 = (0, 101, 201, 302)$.
-	\end{itemize}
-	Zwracamy największy element $z = 302$ (podzbiór $\{201, 101\}$). Optimum to $z^* = 307$ (podzbiór $\{104, 102, 101\}$), wycięte przez przycinanie w~iteracji $i = 4$. Iloraz $\frac{z^*}{z} = \frac{307}{302} \approx 1{,}017 \leq 1 + \varepsilon = 1{,}4$ -- zgodnie z~gwarancją.
-\end{example}
+Pełny przykład działania schematu wraz z~dowodem poprawności i~analizą złożoności przedstawimy w~podrozdziale~\ref{subsec:subsetsum-cd} (następny wykład). Najpierw -- nieco na~marginesie -- pokazujemy NP-zupełność problemu sumy podzbiorów.
 
 % ════════════════════════════════════════════════════════════════
 \subsection{NP-zupełność problemu sumy podzbiorów}
