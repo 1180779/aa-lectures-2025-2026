@@ -1,0 +1,123 @@
+% ── Rozwiązanie: Para najbliższych punktów -- instancja 1 ──────────
+\subsection{Para najbliższych punktów -- instancja 1}
+
+% Kolory grup w drzewie rekursji (4 liście = 4 wywołania siłowe).
+\colorlet{grpLL}{accent}%  {p8,p1}
+\colorlet{grpLR}{accentC}% {p6,p4}
+\colorlet{grpRL}{accentB}% {p7,p5}
+\colorlet{grpRR}{violet}%  {p2,p3}
+\colorlet{grpL}{accent}%   lewa połowa P_L
+\colorlet{grpR}{accentB}%  prawa połowa P_R
+
+% Pudełko grupujące krok rekursji; #1 = kolor (jak w drzewie).
+\newtcolorbox{grpbox}[1][black]{%
+	colback=#1!7, colframe=#1!55, boxrule=0.6pt,
+	left=2mm, right=2mm, top=1mm, bottom=1mm, breakable}
+
+Dane: $Q = \{(2,3),\ (12,30),\ (40,50),\ (5,1),\ (12,10),\ (3,4),\ (8,9),\ (1,1)\}$,
+$n = 8$. Ponumerujmy punkty w~kolejności wejściowej:
+\[
+	p_1=(2,3),\ p_2=(12,30),\ p_3=(40,50),\ p_4=(5,1),\
+	p_5=(12,10),\ p_6=(3,4),\ p_7=(8,9),\ p_8=(1,1).
+\]
+
+\paragraph{Sortowanie wstępne.}
+Tworzymy tablice $X$ (rosnąco po~$x$) i~$Y$ (rosnąco po~$y$):
+\begin{align*}
+	X &= \big[\,p_8(1,1),\ p_1(2,3),\ p_6(3,4),\ p_4(5,1),\ p_7(8,9),\ p_5(12,10),\ p_2(12,30),\ p_3(40,50)\,\big], \\
+	Y &= \big[\,p_8(1,1),\ p_4(5,1),\ p_1(2,3),\ p_6(3,4),\ p_7(8,9),\ p_5(12,10),\ p_2(12,30),\ p_3(40,50)\,\big].
+\end{align*}
+
+\paragraph{Dziel.}
+$|P|=8>3$, dzielimy prostą $l\colon x=5$ na $|P_L|=|P_R|=4$, a~każdą połowę dalej, aż
+do podzbiorów $\leq 3$ punktów (liście --- sprawdzane siłowo). Strukturę rekursji
+i~kolory grup zbiera rysunek~\ref{fig:closest1:tree}.
+
+\begin{azfigure}
+	\centering
+	\begin{tikzpicture}[
+			font=\small,
+			level distance=12mm,
+			level 1/.style={sibling distance=42mm},
+			level 2/.style={sibling distance=22mm},
+			grp/.style={draw, rounded corners=2pt, inner sep=3pt, thick},
+			edge from parent/.style={draw, gray, -}]
+		\node[grp] {$P$ \scriptsize(8)}
+			child {node[grp, grpL, text=grpL] {$P_L$ \scriptsize(4)}
+				child {node[grp, grpLL, text=grpLL] {$\{p_8,p_1\}$}}
+				child {node[grp, grpLR, text=grpLR] {$\{p_6,p_4\}$}}}
+			child {node[grp, grpR, text=grpR] {$P_R$ \scriptsize(4)}
+				child {node[grp, grpRL, text=grpRL] {$\{p_7,p_5\}$}}
+				child {node[grp, grpRR, text=grpRR] {$\{p_2,p_3\}$}}};
+	\end{tikzpicture}
+	\caption{Drzewo rekursji. Cztery liście (po~2 punkty) liczone są siłowo;
+		ich kolory powtarzają się w~tekście i~na rysunku~\ref{fig:closest1:result}.}
+	\label{fig:closest1:tree}
+\end{azfigure}
+
+\[
+	P_L=\{\textcolor{grpLL}{p_8,p_1},\ \textcolor{grpLR}{p_6,p_4}\},\qquad
+	P_R=\{\textcolor{grpRL}{p_7,p_5},\ \textcolor{grpRR}{p_2,p_3}\}.
+\]
+
+\begin{grpbox}[grpL]
+\paragraph{Zwyciężaj --- lewa połowa $P_L$.}
+Liście (po~2 punkty --- siłowo):
+\[
+	d(\textcolor{grpLL}{p_8,p_1})=\sqrt{1^2+2^2}=\sqrt5\approx2{,}24,\qquad
+	d(\textcolor{grpLR}{p_6,p_4})=\sqrt{2^2+3^2}=\sqrt{13}\approx3{,}61,
+\]
+więc $\delta=\sqrt5$. Faza \emph{połącz} w~$P_L$: pas $x\in[\,2-\sqrt5,\ 2+\sqrt5\,]$;
+ponieważ $2<\sqrt5<3$, jego końce leżą w~$(-1,0)$ oraz $(4,5)$, więc pas
+odrzuca $p_4(5,1)$, zostaje $Y'=[\,p_8(1,1),\,p_1(2,3),\,p_6(3,4)\,]$. Sprawdzamy:
+\[
+	d(p_8,p_1)=\sqrt5,\quad d(p_8,p_6)=\sqrt{13},\quad
+	\boxed{d(p_1,p_6)=\sqrt{1^2+1^2}=\sqrt2\approx1{,}41.}
+\]
+Zatem $\delta_L=\sqrt2$ dla pary $\big(p_1(2,3),\,p_6(3,4)\big)$.
+\end{grpbox}
+
+\begin{grpbox}[grpR]
+\paragraph{Zwyciężaj --- prawa połowa $P_R$.}
+Liście:
+\[
+	d(\textcolor{grpRL}{p_7,p_5})=\sqrt{4^2+1^2}=\sqrt{17}\approx4{,}12,\qquad
+	d(\textcolor{grpRR}{p_2,p_3})=\sqrt{28^2+20^2}=\sqrt{1184}\approx34{,}4,
+\]
+więc $\delta=\sqrt{17}$. Faza \emph{połącz}: ponieważ $4<\sqrt{17}<5$, pas
+$x\in[\,12-\sqrt{17},\ 12+\sqrt{17}\,]$ ma końce w~$(7,8)$ oraz $(16,17)$, więc
+$Y'=[\,p_7(8,9),\,p_5(12,10),\,p_2(12,30)\,]$ (odpada $p_3$). Żadna para z~$Y'$ nie
+jest bliższa niż $\sqrt{17}$. Zatem $\delta_R=\sqrt{17}$ dla pary $\big(p_7(8,9),\,p_5(12,10)\big)$.
+\end{grpbox}
+
+\paragraph{Połącz --- poziom górny.}
+$\delta=\min(\delta_L,\delta_R)=\min(\sqrt2,\sqrt{17})=\sqrt2$.
+Pas wokół $l\colon x=5$ ma szerokość $2\delta=2\sqrt2$; ponieważ $1<\sqrt2<2$,
+pas $x\in[\,5-\sqrt2,\ 5+\sqrt2\,]$ ma końce w~$(3,4)$ oraz $(6,7)$. W~pasie leży tylko
+$p_4(5,1)$, więc $Y'=[\,p_4\,]$ --- brak pary „międzystronowej”, $\delta$ bez zmian.
+
+\paragraph{Wynik.}
+Para najbliższych punktów to $(2,3)$ i~$(3,4)$ w~odległości $\delta=\sqrt2\approx1{,}41$.
+
+\begin{azfigure}
+	\centering
+	\begin{tikzpicture}[>=stealth, font=\small, scale=0.18]
+		\draw[gray!50, very thin] (0,0) grid[step=5] (40,50);
+		\draw[->] (0,0)--(42,0) node[right]{$x$};
+		\draw[->] (0,0)--(0,52) node[above]{$y$};
+		\draw[thick, accent] (5,-2)--(5,52) node[above]{$l$};
+		% punkty pokolorowane wg liścia drzewa rekursji
+		\foreach \x/\y/\c in {1/1/grpLL,2/3/grpLL,3/4/grpLR,5/1/grpLR,%
+				8/9/grpRL,12/10/grpRL,12/30/grpRR,40/50/grpRR}
+			\fill[\c] (\x,\y) circle (7pt);
+		% znaleziona para
+		\draw[red, thick] (2,3)--(3,4);
+		\draw[red, thick] (2,3) circle (12pt);
+		\draw[red, thick] (3,4) circle (12pt);
+		\node[red, below left=2pt, scale=1.5] at (2,3) {$(2,3)$};
+		\node[red, right=4pt, scale=1.5] at (3,4) {$(3,4)$};
+	\end{tikzpicture}
+	\caption{Instancja~1: prosta podziału $l\colon x=5$, punkty pokolorowane wg
+		liścia drzewa rekursji oraz znaleziona para $(2,3)$, $(3,4)$ (czerwona).}
+	\label{fig:closest1:result}
+\end{azfigure}

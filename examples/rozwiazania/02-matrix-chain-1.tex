@@ -1,0 +1,160 @@
+% ── Rozwiązanie: Matrix-Chain-Order -- instancja 1 ────────────────
+\subsection{Matrix-Chain-Order -- instancja 1}
+
+Dane: $n=4$, $p=(5,\ 4,\ 6,\ 2,\ 7)$, czyli
+\[
+	A_1\ (5\times 4),\quad A_2\ (4\times 6),\quad A_3\ (6\times 2),\quad A_4\ (2\times 7).
+\]
+Wypełniamy tablice $m$ i~$s$ \emph{przekątnymi} po~rosnącej długości
+podciągu $L$; w~każdym kroku dopisane komórki wyróżniono na
+\textcolor{accentB}{pomarańczowo}, a~$\times$ to pola nieużywane
+($i>j$ dla~$m$, $i\geq j$ dla~$s$). Skrót: $A_i=p_{i-1}\times p_i$.
+
+\medskip
+\noindent Stan początkowy ($L=1$, pojedyncze macierze, koszt $0$):\\[0.7em]
+\begin{minipage}{0.45\linewidth}
+	$m$
+	$\begin{bNiceArray}{c|cccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 \\
+			1 & 0 &  &  &  \\
+			2 & \times & 0 &  &  \\
+			3 & \times & \times & 0 &  \\
+			4 & \times & \times & \times & 0
+		\end{bNiceArray}$
+\end{minipage}\hfill
+\begin{minipage}{0.45\linewidth}
+	$s$
+	$\begin{bNiceArray}{c|cccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 \\
+			1 & \times &  &  &  \\
+			2 & \times & \times &  &  \\
+			3 & \times & \times & \times &  \\
+			4 & \times & \times & \times & \times
+		\end{bNiceArray}$
+\end{minipage}
+
+\medskip
+\noindent{\color{placeholdercolor}\rule{\linewidth}{0.4pt}}\par\smallskip
+\noindent{\color{dygresjagray}\footnotesize$\begin{array}{c|*{5}{c}} i & 0 & 1 & 2 & 3 & 4 \\ \hline p_i & 5 & 4 & 6 & 2 & 7 \end{array}$\qquad $A_i = p_{i-1}\times p_i$}
+\begin{flalign*}
+	L=2: \quad & m(1, 2) = 5 \cdot 4 \cdot 6 = 120 &  & \\
+	           & m(2, 3) = 4 \cdot 6 \cdot 2 = 48  &  & \\
+	           & m(3, 4) = 6 \cdot 2 \cdot 7 = 84  &  &
+\end{flalign*}
+
+\medskip
+\noindent po $L=2$ (pary sąsiednich macierzy):\\[0.7em]
+\begin{minipage}{0.45\linewidth}
+	$m$
+	$\begin{bNiceArray}{c|cccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 \\
+			1 & 0 & \color{accentB}120 &  &  \\
+			2 & \times & 0 & \color{accentB}48 &  \\
+			3 & \times & \times & 0 & \color{accentB}84 \\
+			4 & \times & \times & \times & 0
+		\end{bNiceArray}$
+\end{minipage}\hfill
+\begin{minipage}{0.45\linewidth}
+	$s$
+	$\begin{bNiceArray}{c|cccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 \\
+			1 & \times & \color{accentB}1 &  &  \\
+			2 & \times & \times & \color{accentB}2 &  \\
+			3 & \times & \times & \times & \color{accentB}3 \\
+			4 & \times & \times & \times & \times
+		\end{bNiceArray}$
+\end{minipage}
+
+\medskip
+\noindent{\color{placeholdercolor}\rule{\linewidth}{0.4pt}}\par\smallskip
+\noindent{\color{dygresjagray}\footnotesize$\begin{array}{c|*{5}{c}} i & 0 & 1 & 2 & 3 & 4 \\ \hline p_i & 5 & 4 & 6 & 2 & 7 \end{array}$\qquad $A_i = p_{i-1}\times p_i$}
+\begin{flalign*}
+	L=3: \quad & m(1, 3) = \min \begin{cases}
+		                            m(1, 1) + m(2, 3) + 5 \cdot 4 \cdot 2 \\
+		                            m(1, 2) + m(3, 3) + 5 \cdot 6 \cdot 2
+	                            \end{cases} = \min \begin{cases}
+		                                               0 + 48 + 40 \\
+		                                               120 + 0 + 60
+	                                               \end{cases} = \min \begin{cases} 88 \\ 180 \end{cases} = 88 \\
+	           & m(2, 4) = \min \begin{cases}
+		                            m(2, 2) + m(3, 4) + 4 \cdot 6 \cdot 7 \\
+		                            m(2, 3) + m(4, 4) + 4 \cdot 2 \cdot 7
+	                            \end{cases} = \min \begin{cases}
+		                                               0 + 84 + 168 \\
+		                                               48 + 0 + 56
+	                                               \end{cases} = \min \begin{cases} 252 \\ 104 \end{cases} = 104
+\end{flalign*}
+
+\medskip
+\noindent po $L=3$:\\[0.7em]
+\begin{minipage}{0.45\linewidth}
+	$m$
+	$\begin{bNiceArray}{c|cccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 \\
+			1 & 0 & 120 & \color{accentB}88 &  \\
+			2 & \times & 0 & 48 & \color{accentB}104 \\
+			3 & \times & \times & 0 & 84 \\
+			4 & \times & \times & \times & 0
+		\end{bNiceArray}$
+\end{minipage}\hfill
+\begin{minipage}{0.45\linewidth}
+	$s$
+	$\begin{bNiceArray}{c|cccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 \\
+			1 & \times & 1 & \color{accentB}1 &  \\
+			2 & \times & \times & 2 & \color{accentB}3 \\
+			3 & \times & \times & \times & 3 \\
+			4 & \times & \times & \times & \times
+		\end{bNiceArray}$
+\end{minipage}
+
+\medskip
+\noindent{\color{placeholdercolor}\rule{\linewidth}{0.4pt}}\par\smallskip
+\noindent{\color{dygresjagray}\footnotesize$\begin{array}{c|*{5}{c}} i & 0 & 1 & 2 & 3 & 4 \\ \hline p_i & 5 & 4 & 6 & 2 & 7 \end{array}$\qquad $A_i = p_{i-1}\times p_i$}
+\begin{flalign*}
+	L=4: \quad & m(1, 4) = \min \begin{cases}
+		                            m(1, 1) + m(2, 4) + 5 \cdot 4 \cdot 7 \\
+		                            m(1, 2) + m(3, 4) + 5 \cdot 6 \cdot 7 \\
+		                            m(1, 3) + m(4, 4) + 5 \cdot 2 \cdot 7
+	                            \end{cases} = \min \begin{cases}
+		                                               0 + 104 + 140 \\
+		                                               120 + 84 + 210 \\
+		                                               88 + 0 + 70
+	                                               \end{cases} = \min \begin{cases} 244 \\ 414 \\ 158 \end{cases} = 158
+\end{flalign*}
+
+\medskip
+\noindent tablice końcowe:\\[0.7em]
+\begin{minipage}{0.45\linewidth}
+	$m$
+	$\begin{bNiceArray}{c|cccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 \\
+			1 & 0 & 120 & 88 & \color{accentB}158 \\
+			2 & \times & 0 & 48 & 104 \\
+			3 & \times & \times & 0 & 84 \\
+			4 & \times & \times & \times & 0
+		\end{bNiceArray}$
+\end{minipage}\hfill
+\begin{minipage}{0.45\linewidth}
+	$s$
+	$\begin{bNiceArray}{c|cccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 \\
+			1 & \times & 1 & 1 & \color{accentB}3 \\
+			2 & \times & \times & 2 & 3 \\
+			3 & \times & \times & \times & 3 \\
+			4 & \times & \times & \times & \times
+		\end{bNiceArray}$
+\end{minipage}
+
+\paragraph{Optymalne nawiasowanie.}
+Odtwarzamy je z~tablicy $s$, rekurencyjnie dzieląc $A_i\dots A_j$ w~miejscu
+$s(i,j)$:
+\[
+	s(1,4)=3 \;\Rightarrow\; (A_1 A_2 A_3)(A_4),\qquad
+	s(1,3)=1 \;\Rightarrow\; (A_1)(A_2 A_3).
+\]
+Stąd optymalne nawiasowanie
+\[
+	\boxed{\big(A_1\,(A_2\,A_3)\big)\,A_4}
+\]
+o~minimalnym koszcie $m(1,4)=158$ mnożeń skalarnych.
