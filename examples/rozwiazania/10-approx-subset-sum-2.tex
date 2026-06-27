@@ -1,0 +1,82 @@
+% ── Rozwiązanie: Approx Subset Sum -- instancja 2 ────────────────
+\subsection{Approx Subset Sum -- instancja 2}
+
+Dane: $S = \{10, 12, 17, 25\}$ (w~kolejności $x_1, \ldots, x_4$), $t = 50$ oraz
+$\varepsilon = 0{,}5$. Wtedy $n = 4$ i~próg przycinania
+$\delta = \frac{\varepsilon}{2n} = \frac{0{,}5}{8} = 0{,}0625$ (mnożnik
+$1 + \delta = 1{,}0625$). Startujemy z~$L_0 = (0)$.
+
+W~każdej iteracji najpierw scalamy $L_{i-1}$ z~$L_{i-1} + x_i$, potem usuwamy
+elementy $> t = 50$, a~na~końcu przycinamy: zachowujemy $y$, gdy
+$y > last \cdot 1{,}0625$, gdzie $last$ to ostatnio zachowany element.
+\begin{dygresja} \leavevmode
+	\begin{itemize}[nosep]
+		\item \textbf{$i = 1$, $x_1 = 10$.} \\
+		      scalenie: $(0) \cup (10) = (0, 10)$; po~usunięciu $> 50$: bez zmian; \\
+		      przycinanie: \\
+		      \begin{tblr}{colspec={r c l l}, column{4}={font=\itshape}, rowsep=1pt}
+			      $0$  &     &     & zachowane, $last = 0$  \\
+			      $10$ & $>$ & $0$ & zachowane, $last = 10$ \\
+		      \end{tblr} \\
+		      $L_1 = (0, 10)$.
+		\item \textbf{$i = 2$, $x_2 = 12$.} \\
+		      scalenie: $(0, 10) \cup (12, 22) = (0, 10, 12, 22)$;
+		      po~usunięciu $> 50$: bez zmian; \\
+		      przycinanie: \\
+		      \begin{tblr}{colspec={r c l l}, column{4}={font=\itshape}, rowsep=1pt}
+			      $0$  &     &                                & zachowane, $last = 0$  \\
+			      $10$ & $>$ & $0$                            & zachowane, $last = 10$ \\
+			      $12$ & $>$ & $10 \cdot 1{,}0625 = 10{,}625$ & zachowane, $last = 12$ \\
+			      $22$ & $>$ & $12 \cdot 1{,}0625 = 12{,}75$  & zachowane, $last = 22$ \\
+		      \end{tblr} \\
+		      $L_2 = (0, 10, 12, 22)$.
+		\item \textbf{$i = 3$, $x_3 = 17$.} \\
+		      scalenie: $(0, 10, 12, 22) \cup (17, 27, 29, 39)
+			      = (0, 10, 12, 17, 22, 27, 29, 39)$;
+		      po~usunięciu $> 50$: bez zmian; \\
+		      przycinanie: \\
+		      \begin{tblr}{colspec={r c l l}, column{4}={font=\itshape}, rowsep=1pt}
+			      $0$  &     &                                 & zachowane, $last = 0$  \\
+			      $10$ & $>$ & $0$                             & zachowane, $last = 10$ \\
+			      $12$ & $>$ & $10 \cdot 1{,}0625 = 10{,}625$  & zachowane, $last = 12$ \\
+			      $17$ & $>$ & $12 \cdot 1{,}0625 = 12{,}75$   & zachowane, $last = 17$ \\
+			      $22$ & $>$ & $17 \cdot 1{,}0625 = 18{,}0625$ & zachowane, $last = 22$ \\
+			      $27$ & $>$ & $22 \cdot 1{,}0625 = 23{,}375$  & zachowane, $last = 27$ \\
+			      $29$ & $>$ & $27 \cdot 1{,}0625 = 28{,}6875$ & zachowane, $last = 29$ \\
+			      $39$ & $>$ & $29 \cdot 1{,}0625 = 30{,}8125$ & zachowane, $last = 39$ \\
+		      \end{tblr} \\
+		      $L_3 = (0, 10, 12, 17, 22, 27, 29, 39)$.
+		\item \textbf{$i = 4$, $x_4 = 25$.} \\
+		      scalenie \\
+		      $(0, 10, 12, 17, 22, 27, 29, 39) \cup (25, 35, 37, 42, 47, 52, 54, 64)$ \\
+		      $ = (0, 10, 12, 17, 22, 25, 27, 29, 35, 37, 39, 42, 47, 52, 54, 64)$; \\
+		      po~usunięciu $> 50$ odpadają $52, 54, 64$:
+		      $(0, 10, 12, 17, 22, 25, 27, 29, 35, 37, 39, 42, 47)$; \\
+		      przycinanie: \\
+		      \begin{tblr}{colspec={r c l l}, column{4}={font=\itshape}, rowsep=1pt}
+			      $0$  &        &                                 & zachowane, $last = 0$  \\
+			      $10$ & $>$    & $0$                             & zachowane, $last = 10$ \\
+			      $12$ & $>$    & $10{,}625$                      & zachowane, $last = 12$ \\
+			      $17$ & $>$    & $12{,}75$                       & zachowane, $last = 17$ \\
+			      $22$ & $>$    & $17 \cdot 1{,}0625 = 18{,}0625$ & zachowane, $last = 22$ \\
+			      $25$ & $>$    & $22 \cdot 1{,}0625 = 23{,}375$  & zachowane, $last = 25$ \\
+			      $27$ & $>$    & $25 \cdot 1{,}0625 = 26{,}5625$ & zachowane, $last = 27$ \\
+			      $29$ & $>$    & $27 \cdot 1{,}0625 = 28{,}6875$ & zachowane, $last = 29$ \\
+			      $35$ & $>$    & $29 \cdot 1{,}0625 = 30{,}8125$ & zachowane, $last = 35$ \\
+			      $37$ & $\leq$ & $35 \cdot 1{,}0625 = 37{,}1875$ & usunięte               \\
+			      $39$ & $>$    & $37{,}1875$                     & zachowane, $last = 39$ \\
+			      $42$ & $>$    & $39 \cdot 1{,}0625 = 41{,}4375$ & zachowane, $last = 42$ \\
+			      $47$ & $>$    & $42 \cdot 1{,}0625 = 44{,}625$  & zachowane, $last = 47$ \\
+		      \end{tblr} \\
+		      $L_4 = (0, 10, 12, 17, 22, 25, 27, 29, 35, 39, 42, 47)$.
+	\end{itemize}
+\end{dygresja}
+
+\paragraph{Wynik.}
+Zwracamy największy element listy $L_4$:
+\[
+	\boxed{z = 47}
+\]
+realizowany podzbiorem $\{10, 12, 25\}$. Tu optimum dokładne to również
+$z^* = 47$ (ta sama suma), więc $\frac{z^*}{z} = 1 \leq 1 + \varepsilon = 1{,}5$
+--- przycięcie usunęło jedynie $37$, nie naruszając optimum.

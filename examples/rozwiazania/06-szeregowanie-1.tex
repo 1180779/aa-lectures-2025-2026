@@ -1,0 +1,45 @@
+% ── Rozwiązanie: Szeregowanie zadań z deadlinami -- instancja 1 ────
+\subsection{Szeregowanie zadań z deadlinami -- instancja 1}
+
+Dane: $n = 7$ zadań o~jednostkowym czasie wykonania, deadliny $d_i$ i~kary
+$w_i$. Rodzina zbiorów \emph{wolnych od kar} tworzy matroid, więc optymalne
+rozwiązanie daje algorytm \textsc{Greedy}: bierzemy zadania w~kolejności
+\emph{nierosnącej} kary i~dodajemy $z_i$ do~$A$ wtedy i~tylko wtedy, gdy $A$
+pozostaje wolny od kar, tzn.\ profil $N_t(A) = |\{z_j \in A : d_j \leq t\}|$
+nie przekracza $(1, 2, \ldots, n)$. Zadania wybrane (terminowe) wyróżniono na~%
+\textcolor{accentB}{pomarańczowo}.
+
+\begin{aztable}
+	\centering
+	\renewcommand{\arraystretch}{1.2}
+	\begin{NiceTabular}{c|ccccccc}[margin,hvlines]
+		$i$   & \color{accentB}1 & \color{accentB}2 & \color{accentB}3 & \color{accentB}4 & 5 & 6 & \color{accentB}7  \\
+		\hline
+		$d_i$ & \color{accentB}4 & \color{accentB}2 & \color{accentB}4 & \color{accentB}3 & 1 & 4 & \color{accentB}6  \\
+		$w_i$ & \color{accentB}100 & \color{accentB}90 & \color{accentB}70 & \color{accentB}60 & 50 & 30 & \color{accentB}15
+	\end{NiceTabular}
+\end{aztable}
+
+\begin{dygresja}
+	Kary są już posortowane nierosnąco ($w_1 \geq \dots \geq w_7$), więc zadania
+	rozważamy w~kolejności $z_1, \dots, z_7$. Poniżej $A$ wypisane rosnąco po
+	deadlinach, a~po prawej profil $N(A) = (N_1, \ldots, N_7)$, który musi
+	pozostać $\leq (1, 2, 3, 4, 5, 6, 7)$:
+	\begin{enumerate}[nosep]
+		\item $A = (z_1)$ \hfill $N(A) = (0, 0, 0, 1, 1, 1, 1)$
+		\item $A = (z_2, z_1)$ \hfill $N(A) = (0, 1, 1, 2, 2, 2, 2)$
+		\item $A = (z_2, z_1, z_3)$ \hfill $N(A) = (0, 1, 1, 3, 3, 3, 3)$
+		\item $A = (z_2, z_4, z_1, z_3)$ \hfill $N(A) = (0, 1, 2, 4, 4, 4, 4)$
+		\item $A = (z_2, z_4, z_1, z_3)$ \quad ($z_5$ nie dodajemy, bo $N_4(A \cup \{z_5\}) = 5 > 4$)
+		\item $A = (z_2, z_4, z_1, z_3)$ \quad ($z_6$ nie dodajemy, bo $N_4(A \cup \{z_6\}) = 5 > 4$)
+		\item $A = (z_2, z_4, z_1, z_3, z_7)$ \hfill $N(A) = (0, 1, 2, 4, 4, 5, 5)$
+	\end{enumerate}
+\end{dygresja}
+
+\paragraph{Harmonogram.}
+Zadania terminowe ustawiamy rosnąco po~deadlinach, a~spóźnione ($z_5, z_6$) na
+końcu:
+\[
+	\boxed{(z_2,\ z_4,\ z_1,\ z_3,\ z_7,\ z_5,\ z_6)}
+\]
+Suma kar zadań spóźnionych: $w_5 + w_6 = 50 + 30 = 80$.

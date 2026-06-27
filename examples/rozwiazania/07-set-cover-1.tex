@@ -1,0 +1,55 @@
+% ── Rozwiązanie: Greedy Set Cover -- instancja 1 ─────────────────
+\subsection{Greedy Set Cover -- instancja 1}
+
+Dane: $X = \{1, \ldots, 12\}$ oraz rodzina $\mathcal{F} = \{S_1, \ldots, S_6\}$.
+Algorytm \textsc{GSC} startuje z~$U = X$ i~w~każdej iteracji dokłada do~pokrycia
+$\mathcal{C}$ ten zbiór $S \in \mathcal{F}$, który pokrywa najwięcej elementów
+jeszcze niepokrytych, tj.\ maksymalizuje $|S \cap U|$ (remisy rozstrzygamy na
+korzyść mniejszego indeksu), po~czym odejmuje $U \Assign U \setminus S$. Zbiory
+wybrane do~pokrycia wyróżniono na~\textcolor{accentB}{pomarańczowo}.
+
+\begin{aztable}
+	\centering
+	\renewcommand{\arraystretch}{1.2}
+	\begin{NiceTabular}{c|l|c}[margin,hvlines]
+		$S$                  & elementy                & $|S|$ \\
+		\hline
+		\color{accentB}$S_1$ & \color{accentB}$\{1,2,3,4,5,6\}$ & \color{accentB}6 \\
+		$S_2$                & $\{5,6,8,9\}$           & 4 \\
+		\color{accentB}$S_3$ & \color{accentB}$\{1,4,7,10\}$    & \color{accentB}4 \\
+		\color{accentB}$S_4$ & \color{accentB}$\{2,5,7,8,11\}$  & \color{accentB}5 \\
+		\color{accentB}$S_5$ & \color{accentB}$\{3,6,9,12\}$    & \color{accentB}4 \\
+		$S_6$                & $\{10,11\}$             & 2
+	\end{NiceTabular}
+\end{aztable}
+
+\begin{dygresja}
+	W~każdym wierszu po~lewej bieżący zbiór niepokrytych $U$, a~po~prawej
+	rozważane przecięcia $|S \cap U|$ (pogrubiony zwycięzca):
+	\begin{enumerate}[nosep]
+		\item $U = \{1,\ldots,12\}$:\quad
+		      $|S_1 \cap U| = \mathbf{6}$, $|S_4 \cap U| = 5$, pozostałe $\leq 4$
+		      \hfill wybór $S_1$
+		\item $U = \{7,8,9,10,11,12\}$:\quad
+		      $|S_4 \cap U| = \mathbf{3}$, $|S_2 \cap U| = |S_3 \cap U| = |S_5 \cap U|
+		      = |S_6 \cap U| = 2$
+		      \hfill wybór $S_4$
+		\item $U = \{9,10,12\}$:\quad
+		      $|S_5 \cap U| = \mathbf{2}$, $|S_2 \cap U| = |S_3 \cap U|
+		      = |S_6 \cap U| = 1$
+		      \hfill wybór $S_5$
+		\item $U = \{10\}$:\quad
+		      $|S_3 \cap U| = |S_6 \cap U| = 1$ -- remis, mniejszy indeks
+		      \hfill wybór $S_3$
+	\end{enumerate}
+	Po~czwartej iteracji $U = \emptyset$, pętla się kończy.
+\end{dygresja}
+
+\paragraph{Wynik.}
+Algorytm zachłanny zwraca pokrycie złożone z~czterech zbiorów:
+\[
+	\boxed{\mathcal{C} = \{S_1,\ S_4,\ S_5,\ S_3\}}
+\]
+Nie jest ono optymalne: $\mathcal{C}^* = \{S_3, S_4, S_5\}$ pokrywa całe $X$
+trzema zbiorami. Pierwszy, najobfitszy wybór $S_1$ okazał się pułapką --- po~nim
+do~domknięcia pokrycia trzeba było aż trzech kolejnych zbiorów.

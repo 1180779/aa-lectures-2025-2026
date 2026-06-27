@@ -1,0 +1,42 @@
+% ── Rozwiązanie: Szeregowanie zadań z deadlinami -- instancja 2 ────
+\subsection{Szeregowanie zadań z deadlinami -- instancja 2}
+
+Dane: $n = 7$ zadań o~jednostkowym czasie wykonania. Kary $w_i$ są już ułożone
+nierosnąco ($w_1 \geq \dots \geq w_7$), więc zadania rozważamy w~kolejności
+$z_1, \dots, z_7$. Algorytm \textsc{Greedy} dodaje $z_i$ do~$A$ wtedy i~tylko
+wtedy, gdy zbiór pozostaje wolny od kar, tzn.\ profil
+$N_t(A) = |\{z_j \in A : d_j \leq t\}|$ nie przekracza $(1, 2, \ldots, n)$.
+Zadania terminowe wyróżniono na~\textcolor{accentB}{pomarańczowo}.
+
+\begin{aztable}
+	\centering
+	\renewcommand{\arraystretch}{1.2}
+	\begin{NiceTabular}{c|ccccccc}[margin,hvlines]
+		$i$   & \color{accentB}1 & 2 & \color{accentB}3 & \color{accentB}4 & \color{accentB}5 & \color{accentB}6 & 7  \\
+		\hline
+		$d_i$ & \color{accentB}1 & 1 & \color{accentB}3 & \color{accentB}2 & \color{accentB}5 & \color{accentB}4 & 3  \\
+		$w_i$ & \color{accentB}60 & 55 & \color{accentB}45 & \color{accentB}35 & \color{accentB}25 & \color{accentB}20 & 10
+	\end{NiceTabular}
+\end{aztable}
+
+\begin{dygresja}
+	Poniżej $A$ wypisane rosnąco po~deadlinach, a~po prawej profil
+	$N(A) = (N_1, \ldots, N_7)$, który musi pozostać $\leq (1, 2, 3, 4, 5, 6, 7)$:
+	\begin{enumerate}[nosep]
+		\item $A = (z_1)$ \hfill $N(A) = (1, 1, 1, 1, 1, 1, 1)$
+		\item $z_2$ ($d = 1$) nie dodajemy, bo $N_1(A \cup \{z_2\}) = 2 > 1$.
+		\item $A = (z_1, z_3)$ \hfill $N(A) = (1, 1, 2, 2, 2, 2, 2)$
+		\item $A = (z_1, z_4, z_3)$ \hfill $N(A) = (1, 2, 3, 3, 3, 3, 3)$
+		\item $A = (z_1, z_4, z_3, z_5)$ \hfill $N(A) = (1, 2, 3, 3, 4, 4, 4)$
+		\item $A = (z_1, z_4, z_3, z_6, z_5)$ \hfill $N(A) = (1, 2, 3, 4, 5, 5, 5)$
+		\item $z_7$ ($d = 3$) nie dodajemy, bo $N_3(A \cup \{z_7\}) = 4 > 3$.
+	\end{enumerate}
+\end{dygresja}
+
+\paragraph{Harmonogram.}
+Zadania terminowe ustawiamy rosnąco po~deadlinach, a~spóźnione ($z_2, z_7$) na
+końcu:
+\[
+	\boxed{(z_1,\ z_4,\ z_3,\ z_6,\ z_5,\ z_2,\ z_7)}
+\]
+Suma kar zadań spóźnionych: $w_2 + w_7 = 55 + 10 = 65$.

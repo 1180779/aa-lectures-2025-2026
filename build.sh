@@ -78,6 +78,26 @@ for entry in "${BUILDS[@]}"; do
 	cp "$SRC/main.pdf" "$dest"
 done
 
+# ── compile the examples booklet (single version, no highlight) ──
+EX_SRC=examples
+EX_DEST="AZ_examples_${VERSION}.pdf"
+echo "==> Compiling $EX_SRC/przyklady.tex -> $EX_DEST"
+if [ "$VERBOSE" -eq 1 ]; then
+	( cd "$EX_SRC" && latexmk -g przyklady.tex )
+else
+	log="$(mktemp)"
+	if ! ( cd "$EX_SRC" && latexmk -g przyklady.tex ) >"$log" 2>&1; then
+		echo "!!! Compile failed ($EX_SRC) — latexmk output:" >&2
+		cat "$log" >&2
+		rm -f "$log"
+		exit 1
+	fi
+	rm -f "$log"
+fi
+cp "$EX_SRC/przyklady.pdf" "$EX_DEST"
+( cd "$EX_SRC" && latexmk -C >/dev/null )
+rm -f "$EX_SRC/indent.log"
+
 # ── clean build artefacts ────────────────────────────────────────
 # latexmk -C removes auxiliary files *and* the generated main.pdf (already
 # copied out and git-ignored). indent.log is left behind by latexindent, so

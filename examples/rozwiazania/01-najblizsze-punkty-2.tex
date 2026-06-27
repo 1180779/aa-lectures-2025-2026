@@ -1,0 +1,112 @@
+% ── Rozwiązanie: Para najbliższych punktów -- instancja 2 ──────────
+\subsection{Para najbliższych punktów -- instancja 2}
+
+% Kolory grup w drzewie rekursji (4 liście = 4 wywołania siłowe).
+\colorlet{grpLLb}{accent}%  {p1,p2}
+\colorlet{grpLRb}{accentC}% {p3,p4}
+\colorlet{grpRLb}{accentB}% {p5,p6}
+\colorlet{grpRRb}{violet}%  {p7,p8}
+\colorlet{grpLb}{accent}%   lewa połowa P_L
+\colorlet{grpRb}{accentB}%  prawa połowa P_R
+
+Dane (instancja podana tabelą), $n = 8$. Ponumerujmy punkty w~kolejności
+wejściowej:
+\[
+	p_1=(0,0),\ p_2=(1,6),\ p_3=(4,2),\ p_4=(5,5),\
+	p_5=(7,1),\ p_6=(8,7),\ p_7=(9,3),\ p_8=(11,6).
+\]
+
+\paragraph{Sortowanie wstępne.}
+Tablice $X$ (rosnąco po~$x$) i~$Y$ (rosnąco po~$y$):
+\begin{align*}
+	X &= \big[\,p_1(0,0),\ p_2(1,6),\ p_3(4,2),\ p_4(5,5),\ p_5(7,1),\ p_6(8,7),\ p_7(9,3),\ p_8(11,6)\,\big], \\
+	Y &= \big[\,p_1(0,0),\ p_5(7,1),\ p_3(4,2),\ p_7(9,3),\ p_4(5,5),\ p_2(1,6),\ p_8(11,6),\ p_6(8,7)\,\big].
+\end{align*}
+
+\paragraph{Dziel.}
+$|P|=8>3$, dzielimy prostą $l\colon x=6$ (mediana współrzędnej~$x$:
+$\frac{X(4).x + X(5).x}{2} = \frac{5+7}{2} = 6$; zob.~uwagę o~wyborze~$l$)
+na~$|P_L|=|P_R|=4$, a~każdą połowę dalej,
+aż do podzbiorów po~$2$ punkty (liście --- sprawdzane siłowo). Strukturę rekursji
+zbiera rysunek~\ref{fig:closest2:tree}.
+
+\begin{azfigure}
+	\centering
+	\begin{tikzpicture}[
+			font=\small,
+			level distance=12mm,
+			level 1/.style={sibling distance=42mm},
+			level 2/.style={sibling distance=22mm},
+			grp/.style={draw, rounded corners=2pt, inner sep=3pt, thick},
+			edge from parent/.style={draw, gray, -}]
+		\node[grp] {$P$ \scriptsize(8)}
+			child {node[grp, grpLb, text=grpLb] {$P_L$ \scriptsize(4)}
+				child {node[grp, grpLLb, text=grpLLb] {$\{p_1,p_2\}$}}
+				child {node[grp, grpLRb, text=grpLRb] {$\{p_3,p_4\}$}}}
+			child {node[grp, grpRb, text=grpRb] {$P_R$ \scriptsize(4)}
+				child {node[grp, grpRLb, text=grpRLb] {$\{p_5,p_6\}$}}
+				child {node[grp, grpRRb, text=grpRRb] {$\{p_7,p_8\}$}}};
+	\end{tikzpicture}
+	\caption{Drzewo rekursji. Cztery liście (po~2 punkty) liczone są siłowo;
+		ich kolory powtarzają się na~rysunku~\ref{fig:closest2:result}.}
+	\label{fig:closest2:tree}
+\end{azfigure}
+
+\[
+	P_L=\{\textcolor{grpLLb}{p_1,p_2},\ \textcolor{grpLRb}{p_3,p_4}\},\qquad
+	P_R=\{\textcolor{grpRLb}{p_5,p_6},\ \textcolor{grpRRb}{p_7,p_8}\}.
+\]
+
+\paragraph{Zwyciężaj --- lewa połowa $P_L$.}
+Liście (po~2 punkty --- siłowo) i~faza \emph{połącz} wzdłuż prostej $x=2{,}5$:
+\[
+	d(\textcolor{grpLLb}{p_1,p_2})=\sqrt{1^2+6^2}=\sqrt{37}\approx6{,}08,\qquad
+	\boxed{d(\textcolor{grpLRb}{p_3,p_4})=\sqrt{1^2+3^2}=\sqrt{10}\approx3{,}16.}
+\]
+Pas o~szerokości $2\sqrt{10}$ obejmuje wszystkie cztery punkty, ale żadna para
+„międzystronowa” nie jest bliższa niż $\sqrt{10}$. Zatem $\delta_L=\sqrt{10}$ dla
+pary $\big(p_3(4,2),\,p_4(5,5)\big)$.
+
+\paragraph{Zwyciężaj --- prawa połowa $P_R$.}
+Liście i~faza \emph{połącz} wzdłuż $x=8{,}5$:
+\[
+	d(\textcolor{grpRLb}{p_5,p_6})=\sqrt{1^2+6^2}=\sqrt{37}\approx6{,}08,\qquad
+	d(\textcolor{grpRRb}{p_7,p_8})=\sqrt{2^2+3^2}=\sqrt{13}\approx3{,}61.
+\]
+W~pasie wokół $x=8{,}5$ leżą $p_5,p_6,p_7,p_8$; sprawdzając pary stwierdzamy
+\[
+	\boxed{d(p_5,p_7)=\sqrt{2^2+2^2}=\sqrt{8}=2\sqrt2\approx2{,}83,}
+\]
+co poprawia $\delta$. Zatem $\delta_R=\sqrt8$ dla pary $\big(p_5(7,1),\,p_7(9,3)\big)$.
+
+\paragraph{Połącz --- poziom górny.}
+$\delta=\min(\delta_L,\delta_R)=\min(\sqrt{10},\sqrt8)=\sqrt8$. Pas wokół
+$l\colon x=6$ ma szerokość $2\sqrt8\approx5{,}66$: $x\in[\,6-2\sqrt2,\ 6+2\sqrt2\,]
+\approx[3{,}17,\ 8{,}83]$. W~pasie (rosnąco po~$y$) leżą $p_5(7,1),p_3(4,2),
+p_4(5,5),p_6(8,7)$; sąsiednie pary mają odległości $\geq\sqrt{10}>\sqrt8$, więc
+$\delta$ bez zmian.
+
+\paragraph{Wynik.}
+Para najbliższych punktów to $(7,1)$ i~$(9,3)$ w~odległości
+$\delta=2\sqrt2\approx2{,}83$.
+
+\begin{azfigure}
+	\centering
+	\begin{tikzpicture}[>=stealth, font=\small, scale=0.45]
+		\draw[gray!50, very thin] (0,0) grid (11,7);
+		\draw[->] (0,0)--(12,0) node[right]{$x$};
+		\draw[->] (0,0)--(0,8) node[above]{$y$};
+		\draw[thick, accent] (6,-0.5)--(6,7.5) node[above]{$l$};
+		\foreach \x/\y/\c in {0/0/grpLLb,1/6/grpLLb,4/2/grpLRb,5/5/grpLRb,%
+				7/1/grpRLb,8/7/grpRLb,9/3/grpRRb,11/6/grpRRb}
+			\fill[\c] (\x,\y) circle (3.5pt);
+		\draw[red, thick] (7,1)--(9,3);
+		\draw[red, thick] (7,1) circle (6pt);
+		\draw[red, thick] (9,3) circle (6pt);
+		\node[red, below=3pt] at (7,1) {$(7,1)$};
+		\node[red, right=3pt] at (9,3) {$(9,3)$};
+	\end{tikzpicture}
+	\caption{Instancja~2: prosta podziału $l\colon x=6$, punkty pokolorowane wg
+		liścia drzewa rekursji oraz znaleziona para $(7,1)$, $(9,3)$ (czerwona).}
+	\label{fig:closest2:result}
+\end{azfigure}

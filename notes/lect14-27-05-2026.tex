@@ -131,326 +131,82 @@ Złożoność czasowa \textnormal{\Call{MM}{}}:
 \end{itemize}
 Ostateczna złożoność \textnormal{\Call{MM}{}} wynosi $\BO(|V| \cdot |E|)$.
 
-\definecolor{path}{RGB}{250, 0, 135}
+% Wspólne makra rysunkowe dla przykładu MM.
+% Graf G (kolejność krawędzi): aq, bp, cp, cq, cr, cs, dr, dt, es, et.
+\tikzset{
+	mmN/.style={circle, fill=black, inner sep=1.5pt},
+	matN/.style={<-},                          % skojarzona: strzałka w górę (V_2->V_1)
+	augFN/.style={path, line width=1.2pt},     % na ścieżce, wolna (w dół, domyślne ->)
+	augMN/.style={path, line width=1.2pt, <-}, % na ścieżce, skojarzona (w górę)
+	pthN/.style={path, line width=1.2pt},      % wyróżnienie w nieskierowanym G
+	o/.style={},                               % pusty styl (pgffor gubi pusty pierwszy człon)
+}
+\newcommand{\mmnodes}{%
+	\foreach \x/\n in {0/a, 1/b, 2/c, 3/d, 4/e} {\node[mmN] (u\n) at (\x, 1) {};}
+	\foreach \x/\n in {0/p, 1/q, 2/r, 3/s, 4/t} {\node[mmN] (l\n) at (\x, 0) {};}
+	\node[right] at (4.3, 1) {$V_1$}; \node[right] at (4.3, 0) {$V_2$};}
+\newcommand{\mmfree}[1]{\ifx\relax#1\relax\else
+	\foreach \n in {#1} {\draw[draw=black] (\n) circle (4pt);}\fi}
+% Krawędzie. #1: lista par "styl/od/do" (TeX dopuszcza max 9 parametrów,
+% więc krawędzie idą przez \foreach zamiast osobnych argumentów).
+\newcommand{\mmarcs}[1]{\foreach \st/\a/\b in {#1} {\draw[->,\st] (\a)--(\b);}}
+\newcommand{\mmlines}[1]{\foreach \st/\a/\b in {#1} {\draw[\st] (\a)--(\b);}}
+% Panel G_M: #1 lista par styl/od/do, #2 lista wolnych, #3 wierzchołek startowy (różowy pierścień, pusty dozwolony).
+\newcommand{\mmGM}[3]{%
+	\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth, baseline=(current bounding box.center)]
+		\mmnodes \node[left] at (-0.3, 0.5) {$G_M$};
+		\mmfree{#2}%
+		\ifx\relax#3\relax\else\draw[path, line width=1.2pt] (#3) circle (4pt);\fi
+		\mmarcs{#1}\end{tikzpicture}}
+% Panel G z wyróżnionym skojarzeniem: #1 lista par styl/od/do.
+\newcommand{\mmG}[1]{%
+	\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth, baseline=(current bounding box.center)]
+		\mmnodes \node[left] at (-0.3, 0.5) {$G$};
+		\mmlines{#1}\end{tikzpicture}}
 
 \begin{example}[Działanie algorytmu Maximum Matching]
-	Prześledźmy działanie algorytmu \textnormal{\Call{MM}{}} na poniższym grafie $G$:
+	Prześledźmy działanie algorytmu \textnormal{\Call{MM}{}} na poniższym grafie $G$.
+	W~każdej iteracji po~lewej $G_M$ ze~ścieżką powiększającą
+	(\textcolor{path}{na~różowo}, różowy pierścień to~wierzchołek startowy),
+	po~prawej graf $G$ z~bieżącym skojarzeniem $M$ (\textcolor{path}{wyróżnionym}).
 
 	\begin{azfigure}
 		\centering
-		\begin{tikzpicture}[x=0.9cm, y=0.9cm]
-			\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-					\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-				}
-			\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-					\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-				}
-			\node[right] at (4.3, 1) {$V_1$};
-			\node[right] at (4.3, 0) {$V_2$};
-			\node[left] at (-0.3, 0.5) {$G$};
-
-			\draw (ua) -- (lq);
-			\draw (ub) -- (lp);
-			\draw (uc) -- (lp);
-			\draw (uc) -- (lq);
-			\draw (uc) -- (lr);
-			\draw (uc) -- (ls);
-			\draw (ud) -- (lr);
-			\draw (ud) -- (lt);
-			\draw (ue) -- (ls);
-			\draw (ue) -- (lt);
-		\end{tikzpicture}
+		\mmG{o/ua/lq, o/ub/lp, o/uc/lp, o/uc/lq, o/uc/lr, o/uc/ls, o/ud/lr, o/ud/lt, o/ue/ls, o/ue/lt}
 	\end{azfigure}
 
 	\textbf{Iteracja 1:}
 	\begin{azfigure}
 		\centering
-		\begin{minipage}{0.48\linewidth}
-			\centering
-			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
-				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-					}
-				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-					}
-				\node[right] at (4.3, 1) {$V_1$};
-				\node[right] at (4.3, 0) {$V_2$};
-				\node[left] at (-0.3, 0.5) {$G_M$};
-
-				% wszystkie wolne
-				\foreach \name in {a, b, c, d, e} {\draw[draw=black] (u\name) circle (4pt);}
-				\foreach \name in {p, q, r, s, t} {\draw[draw=black] (l\name) circle (4pt);}
-
-
-				\draw[->] (ua) -- (lq);
-				\draw[->] (ub) -- (lp);
-				\draw[->] (uc) -- (lp);
-				\draw[->, line width=1.2pt, path] (uc) -- (lq);
-				\draw[->] (uc) -- (lr);
-				\draw[->] (uc) -- (ls);
-				\draw[->] (ud) -- (lr);
-				\draw[->] (ud) -- (lt);
-				\draw[->] (ue) -- (ls);
-				\draw[->] (ue) -- (lt);
-			\end{tikzpicture}
-		\end{minipage}\hfill\begin{minipage}{0.48\linewidth}
-			\centering
-			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
-				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-					}
-				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-					}
-				\node[right] at (4.3, 1) {$V_1$};
-				\node[right] at (4.3, 0) {$V_2$};
-				\node[left] at (-0.3, 0.5) {$G$};
-
-				\draw (ua) -- (lq);
-				\draw (ub) -- (lp);
-				\draw (uc) -- (lp);
-				\draw[line width=1.2pt, path] (uc) -- (lq);
-				\draw (uc) -- (lr);
-				\draw (uc) -- (ls);
-				\draw (ud) -- (lr);
-				\draw (ud) -- (lt);
-				\draw (ue) -- (ls);
-				\draw (ue) -- (lt);
-			\end{tikzpicture}
-		\end{minipage}
+		\mmGM{o/ua/lq, o/ub/lp, o/uc/lp, augFN/uc/lq, o/uc/lr, o/uc/ls, o/ud/lr, o/ud/lt, o/ue/ls, o/ue/lt}{ua,ub,uc,ud,ue,lp,lq,lr,ls,lt}{uc}\qquad
+		\mmG{o/ua/lq, o/ub/lp, o/uc/lp, pthN/uc/lq, o/uc/lr, o/uc/ls, o/ud/lr, o/ud/lt, o/ue/ls, o/ue/lt}
 	\end{azfigure}
 
 	\textbf{Iteracja 2:}
 	\begin{azfigure}
 		\centering
-		\begin{minipage}{0.48\linewidth}
-			\centering
-			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
-				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-					}
-				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-					}
-				\node[right] at (4.3, 1) {$V_1$};
-				\node[right] at (4.3, 0) {$V_2$};
-				\node[left] at (-0.3, 0.5) {$G_M$};
-
-				\foreach \name in {a, b, d, e} {\draw[draw=black] (u\name) circle (4pt);}
-				\foreach \name in {p, r, s, t} {\draw[draw=black] (l\name) circle (4pt);}
-
-
-				\draw[->] (ua) -- (lq);
-				\draw[->] (ub) -- (lp);
-				\draw[->] (uc) -- (lp);
-				\draw[<-] (uc) -- (lq);
-				\draw[->] (uc) -- (lr);
-				\draw[->] (uc) -- (ls);
-				\draw[->] (ud) -- (lr);
-				\draw[->] (ud) -- (lt);
-				\draw[->, line width=1.2pt, path] (ue) -- (ls);
-				\draw[->] (ue) -- (lt);
-			\end{tikzpicture}
-		\end{minipage}\hfill\begin{minipage}{0.48\linewidth}
-			\centering
-			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
-				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-					}
-				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-					}
-				\node[right] at (4.3, 1) {$V_1$};
-				\node[right] at (4.3, 0) {$V_2$};
-				\node[left] at (-0.3, 0.5) {$G$};
-
-				\draw (ua) -- (lq);
-				\draw (ub) -- (lp);
-				\draw (uc) -- (lp);
-				\draw[line width=1.2pt, path] (uc) -- (lq);
-				\draw (uc) -- (lr);
-				\draw (uc) -- (ls);
-				\draw (ud) -- (lr);
-				\draw (ud) -- (lt);
-				\draw[line width=1.2pt, path] (ue) -- (ls);
-				\draw (ue) -- (lt);
-			\end{tikzpicture}
-		\end{minipage}
+		\mmGM{o/ua/lq, o/ub/lp, o/uc/lp, matN/uc/lq, o/uc/lr, o/uc/ls, o/ud/lr, o/ud/lt, augFN/ue/ls, o/ue/lt}{ua,ub,ud,ue,lp,lr,ls,lt}{ue}\qquad
+		\mmG{o/ua/lq, o/ub/lp, o/uc/lp, pthN/uc/lq, o/uc/lr, o/uc/ls, o/ud/lr, o/ud/lt, pthN/ue/ls, o/ue/lt}
 	\end{azfigure}
 
 	\textbf{Iteracja 3:}
 	\begin{azfigure}
 		\centering
-		\begin{minipage}{0.48\linewidth}
-			\centering
-			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
-				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-					}
-				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-					}
-				\node[right] at (4.3, 1) {$V_1$};
-				\node[right] at (4.3, 0) {$V_2$};
-				\node[left] at (-0.3, 0.5) {$G_M$};
-
-				\foreach \name in {a, b, d} {\draw[draw=black] (u\name) circle (4pt);}
-				\foreach \name in {p, r, t} {\draw[draw=black] (l\name) circle (4pt);}
-
-
-				\draw[->] (ua) -- (lq);
-				\draw[->] (ub) -- (lp);
-				\draw[->] (uc) -- (lp);
-				\draw[<-] (uc) -- (lq);
-				\draw[->] (uc) -- (lr);
-				\draw[->] (uc) -- (ls);
-				\draw[->] (ud) -- (lr);
-				\draw[->, line width=1.2pt, path] (ud) -- (lt);
-				\draw[<-] (ue) -- (ls);
-				\draw[->] (ue) -- (lt);
-			\end{tikzpicture}
-		\end{minipage}\hfill\begin{minipage}{0.48\linewidth}
-			\centering
-			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
-				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-					}
-				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-					}
-				\node[right] at (4.3, 1) {$V_1$};
-				\node[right] at (4.3, 0) {$V_2$};
-				\node[left] at (-0.3, 0.5) {$G$};
-
-				\draw (ua) -- (lq);
-				\draw (ub) -- (lp);
-				\draw (uc) -- (lp);
-				\draw[line width=1.2pt, path] (uc) -- (lq);
-				\draw (uc) -- (lr);
-				\draw (uc) -- (ls);
-				\draw (ud) -- (lr);
-				\draw[line width=1.2pt, path] (ud) -- (lt);
-				\draw[line width=1.2pt, path] (ue) -- (ls);
-				\draw (ue) -- (lt);
-			\end{tikzpicture}
-		\end{minipage}
+		\mmGM{o/ua/lq, o/ub/lp, o/uc/lp, matN/uc/lq, o/uc/lr, o/uc/ls, o/ud/lr, augFN/ud/lt, matN/ue/ls, o/ue/lt}{ua,ub,ud,lp,lr,lt}{ud}\qquad
+		\mmG{o/ua/lq, o/ub/lp, o/uc/lp, pthN/uc/lq, o/uc/lr, o/uc/ls, o/ud/lr, pthN/ud/lt, pthN/ue/ls, o/ue/lt}
 	\end{azfigure}
-
 
 	\textbf{Iteracja 4:}
 	\begin{azfigure}
 		\centering
-		\begin{minipage}{0.48\linewidth}
-			\centering
-			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
-				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-					}
-				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-					}
-				\node[right] at (4.3, 1) {$V_1$};
-				\node[right] at (4.3, 0) {$V_2$};
-				\node[left] at (-0.3, 0.5) {$G_M$};
-
-				\foreach \name in {a, b, d} {\draw[draw=black] (u\name) circle (4pt);}
-				\foreach \name in {p, r, t} {\draw[draw=black] (l\name) circle (4pt);}
-
-
-				\draw[->, line width=1.2pt, path] (ua) -- (lq);
-				\draw[->] (ub) -- (lp);
-				\draw[->] (uc) -- (lp);
-				\draw[<-, line width=1.2pt, path] (uc) -- (lq);
-				\draw[->] (uc) -- (lr);
-				\draw[->, line width=1.2pt, path] (uc) -- (ls);
-				\draw[->, line width=1.2pt, path] (ud) -- (lr);
-				\draw[<-, line width=1.2pt, path] (ud) -- (lt);
-				\draw[<-, line width=1.2pt, path] (ue) -- (ls);
-				\draw[->, line width=1.2pt, path] (ue) -- (lt);
-			\end{tikzpicture}
-		\end{minipage}\hfill\begin{minipage}{0.48\linewidth}
-			\centering
-			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
-				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-					}
-				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-					}
-				\node[right] at (4.3, 1) {$V_1$};
-				\node[right] at (4.3, 0) {$V_2$};
-				\node[left] at (-0.3, 0.5) {$G$};
-
-				\draw[line width=1.2pt, path] (ua) -- (lq);
-				\draw (ub) -- (lp);
-				\draw (uc) -- (lp);
-				\draw[] (uc) -- (lq);
-				\draw (uc) -- (lr);
-				\draw[line width=1.2pt, path] (uc) -- (ls);
-				\draw[line width=1.2pt, path] (ud) -- (lr);
-				\draw[] (ud) -- (lt);
-				\draw[] (ue) -- (ls);
-				\draw[line width=1.2pt, path] (ue) -- (lt);
-			\end{tikzpicture}
-		\end{minipage}
+		\mmGM{augFN/ua/lq, o/ub/lp, o/uc/lp, augMN/uc/lq, o/uc/lr, augFN/uc/ls, augFN/ud/lr, augMN/ud/lt, augMN/ue/ls, augFN/ue/lt}{ua,ub,ud,lp,lr,lt}{ua}\qquad
+		\mmG{pthN/ua/lq, o/ub/lp, o/uc/lp, o/uc/lq, o/uc/lr, pthN/uc/ls, pthN/ud/lr, o/ud/lt, o/ue/ls, pthN/ue/lt}
 	\end{azfigure}
 
 	\textbf{Iteracja 5:}
 	\begin{azfigure}
 		\centering
-		\begin{minipage}{0.48\linewidth}
-			\centering
-			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
-				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-					}
-				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-					}
-				\node[right] at (4.3, 1) {$V_1$};
-				\node[right] at (4.3, 0) {$V_2$};
-				\node[left] at (-0.3, 0.5) {$G_M$};
-
-				\foreach \name in {b} {\draw[draw=black] (u\name) circle (4pt);}
-				\foreach \name in {p} {\draw[draw=black] (l\name) circle (4pt);}
-
-
-				\draw[<-] (ua) -- (lq);
-				\draw[->, line width=1.2pt, path] (ub) -- (lp);
-				\draw[->] (uc) -- (lp);
-				\draw[->] (uc) -- (lq);
-				\draw[->] (uc) -- (lr);
-				\draw[<-] (uc) -- (ls);
-				\draw[<-] (ud) -- (lr);
-				\draw[->] (ud) -- (lt);
-				\draw[->] (ue) -- (ls);
-				\draw[<-] (ue) -- (lt);
-			\end{tikzpicture}
-		\end{minipage}\hfill\begin{minipage}{0.48\linewidth}
-			\centering
-			\begin{tikzpicture}[x=0.9cm, y=0.9cm, >=stealth]
-				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d, 4/e} {
-						\node[circle, fill=black, inner sep=1.5pt] (u\name) at (\x, 1) {};
-					}
-				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s, 4/t} {
-						\node[circle, fill=black, inner sep=1.5pt] (l\name) at (\x, 0) {};
-					}
-				\node[right] at (4.3, 1) {$V_1$};
-				\node[right] at (4.3, 0) {$V_2$};
-				\node[left] at (-0.3, 0.5) {$G$};
-
-				\draw[line width=1.2pt, path] (ua) -- (lq);
-				\draw[line width=1.2pt, path] (ub) -- (lp);
-				\draw (uc) -- (lp);
-				\draw[] (uc) -- (lq);
-				\draw (uc) -- (lr);
-				\draw[line width=1.2pt, path] (uc) -- (ls);
-				\draw[line width=1.2pt, path] (ud) -- (lr);
-				\draw[] (ud) -- (lt);
-				\draw[] (ue) -- (ls);
-				\draw[line width=1.2pt, path] (ue) -- (lt);
-			\end{tikzpicture}
-		\end{minipage}
+		\mmGM{matN/ua/lq, augFN/ub/lp, o/uc/lp, o/uc/lq, o/uc/lr, matN/uc/ls, matN/ud/lr, o/ud/lt, o/ue/ls, matN/ue/lt}{ub,lp}{ub}\qquad
+		\mmG{pthN/ua/lq, pthN/ub/lp, o/uc/lp, o/uc/lq, o/uc/lr, pthN/uc/ls, pthN/ud/lr, o/ud/lt, o/ue/ls, pthN/ue/lt}
 	\end{azfigure}
 \end{example}

@@ -9,20 +9,25 @@ i Nauk Informacyjnych Politechniki Warszawskiej (semestr letni 2025/2026).
 | Ścieżka          | Opis                                                                         |
 |------------------|------------------------------------------------------------------------------|
 | `notes/`         | Pełne notatki &mdash; wszystkie wykłady w całości (jedyne źródło).                 |
-| `preamble.tex`   | Wspólna preambuła (`\documentclass`, pakiety, środowiska) dołączana przez `notes/main.tex`. |
+| `examples/`      | Zestaw przykładowych instancji do powtórki (`przyklady.tex`) wraz z rozwiązaniami w `examples/rozwiazania/`. |
+| `preamble.tex`   | Wspólna preambuła (`\documentclass`, pakiety, środowiska) dołączana przez `notes/main.tex` i `examples/przyklady.tex`. |
 
 Katalog `notes/` zawiera `main.tex`, który dołącza wspólną preambułę przez
 `\input{../preamble}` oraz poszczególne pliki wykładów `lectXX-DD-MM-2026.tex`.
 
 ## Wersje
 
-Z jednego źródła powstają **dwie** wersje PDF, sterowane zmienną środowiskową
-`AZ_HIGHLIGHT` (czytaną przez preambułę):
+Z notatek powstają **trzy** wersje PDF, sterowane zmiennymi środowiskowymi
+`AZ_HIGHLIGHT` i `AZ_SKIP` (czytanymi przez preambułę):
 
-| Wersja | `AZ_HIGHLIGHT` | Opis |
-|--------|----------------|------|
-| `AZ_lectures` | (brak / `0`) | Zwykłe notatki. |
-| `AZ_lectures_highlighted` | `1` | Materiał obowiązkowy (twierdzenia wraz z dowodami) na wyróżniającym tle &mdash; dla lepszej czytelności tego, co najważniejsze na egzaminie. |
+| Wersja | `AZ_HIGHLIGHT` | `AZ_SKIP` | Opis |
+|--------|----------------|-----------|------|
+| `AZ_lectures` | (brak / `0`) | `0` | Zwykłe notatki. |
+| `AZ_lectures_highlighted` | `1` | `0` | Materiał obowiązkowy (twierdzenia wraz z dowodami) na wyróżniającym tle &mdash; dla lepszej czytelności tego, co najważniejsze na egzaminie. |
+| `AZ_lectures_exam` | `1` | `1` | Jak wyżej, ale z wyciętymi dowodami nieobowiązkowymi &mdash; szybka powtórka przed egzaminem. |
+
+Dodatkowo z `examples/przyklady.tex` powstaje `AZ_examples` &mdash; zestaw
+przykładowych instancji do samodzielnego prześledzenia wraz z rozwiązaniami.
 
 ## Kompilacja
 
@@ -34,8 +39,9 @@ latexmk main.tex                    # wersja zwykła
 AZ_HIGHLIGHT=1 latexmk -g main.tex  # wersja z wyróżnieniami
 ```
 
-(konfiguracja silnika znajduje się w `.latexmkrc`). Najwygodniej zbudować obie
-wersje naraz skryptem `./build.sh` w katalogu głównym.
+(konfiguracja silnika znajduje się w `.latexmkrc`). Najwygodniej zbudować
+wszystkie wersje (notatki + przykłady) naraz skryptem `./build.sh` w katalogu
+głównym.
 
 ## Wydania
 

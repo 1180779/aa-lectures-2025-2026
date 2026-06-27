@@ -1,0 +1,74 @@
+% ── Rozwiązanie: Approx Subset Sum -- instancja 1 ────────────────
+\subsection{Approx Subset Sum -- instancja 1}
+
+Dane: $S = \{106, 103, 205, 104\}$ (w~kolejności $x_1, \ldots, x_4$),
+$t = 312$ oraz $\varepsilon = 0{,}4$. Wtedy $n = 4$ i~próg przycinania to
+$\delta = \frac{\varepsilon}{2n} = \frac{0{,}4}{8} = 0{,}05$ (mnożnik
+$1 + \delta = 1{,}05$). Startujemy z~$L_0 = (0)$.
+
+W~każdej iteracji najpierw scalamy $L_{i-1}$ z~$L_{i-1} + x_i$, potem usuwamy
+elementy $> t = 312$, a~na~końcu przycinamy. Przy przycinaniu zachowujemy
+element $y$, gdy $y > last \cdot 1{,}05$, gdzie $last$ to ostatnio zachowany
+element.
+\begin{dygresja} \leavevmode
+	\begin{itemize}[nosep]
+		\item \textbf{$i = 1$, $x_1 = 106$.} \\
+		      scalenie: $(0) \cup (106) = (0, 106)$; \\
+		      po~usunięciu $> 312$: $(0, 106)$; \\
+		      przycinanie: \\
+		      \begin{tblr}{colspec={r c l l}, column{4}={font=\itshape}, rowsep=1pt}
+			      $0$   &     &                     & zachowane, $last = 0$   \\
+			      $106$ & $>$ & $0 \cdot 1{,}05 = 0$ & zachowane, $last = 106$ \\
+		      \end{tblr} \\
+		      $L_1 = (0, 106)$.
+		\item \textbf{$i = 2$, $x_2 = 103$.} \\
+		      scalenie: $(0, 106) \cup (103, 209) = (0, 103, 106, 209)$; \\
+		      po~usunięciu $> 312$: bez zmian; \\
+		      przycinanie: \\
+		      \begin{tblr}{colspec={r c l l}, column{4}={font=\itshape}, rowsep=1pt}
+			      $0$   &        &                              & zachowane, $last = 0$   \\
+			      $103$ & $>$    & $0$                          & zachowane, $last = 103$ \\
+			      $106$ & $\leq$ & $103 \cdot 1{,}05 = 108{,}15$ & usunięte                \\
+			      $209$ & $>$    & $108{,}15$                   & zachowane, $last = 209$ \\
+		      \end{tblr} \\
+		      $L_2 = (0, 103, 209)$.
+		\item \textbf{$i = 3$, $x_3 = 205$.} \\
+		      scalenie: $(0, 103, 209) \cup (205, 308, 414) = (0, 103, 205, 209, 308, 414)$; \\
+		      po~usunięciu $> 312$: $(0, 103, 205, 209, 308)$; \\
+		      przycinanie: \\
+		      \begin{tblr}{colspec={r c l l}, column{4}={font=\itshape}, rowsep=1pt}
+			      $0$   &        &                              & zachowane, $last = 0$   \\
+			      $103$ & $>$    & $0$                          & zachowane, $last = 103$ \\
+			      $205$ & $>$    & $103 \cdot 1{,}05 = 108{,}15$ & zachowane, $last = 205$ \\
+			      $209$ & $\leq$ & $205 \cdot 1{,}05 = 215{,}25$ & usunięte               \\
+			      $308$ & $>$    & $215{,}25$                   & zachowane, $last = 308$ \\
+		      \end{tblr} \\
+		      $L_3 = (0, 103, 205, 308)$.
+		\item \textbf{$i = 4$, $x_4 = 104$.} \\
+		      scalenie: $(0, 103, 205, 308) \cup (104, 207, 309, 412)
+		      = (0, 103, 104, 205, 207, 308, 309, 412)$; \\
+		      po~usunięciu $> 312$: $(0, 103, 104, 205, 207, 308, 309)$; \\
+		      przycinanie: \\
+		      \begin{tblr}{colspec={r c l l}, column{4}={font=\itshape}, rowsep=1pt}
+			      $0$   &        &                              & zachowane, $last = 0$   \\
+			      $103$ & $>$    & $0$                          & zachowane, $last = 103$ \\
+			      $104$ & $\leq$ & $103 \cdot 1{,}05 = 108{,}15$ & usunięte               \\
+			      $205$ & $>$    & $108{,}15$                   & zachowane, $last = 205$ \\
+			      $207$ & $\leq$ & $205 \cdot 1{,}05 = 215{,}25$ & usunięte               \\
+			      $308$ & $>$    & $215{,}25$                   & zachowane, $last = 308$ \\
+			      $309$ & $\leq$ & $308 \cdot 1{,}05 = 323{,}4$ & usunięte                \\
+		      \end{tblr} \\
+		      $L_4 = (0, 103, 205, 308)$.
+	\end{itemize}
+\end{dygresja}
+
+\paragraph{Wynik.}
+Zwracamy największy element listy $L_4$:
+\[
+	\boxed{z = 308}
+\]
+realizowany podzbiorem $\{103, 205\}$. Optimum w~granicy progu to
+$z^* = 311$ (podzbiór $\{106, 205\}$): zostało utracone już w~iteracji
+$i = 2$, gdy przycinanie usunęło $106$ jako bliskie zachowanemu $103$. Iloraz
+$\frac{z^*}{z} = \frac{311}{308} \approx 1{,}010 \leq 1 + \varepsilon = 1{,}4$
+-- zgodnie z~gwarancją aproksymacji.

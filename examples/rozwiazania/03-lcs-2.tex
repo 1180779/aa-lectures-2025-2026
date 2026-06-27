@@ -1,0 +1,81 @@
+% ── Rozwiązanie: LCS -- instancja 2 ───────────────────────────────
+\subsection{Najdłuższy wspólny podciąg (LCS) -- instancja 2}
+
+Dane: $X = (G,\ A,\ T,\ T,\ A,\ C,\ A)$, $Y = (G,\ C,\ A,\ T,\ A,\ A,\ T)$, czyli
+$m = 7$, $n = 7$. Tablicę kosztów $c$ wypełniamy wierszami regułą jak w~instancji~1,
+a~równolegle w~tablicy $b$ zapisujemy kierunek ($\nwarrow$ -- dopasowanie,
+$\uparrow$ -- góra, $\leftarrow$ -- lewo; remisy na korzyść góry). Komórki
+wchodzące do wybranego LCS wyróżniono na~\textcolor{accentB}{pomarańczowo}.
+
+\begin{aztable}
+	\centering
+	\renewcommand{\arraystretch}{1.2}
+	\begin{minipage}{0.48\linewidth}
+		\centering
+		Tablica kosztów $c$: \\[0.5em]
+		\begin{NiceTabular}{cc|c|ccccccc}[margin,hvlines]
+			    & $j$   & 0     & 1   & 2   & 3   & 4   & 5   & 6   & 7   \\
+			$i$ &       & $y_j$ & $G$ & $C$ & $A$ & $T$ & $A$ & $A$ & $T$ \\
+			\hline
+			0   & $x_i$ & 0     & 0   & 0   & 0   & 0   & 0   & 0   & 0   \\
+			1   & $G$   & 0     & \color{accentB}1 & 1 & 1 & 1 & 1 & 1 & 1 \\
+			2   & $A$   & 0     & 1   & 1   & \color{accentB}2 & 2 & 2 & 2 & 2 \\
+			3   & $T$   & 0     & 1   & 1   & 2   & 3   & 3   & 3   & 3   \\
+			4   & $T$   & 0     & 1   & 1   & 2   & \color{accentB}3 & 3 & 3 & 4 \\
+			5   & $A$   & 0     & 1   & 1   & 2   & 3   & \color{accentB}4 & 4 & 4 \\
+			6   & $C$   & 0     & 1   & 2   & 2   & 3   & 4   & 4   & 4   \\
+			7   & $A$   & 0     & 1   & 2   & 3   & 3   & 4   & \color{accentB}5 & 5 \\
+		\end{NiceTabular}
+	\end{minipage}\hfill
+	\begin{minipage}{0.48\linewidth}
+		\centering
+		Tablica strzałek $b$: \\[0.5em]
+		\begin{NiceTabular}{cc|c|ccccccc}[margin,hvlines]
+			    & $j$   & 0     & 1          & 2            & 3            & 4            & 5            & 6            & 7            \\
+			$i$ &       & $y_j$ & $G$        & $C$          & $A$          & $T$          & $A$          & $A$          & $T$          \\
+			\hline
+			0   & $x_i$ &       &            &              &              &              &              &              &              \\
+			1   & $G$   &       & \color{accentB}$\nwarrow$ & $\leftarrow$ & $\leftarrow$ & $\leftarrow$ & $\leftarrow$ & $\leftarrow$ & $\leftarrow$ \\
+			2   & $A$   &       & $\uparrow$ & $\uparrow$   & \color{accentB}$\nwarrow$ & $\leftarrow$ & $\nwarrow$   & $\nwarrow$   & $\leftarrow$ \\
+			3   & $T$   &       & $\uparrow$ & $\uparrow$   & $\uparrow$   & $\nwarrow$   & $\leftarrow$ & $\leftarrow$ & $\nwarrow$   \\
+			4   & $T$   &       & $\uparrow$ & $\uparrow$   & $\uparrow$   & \color{accentB}$\nwarrow$ & $\uparrow$ & $\uparrow$ & $\nwarrow$ \\
+			5   & $A$   &       & $\uparrow$ & $\uparrow$   & $\nwarrow$   & $\uparrow$   & \color{accentB}$\nwarrow$ & $\nwarrow$ & $\uparrow$ \\
+			6   & $C$   &       & $\uparrow$ & $\nwarrow$   & $\uparrow$   & $\uparrow$   & $\uparrow$   & $\uparrow$   & $\uparrow$   \\
+			7   & $A$   &       & $\uparrow$ & $\uparrow$   & $\nwarrow$   & $\uparrow$   & $\nwarrow$   & \color{accentB}$\nwarrow$ & $\leftarrow$ \\
+		\end{NiceTabular}
+	\end{minipage}
+\end{aztable}
+
+\begin{dygresja}
+	Po jednej komórce na każdą gałąź reguły,
+	$X = (x_1, \dots, x_7)$, $Y = (y_1, \dots, y_7)$:
+	\begin{itemize}
+		\item \textbf{Dopasowanie} ($\nwarrow$): $c(1, 1)$, $x_1 = G = y_1$, więc
+		      $c(1, 1) = c(0, 0) + 1 = 1$.
+		\item \textbf{Góra} ($\uparrow$): $c(2, 1)$, $x_2 = A \neq G = y_1$; sąsiedzi
+		      $c(1, 1) = 1 \geq c(2, 0) = 0$, więc $c(2, 1) = 1$.
+		\item \textbf{Lewo} ($\leftarrow$): $c(1, 2)$, $x_1 = G \neq C = y_2$; sąsiedzi
+		      $c(0, 2) = 0 < c(1, 1) = 1$, więc $c(1, 2) = 1$.
+		\item \textbf{Remis}: $c(2, 7)$, $A \neq T$, $c(1, 7) = c(2, 6) = 2$ -- warunek
+		      $\geq$ spełniony, więc $\uparrow$.
+	\end{itemize}
+\end{dygresja}
+
+\paragraph{Odtworzenie podciągu.}
+Startujemy z~$(m, n) = (7, 7)$ i~idziemy za strzałkami; przy $\nwarrow$ schodzimy
+po~przekątnej, dopisując $x_i$ do~LCS:
+\[
+	\begin{aligned}
+		(7, 7) & \xrightarrow{\leftarrow} (7, 6) \xrightarrow{\nwarrow} (6, 5) \;[\,x_7 = A\,]
+		\xrightarrow{\uparrow} (5, 5) \xrightarrow{\nwarrow} (4, 4) \;[\,x_5 = A\,] \\
+		       & \xrightarrow{\nwarrow} (3, 3) \;[\,x_4 = T\,]
+		\xrightarrow{\uparrow} (2, 3) \xrightarrow{\nwarrow} (1, 2) \;[\,x_2 = A\,]
+		\xrightarrow{\leftarrow} (1, 1) \xrightarrow{\nwarrow} (0, 0) \;[\,x_1 = G\,].
+	\end{aligned}
+\]
+Znaki dopisywane są \emph{po} powrocie z~rekurencji, więc w~kolejności od
+najgłębszego: $G, A, T, A, A$. Stąd najdłuższy wspólny podciąg
+\[
+	\boxed{\text{LCS}(X, Y) = (G,\ A,\ T,\ A,\ A)}
+\]
+o~długości $c(7, 7) = 5$.

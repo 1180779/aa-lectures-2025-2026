@@ -1,0 +1,49 @@
+% ── Rozwiązanie: Exact Subset Sum -- instancja 1 ─────────────────
+\subsection{Exact Subset Sum -- instancja 1}
+
+Dane: $S = \{1, 4, 5, 11, 12\}$ (w~kolejności $x_1, \ldots, x_5$) oraz $t = 21$.
+Algorytm \textsc{ExactSubsetSum} startuje z~$L_0 = (0)$ i~w~$i$-tej iteracji
+scala $L_{i-1}$ z~$L_{i-1} + x_i$ (procedura \textsc{MergeLists} -- posortowane
+złączenie bez duplikatów), a~następnie usuwa z~wyniku wszystkie liczby $> t$.
+Lista $L_i$ to posortowane sumy podzbiorów $\{x_1, \ldots, x_i\}$ nieprzekraczające
+$t$. Element wprowadzony przez przesunięcie $L_{i-1} + x_i$ wyróżniono na~%
+\textcolor{accentB}{pomarańczowo}.
+
+\begin{dygresja}
+	Przebieg iteracji ($L_{i-1} + x_i$ to składnik przesunięty):
+	\begin{enumerate}[nosep]
+		\item $x_1 = 1$:\quad
+		      $(0) \cup (\textcolor{accentB}{1}) = (0, \textcolor{accentB}{1})$
+		      \hfill $L_1 = (0, 1)$
+		\item $x_2 = 4$:\quad
+		      $(0, 1) \cup (\textcolor{accentB}{4}, \textcolor{accentB}{5})
+		      = (0, 1, \textcolor{accentB}{4}, \textcolor{accentB}{5})$
+		      \hfill $L_2 = (0, 1, 4, 5)$
+		\item $x_3 = 5$:\quad
+		      $(0, 1, 4, 5) \cup (\textcolor{accentB}{6}, \textcolor{accentB}{9},
+		      \textcolor{accentB}{10})$ \\
+		      (przesunięte $5, 6, 9, 10$; $5$ już było)
+		      \hfill $L_3 = (0, 1, 4, 5, 6, 9, 10)$
+		\item $x_4 = 11$:\quad scalenie z~$(11, 12, 15, 16, 17, 20, 21)$, nic $> 21$
+		      \hfill\\
+		      $L_4 = (0, 1, 4, 5, 6, 9, 10, \textcolor{accentB}{11},
+		      \textcolor{accentB}{12}, \textcolor{accentB}{15},
+		      \textcolor{accentB}{16}, \textcolor{accentB}{17},
+		      \textcolor{accentB}{20}, \textcolor{accentB}{21})$
+		\item $x_5 = 12$:\quad przesunięcie $L_4 + 12$ daje
+		      $12, 13, 16, 17, 18, 21, 22, 23, 24, 27, 28, 29, 32, 33$;
+		      po~usunięciu $> 21$ dochodzą tylko $\textcolor{accentB}{13}$
+		      i~$\textcolor{accentB}{18}$ \\
+		      $L_5 = (0, 1, 4, 5, 6, 9, 10, 11, 12, \textcolor{accentB}{13}, 15,
+		      16, 17, \textcolor{accentB}{18}, 20, 21)$
+	\end{enumerate}
+\end{dygresja}
+
+\paragraph{Wynik.}
+Największy element listy $L_5$ nieprzekraczający $t = 21$ to
+\[
+	\boxed{z = 21}
+\]
+czyli dokładnie $t$ -- istnieje podzbiór o~sumie równej progowi, np.\
+$\{4, 5, 12\}$ lub $\{1, 4, 5, 11\}$. Wersja decyzyjna ma więc odpowiedź
+\emph{tak}, a~optymalna suma $\leq t$ wynosi $21$.

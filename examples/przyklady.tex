@@ -1,6 +1,6 @@
 % ════════════════════════════════════════════════════════════════
 % Zestaw przykładowych instancji do powtórki przed egzaminem.
-% Same DANE wejściowe (po dwie instancje na algorytm) --- bez rozwiązań,
+% Same DANE wejściowe (po trzy instancje na algorytm) --- bez rozwiązań,
 % do samodzielnego prześledzenia działania algorytmu.
 % Kompilacja: lualatex (patrz ../preamble, build.sh).
 % ════════════════════════════════════════════════════════════════
@@ -12,7 +12,7 @@
 \begin{center}
 	{\LARGE\bfseries\color{accent} Algorytmy Zaawansowane}\\[0.3cm]
 	{\large\bfseries Przykładowe instancje do powtórki}\\[0.2cm]
-	{\small\itshape Po dwie instancje na algorytm --- same dane wejściowe, do samodzielnego prześledzenia.}
+	{\small\itshape Po trzy instancje na algorytm --- same dane wejściowe, do samodzielnego prześledzenia.}
 \end{center}
 \bigskip
 
@@ -42,6 +42,11 @@
 	\end{aztable}
 \end{example}
 
+	\begin{example}[Najbliższe punkty -- instancja 3]
+		$Q = \{(1,2),\ (4,4),\ (7,1),\ (8,8),\ (2,9),\ (10,3),\ (6,5),\ (3,3)\}$.\\
+		Znaleźć parę punktów w~najmniejszej odległości (euklidesowej).
+	\end{example}
+
 % ════════════════════════════════════════════════════════════════
 \section{Mnożenie ciągu macierzy (Matrix-Chain-Order)}
 % ════════════════════════════════════════════════════════════════
@@ -58,6 +63,12 @@
 	Wyznaczyć tablice $m$ i~$s$ oraz optymalne nawiasowanie.
 \end{example}
 
+	\begin{example}[Matrix-Chain-Order -- instancja 3]
+		$n = 5$, \quad $p = (4,\ 10,\ 3,\ 12,\ 20,\ 7)$, czyli\\
+		$A_1\ (4\times 10),\ A_2\ (10\times 3),\ A_3\ (3\times 12),\ A_4\ (12\times 20),\ A_5\ (20\times 7)$.\\
+		Wyznaczyć tablice $m$ i~$s$ oraz optymalne nawiasowanie.
+	\end{example}
+
 % ════════════════════════════════════════════════════════════════
 \section{Najdłuższy wspólny podciąg (LCS)}
 % ════════════════════════════════════════════════════════════════
@@ -71,6 +82,11 @@
 	$X = (G,\ A,\ T,\ T,\ A,\ C,\ A)$, \quad $Y = (G,\ C,\ A,\ T,\ A,\ A,\ T)$.\\
 	Wyznaczyć tablicę długości LCS oraz jeden najdłuższy wspólny podciąg.
 \end{example}
+
+	\begin{example}[LCS -- instancja 3]
+		$X = (A,\ B,\ A,\ C,\ B,\ D,\ A)$, \quad $Y = (B,\ A,\ B,\ C,\ D,\ A,\ B)$.\\
+		Wyznaczyć tablicę długości LCS oraz jeden najdłuższy wspólny podciąg.
+	\end{example}
 
 % ════════════════════════════════════════════════════════════════
 \section{Zachłanny wybór zajęć}
@@ -104,6 +120,20 @@
 	\end{aztable}
 \end{example}
 
+	\begin{example}[Wybór zajęć -- instancja 3]
+		Znaleźć podzbiór o~największej liczności parami zgodnych zajęć:
+		\begin{aztable}
+			\centering
+			\renewcommand{\arraystretch}{1.2}
+			\begin{NiceTabular}{c|cccccccc}[margin,hvlines]
+				$i$   & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8  \\
+				\hline
+				$s_i$ & 1 & 2 & 0 & 3 & 4 & 6 & 5 & 7  \\
+				$t_i$ & 3 & 5 & 7 & 8 & 9 & 10& 9 & 12
+			\end{NiceTabular}
+		\end{aztable}
+	\end{example}
+
 % ════════════════════════════════════════════════════════════════
 \section{Algorytm Huffmana}
 % ════════════════════════════════════════════════════════════════
@@ -128,6 +158,20 @@
 	Skonstruować drzewo Huffmana i~przypisać słowa kodowe.
 \end{example}
 
+	\begin{example}[Huffman -- instancja 3]
+		Znaki i~ich częstości:
+		\begin{aztable}
+			\centering
+			\renewcommand{\arraystretch}{1.2}
+			\begin{NiceTabular}{c|ccccccc}[margin,hvlines]
+				znak     & $a$ & $b$ & $c$ & $d$ & $e$ & $f$ & $g$ \\
+				\hline
+				częstość & 30  & 25  & 20  & 15  & 10  & 7   & 3
+			\end{NiceTabular}
+		\end{aztable}
+		Skonstruować drzewo Huffmana i~przypisać słowa kodowe.
+	\end{example}
+
 % ════════════════════════════════════════════════════════════════
 \section{Szeregowanie zadań z deadlinami}
 % ════════════════════════════════════════════════════════════════
@@ -148,7 +192,7 @@
 \end{example}
 
 \begin{example}[Szeregowanie zadań -- instancja 2]
-	Zadania (nie są jeszcze posortowane); wyznaczyć harmonogram minimalizujący sumę kar:
+	Wyznaczyć harmonogram minimalizujący sumę kar dla następujących zadań:
 	\begin{aztable}
 		\centering
 		\renewcommand{\arraystretch}{1.2}
@@ -160,6 +204,20 @@
 		\end{NiceTabular}
 	\end{aztable}
 \end{example}
+
+	\begin{example}[Szeregowanie zadań -- instancja 3]
+		Zadania (kary $w_i$ za spóźnienie, deadliny $d_i$); wyznaczyć harmonogram minimalizujący sumę kar:
+		\begin{aztable}
+			\centering
+			\renewcommand{\arraystretch}{1.2}
+			\begin{NiceTabular}{c|ccccccc}[margin,hvlines]
+				$i$   & 1  & 2  & 3  & 4  & 5  & 6  & 7  \\
+				\hline
+				$d_i$ & 3  & 1  & 2  & 4  & 2  & 1  & 5  \\
+				$w_i$ & 40 & 50 & 30 & 25 & 20 & 35 & 10
+			\end{NiceTabular}
+		\end{aztable}
+	\end{example}
 
 % ════════════════════════════════════════════════════════════════
 \section{Greedy-Set-Cover}
@@ -182,6 +240,15 @@
 	\end{flalign*}
 	$\mathcal{F} = \{S_1,\dots,S_5\}$. Znaleźć pokrycie zwracane przez algorytm zachłanny.
 \end{example}
+
+	\begin{example}[Greedy Set Cover -- instancja 3]
+		$X = \{1,2,3,4,5,6,7,8,9,10\}$,
+		\begin{flalign*}
+			S_1 &= \{1,2,3,4,5\}, & S_2 &= \{4,5,6,7\},    & S_3 &= \{1,6,8\},      & \\
+			S_4 &= \{2,7,9\},     & S_5 &= \{3,8,9,10\},   & S_6 &= \{5,10\}.       &
+		\end{flalign*}
+		$\mathcal{F} = \{S_1,\dots,S_6\}$. Znaleźć pokrycie zwracane przez algorytm zachłanny.
+	\end{example}
 
 % ════════════════════════════════════════════════════════════════
 \section{Approx-Vertex-Cover}
@@ -224,6 +291,25 @@
 	\end{azfigure}
 \end{example}
 
+	\begin{example}[Approx Vertex Cover -- instancja 3]
+		Wyznaczyć pokrycie wierzchołkowe zwracane przez Approx-Vertex-Cover dla grafu:
+		\begin{azfigure}
+			\centering
+			\begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.6cm, inner sep=1pt}]
+				\node (a) at (0,2)   {$a$};
+				\node (b) at (2,2)   {$b$};
+				\node (c) at (4,2)   {$c$};
+				\node (d) at (1,0.7) {$d$};
+				\node (e) at (3,0.7) {$e$};
+				\node (f) at (0,-0.6){$f$};
+				\node (g) at (4,-0.6){$g$};
+				\draw (a)--(b); \draw (b)--(c); \draw (a)--(d);
+				\draw (b)--(d); \draw (b)--(e); \draw (c)--(e);
+				\draw (d)--(f); \draw (e)--(g); \draw (d)--(e); \draw (f)--(g);
+			\end{tikzpicture}
+		\end{azfigure}
+	\end{example}
+
 % ════════════════════════════════════════════════════════════════
 \section{Exact-Subset-Sum}
 % ════════════════════════════════════════════════════════════════
@@ -238,12 +324,17 @@
 	Wyznaczyć kolejne listy $L_i$ i~największą sumę podzbioru $\leq t$.
 \end{example}
 
+	\begin{example}[Exact Subset Sum -- instancja 3]
+		$S = \{3,\ 5,\ 6,\ 9,\ 11\}$ (w~kolejności $x_1,\dots,x_5$), \quad $t = 20$.\\
+		Wyznaczyć kolejne listy $L_i$ i~największą sumę podzbioru $\leq t$.
+	\end{example}
+
 % ════════════════════════════════════════════════════════════════
 \section{Approx-Subset-Sum}
 % ════════════════════════════════════════════════════════════════
 
 \begin{example}[Approx Subset Sum -- instancja 1]
-	$S = \{104,\ 102,\ 201,\ 101\}$ (w~kolejności $x_1,\dots,x_4$), \quad $t = 308$, \quad $\varepsilon = 0{,}4$.\\
+	$S = \{106,\ 103,\ 205,\ 104\}$ (w~kolejności $x_1,\dots,x_4$), \quad $t = 312$, \quad $\varepsilon = 0{,}4$.\\
 	Prześledzić działanie z~przycinaniem ($\delta = \tfrac{\varepsilon}{2n}$): wyznaczyć listy $L_i$ i~zwracaną sumę.
 \end{example}
 
@@ -251,6 +342,11 @@
 	$S = \{10,\ 12,\ 17,\ 25\}$ (w~kolejności $x_1,\dots,x_4$), \quad $t = 50$, \quad $\varepsilon = 0{,}5$.\\
 	Prześledzić działanie z~przycinaniem ($\delta = \tfrac{\varepsilon}{2n}$): wyznaczyć listy $L_i$ i~zwracaną sumę.
 \end{example}
+
+	\begin{example}[Approx Subset Sum -- instancja 3]
+		$S = \{8,\ 15,\ 23,\ 42\}$ (w~kolejności $x_1,\dots,x_4$), \quad $t = 70$, \quad $\varepsilon = 0{,}3$.\\
+		Prześledzić działanie z~przycinaniem ($\delta = \tfrac{\varepsilon}{2n}$): wyznaczyć listy $L_i$ i~zwracaną sumę.
+	\end{example}
 
 % ════════════════════════════════════════════════════════════════
 \section{Maksymalne skojarzenie w grafie dwudzielnym (MM)}
@@ -299,6 +395,27 @@
 	\end{azfigure}
 \end{example}
 
+	\begin{example}[Maximum Matching -- instancja 3]
+		Wyznaczyć najliczniejsze skojarzenie (ścieżki powiększające) w~grafie:
+		\begin{azfigure}
+			\centering
+			\begin{tikzpicture}[x=1.1cm, y=1.1cm]
+				\foreach \x/\name in {0/a, 1/b, 2/c, 3/d} {
+						\node[circle, fill=black, inner sep=1.5pt, label=above:$\name$] (u\name) at (\x,1) {};
+					}
+				\foreach \x/\name in {0/p, 1/q, 2/r, 3/s} {
+						\node[circle, fill=black, inner sep=1.5pt, label=below:$\name$] (l\name) at (\x,0) {};
+					}
+				\node[right] at (3.3,1) {$V_1$};
+				\node[right] at (3.3,0) {$V_2$};
+				\draw (ua)--(lp); \draw (ua)--(lr);
+				\draw (ub)--(lp); \draw (ub)--(lq);
+				\draw (uc)--(lq); \draw (uc)--(ls);
+				\draw (ud)--(lr); \draw (ud)--(ls);
+			\end{tikzpicture}
+		\end{azfigure}
+	\end{example}
+
 % ════════════════════════════════════════════════════════════════
 \appendix
 \newpage
@@ -307,5 +424,25 @@
 % Każde rozwiązanie w osobnym pliku w rozwiazania/.
 \input{rozwiazania/01-najblizsze-punkty-1}
 \input{rozwiazania/02-matrix-chain-1}
+\input{rozwiazania/03-lcs-1}
+\input{rozwiazania/04-wybor-zajec-1}
+\input{rozwiazania/05-huffman-1}
+\input{rozwiazania/06-szeregowanie-1}
+\input{rozwiazania/07-set-cover-1}
+\input{rozwiazania/08-vertex-cover-1}
+\input{rozwiazania/09-exact-subset-sum-1}
+\input{rozwiazania/10-approx-subset-sum-1}
+\input{rozwiazania/11-maximum-matching-1}
+\input{rozwiazania/01-najblizsze-punkty-2}
+\input{rozwiazania/02-matrix-chain-2}
+\input{rozwiazania/03-lcs-2}
+\input{rozwiazania/04-wybor-zajec-2}
+\input{rozwiazania/05-huffman-2}
+\input{rozwiazania/06-szeregowanie-2}
+\input{rozwiazania/07-set-cover-2}
+\input{rozwiazania/08-vertex-cover-2}
+\input{rozwiazania/09-exact-subset-sum-2}
+\input{rozwiazania/10-approx-subset-sum-2}
+\input{rozwiazania/11-maximum-matching-2}
 
 \end{document}

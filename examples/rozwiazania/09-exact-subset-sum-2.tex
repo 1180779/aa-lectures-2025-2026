@@ -1,0 +1,43 @@
+% ── Rozwiązanie: Exact Subset Sum -- instancja 2 ─────────────────
+\subsection{Exact Subset Sum -- instancja 2}
+
+Dane: $S = \{2, 3, 7, 8, 10\}$ (w~kolejności $x_1, \ldots, x_5$) oraz $t = 15$.
+Algorytm \textsc{ExactSubsetSum} startuje z~$L_0 = (0)$ i~w~$i$-tej iteracji scala
+$L_{i-1}$ z~$L_{i-1} + x_i$, po~czym usuwa elementy $> t$. Element wprowadzony
+przez przesunięcie $L_{i-1} + x_i$ wyróżniono na~\textcolor{accentB}{pomarańczowo}.
+
+\begin{dygresja}
+	Przebieg iteracji ($L_{i-1} + x_i$ to składnik przesunięty):
+	\begin{enumerate}[nosep]
+		\item $x_1 = 2$:\quad
+		      $(0) \cup (\textcolor{accentB}{2}) = (0, \textcolor{accentB}{2})$
+		      \hfill $L_1 = (0, 2)$
+		\item $x_2 = 3$:\quad
+		      $(0, 2) \cup (\textcolor{accentB}{3}, \textcolor{accentB}{5})
+		      = (0, 2, \textcolor{accentB}{3}, \textcolor{accentB}{5})$
+		      \hfill $L_2 = (0, 2, 3, 5)$
+		\item $x_3 = 7$:\quad scalenie z~$(7, 9, 10, 12)$, nic $> 15$
+		      \hfill\\
+		      $L_3 = (0, 2, 3, 5, \textcolor{accentB}{7}, \textcolor{accentB}{9},
+		      \textcolor{accentB}{10}, \textcolor{accentB}{12})$
+		\item $x_4 = 8$:\quad przesunięcie $L_3 + 8$ daje
+		      $8, 10, 11, 13, 15, 17, 18, 20$; po~usunięciu $> 15$ dochodzą
+		      $\textcolor{accentB}{8}, \textcolor{accentB}{11}, \textcolor{accentB}{13},
+		      \textcolor{accentB}{15}$ ($10$ już było) \\
+		      $L_4 = (0, 2, 3, 5, 7, \textcolor{accentB}{8}, 9, 10,
+		      \textcolor{accentB}{11}, 12, \textcolor{accentB}{13}, \textcolor{accentB}{15})$
+		\item $x_5 = 10$:\quad przesunięcie $L_4 + 10$ daje
+		      $10, 12, 13, 15, 17, \ldots$; wszystkie $\leq 15$ ($10, 12, 13, 15$) już
+		      są na liście, więc \emph{nic nowego}
+		      \hfill $L_5 = L_4$
+	\end{enumerate}
+\end{dygresja}
+
+\paragraph{Wynik.}
+Największy element listy $L_5$ nieprzekraczający $t = 15$ to
+\[
+	\boxed{z = 15}
+\]
+czyli dokładnie $t$ -- istnieje podzbiór o~sumie równej progowi, np.\
+$\{7, 8\}$ lub $\{2, 3, 10\}$. Wersja decyzyjna ma więc odpowiedź \emph{tak},
+a~optymalna suma $\leq t$ wynosi $15$.

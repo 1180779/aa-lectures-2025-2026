@@ -1,0 +1,70 @@
+% ── Rozwiązanie: Approx Vertex Cover -- instancja 2 ──────────────
+\subsection{Approx Vertex Cover -- instancja 2}
+
+Algorytm \textsc{AVC} dopóki zostają niepokryte krawędzie, wybiera (tu:
+leksykograficznie najmniejszą) krawędź $uv \in F$, dorzuca do~pokrycia $C$
+\emph{oba} jej końce i~usuwa z~$F$ wszystkie krawędzie incydentne z~$u$ lub $v$.
+Krawędzie wybrane (skojarzenie $B$) na~\textcolor{accentB}{pomarańczowo}, usuwane
+wraz z~nimi --- szaro, wierzchołki dokładane do~$C$ --- niebiesko.
+
+% Lokalne style i makra (sufiks B, by nie kolidować z instancją 1).
+\tikzset{
+	vcnodeB/.style={circle, draw, minimum size=0.55cm, inner sep=1pt, font=\small},
+	covB/.style={fill=accent!25},
+	selB/.style={accentB, line width=1.2pt},
+	goneB/.style={gray!45, dashed},
+}
+% #1..#7: style wierzchołków a,b,c,d,e,f,g
+\newcommand{\vcnodesB}[7]{%
+	\node[vcnodeB,#1] (a) at (0,2)    {$a$};
+	\node[vcnodeB,#2] (b) at (1.5,2)  {$b$};
+	\node[vcnodeB,#3] (c) at (3,2)    {$c$};
+	\node[vcnodeB,#4] (d) at (4.5,2)  {$d$};
+	\node[vcnodeB,#5] (e) at (0.75,0) {$e$};
+	\node[vcnodeB,#6] (f) at (2.25,0) {$f$};
+	\node[vcnodeB,#7] (g) at (3.75,0) {$g$};
+}
+% Makro może mieć najwyżej 9 parametrów (#10 = #1 + "0"), więc dzielimy na dwa.
+% \vcedgesBa: ab,bc,cd,ae,be   \vcedgesBb: bf,cf,cg,dg,ef
+\newcommand{\vcedgesBa}[5]{%
+	\draw[#1] (a)--(b); \draw[#2] (b)--(c); \draw[#3] (c)--(d); \draw[#4] (a)--(e);
+	\draw[#5] (b)--(e);}
+\newcommand{\vcedgesBb}[5]{%
+	\draw[#1] (b)--(f); \draw[#2] (c)--(f); \draw[#3] (c)--(g); \draw[#4] (d)--(g);
+	\draw[#5] (e)--(f);}
+\newcommand{\vcpanelB}[1]{%
+	\begin{tikzpicture}[scale=0.55, baseline=(current bounding box.center)]#1\end{tikzpicture}}
+\newcommand{\vclabelB}[1]{\node[font=\footnotesize] at (2.25,-0.9) {#1};}
+
+\begin{dygresja}
+	Przebieg pętli ($F$ -- niepokryte krawędzie, $B$ -- wybierane krawędzie):
+	\begin{enumerate}[nosep]
+		\item $F = \{ab, ae, bc, be, bf, cd, cf, cg, dg, ef\}$. Wybór $ab$; usuwamy
+		      $ab, ae, bc, be, bf$ (incydentne z~$a$ lub $b$).
+		\item $F = \{cd, cf, cg, dg, ef\}$. Wybór $cd$; usuwamy $cd, cf, cg, dg$
+		      (incydentne z~$c$ lub $d$).
+		\item $F = \{ef\}$. Wybór $ef$; usuwamy $ef$ --- $F = \emptyset$.
+	\end{enumerate}
+\end{dygresja}
+
+\begin{azfigure}
+	\centering
+	\vcpanelB{\vcnodesB{}{}{}{}{}{}{}\vcedgesBa{}{}{}{}{}\vcedgesBb{}{}{}{}{}\vclabelB{start}}%
+	\;$\rightarrow$\;%
+	\vcpanelB{\vcnodesB{covB}{covB}{}{}{}{}{}\vcedgesBa{selB}{goneB}{}{goneB}{goneB}\vcedgesBb{goneB}{}{}{}{}\vclabelB{wybór $ab$}}%
+	\;$\rightarrow$\;%
+	\vcpanelB{\vcnodesB{covB}{covB}{covB}{covB}{}{}{}\vcedgesBa{selB}{goneB}{selB}{goneB}{goneB}\vcedgesBb{goneB}{goneB}{goneB}{goneB}{}\vclabelB{wybór $cd$}}%
+	\;$\rightarrow$\;%
+	\vcpanelB{\vcnodesB{covB}{covB}{covB}{covB}{covB}{covB}{}\vcedgesBa{selB}{goneB}{selB}{goneB}{goneB}\vcedgesBb{goneB}{goneB}{goneB}{goneB}{selB}\vclabelB{wybór $ef$}}
+\end{azfigure}
+
+\paragraph{Wynik.}
+Algorytm dokłada oba końce trzech wybranych krawędzi $B = \{ab, cd, ef\}$,
+zwracając pokrycie
+\[
+	\boxed{C = \{a,\ b,\ c,\ d,\ e,\ f\}}
+\]
+o~liczności $|C| = 2|B| = 6$ (wierzchołek $g$ nie wszedł). Optymalne pokrycie ma
+rozmiar $4$, np.\ $C^* = \{b, c, d, e\}$: każda krawędź ma koniec w~$b$, $c$, $d$
+lub~$e$. Iloraz $|C| / |C^*| = 6/4 = 1{,}5 \leq 2$, zgodnie z~gwarancją
+aproksymacji \textsc{AVC}.

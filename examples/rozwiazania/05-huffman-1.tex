@@ -1,0 +1,130 @@
+% ── Rozwiązanie: Huffman -- instancja 1 ──────────────────────────
+\subsection{Algorytm Huffmana -- instancja 1}
+
+Dane: $C = \{a, b, c, d, e, f\}$ z~częstościami
+$f(a) = 45,\ f(b) = 13,\ f(c) = 12,\ f(d) = 16,\ f(e) = 9,\ f(f) = 5$.
+Algorytm Huffmana buduje drzewo \emph{od dołu}: w~każdej z~$n - 1 = 5$ iteracji
+wyjmuje z~kolejki dwa korzenie o~\emph{najmniejszej} częstości, łączy je nowym
+wierzchołkiem $z$ o~częstości $f(z) = f(x) + f(y)$ (mniejszy jako lewe dziecko)
+i~wkłada $z$ z~powrotem. Krawędź do lewego dziecka etykietujemy $0$, do~prawego $1$.
+
+% Styl drzew jak w wykładzie (lect07): okrągłe, jednakowe węzły z etykietą "a,45".
+\tikzset{
+	htree/.style={
+			level distance=0.95cm,
+			level 1/.style={sibling distance=4cm},
+			level 2/.style={sibling distance=2.5cm},
+			level 3/.style={sibling distance=1.5cm},
+			level 4/.style={sibling distance=1.0cm},
+			every node/.style={circle, draw, minimum size=0.7cm, inner sep=0pt, font=\footnotesize, align=center},
+			elabel left/.style={draw=none, font=\scriptsize, inner sep=1pt, midway, sloped, above},
+			elabel right/.style={draw=none, font=\scriptsize, inner sep=1pt, midway, sloped, above},
+		}
+}
+\newcommand{\huffstep}[2]{%
+	\noindent
+	\begin{minipage}[t]{0.34\textwidth}\vspace{0pt}\raggedright #1\end{minipage}%
+	\hfill
+	\begin{minipage}[t]{0.62\textwidth}\vspace{0pt}\centering#2\end{minipage}%
+	\par\vspace{2em}%
+}
+
+\huffstep{%
+	\textbf{1.} Łączymy $f$ i~$e$. \\
+	Zostają: $(c, 12), (b, 13), (14), (d, 16), (a, 45)$.
+}{%
+	\begin{tikzpicture}[htree]
+		\node {14}
+		child { node {f,5} }
+		child { node {e,9} };
+	\end{tikzpicture}
+}
+
+\huffstep{%
+	\textbf{2.} Łączymy $c$ i~$b$. \\
+	Zostają: $(14), (d, 16), (25), (a, 45)$.
+}{%
+	\begin{tikzpicture}[htree]
+		\node {25}
+		child { node {c,12} }
+		child { node {b,13} };
+	\end{tikzpicture}
+}
+
+\huffstep{%
+	\textbf{3.} Łączymy $14$ i~$d$. \\
+	Zostają: $(25), (30), (a, 45)$.
+}{%
+	\begin{tikzpicture}[htree]
+		\node {30}
+		child { node {14}
+				child { node {f,5} }
+				child { node {e,9} }
+			}
+		child { node {d,16} };
+	\end{tikzpicture}
+}
+
+\huffstep{%
+	\textbf{4.} Łączymy $25$ i~$30$. \\
+	Zostają: $(a, 45), (55)$.
+}{%
+	\begin{tikzpicture}[htree]
+		\node {55}
+		child { node {25}
+				child { node {c,12} }
+				child { node {b,13} }
+			}
+		child { node {30}
+				child { node {14}
+						child { node {f,5} }
+						child { node {e,9} }
+					}
+				child { node {d,16} }
+			};
+	\end{tikzpicture}
+}
+
+\huffstep{%
+	\textbf{5.} Łączymy $a$ i~$55$. \\
+	(ostateczne drzewo kodów)
+}{%
+	\begin{tikzpicture}[htree]
+		\node {100}
+		child { node {a,45} edge from parent node[elabel left] {0} }
+		child { node {55}
+				child { node {25}
+						child { node {c,12} edge from parent node[elabel left] {0} }
+						child { node {b,13} edge from parent node[elabel right] {1} }
+						edge from parent node[elabel left] {0}
+					}
+				child { node {30}
+						child { node {14}
+								child { node {f,5} edge from parent node[elabel left] {0} }
+								child { node {e,9} edge from parent node[elabel right] {1} }
+								edge from parent node[elabel left] {0}
+							}
+						child { node {d,16} edge from parent node[elabel right] {1} }
+						edge from parent node[elabel right] {1}
+					}
+				edge from parent node[elabel right] {1}
+			};
+	\end{tikzpicture}
+}
+
+Odczytany kod z~drzewa w~kroku 5:
+\begin{flalign*}
+	a & \implies 0    &  & \\
+	c & \implies 100  &  & \\
+	b & \implies 101  &  & \\
+	d & \implies 111  &  & \\
+	f & \implies 1100 &  & \\
+	e & \implies 1101 &  &
+\end{flalign*}
+
+\paragraph{Liczba bitów.}
+Długość zakodowanego pliku to $B(T) = \sum_{c \in C} f(c)\, d_T(c)$:
+\[
+	\boxed{B(T) = 45\cdot 1 + 12\cdot 3 + 13\cdot 3 + 16\cdot 3 + 5\cdot 4 + 9\cdot 4 = 224 \text{ bitów}}
+\]
+(wobec $58 \cdot 3 = 300$ bitów przy kodzie stałej długości po $3$ bity na znak).

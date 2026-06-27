@@ -1,0 +1,46 @@
+% ── Rozwiązanie: Greedy Set Cover -- instancja 2 ─────────────────
+\subsection{Greedy Set Cover -- instancja 2}
+
+Dane: $X = \{1, \ldots, 9\}$ oraz $\mathcal{F} = \{S_1, \ldots, S_5\}$.
+Algorytm \textsc{GSC} w~każdej iteracji dokłada do~$\mathcal{C}$ zbiór
+maksymalizujący $|S \cap U|$ (remisy na korzyść mniejszego indeksu) i~odejmuje
+$U \Assign U \setminus S$. Zbiory wybrane wyróżniono na~\textcolor{accentB}{pomarańczowo}.
+
+\begin{aztable}
+	\centering
+	\renewcommand{\arraystretch}{1.2}
+	\begin{NiceTabular}{c|l|c}[margin,hvlines]
+		$S$                  & elementy                & $|S|$ \\
+		\hline
+		\color{accentB}$S_1$ & \color{accentB}$\{1,2,3,4,5\}$ & \color{accentB}5 \\
+		\color{accentB}$S_2$ & \color{accentB}$\{6,7,8,9\}$   & \color{accentB}4 \\
+		$S_3$                & $\{1,4,7\}$             & 3 \\
+		$S_4$                & $\{2,5,8\}$             & 3 \\
+		$S_5$                & $\{3,6,9\}$             & 3
+	\end{NiceTabular}
+\end{aztable}
+
+\begin{dygresja}
+	W~każdym wierszu po~lewej bieżący zbiór niepokrytych $U$, a~po~prawej
+	rozważane przecięcia $|S \cap U|$ (pogrubiony zwycięzca):
+	\begin{enumerate}[nosep]
+		\item $U = \{1,\ldots,9\}$:\quad
+		      $|S_1 \cap U| = \mathbf{5}$, $|S_2 \cap U| = 4$,
+		      $|S_3 \cap U| = |S_4 \cap U| = |S_5 \cap U| = 3$
+		      \hfill wybór $S_1$
+		\item $U = \{6,7,8,9\}$:\quad
+		      $|S_2 \cap U| = \mathbf{4}$, $|S_5 \cap U| = 2$,
+		      $|S_3 \cap U| = |S_4 \cap U| = 1$
+		      \hfill wybór $S_2$
+	\end{enumerate}
+	Po~drugiej iteracji $U = \emptyset$, pętla się kończy.
+\end{dygresja}
+
+\paragraph{Wynik.}
+Algorytm zachłanny zwraca pokrycie
+\[
+	\boxed{\mathcal{C} = \{S_1,\ S_2\}}
+\]
+o~rozmiarze $2$. Ponieważ $S_1 \cup S_2 = X$, a~żaden pojedynczy zbiór nie pokrywa
+całego $X$, jest to zarazem pokrycie optymalne ($|\mathcal{C}^*| = 2$) --- tutaj
+zachłanność trafia w~optimum.

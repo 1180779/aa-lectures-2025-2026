@@ -1,0 +1,69 @@
+% ── Rozwiązanie: Approx Vertex Cover -- instancja 1 ──────────────
+\subsection{Approx Vertex Cover -- instancja 1}
+
+Algorytm \textsc{AVC} startuje z~$F = E(G)$ i~dopóki zostają niepokryte
+krawędzie, wybiera dowolną krawędź $uv \in F$, dorzuca do~pokrycia $C$
+\emph{oba} jej końce, a~następnie usuwa z~$F$ wszystkie krawędzie incydentne
+z~$u$ lub $v$. Wybór krawędzi jest dowolny --- przyjmijmy kolejność
+leksykograficzną najmniejszej pozostałej krawędzi. Krawędzie wybrane
+(skojarzenie $B$) zaznaczono na~\textcolor{accentB}{pomarańczowo}, krawędzie
+usuwane z~$F$ wraz z~nimi --- szaro, a~wierzchołki dokładane do~$C$ --- na
+niebiesko.
+
+% Lokalne style i makra do rysowania kolejnych kroków AVC na grafie instancji.
+\tikzset{
+	vcnode/.style={circle, draw, minimum size=0.55cm, inner sep=1pt, font=\small},
+	cov/.style={fill=accent!25},
+	sel/.style={accentB, line width=1.2pt},
+	gone/.style={gray!45, dashed},
+}
+% #1..#6: dodatkowe style wierzchołków a,b,c,d,e,f (cov albo puste)
+\newcommand{\vcnodes}[6]{%
+	\node[vcnode,#1] (a) at (0,2) {$a$};
+	\node[vcnode,#2] (b) at (2,2) {$b$};
+	\node[vcnode,#3] (c) at (4,2) {$c$};
+	\node[vcnode,#4] (d) at (0,0) {$d$};
+	\node[vcnode,#5] (e) at (2,0) {$e$};
+	\node[vcnode,#6] (f) at (4,0) {$f$};
+}
+% #1..#8: style krawędzi ab,bc,ad,be,cf,de,ef,bd (sel/gone albo puste = nadal w F)
+\newcommand{\vcedges}[8]{%
+	\draw[#1] (a)--(b); \draw[#2] (b)--(c); \draw[#3] (a)--(d);
+	\draw[#4] (b)--(e); \draw[#5] (c)--(f); \draw[#6] (d)--(e);
+	\draw[#7] (e)--(f); \draw[#8] (b)--(d);
+}
+\newcommand{\vcpanel}[1]{%
+	\begin{tikzpicture}[scale=0.6, baseline=(current bounding box.center)]#1\end{tikzpicture}}
+\newcommand{\vclabel}[1]{\node[font=\footnotesize] at (2,-0.9) {#1};}
+
+\begin{dygresja}
+	Przebieg pętli ($F$ -- niepokryte krawędzie, $B$ -- wybierane krawędzie):
+	\begin{enumerate}[nosep]
+		\item $F = \{ab, ad, bc, bd, be, cf, de, ef\}$. Wybór $ab$; usuwamy
+		      $ab, ad, bc, bd, be$ (incydentne z~$a$ lub $b$).
+		\item $F = \{cf, de, ef\}$. Wybór $cf$; usuwamy $cf, ef$ (incydentne z~$f$).
+		\item $F = \{de\}$. Wybór $de$; usuwamy $de$ --- $F = \emptyset$.
+	\end{enumerate}
+\end{dygresja}
+
+\begin{azfigure}
+	\centering
+	\vcpanel{\vcnodes{}{}{}{}{}{}\vcedges{}{}{}{}{}{}{}{}\vclabel{start}}%
+	\;$\rightarrow$\;%
+	\vcpanel{\vcnodes{cov}{cov}{}{}{}{}\vcedges{sel}{gone}{gone}{gone}{}{}{}{gone}\vclabel{wybór $ab$}}%
+	\;$\rightarrow$\;%
+	\vcpanel{\vcnodes{cov}{cov}{cov}{}{}{cov}\vcedges{sel}{gone}{gone}{gone}{sel}{}{gone}{gone}\vclabel{wybór $cf$}}%
+	\;$\rightarrow$\;%
+	\vcpanel{\vcnodes{cov}{cov}{cov}{cov}{cov}{cov}\vcedges{sel}{gone}{gone}{gone}{sel}{sel}{gone}{gone}\vclabel{wybór $de$}}
+\end{azfigure}
+
+\paragraph{Wynik.}
+Algorytm dokłada oba końce trzech wybranych krawędzi $B = \{ab, cf, de\}$,
+zwracając pokrycie
+\[
+	\boxed{C = \{a,\ b,\ c,\ d,\ e,\ f\}}
+\]
+o~liczności $|C| = 2|B| = 6$ --- czyli wszystkie wierzchołki grafu. Optymalne
+pokrycie ma rozmiar $3$, np.\ $C^* = \{b, d, f\}$ (każda krawędź ma koniec
+w~$b$, $d$ lub $f$). Ta instancja realizuje więc najgorszy przypadek: stosunek
+$|C| / |C^*| = 2$, dokładnie gwarancja aproksymacji \textsc{AVC}.

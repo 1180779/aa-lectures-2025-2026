@@ -1,0 +1,97 @@
+% ── Rozwiązanie: Maximum Matching -- instancja 1 ─────────────────
+\subsection{Maximum Matching -- instancja 1}
+
+Graf dwudzielny $G = (V_1, V_2; E)$ z~$V_1 = \{a, b, c, d\}$, $V_2 = \{p, q, r, s\}$
+oraz krawędziami $ap, aq, bp, br, cq, cr, cs, ds$. Algorytm \textsc{MM} startuje
+z~$M = \emptyset$ i~dopóki \textsc{APS} zwraca ścieżkę powiększającą $P$,
+podmienia $M \Assign M \div E(P)$ (różnica symetryczna -- krawędzie wolne na
+$P$ wchodzą do~$M$, skojarzone wychodzą). \textsc{APS} szuka ścieżki w~grafie
+skierowanym $G_M$ (krawędzie wolne kierowane $V_1 \to V_2$, skojarzone
+$V_2 \to V_1$) z~wierzchołka wolnego w~$V_1$ do~wolnego w~$V_2$; przyjmujemy
+przeszukiwanie w~głąb, odwiedzając sąsiadów alfabetycznie. Na~rysunkach
+pierścień otacza wierzchołki \emph{wolne}, a~strzałki pokazują orientację
+krawędzi w~$G_M$ (skojarzone w~górę, do~$V_1$; wolne w~dół, do~$V_2$).
+Każdy wiersz pokazuje $G_M$ ze~znalezioną ścieżką powiększającą
+(\textcolor{path}{na~różowo}, różowy pierścień to~wierzchołek startowy),
+a~po~strzałce $\Rightarrow$ --- wynikowe skojarzenie $M$
+(\textcolor{accentB}{na~pomarańczowo}).
+
+% Lokalne makra do rysowania grafu instancji z~zaznaczonym skojarzeniem.
+\tikzset{
+	mmnode/.style={circle, fill=black, inner sep=1.5pt},
+	sel/.style={accentB, line width=1.4pt, <-},  % skojarzona: strzałka V_2->V_1 (w górę)
+	augF/.style={path, line width=1.4pt},        % na ścieżce, wolna (w dół, domyślne ->)
+	augM/.style={path, line width=1.4pt, <-},    % na ścieżce, skojarzona (w górę)
+}
+% Strzałki w G_M: krawędź wolna ->, skojarzona przejmuje <- ze stylu sel.
+% Pierścień wokół wierzchołków wolnych (lista w #1, pusta dozwolona).
+\newcommand{\mmfreeR}[1]{\ifx\relax#1\relax\else
+	\foreach \n in {#1} {\draw[black] (\n) circle (3.5pt);}\fi}
+% #1..#8: style krawędzi ap,aq,bp,br,cq,cr,cs,ds (sel albo puste)
+\newcommand{\mmedges}[8]{%
+	\foreach \x/\n in {0/a, 1/b, 2/c, 3/d} {\node[mmnode, label=above:$\n$] (\n) at (\x,1) {};}
+	\foreach \x/\n in {0/p, 1/q, 2/r, 3/s} {\node[mmnode, label=below:$\n$] (\n) at (\x,0) {};}
+	\draw[->,#1] (a)--(p); \draw[->,#2] (a)--(q); \draw[->,#3] (b)--(p); \draw[->,#4] (b)--(r);
+	\draw[->,#5] (c)--(q); \draw[->,#6] (c)--(r); \draw[->,#7] (c)--(s); \draw[->,#8] (d)--(s);}
+% #1: style krawędzi, #2: etykieta, #3: lista wolnych, #4: początek ścieżki (pierścień różowy, pusty dozwolony)
+\newcommand{\mmpanel}[4]{%
+	\begin{tikzpicture}[x=0.8cm, y=0.9cm, scale=0.78, >=stealth, baseline=(current bounding box.center)]
+		\mmedges#1\mmfreeR{#3}%
+		\ifx\relax#4\relax\else\draw[path, line width=1.4pt] (#4) circle (3.5pt);\fi
+		\node[font=\footnotesize] at (1.5,-0.95) {#2};\end{tikzpicture}}
+
+\begin{dygresja}
+	Przebieg pętli (ścieżki powiększające na~\textcolor{path}{różowo},
+	krawędzie w~skojarzeniu na~\textcolor{accentB}{pomarańczowo}):
+	\begin{enumerate}[nosep]
+		\item $M = \emptyset$, wszystkie wierzchołki wolne. \textsc{APS} z~$a$
+		      znajduje wolną krawędź $P_1 = a\,p$.
+		      \hfill $M = \{ap\}$
+		\item Wolne: $b, c, d$ oraz $q, r, s$. W~$G_M$ z~$b$: krawędź wolna
+		      $b\!\to\!p$, dalej skojarzona $p\!\to\!a$, wolna $a\!\to\!q$ ($q$
+		      wolne). Ścieżka powiększająca $P_2 = b\,p\,a\,q$ (zamiana: $ap$
+		      wychodzi, $bp, aq$ wchodzą).
+		      \hfill $M = \{aq, bp\}$
+		\item Wolne: $c, d$ oraz $r, s$. Z~$c$: $c\!\to\!q$, $q\!\to\!a$,
+		      $a\!\to\!p$, $p\!\to\!b$, $b\!\to\!r$ ($r$ wolne). Ścieżka
+		      $P_3 = c\,q\,a\,p\,b\,r$ ($aq, bp$ wychodzą, $cq, ap, br$ wchodzą).
+		      \hfill $M = \{ap, br, cq\}$
+		\item Wolne: $d$ oraz $s$. Jedyna krawędź $d$ to wolna $d\,s$:
+		      $P_4 = d\,s$.
+		      \hfill $M = \{ap, br, cq, ds\}$
+		\item Brak wolnych wierzchołków w~$V_1$ -- \textsc{APS} zwraca NULL,
+		      pętla się kończy.
+	\end{enumerate}
+\end{dygresja}
+
+% Każdy wiersz: G_M ze ścieżką powiększającą (\textcolor{path}{na różowo}, pierścień
+% startowy też różowy) -> wynikowe M. Kolumny w tblr wyrównują rysunki w pionie.
+\begin{azfigure}
+	\centering
+	\begin{tblr}{colspec={ccc}, rowsep=10pt, colsep=6pt}
+		\mmpanel{{augF}{}{}{}{}{}{}{}}{$P_1 = a\,p$}{a,b,c,d,p,q,r,s}{a}
+		& $\Rightarrow$ &
+		\mmpanel{{sel}{}{}{}{}{}{}{}}{$M = \{ap\}$}{b,c,d,q,r,s}{} \\
+		\mmpanel{{augM}{augF}{augF}{}{}{}{}{}}{$P_2 = b\,p\,a\,q$}{b,c,d,q,r,s}{b}
+		& $\Rightarrow$ &
+		\mmpanel{{}{sel}{sel}{}{}{}{}{}}{$M = \{aq, bp\}$}{c,d,r,s}{} \\
+		\mmpanel{{augF}{augM}{augM}{augF}{augF}{}{}{}}{$P_3 = c\,q\,a\,p\,b\,r$}{c,d,r,s}{c}
+		& $\Rightarrow$ &
+		\mmpanel{{sel}{}{}{sel}{sel}{}{}{}}{$M = \{ap, br, cq\}$}{d,s}{} \\
+		\mmpanel{{sel}{}{}{sel}{sel}{}{}{augF}}{$P_4 = d\,s$}{d,s}{d}
+		& $\Rightarrow$ &
+		\mmpanel{{sel}{}{}{sel}{sel}{}{}{sel}}{$M = \{ap, br, cq, ds\}$}{}{} \\
+	\end{tblr}
+\end{azfigure}
+
+\paragraph{Wynik.}
+Algorytm zwraca skojarzenie
+\[
+	\boxed{M = \{ap,\ br,\ cq,\ ds\}}
+\]
+o~liczności $|M| = 4$. Jest ono \emph{doskonałe} -- każdy wierzchołek jest
+skojarzony -- więc i~najliczniejsze (większe niż $|V_1| = 4$ być nie może).
+Dwie środkowe iteracje pokazują istotę metody: zachłanne krawędzie $ap$, a~potem
+$aq, bp$ blokowałyby kolejne wierzchołki, ale ścieżki powiększające $P_2$ i~$P_3$
+przekładają skojarzenie wzdłuż naprzemiennych krawędzi i~za~każdym razem
+zwiększają $|M|$ o~$1$.

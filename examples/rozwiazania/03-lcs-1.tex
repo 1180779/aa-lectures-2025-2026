@@ -1,0 +1,88 @@
+% ── Rozwiązanie: LCS -- instancja 1 ───────────────────────────────
+\subsection{Najdłuższy wspólny podciąg (LCS) -- instancja 1}
+
+Dane: $X = (A,\ B,\ C,\ B,\ D,\ A,\ B)$, $Y = (B,\ D,\ C,\ A,\ B,\ A)$, czyli
+$m = 7$, $n = 6$. Tablicę kosztów $c$ wypełniamy wierszami, korzystając z~reguły
+\[
+	c(i, j) = \begin{cases}
+		          0                               & \text{jeśli } i = 0 \text{ lub } j = 0,         \\
+		          c(i - 1, j - 1) + 1             & \text{jeśli } i, j > 0 \text{ i } x_i = y_j,    \\
+		          \max\{c(i - 1, j),\ c(i, j - 1)\} & \text{jeśli } i, j > 0 \text{ i } x_i \neq y_j,
+	          \end{cases}
+\]
+a~równolegle zapisujemy w~tablicy $b$ kierunek, z~którego wzięliśmy wartość
+($\nwarrow$ -- dopasowanie, $\uparrow$ -- góra, $\leftarrow$ -- lewo; remisy na
+korzyść góry). Komórki wchodzące do wybranego LCS wyróżniono na
+\textcolor{accentB}{pomarańczowo}.
+
+\begin{aztable}
+	\centering
+	\renewcommand{\arraystretch}{1.2}
+	\begin{minipage}{0.48\linewidth}
+		\centering
+		Tablica kosztów $c$: \\[0.5em]
+		\begin{NiceTabular}{cc|c|cccccc}[margin,hvlines]
+			    & $j$   & 0     & 1   & 2   & 3   & 4   & 5   & 6   \\
+			$i$ &       & $y_j$ & $B$ & $D$ & $C$ & $A$ & $B$ & $A$ \\
+			\hline
+			0   & $x_i$ & 0     & 0   & 0   & 0   & 0   & 0   & 0   \\
+			1   & $A$   & 0     & 0   & 0   & 0   & 1   & 1   & 1   \\
+			2   & $B$   & 0     & \color{accentB}1 & 1 & 1 & 1 & 2 & 2 \\
+			3   & $C$   & 0     & 1   & 1   & \color{accentB}2 & 2 & 2 & 2 \\
+			4   & $B$   & 0     & 1   & 1   & 2   & 2   & \color{accentB}3 & 3 \\
+			5   & $D$   & 0     & 1   & 2   & 2   & 2   & 3   & 3   \\
+			6   & $A$   & 0     & 1   & 2   & 2   & 3   & 3   & \color{accentB}4 \\
+			7   & $B$   & 0     & 1   & 2   & 2   & 3   & 4   & 4   \\
+		\end{NiceTabular}
+	\end{minipage}\hfill
+	\begin{minipage}{0.48\linewidth}
+		\centering
+		Tablica strzałek $b$: \\[0.5em]
+		\begin{NiceTabular}{cc|c|cccccc}[margin,hvlines]
+			    & $j$   & 0     & 1          & 2            & 3            & 4            & 5            & 6            \\
+			$i$ &       & $y_j$ & $B$        & $D$          & $C$          & $A$          & $B$          & $A$          \\
+			\hline
+			0   & $x_i$ &       &            &              &              &              &              &              \\
+			1   & $A$   &       & $\uparrow$ & $\uparrow$   & $\uparrow$   & $\nwarrow$   & $\leftarrow$ & $\nwarrow$   \\
+			2   & $B$   &       & \color{accentB}$\nwarrow$ & $\leftarrow$ & $\leftarrow$ & $\uparrow$   & $\nwarrow$   & $\leftarrow$ \\
+			3   & $C$   &       & $\uparrow$ & $\uparrow$   & \color{accentB}$\nwarrow$ & $\leftarrow$ & $\uparrow$   & $\uparrow$   \\
+			4   & $B$   &       & $\nwarrow$ & $\uparrow$   & $\uparrow$   & $\uparrow$   & \color{accentB}$\nwarrow$ & $\leftarrow$ \\
+			5   & $D$   &       & $\uparrow$ & $\nwarrow$   & $\uparrow$   & $\uparrow$   & $\uparrow$   & $\uparrow$   \\
+			6   & $A$   &       & $\uparrow$ & $\uparrow$   & $\uparrow$   & $\nwarrow$   & $\uparrow$   & \color{accentB}$\nwarrow$ \\
+			7   & $B$   &       & $\nwarrow$ & $\uparrow$   & $\uparrow$   & $\uparrow$   & $\nwarrow$   & $\uparrow$   \\
+		\end{NiceTabular}
+	\end{minipage}
+\end{aztable}
+
+\begin{dygresja}
+	Po jednej komórce na każdą gałąź reguły (pozostałe $42$ liczymy analogicznie),
+	$X = (x_1, \dots, x_7)$, $Y = (y_1, \dots, y_6)$:
+	\begin{itemize}
+		\item \textbf{Dopasowanie} ($\nwarrow$): $c(2, 1)$, $x_2 = B = y_1$, więc
+		      $c(2, 1) = c(1, 0) + 1 = 1$.
+		\item \textbf{Góra} ($\uparrow$): $c(3, 1)$, $x_3 = C \neq B = y_1$; sąsiedzi
+		      $c(2, 1) = 1 \geq c(3, 0) = 0$, więc $c(3, 1) = 1$.
+		\item \textbf{Lewo} ($\leftarrow$): $c(2, 2)$, $x_2 = B \neq D = y_2$; sąsiedzi
+		      $c(1, 2) = 0 < c(2, 1) = 1$, więc $c(2, 2) = 1$.
+		\item \textbf{Remis}: $c(1, 1)$, $A \neq B$, $c(0, 1) = c(1, 0) = 0$ -- warunek
+		      $\geq$ spełniony, więc $\uparrow$.
+	\end{itemize}
+\end{dygresja}
+
+\paragraph{Odtworzenie podciągu.}
+Startujemy z~$(m, n) = (7, 6)$ i~idziemy za strzałkami $b$ aż do brzegu; przy
+$\nwarrow$ schodzimy po~przekątnej, dopisując $x_i$ do~LCS:
+\[
+	\begin{aligned}
+		(7, 6) & \xrightarrow{\uparrow} (6, 6) \xrightarrow{\nwarrow} (5, 5) \;[\,x_6 = A\,]
+		\xrightarrow{\uparrow} (4, 5) \xrightarrow{\nwarrow} (3, 4) \;[\,x_4 = B\,] \\
+		       & \xrightarrow{\leftarrow} (3, 3) \xrightarrow{\nwarrow} (2, 2) \;[\,x_3 = C\,]
+		\xrightarrow{\leftarrow} (2, 1) \xrightarrow{\nwarrow} (1, 0) \;[\,x_2 = B\,].
+	\end{aligned}
+\]
+Znaki dopisywane są \emph{po} powrocie z~rekurencji, więc w~kolejności od
+najgłębszego: $B, C, B, A$. Stąd najdłuższy wspólny podciąg
+\[
+	\boxed{\text{LCS}(X, Y) = (B,\ C,\ B,\ A)}
+\]
+o~długości $c(7, 6) = 4$. (Nie jest jedyny -- np. $(B, D, A, B)$ też ma długość~$4$.)

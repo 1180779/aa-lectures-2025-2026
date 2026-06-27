@@ -1,0 +1,206 @@
+% ── Rozwiązanie: Matrix-Chain-Order -- instancja 2 ────────────────
+\subsection{Matrix-Chain-Order -- instancja 2}
+
+Dane: $n=5$, $p=(10,\ 3,\ 12,\ 5,\ 50,\ 6)$, czyli
+\[
+	A_1\ (10\times 3),\quad A_2\ (3\times 12),\quad A_3\ (12\times 5),\quad
+	A_4\ (5\times 50),\quad A_5\ (50\times 6).
+\]
+Wypełniamy tablice $m$ i~$s$ \emph{przekątnymi} po~rosnącej długości podciągu
+$L$; w~każdym kroku dopisane komórki wyróżniono na
+\textcolor{accentB}{pomarańczowo}, a~$\times$ to pola nieużywane. Skrót:
+$A_i=p_{i-1}\times p_i$.
+
+\medskip
+\noindent Stan początkowy ($L=1$, koszt $0$):\\[0.7em]
+\begin{minipage}{0.45\linewidth}
+	$m$
+	$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+			1 & 0 &  &  &  &  \\
+			2 & \times & 0 &  &  &  \\
+			3 & \times & \times & 0 &  &  \\
+			4 & \times & \times & \times & 0 &  \\
+			5 & \times & \times & \times & \times & 0
+		\end{bNiceArray}$
+\end{minipage}\hfill
+\begin{minipage}{0.45\linewidth}
+	$s$
+	$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+			1 & \times &  &  &  &  \\
+			2 & \times & \times &  &  &  \\
+			3 & \times & \times & \times &  &  \\
+			4 & \times & \times & \times & \times &  \\
+			5 & \times & \times & \times & \times & \times
+		\end{bNiceArray}$
+\end{minipage}
+
+\medskip
+\noindent{\color{placeholdercolor}\rule{\linewidth}{0.4pt}}\par\smallskip
+\noindent{\color{dygresjagray}\footnotesize$\begin{array}{c|*{6}{c}} i & 0 & 1 & 2 & 3 & 4 & 5 \\ \hline p_i & 10 & 3 & 12 & 5 & 50 & 6 \end{array}$\qquad $A_i = p_{i-1}\times p_i$}
+\begin{flalign*}
+	L=2: \quad & m(1, 2) = 10 \cdot 3 \cdot 12 = 360  &  & \\
+	           & m(2, 3) = 3 \cdot 12 \cdot 5 = 180   &  & \\
+	           & m(3, 4) = 12 \cdot 5 \cdot 50 = 3000 &  & \\
+	           & m(4, 5) = 5 \cdot 50 \cdot 6 = 1500  &  &
+\end{flalign*}
+
+\medskip
+\noindent po $L=2$:\\[0.7em]
+\begin{minipage}{0.45\linewidth}
+	$m$
+	$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+			1 & 0 & \color{accentB}360 &  &  &  \\
+			2 & \times & 0 & \color{accentB}180 &  &  \\
+			3 & \times & \times & 0 & \color{accentB}3000 &  \\
+			4 & \times & \times & \times & 0 & \color{accentB}1500 \\
+			5 & \times & \times & \times & \times & 0
+		\end{bNiceArray}$
+\end{minipage}\hfill
+\begin{minipage}{0.45\linewidth}
+	$s$
+	$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+			1 & \times & \color{accentB}1 &  &  &  \\
+			2 & \times & \times & \color{accentB}2 &  &  \\
+			3 & \times & \times & \times & \color{accentB}3 &  \\
+			4 & \times & \times & \times & \times & \color{accentB}4 \\
+			5 & \times & \times & \times & \times & \times
+		\end{bNiceArray}$
+\end{minipage}
+
+\medskip
+\noindent{\color{placeholdercolor}\rule{\linewidth}{0.4pt}}\par\smallskip
+\noindent{\color{dygresjagray}\footnotesize$\begin{array}{c|*{6}{c}} i & 0 & 1 & 2 & 3 & 4 & 5 \\ \hline p_i & 10 & 3 & 12 & 5 & 50 & 6 \end{array}$\qquad $A_i = p_{i-1}\times p_i$}
+\begin{flalign*}
+	L=3: \quad & m(1, 3) = \min \begin{cases}
+		                            m(1,1) + m(2,3) + 10 \cdot 3 \cdot 5 \\
+		                            m(1,2) + m(3,3) + 10 \cdot 12 \cdot 5
+	                            \end{cases} = \min \begin{cases} 0+180+150 \\ 360+0+600 \end{cases} = \min \begin{cases} 330 \\ 960 \end{cases} = 330 \\
+	           & m(2, 4) = \min \begin{cases}
+		                            m(2,2) + m(3,4) + 3 \cdot 12 \cdot 50 \\
+		                            m(2,3) + m(4,4) + 3 \cdot 5 \cdot 50
+	                            \end{cases} = \min \begin{cases} 0+3000+1800 \\ 180+0+750 \end{cases} = \min \begin{cases} 4800 \\ 930 \end{cases} = 930 \\
+	           & m(3, 5) = \min \begin{cases}
+		                            m(3,3) + m(4,5) + 12 \cdot 5 \cdot 6 \\
+		                            m(3,4) + m(5,5) + 12 \cdot 50 \cdot 6
+	                            \end{cases} = \min \begin{cases} 0+1500+360 \\ 3000+0+3600 \end{cases} = \min \begin{cases} 1860 \\ 6600 \end{cases} = 1860
+\end{flalign*}
+
+\medskip
+\noindent po $L=3$:\\[0.7em]
+\begin{minipage}{0.45\linewidth}
+	$m$
+	$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+			1 & 0 & 360 & \color{accentB}330 &  &  \\
+			2 & \times & 0 & 180 & \color{accentB}930 &  \\
+			3 & \times & \times & 0 & 3000 & \color{accentB}1860 \\
+			4 & \times & \times & \times & 0 & 1500 \\
+			5 & \times & \times & \times & \times & 0
+		\end{bNiceArray}$
+\end{minipage}\hfill
+\begin{minipage}{0.45\linewidth}
+	$s$
+	$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+			1 & \times & 1 & \color{accentB}1 &  &  \\
+			2 & \times & \times & 2 & \color{accentB}3 &  \\
+			3 & \times & \times & \times & 3 & \color{accentB}3 \\
+			4 & \times & \times & \times & \times & 4 \\
+			5 & \times & \times & \times & \times & \times
+		\end{bNiceArray}$
+\end{minipage}
+
+\medskip
+\noindent{\color{placeholdercolor}\rule{\linewidth}{0.4pt}}\par\smallskip
+\noindent{\color{dygresjagray}\footnotesize$\begin{array}{c|*{6}{c}} i & 0 & 1 & 2 & 3 & 4 & 5 \\ \hline p_i & 10 & 3 & 12 & 5 & 50 & 6 \end{array}$\qquad $A_i = p_{i-1}\times p_i$}
+\begin{flalign*}
+	L=4: \quad & m(1, 4) = \min \begin{cases}
+		                            m(1,1) + m(2,4) + 10 \cdot 3 \cdot 50 \\
+		                            m(1,2) + m(3,4) + 10 \cdot 12 \cdot 50 \\
+		                            m(1,3) + m(4,4) + 10 \cdot 5 \cdot 50
+	                            \end{cases} = \min \begin{cases} 0+930+1500 \\ 360+3000+6000 \\ 330+0+2500 \end{cases} = \min \begin{cases} 2430 \\ 9360 \\ 2830 \end{cases} = 2430 \\
+	           & m(2, 5) = \min \begin{cases}
+		                            m(2,2) + m(3,5) + 3 \cdot 12 \cdot 6 \\
+		                            m(2,3) + m(4,5) + 3 \cdot 5 \cdot 6 \\
+		                            m(2,4) + m(5,5) + 3 \cdot 50 \cdot 6
+	                            \end{cases} = \min \begin{cases} 0+1860+216 \\ 180+1500+90 \\ 930+0+900 \end{cases} = \min \begin{cases} 2076 \\ 1770 \\ 1830 \end{cases} = 1770
+\end{flalign*}
+
+\medskip
+\noindent po $L=4$:\\[0.7em]
+\begin{minipage}{0.45\linewidth}
+	$m$
+	$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+			1 & 0 & 360 & 330 & \color{accentB}2430 &  \\
+			2 & \times & 0 & 180 & 930 & \color{accentB}1770 \\
+			3 & \times & \times & 0 & 3000 & 1860 \\
+			4 & \times & \times & \times & 0 & 1500 \\
+			5 & \times & \times & \times & \times & 0
+		\end{bNiceArray}$
+\end{minipage}\hfill
+\begin{minipage}{0.45\linewidth}
+	$s$
+	$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+			1 & \times & 1 & 1 & \color{accentB}1 &  \\
+			2 & \times & \times & 2 & 3 & \color{accentB}3 \\
+			3 & \times & \times & \times & 3 & 3 \\
+			4 & \times & \times & \times & \times & 4 \\
+			5 & \times & \times & \times & \times & \times
+		\end{bNiceArray}$
+\end{minipage}
+
+\medskip
+\noindent{\color{placeholdercolor}\rule{\linewidth}{0.4pt}}\par\smallskip
+\noindent{\color{dygresjagray}\footnotesize$\begin{array}{c|*{6}{c}} i & 0 & 1 & 2 & 3 & 4 & 5 \\ \hline p_i & 10 & 3 & 12 & 5 & 50 & 6 \end{array}$\qquad $A_i = p_{i-1}\times p_i$}
+\begin{flalign*}
+	L=5: \quad & m(1, 5) = \min \begin{cases}
+		                            m(1,1) + m(2,5) + 10 \cdot 3 \cdot 6 \\
+		                            m(1,2) + m(3,5) + 10 \cdot 12 \cdot 6 \\
+		                            m(1,3) + m(4,5) + 10 \cdot 5 \cdot 6 \\
+		                            m(1,4) + m(5,5) + 10 \cdot 50 \cdot 6
+	                            \end{cases} = \min \begin{cases} 0+1770+180 \\ 360+1860+720 \\ 330+1500+300 \\ 2430+0+3000 \end{cases} = \min \begin{cases} 1950 \\ 2940 \\ 2130 \\ 5430 \end{cases} = 1950
+\end{flalign*}
+
+\medskip
+\noindent tablice końcowe:\\[0.7em]
+\begin{minipage}{0.45\linewidth}
+	$m$
+	$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+			1 & 0 & 360 & 330 & 2430 & \color{accentB}1950 \\
+			2 & \times & 0 & 180 & 930 & 1770 \\
+			3 & \times & \times & 0 & 3000 & 1860 \\
+			4 & \times & \times & \times & 0 & 1500 \\
+			5 & \times & \times & \times & \times & 0
+		\end{bNiceArray}$
+\end{minipage}\hfill
+\begin{minipage}{0.45\linewidth}
+	$s$
+	$\begin{bNiceArray}{c|ccccc}[margin,hvlines]
+			i \backslash j & 1 & 2 & 3 & 4 & 5 \\
+			1 & \times & 1 & 1 & 1 & \color{accentB}1 \\
+			2 & \times & \times & 2 & 3 & 3 \\
+			3 & \times & \times & \times & 3 & 3 \\
+			4 & \times & \times & \times & \times & 4 \\
+			5 & \times & \times & \times & \times & \times
+		\end{bNiceArray}$
+\end{minipage}
+
+\paragraph{Optymalne nawiasowanie.}
+Odtwarzamy je z~tablicy $s$:
+\[
+	s(1,5)=1 \Rightarrow (A_1)(A_2 A_3 A_4 A_5),\quad
+	s(2,5)=3 \Rightarrow (A_2 A_3)(A_4 A_5),\quad
+	s(2,3)=2,\ s(4,5)=4.
+\]
+Stąd optymalne nawiasowanie
+\[
+	\boxed{A_1\,\big((A_2\,A_3)\,(A_4\,A_5)\big)}
+\]
+o~minimalnym koszcie $m(1,5)=1950$ mnożeń skalarnych.

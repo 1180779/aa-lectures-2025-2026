@@ -131,6 +131,23 @@ Optymalne rozwiązanie problemu jest funkcją optymalnych rozwiązań podproblem
 			      \label{fig:closestpoints:split}
 		      \end{azfigure}
 
+		      \begin{remark}
+			      Prostą $l$ definiuje \emph{mediana współrzędnej~$x$} zbioru~$P$
+			      --- tak ją zadają Preparata i~Shamos (\textit{Computational
+			      Geometry: An Introduction}, \S5.4), za~którymi podąża też CLRS
+			      (\S33.4). Dla parzystego $|P|$ medianę bierzemy jako średnią
+			      dwóch środkowych wartości, $x_l = \frac{1}{2}\!\left(X\!\left(\tfrac{|P|}{2}\right).x
+			      + X\!\left(\tfrac{|P|}{2}+1\right).x\right)$, co daje
+			      $|P_L| = |P_R| = \tfrac{|P|}{2}$. Sam \emph{algorytm} nie wymaga
+			      jednak żadnej wyróżnionej wartości: istotny jest tylko podział
+			      na~$\lceil|P|/2\rceil$ i~$\lfloor|P|/2\rfloor$ punktów (dowolna prosta
+			      rozdzielająca posortowane połowy działa tak samo), a~przy~remisach
+			      na~$x$ rozstrzyga ograniczenie liczności, nie sama wartość~$x_l$.
+			      Pierwsze rozwiązanie problemu w~czasie $\BO(N \log N)$ podali Shamos
+			      i~Hoey (\textit{Closest-Point Problems}, 1975) inną metodą ---
+			      przez diagram Woronoja.
+		      \end{remark}
+
 		\item[\uemph{Zwyciężaj:}] Wywołujemy rekurencyjnie algorytm dla wejścia $P_L,\ X_L,\ Y_L$ i $P_R,\ X_R,\ Y_R$.
 		      Algorytm znajduje pary najbliższych punktów w $P_L$ i $P_R$. Niech $\delta_L$ i $\delta_R$ będą
 		      najmniejszymi odległościami znalezionymi przez algorytm dla odpowiednio $P_L$ i $P_R$.

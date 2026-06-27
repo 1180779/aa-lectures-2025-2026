@@ -1,0 +1,44 @@
+% ── Rozwiązanie: Zachłanny wybór zajęć -- instancja 2 ─────────────
+\subsection{Zachłanny wybór zajęć -- instancja 2}
+
+Dane ($n = 9$ zajęć). Tym razem nie są one posortowane po~czasie zakończenia:
+$t_2 = 5 > t_3 = 4$. Najpierw więc sortujemy rosnąco po~$t_i$ (miejscami zamieniają się
+$z_2$ i~$z_3$ oraz $z_4$ i~$z_5$):
+
+\begin{aztable}
+	\centering
+	\renewcommand{\arraystretch}{1.2}
+	\begin{NiceTabular}{c|ccccccccc}[margin,hvlines]
+		$i$   & \color{accentB}1 & 3 & 2 & \color{accentB}5 & 4 & \color{accentB}6 & 7 & \color{accentB}8 & 9  \\
+		\hline
+		$s_i$ & \color{accentB}0 & 1 & 2 & \color{accentB}4 & 6 & \color{accentB}8 & 7 & \color{accentB}9 & 11 \\
+		$t_i$ & \color{accentB}3 & 4 & 5 & \color{accentB}7 & 8 & \color{accentB}9 & 11& \color{accentB}12& 14
+	\end{NiceTabular}
+\end{aztable}
+
+Algorytm \textsc{GreedyActivitySelector} wybiera pierwsze zajęcie i~idzie dalej,
+dodając $z_i$ wtedy i~tylko wtedy, gdy $s_i \geq t_j$ dla ostatnio wybranego
+$z_j$. Wybrane zajęcia wyróżniono na~\textcolor{accentB}{pomarańczowo}.
+
+\begin{dygresja}
+	Przebieg pętli (kolejność po~sortowaniu: $z_1, z_3, z_2, z_5, z_4, z_6, z_7, z_8, z_9$;
+	początkowo $A = \{z_1\}$, $j = 1$, $t_j = 3$):
+	\begin{itemize}
+		\item $z_3$: $s_3 = 1 \geq t_j = 3$? \emph{nie} -- pomijamy.
+		\item $z_2$: $s_2 = 2 \geq 3$? \emph{nie} -- pomijamy.
+		\item $z_5$: $s_5 = 4 \geq 3$? \emph{tak} -- $A \cup \{z_5\}$, $j \Assign 5$, $t_j = 7$.
+		\item $z_4$: $s_4 = 6 \geq 7$? \emph{nie} -- pomijamy.
+		\item $z_6$: $s_6 = 8 \geq 7$? \emph{tak} -- $A \cup \{z_6\}$, $j \Assign 6$, $t_j = 9$.
+		\item $z_7$: $s_7 = 7 \geq 9$? \emph{nie} -- pomijamy.
+		\item $z_8$: $s_8 = 9 \geq 9$? \emph{tak} -- $A \cup \{z_8\}$, $j \Assign 8$, $t_j = 12$.
+		\item $z_9$: $s_9 = 11 \geq 12$? \emph{nie} -- pomijamy.
+	\end{itemize}
+\end{dygresja}
+
+\paragraph{Wynik.}
+Wybrane zajęcia są parami zgodne, bo ich przedziały
+$\langle 0, 3)$, $\langle 4, 7)$, $\langle 8, 9)$, $\langle 9, 12)$ są rozłączne:
+\[
+	\boxed{A = \{z_1,\ z_5,\ z_6,\ z_8\}}
+\]
+o~liczności $|A| = 4$.
