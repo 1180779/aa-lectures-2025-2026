@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# Build both versions of the notes from the single notes/ source, refresh the
-# versioned PDFs in the repo root, and clean up all build artefacts.
+# Build the notes (three variants) and the examples booklet from their single
+# sources and refresh the versioned PDFs in the repo root.
 #
 # Two PDFs are produced from one source by toggling the AZ_HIGHLIGHT environment
 # variable, which the preamble reads (via LuaTeX) to switch the obowiazkowy
@@ -11,20 +11,33 @@
 # AZ_SKIP=1 additionally drops the non-obligatory proofs entirely:
 #   AZ_HIGHLIGHT=1 AZ_SKIP=1 → AZ_lectures_exam     (quick-revision: essentials only)
 #
-# Usage:  ./build.sh [-v|--verbose] [VERSION]
+# Usage:  ./build.sh [-h|--help] [-v|--verbose] [--notes|--examples] [VERSION]
+#   -h, --help     print this usage and exit
 #   -v, --verbose  stream the full latexmk output (default: only show it
 #                  when a compile fails; warnings and hints are hidden)
+#   --notes        build only the notes (skip the examples booklet)
+#   --examples     build only the examples booklet (skip the notes)
 #   VERSION        tag for the output file names, e.g. v1.0.0
 #                  (default: latest git tag, or "dev" if there are none)
+#
+# Build artefacts from the last compile are left in place (cleaned at the
+# start of the next run), so editors / viewers keep working aux files around.
 #
 set -euo pipefail
 
 # ── parse arguments ──────────────────────────────────────────────
 VERBOSE=0
 VERSION=""
+TARGET=all   # all | notes | examples
+usage() {
+	sed -n '14,21p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+}
 for arg in "$@"; do
 	case "$arg" in
+		-h|--help)    usage; exit 0 ;;
 		-v|--verbose) VERBOSE=1 ;;
+		--notes)      TARGET=notes ;;
+		--examples)   TARGET=examples ;;
 		*)            VERSION="$arg" ;;
 	esac
 done
@@ -47,9 +60,21 @@ BUILDS=(
 	"AZ_lectures_exam:1:1"
 )
 
+# ── clean stale artefacts up front (last run's are kept until now) ──
+# latexmk -C removes auxiliary files *and* the generated PDFs (already copied
+# out and git-ignored). indent.log is left behind by latexindent.
+clean_dir() {
+	( cd "$1" && latexmk -C >/dev/null 2>&1 || true )
+	rm -f "$1/indent.log"
+}
+echo "==> Cleaning stale artefacts"
+if [ "$TARGET" != examples ]; then clean_dir notes; fi
+if [ "$TARGET" != notes ];    then clean_dir examples; fi
+
 # ── refresh the versioned PDFs in the repo root ──────────────────
 echo "==> Removing old root PDFs"
-rm -f AZ_*.pdf
+if [ "$TARGET" != examples ]; then rm -f AZ_lectures*.pdf; fi
+if [ "$TARGET" != notes ];    then rm -f AZ_examples*.pdf; fi
 
 # ── compile each version ─────────────────────────────────────────
 # latexmk runs inside notes/ so that \input{../preamble} resolves relative to
@@ -57,6 +82,7 @@ rm -f AZ_*.pdf
 # Both builds share the same source bytes (only AZ_HIGHLIGHT differs), so latexmk
 # cannot tell them apart from file timestamps — we force a rebuild with -g and
 # copy main.pdf out before the next build overwrites it.
+if [ "$TARGET" != examples ]; then
 for entry in "${BUILDS[@]}"; do
 	IFS=: read -r name hl skip <<<"$entry"
 	dest="${name}_${VERSION}.pdf"
@@ -77,8 +103,10 @@ for entry in "${BUILDS[@]}"; do
 	fi
 	cp "$SRC/main.pdf" "$dest"
 done
+fi
 
 # ── compile the examples booklet (single version, no highlight) ──
+if [ "$TARGET" != notes ]; then
 EX_SRC=examples
 EX_DEST="AZ_examples_${VERSION}.pdf"
 echo "==> Compiling $EX_SRC/przyklady.tex -> $EX_DEST"
@@ -95,16 +123,8 @@ else
 	rm -f "$log"
 fi
 cp "$EX_SRC/przyklady.pdf" "$EX_DEST"
-( cd "$EX_SRC" && latexmk -C >/dev/null )
-rm -f "$EX_SRC/indent.log"
+fi
 
-# ── clean build artefacts ────────────────────────────────────────
-# latexmk -C removes auxiliary files *and* the generated main.pdf (already
-# copied out and git-ignored). indent.log is left behind by latexindent, so
-# remove it explicitly.
-echo "==> Cleaning $SRC"
-( cd "$SRC" && latexmk -C >/dev/null )
-rm -f "$SRC/indent.log"
-
+# Build artefacts are intentionally kept (cleaned at the start of the next run).
 echo "==> Done. Produced:"
 ls -1 AZ_*.pdf
