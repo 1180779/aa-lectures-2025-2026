@@ -1,0 +1,40 @@
+% ════════════════════════════════════════════════════════════════
+\section{Termin 1}
+% ════════════════════════════════════════════════════════════════
+
+\begin{zadanie}[Zadanie 1 --- przecinające się kwadraty jednostkowe (15 p.)]
+	Zaprojektuj rekurencyjny algorytm w~oparciu o~strategię ,,dziel i~zwyciężaj''
+	rozwiązujący następujący problem. \emph{Dane:} zbiór kwadratów na płaszczyźnie
+	o~boku jeden, których boki są równoległe do osi. \emph{Szukane:} para
+	przecinających się kwadratów lub odpowiedź, że takiej pary nie ma. Oblicz
+	złożoność obliczeniową zaprojektowanego algorytmu.
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 2 --- liczba etykietowań L(2,0) ścieżki (15 p.)]
+	Etykietowaniem $L(2,0)$ grafu $G$ nazywamy funkcję przyporządkowującą
+	wierzchołkom $G$ liczby ze zbioru $\{1,2,\dots,k\}$ taką, że sąsiednie
+	wierzchołki otrzymują etykiety różniące się o~co najmniej~$2$. Zaprojektuj
+	wielomianowy algorytm programowania dynamicznego zliczający liczbę
+	etykietowań $L(2,0)$ czterema etykietami ($k=4$) dla ścieżki o~$n$
+	wierzchołkach. Oszacuj asymptotyczną złożoność (w~terminach $\BO(\cdot)$).
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 3 --- najmniejsza transwersala (15 p.)]
+	Niech $\mathcal{S}$ będzie rodziną pewnych podzbiorów zbioru $U$.
+	\emph{Transwersalą} dla rodziny $\mathcal{S}$ nazywamy dowolny podzbiór $U$
+	przecinający każdy zbiór z~$\mathcal{S}$. Podaj algorytm aproksymacyjny dla
+	problemu znajdowania najmniejszej transwersali przy założeniu, że każdy
+	element zbioru $U$ należy do co najwyżej dwóch zbiorów z~$\mathcal{S}$.
+	\emph{Wskazówka:} sprowadź ten problem do problemu pokrycia zbioru.
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 4 --- ze schematu prawie-optymalnego do 2-aproksymacji (15 p.)]
+	Niech $P$ będzie problemem optymalizacyjnym, w~którym poszukujemy rozwiązania
+	dopuszczalnego maksymalizującego funkcję celu $f$, której zbiorem wartości
+	jest przedział $[3,\infty)$. Wiadomo, że dla problemu $P$ i~każdego
+	$\epsilon>0$ istnieje algorytm wielomianowy, który dla wejścia $I$ znajduje
+	rozwiązanie dopuszczalne $A(I)$ takie, że $f(A(I))\geq(1-\epsilon)f(OPT(I))-1$,
+	gdzie $OPT(I)$ to rozwiązanie optymalne. Udowodnij, że istnieje wielomianowy
+	algorytm $2$-aproksymacyjny dla problemu $P$.
+\end{zadanie}
+

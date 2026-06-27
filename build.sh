@@ -11,12 +11,13 @@
 # AZ_SKIP=1 additionally drops the non-obligatory proofs entirely:
 #   AZ_HIGHLIGHT=1 AZ_SKIP=1 → AZ_lectures_exam     (quick-revision: essentials only)
 #
-# Usage:  ./build.sh [-h|--help] [-v|--verbose] [--notes|--examples] [VERSION]
+# Usage:  ./build.sh [-h|--help] [-v|--verbose] [--notes|--examples|--exams] [VERSION]
 #   -h, --help     print this usage and exit
 #   -v, --verbose  stream the full latexmk output (default: only show it
 #                  when a compile fails; warnings and hints are hidden)
-#   --notes        build only the notes (skip the examples booklet)
-#   --examples     build only the examples booklet (skip the notes)
+#   --notes        build only the notes
+#   --examples     build only the examples booklet
+#   --exams        build only the exam solutions (needs notes/main.aux for refs)
 #   VERSION        tag for the output file names, e.g. v1.0.0
 #                  (default: latest git tag, or "dev" if there are none)
 #
@@ -28,16 +29,18 @@ set -euo pipefail
 # ── parse arguments ──────────────────────────────────────────────
 VERBOSE=0
 VERSION=""
-TARGET=all   # all | notes | examples
+TARGET=all   # all | notes | examples | exams
 usage() {
-	sed -n '14,21p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+	sed -n '14,22p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
 }
+want() { [ "$TARGET" = all ] || [ "$TARGET" = "$1" ]; }
 for arg in "$@"; do
 	case "$arg" in
 		-h|--help)    usage; exit 0 ;;
 		-v|--verbose) VERBOSE=1 ;;
 		--notes)      TARGET=notes ;;
 		--examples)   TARGET=examples ;;
+		--exams)      TARGET=exams ;;
 		*)            VERSION="$arg" ;;
 	esac
 done
@@ -68,13 +71,15 @@ clean_dir() {
 	rm -f "$1/indent.log"
 }
 echo "==> Cleaning stale artefacts"
-if [ "$TARGET" != examples ]; then clean_dir notes; fi
-if [ "$TARGET" != notes ];    then clean_dir examples; fi
+if want notes;    then clean_dir notes; fi
+if want examples; then clean_dir examples; fi
+if want exams; then clean_dir exams; fi
 
 # ── refresh the versioned PDFs in the repo root ──────────────────
 echo "==> Removing old root PDFs"
-if [ "$TARGET" != examples ]; then rm -f AZ_lectures*.pdf; fi
-if [ "$TARGET" != notes ];    then rm -f AZ_examples*.pdf; fi
+if want notes;    then rm -f AZ_lectures*.pdf; fi
+if want examples; then rm -f AZ_examples*.pdf; fi
+if want exams; then rm -f AZ_exams*.pdf; fi
 
 # ── compile each version ─────────────────────────────────────────
 # latexmk runs inside notes/ so that \input{../preamble} resolves relative to
@@ -82,7 +87,7 @@ if [ "$TARGET" != notes ];    then rm -f AZ_examples*.pdf; fi
 # Both builds share the same source bytes (only AZ_HIGHLIGHT differs), so latexmk
 # cannot tell them apart from file timestamps — we force a rebuild with -g and
 # copy main.pdf out before the next build overwrites it.
-if [ "$TARGET" != examples ]; then
+if want notes; then
 for entry in "${BUILDS[@]}"; do
 	IFS=: read -r name hl skip <<<"$entry"
 	dest="${name}_${VERSION}.pdf"
@@ -106,15 +111,15 @@ done
 fi
 
 # ── compile the examples booklet (single version, no highlight) ──
-if [ "$TARGET" != notes ]; then
+if want examples; then
 EX_SRC=examples
 EX_DEST="AZ_examples_${VERSION}.pdf"
-echo "==> Compiling $EX_SRC/przyklady.tex -> $EX_DEST"
+echo "==> Compiling $EX_SRC/examples.tex -> $EX_DEST"
 if [ "$VERBOSE" -eq 1 ]; then
-	( cd "$EX_SRC" && latexmk -g przyklady.tex )
+	( cd "$EX_SRC" && latexmk -g examples.tex )
 else
 	log="$(mktemp)"
-	if ! ( cd "$EX_SRC" && latexmk -g przyklady.tex ) >"$log" 2>&1; then
+	if ! ( cd "$EX_SRC" && latexmk -g examples.tex ) >"$log" 2>&1; then
 		echo "!!! Compile failed ($EX_SRC) — latexmk output:" >&2
 		cat "$log" >&2
 		rm -f "$log"
@@ -122,7 +127,26 @@ else
 	fi
 	rm -f "$log"
 fi
-cp "$EX_SRC/przyklady.pdf" "$EX_DEST"
+cp "$EX_SRC/examples.pdf" "$EX_DEST"
+fi
+
+# ── compile the exam solutions (single version; refs to notes/main.aux) ──
+if want exams; then
+EG_DEST="AZ_exams_${VERSION}.pdf"
+echo "==> Compiling exams/exams.tex -> $EG_DEST"
+if [ "$VERBOSE" -eq 1 ]; then
+	( cd exams && latexmk -g exams.tex )
+else
+	log="$(mktemp)"
+	if ! ( cd exams && latexmk -g exams.tex ) >"$log" 2>&1; then
+		echo "!!! Compile failed (exams) — latexmk output:" >&2
+		cat "$log" >&2
+		rm -f "$log"
+		exit 1
+	fi
+	rm -f "$log"
+fi
+cp exams/exams.pdf "$EG_DEST"
 fi
 
 # Build artefacts are intentionally kept (cleaned at the start of the next run).

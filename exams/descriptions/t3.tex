@@ -1,0 +1,38 @@
+% ════════════════════════════════════════════════════════════════
+\section{Termin 3}
+% ════════════════════════════════════════════════════════════════
+
+\begin{zadanie}[Zadanie 1 --- kod Huffmana dla częstości będących potęgami dwójki (15 p.)]
+	Alfabet $A$ składa się ze znaków $z_1,z_2,\dots,z_n$. W~pewnym tekście $T$
+	znak $z_i$ występuje $2^{i-1}$ razy dla wszystkich $i\in\{1,2,\dots,n\}$.
+	Znajdź kod Huffmana dla tekstu $T$.
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 2 --- rozdział czekolady (15 p.)]
+	Kostka czekolady o~wadze $2n$ dkg spadła na podłogę i~połamała się na wiele
+	kawałków, z~których żaden nie waży więcej niż $1$ dkg. Zaprojektuj algorytm
+	o~liniowej złożoności obliczeniowej, który rozdziela te kawałki pomiędzy $n$
+	dzieci tak, że każde dziecko dostaje kawałki o~sumarycznej wadze co najmniej
+	$1$ dkg. Udowodnij, że Twój algorytm jest poprawny.
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 3 --- stacje przekaźnikowe (DP) (15 p.)]
+	Firma ,,Głuchy Telefon'' buduje stacje przekaźnikowe wzdłuż autostrady A44
+	o~długości $M$ km. Jest $n$ możliwych lokalizacji, leżących w~odległościach
+	$m_1<m_2<\dots<m_n$ od początku autostrady (wszystkie przy autostradzie).
+	Koszt budowy stacji w~lokalizacji $i$-tej to $k_i>0$, $i\in\{1,\dots,n\}$.
+	Stacje trzeba wybudować tak, by z~każdego punktu autostrady było nie dalej niż
+	$k$ km do najbliższej stacji. Podaj efektywny algorytm programowania
+	dynamicznego obliczający najmniejszy całkowity koszt inwestycji i~oszacuj jego
+	złożoność obliczeniową.
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 4 --- obiekt majoryzujący (dziel i~zwyciężaj) (15 p.)]
+	Tablica $A$ zawiera $n$ obiektów, które nie są liczbami (np.\ małe pliki
+	tekstowe). Nie jest dla nich zdefiniowana relacja $>$, ale zdefiniowana jest
+	równość (sprawdzana w~czasie stałym), oznaczająca identyczność obiektów.
+	Mówimy, że tablica $A$ ma \emph{obiekt majoryzujący} $M$, jeśli więcej niż
+	połowa obiektów jest równa $M$. Podaj algorytm typu ,,dziel i~zwyciężaj''
+	o~złożoności $\BO(n\log n)$, który rozstrzyga, czy $A$ zawiera obiekt
+	majoryzujący, i~jeśli tak --- zwraca go.
+\end{zadanie}

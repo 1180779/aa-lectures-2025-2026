@@ -1,0 +1,151 @@
+% ════════════════════════════════════════════════════════════════
+\section{Termin 2}
+% ════════════════════════════════════════════════════════════════
+
+\begin{zadanie}[Zadanie 1 --- scalanie list (15 p.)]
+	\textbf{(i) (3p.)} Niech $A,B$ będą listami długości $k$ i~$l$ posortowanymi
+	rosnąco. Podaj algorytm działający w~czasie $\BO(k+l)$, który scala je w~jedną
+	posortowaną rosnąco listę długości $k+l$.\\
+	\textbf{(ii) (4p.)} Mamy $m$ list długości $n$ każda, wszystkie posortowane
+	rosnąco; scalamy je w~jedną długości $mn$, używając wielokrotnie algorytmu
+	z~(i): scalamy dwie pierwsze listy, wynik z~trzecią, ten z~czwartą, itd.
+	Oszacuj złożoność jako funkcję $m$ i~$n$.\\
+	\textbf{(iii) (8p.)} Podaj asymptotycznie szybszy algorytm typu ,,dziel
+	i~zwyciężaj'' rozwiązujący problem z~(ii). Oszacuj jego złożoność.
+\end{zadanie}
+
+\paragraph{(i) Scalanie dwóch list w~czasie $\BO(k+l)$.}
+Klasyczne scalanie dwoma wskaźnikami (procedura \textsc{Merge} z~sortowania
+przez scalanie; por.\ \textsc{MergeLists} z~notatek o~sumie podzbiorów,
+Algorytm~\ref{N-alg:exactsubsetsum}):
+
+\begin{alg}{Merge --- scalanie dwóch list posortowanych}{alg:merge}
+	\Function{Merge}{$A[1\ldots k],\,B[1\ldots l]$}
+	\State $i\gets 1$;\ \ $j\gets 1$;\ \ $C\gets$ pusta lista
+	\While{$i\leq k$ \textbf{and} $j\leq l$}
+	\If{$A[i]\leq B[j]$}
+	\State dołącz $A[i]$ do $C$;\ \ $i\gets i+1$
+	\Else
+	\State dołącz $B[j]$ do $C$;\ \ $j\gets j+1$
+	\EndIf
+	\EndWhile
+	\State dołącz do $C$ pozostałe elementy $A$ lub $B$
+	\State \Return $C$
+	\EndFunction
+\end{alg}
+Każda iteracja przesuwa o~jeden któryś ze wskaźników, więc czas $\BO(k+l)$.
+
+\paragraph{(ii) Scalanie iteracyjne.}
+Scalamy listy po kolei: wynik długości $n$ z~kolejną listą długości $n$, potem
+długości $2n$ z~następną, itd. Scalenie przed dołączeniem $i$-tej listy ma
+rozmiar $(i-1)n$, więc kosztuje $\BO\big((i-1)n+n\big)=\BO(in)$. Łącznie
+\[
+	\sum_{i=2}^{m}\BO(in)=\BO\!\Big(n\sum_{i=2}^{m} i\Big)=\boxed{\BO(m^2 n)}.
+\]
+
+\paragraph{(iii) Scalanie ,,dziel i~zwyciężaj''.}
+Scalamy listy parami (poziom~1: $m/2$ scaleń list długości $n$), potem powstałe
+pary parami, itd. --- jak w~sortowaniu przez scalanie po listach jako liściach.
+Na każdym z~$\lceil\log_2 m\rceil$ poziomów łączna długość scalanych danych
+wynosi $mn$, więc poziom kosztuje $\BO(mn)$. Stąd
+\[
+	T(m,n)=\boxed{\BO(mn\log m)},
+\]
+asymptotycznie szybciej niż $\BO(m^2 n)$ z~podpunktu~(ii).
+
+\clearpage
+\begin{zadanie}[Zadanie 2 --- brak słów kodowych długości~1 (15 p.)]
+	Załóżmy, że w~tekście, który chcemy zakodować za pomocą kodu Huffmana, każdy
+	znak występuje mniej niż $\frac{24}{3}$ razy. Udowodnij, że w~kodzie Huffmana
+	dla takiego tekstu żaden znak nie będzie zakodowany za pomocą tylko jednego
+	bitu.
+\end{zadanie}
+
+\begin{lemma}
+	Jeśli w~tekście o~łącznej liczbie wystąpień $T$ pewien znak $x$ otrzymuje
+	w~kodzie Huffmana słowo długości~$1$, to $f(x)\geq T/3$.
+\end{lemma}
+\begin{proof}
+	Słowo długości~$1$ znaczy, że liść $x$ jest dzieckiem korzenia. Drugim
+	poddrzewem korzenia jest $R$ obejmujące wszystkie pozostałe znaki, o~wadze
+	$f(R)=T-f(x)$. Przy $\geq 3$ znakach $R$ jest węzłem wewnętrznym, powstałym
+	ze scalenia dwóch węzłów o~wagach $a,b$ z~$a+b=T-f(x)$. W~kroku, w~którym
+	powstał korzeń $R$, węzeł $x$ był jeszcze dostępny, a~mimo to scalono $a$
+	i~$b$ --- czyli były to dwa najlżejsze węzły, więc $f(x)\geq a$ oraz
+	$f(x)\geq b$. Zatem
+	\[
+		f(x)\geq\max(a,b)\geq\frac{a+b}{2}=\frac{T-f(x)}{2}
+		\ \Longrightarrow\ 3f(x)\geq T\ \Longrightarrow\ f(x)\geq\frac{T}{3}.
+	\]
+\end{proof}
+
+\paragraph{Wniosek (teza zadania).}
+Jeśli każdy znak występuje mniej niż $T/3$ razy (np.\ mniej niż
+$\tfrac{24}{3}=8$ razy w~tekście długości $T=24$), to żaden znak nie spełnia
+$f(x)\geq T/3$, więc --- na mocy lematu --- \uemph{żaden} znak nie otrzyma słowa
+kodowego długości~$1$. $\qed$
+
+\clearpage
+\begin{zadanie}[Zadanie 3 --- pakowanie do skrzyń (Next-Fit) jest 2-aproksymacyjne (15 p.)]
+	Rozważmy następujący algorytm dla problemu pakowania do skrzyń. Wejściem jest
+	nieposortowana lista rozmiarów pakowanych obiektów. Algorytm pakuje obiekty
+	w~kolejności z~listy, próbując umieścić kolejny obiekt tylko w~ostatnio
+	rozpoczętej skrzyni; jeśli to niemożliwe, rozpoczyna nową skrzynię. Udowodnij,
+	że jest to algorytm $2$-aproksymacyjny dla problemu pakowania do skrzyń.
+\end{zadanie}
+
+Skrzynie mają pojemność~$1$, rozmiary obiektów $s_1,\dots,s_n\in(0,1]$. Algorytm
+(\emph{Next-Fit}) pakuje obiekt do ostatnio rozpoczętej skrzyni, a~gdy się nie
+mieści --- rozpoczyna nową. Niech $S=\sum_i s_i$ i~niech algorytm użyje $k$
+skrzyń, a~optimum $OPT$.
+
+\paragraph{Dolne ograniczenie optimum.}
+Żadne upakowanie nie zmieści więcej niż $1$ w~skrzyni, więc
+$OPT\geq\lceil S\rceil\geq S$.
+
+\paragraph{Górne ograniczenie dla Next-Fit.}
+Rozważmy dwie kolejne skrzynie $B_i,B_{i+1}$. Pierwszy obiekt trafiający do
+$B_{i+1}$ nie zmieścił się w~$B_i$, więc suma zawartości obu skrzyń przekracza
+pojemność: $\mathrm{cont}(B_i)+\mathrm{cont}(B_{i+1})>1$ dla $i=1,\dots,k-1$.
+Sumując te nierówności i~korzystając z~$\sum_i\mathrm{cont}(B_i)=S$:
+\[
+	2S=\sum_{i=1}^{k}2\,\mathrm{cont}(B_i)
+	\ \geq\ \sum_{i=1}^{k-1}\big(\mathrm{cont}(B_i)+\mathrm{cont}(B_{i+1})\big)
+	\ >\ k-1.
+\]
+Stąd $k<2S+1$, a~ponieważ $k$ jest całkowite, $k\leq 2S\leq 2\,OPT$.
+
+\paragraph{Wniosek.}
+$k\leq 2\,OPT$, więc Next-Fit jest algorytmem $2$-aproksymacyjnym. $\qed$
+
+\clearpage
+\begin{zadanie}[Zadanie 4 --- najdłuższy wspólny podciąg kolejnych wyrazów (15 p.)]
+	Dla zadanych ciągów $(x_1,x_2,\dots,x_n)$ i~$(y_1,y_2,\dots,y_m)$ chcemy
+	znaleźć długość ich najdłuższego wspólnego podciągu \emph{kolejnych} wyrazów,
+	czyli największe $k$, dla którego istnieją indeksy $i,j$ takie, że
+	$(x_i,x_{i+1},\dots,x_{i+k-1})=(y_j,y_{j+1},\dots,y_{j+k-1})$. Podaj algorytm
+	programowania dynamicznego o~złożoności $\BO(mn)$ rozwiązujący ten problem.
+\end{zadanie}
+
+Szukamy najdłuższego wspólnego \uemph{spójnego} fragmentu (substring) ciągów
+$x_{1\ldots n}$ i~$y_{1\ldots m}$. W~odróżnieniu od LCS z~wykładu fragment musi
+być ciągły.
+
+\paragraph{Programowanie dynamiczne.}
+Niech $D[i][j]$ to długość najdłuższego wspólnego \emph{sufiksu} prefiksów
+$x_{1\ldots i}$ i~$y_{1\ldots j}$ (czyli wspólnego fragmentu kończącego się
+dokładnie na $x_i$ i~$y_j$):
+\[
+	D[i][j]=
+	\begin{cases}
+		D[i-1][j-1]+1, & x_i=y_j,\\
+		0,             & x_i\neq y_j,
+	\end{cases}
+	\qquad D[0][j]=D[i][0]=0.
+\]
+Odpowiedzią jest $\max_{i,j} D[i][j]$ (indeksy początku odzyskujemy z~pozycji
+maksimum: $i-k+1,\ j-k+1$).
+
+\paragraph{Złożoność.}
+$(n+1)(m+1)$ komórek, $\BO(1)$ pracy każda: $\boxed{\BO(mn)}$ czasu
+(pamięć $\BO(m)$ przy trzymaniu dwóch wierszy).

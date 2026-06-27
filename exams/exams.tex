@@ -1,0 +1,50 @@
+% ════════════════════════════════════════════════════════════════
+% Rozwiązania zadań z egzaminów z lat ubiegłych.
+% Rozwiązujemy tylko zadania wymagające pracy --- zadania będące
+% przepisaniem definicji/dowodu z wykładu odsyłają do notatek.
+% Kompilacja: lualatex (patrz ../preamble, build.sh). Odnośniki do
+% notatek (\ref{N-...}) wymagają wcześniejszego zbudowania notes/main.
+% ════════════════════════════════════════════════════════════════
+
+\input{../preamble}
+
+% Import etykiet z notatek: \ref{N-alg:gsc}, \ref{N-lemma:huffman:1}, ...
+% (xr ładujemy po hyperref; odnośniki rozwiążą się, gdy istnieje
+% notes/main.aux --- czyli po kompilacji notatek).
+\usepackage{xr}
+\externaldocument[N-]{../notes/main}
+
+% Treść zadania nad rozwiązaniem: delikatne pudełko z punktacją w~tytule.
+% Lokalne dla tego dokumentu. Użycie: \begin{zadanie}[(15 p.)] ... \end{zadanie}
+\newtcolorbox{zadanie}[1][]{%
+	breakable, enhanced,
+	colback=rowA, colframe=accent,
+	boxrule=0.5pt, arc=2pt,
+	left=8pt, right=8pt, top=5pt, bottom=5pt,
+	coltitle=white, fonttitle=\bfseries\small,
+	title={#1}}
+
+\begin{document}
+
+\begin{center}
+	{\LARGE\bfseries\color{accent} Algorytmy Zaawansowane}\\[0.3cm]
+	{\large\bfseries Rozwiązania egzaminów z lat ubiegłych}\\[0.2cm]
+	{\small\itshape Rozwiązujemy zadania wymagające pracy; te będące powtórzeniem
+	materiału z~wykładu odsyłają do notatek.}
+\end{center}
+\bigskip
+
+\tableofcontents
+\newpage
+
+\input{descriptions/t1.tex} \clearpage
+\input{descriptions/t2.tex} \clearpage
+\input{descriptions/t3.tex} \clearpage
+
+\appendix
+
+\input{solutions/t1.tex} \clearpage
+\input{solutions/t2.tex} \clearpage
+\input{solutions/t3.tex}
+
+\end{document}

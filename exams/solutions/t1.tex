@@ -1,0 +1,147 @@
+% ════════════════════════════════════════════════════════════════
+\section{Termin 1}
+% ════════════════════════════════════════════════════════════════
+
+\begin{zadanie}[Zadanie 1 --- przecinające się kwadraty jednostkowe (15 p.)]
+	Zaprojektuj rekurencyjny algorytm w~oparciu o~strategię ,,dziel i~zwyciężaj''
+	rozwiązujący następujący problem. \emph{Dane:} zbiór kwadratów na płaszczyźnie
+	o~boku jeden, których boki są równoległe do osi. \emph{Szukane:} para
+	przecinających się kwadratów lub odpowiedź, że takiej pary nie ma. Oblicz
+	złożoność obliczeniową zaprojektowanego algorytmu.
+\end{zadanie}
+
+\paragraph{Sprowadzenie do pary najbliższych punktów.}
+Każdy kwadrat o~boku $1$ i~bokach równoległych do osi reprezentujemy jego
+środkiem $p_i=(x_i,y_i)$. Dwa takie kwadraty $p_i,p_j$ przecinają się (mają
+wspólny punkt) wtedy i~tylko wtedy, gdy nakładają się ich rzuty na obie osie:
+\[
+	|x_i-x_j|\leq 1 \quad\text{oraz}\quad |y_i-y_j|\leq 1,
+	\qquad\text{czyli}\qquad
+	d_\infty(p_i,p_j)=\max\big(|x_i-x_j|,\,|y_i-y_j|\big)\leq 1.
+\]
+(Dla samych wnętrz zamieniamy $\leq$ na $<$; nie zmienia to algorytmu.) Szukamy
+więc pary punktów w~odległości $d_\infty\leq 1$ albo stwierdzamy, że jej nie ma.
+Wystarczy znaleźć parę \uemph{najbliższą} w~metryce $d_\infty$ i~porównać jej
+odległość z~$1$: jeśli minimalna odległość $>1$, to żadna para się nie przecina.
+
+\paragraph{Algorytm.}
+Stosujemy schemat ,,dziel i~zwyciężaj'' dla pary najbliższych punktów
+(notatki, wykład o~parze najbliższych punktów: rys.~\ref{N-fig:closestpoints:split}),
+zmieniając jedynie metrykę z~euklidesowej na $d_\infty$:
+\begin{itemize}[nosep]
+	\item \textbf{Dziel.} Sortujemy punkty po~$x$ (raz, wstępnie) i~dzielimy
+	      pionową prostą $l$ na dwie połowy po~$\lfloor n/2\rfloor$ punktów.
+	\item \textbf{Zwyciężaj.} Rekurencyjnie wyznaczamy najmniejsze
+	      $\delta_L,\delta_R$ w~obu połowach; $\delta=\min(\delta_L,\delta_R)$.
+	\item \textbf{Połącz.} W~pasie $|x-l|\leq\delta$ (punkty posortowane po~$y$)
+	      każdy punkt porównujemy tylko z~następnymi, których współrzędna $y$
+	      różni się o~$\leq\delta$. Jak w~dowodzie dla pary najbliższych punktów,
+	      w~prostokącie $2\delta\times\delta$ leży $\BO(1)$ punktów (gdyby było
+	      ich więcej, dwa leżałyby w~odległości $d_\infty<\delta$ po tej samej
+	      stronie --- sprzeczność z~$\delta$), więc faza łączenia kosztuje
+	      $\BO(n)$.
+\end{itemize}
+Dla $n\leq 3$ liczymy wszystkie pary wprost. Na końcu zwracamy najbliższą parę,
+gdy jej $d_\infty\leq 1$, w~przeciwnym razie ,,brak pary''.
+
+\paragraph{Złożoność.}
+Wstępne sortowanie $\BO(n\log n)$; rekurencja $T(n)=2T(n/2)+\BO(n)=\BO(n\log n)$.
+Łącznie $\boxed{\BO(n\log n)}$.
+
+\clearpage
+\begin{zadanie}[Zadanie 2 --- liczba etykietowań L(2,0) ścieżki (15 p.)]
+	Etykietowaniem $L(2,0)$ grafu $G$ nazywamy funkcję przyporządkowującą
+	wierzchołkom $G$ liczby ze zbioru $\{1,2,\dots,k\}$ taką, że sąsiednie
+	wierzchołki otrzymują etykiety różniące się o~co najmniej~$2$. Zaprojektuj
+	wielomianowy algorytm programowania dynamicznego zliczający liczbę
+	etykietowań $L(2,0)$ czterema etykietami ($k=4$) dla ścieżki o~$n$
+	wierzchołkach. Oszacuj asymptotyczną złożoność (w~terminach $\BO(\cdot)$).
+\end{zadanie}
+
+Etykietujemy wierzchołki ścieżki $v_1,\dots,v_n$ liczbami ze zbioru
+$\{1,2,3,4\}$ tak, że sąsiednie etykiety różnią się o~co najmniej $2$.
+Dwie etykiety $a,b$ są \uemph{zgodne}, gdy $|a-b|\geq 2$; zgodne pary
+(nieuporządkowane) to
+\[
+	\{1,3\},\ \{1,4\},\ \{2,4\}\qquad(\text{oraz }a=b\text{ jest zawsze niezgodne}).
+\]
+
+\paragraph{Programowanie dynamiczne.}
+Niech $D[i][c]$ to liczba poprawnych etykietowań prefiksu $v_1,\dots,v_i$,
+w~których $v_i$ ma etykietę $c$. Wtedy
+\[
+	D[1][c]=1\ (c=1,\dots,4),\qquad
+	D[i][c]=\!\!\sum_{\substack{c'=1\\|c-c'|\geq 2}}^{4}\!\! D[i-1][c'],
+\]
+a~odpowiedzią jest $\sum_{c=1}^{4} D[n][c]$. Tablicę wypełniamy dla
+$i=2,\dots,n$; każda komórka to suma po~$\leq 4$ poprzednikach.
+
+\paragraph{Złożoność.}
+$n$ wierszy $\times\,4$ etykiety $\times\,\BO(1)$ pracy na komórkę:
+$\boxed{\BO(n)}$ czasu i~$\BO(1)$ pamięci (trzymamy tylko wiersz $i-1$).
+
+\clearpage
+\begin{zadanie}[Zadanie 3 --- najmniejsza transwersala (15 p.)]
+	Niech $\mathcal{S}$ będzie rodziną pewnych podzbiorów zbioru $U$.
+	\emph{Transwersalą} dla rodziny $\mathcal{S}$ nazywamy dowolny podzbiór $U$
+	przecinający każdy zbiór z~$\mathcal{S}$. Podaj algorytm aproksymacyjny dla
+	problemu znajdowania najmniejszej transwersali przy założeniu, że każdy
+	element zbioru $U$ należy do co najwyżej dwóch zbiorów z~$\mathcal{S}$.
+	\emph{Wskazówka:} sprowadź ten problem do problemu pokrycia zbioru.
+\end{zadanie}
+
+Dana rodzina $\mathcal{S}$ podzbiorów zbioru $U$; \uemph{transwersala} to
+$T\subseteq U$ przecinająca każdy zbiór z~$\mathcal{S}$. Zakładamy, że każdy
+element $U$ należy do co najwyżej dwóch zbiorów z~$\mathcal{S}$.
+
+\paragraph{Sprowadzenie do pokrycia zbioru.}
+Tworzymy instancję pokrycia zbioru, w~której \uemph{pokrywamy rodzinę}
+$\mathcal{S}$: zbiorem bazowym jest $X=\mathcal{S}$, a~dla każdego elementu
+$u\in U$ definiujemy zbiór pokrywający
+\[
+	S_u=\{\,A\in\mathcal{S} : u\in A\,\}\subseteq\mathcal{S}.
+\]
+Wybranie elementu $u$ do transwersali ,,pokrywa'' dokładnie te $A$, które $u$
+przecina. Zatem $\{u_1,\dots,u_t\}$ jest transwersalą wtedy i~tylko wtedy, gdy
+$S_{u_1},\dots,S_{u_t}$ pokrywają $X=\mathcal{S}$, przy równym koszcie $t$.
+Najmniejsza transwersala $=$ najmniejsze pokrycie tej instancji.
+
+\paragraph{Algorytm i~współczynnik.}
+Założenie ,,każdy $u$ w~co najwyżej dwóch zbiorach'' daje $|S_u|\leq 2$ dla
+każdego $u$. Uruchamiamy zachłanny algorytm pokrycia zbioru
+(\textsc{Greedy-Set-Cover}, Algorytm~\ref{N-alg:gsc}). Z~twierdzenia o~jego
+jakości jest on $H_d$-aproksymacyjny, gdzie $d=\max_{u}|S_u|$ to liczność
+największego zbioru pokrywającego. Tu $d\leq 2$, więc współczynnik wynosi
+\[
+	H_2=1+\tfrac12=\tfrac32,
+\]
+a~zatem otrzymujemy algorytm $\tfrac32$-aproksymacyjny (w~szczególności
+$2$-aproksymacyjny) dla najmniejszej transwersali.
+
+\clearpage
+\begin{zadanie}[Zadanie 4 --- ze schematu prawie-optymalnego do 2-aproksymacji (15 p.)]
+	Niech $P$ będzie problemem optymalizacyjnym, w~którym poszukujemy rozwiązania
+	dopuszczalnego maksymalizującego funkcję celu $f$, której zbiorem wartości
+	jest przedział $[3,\infty)$. Wiadomo, że dla problemu $P$ i~każdego
+	$\epsilon>0$ istnieje algorytm wielomianowy, który dla wejścia $I$ znajduje
+	rozwiązanie dopuszczalne $A(I)$ takie, że $f(A(I))\geq(1-\epsilon)f(OPT(I))-1$,
+	gdzie $OPT(I)$ to rozwiązanie optymalne. Udowodnij, że istnieje wielomianowy
+	algorytm $2$-aproksymacyjny dla problemu $P$.
+\end{zadanie}
+
+Dla każdego $\epsilon>0$ mamy wielomianowy $A_\epsilon$ z~gwarancją
+$f(A_\epsilon(I))\geq(1-\epsilon)f(OPT(I))-1$, a~wartości $f$ leżą w~$[3,\infty)$,
+więc $f(OPT(I))\geq 3$ dla każdej instancji. Chcemy algorytmu $2$-aproksymacyjnego,
+tj. $f(A(I))\geq\tfrac12 f(OPT(I))$.
+
+\paragraph{Konstrukcja.}
+Ustalamy $\epsilon=\tfrac16$ (stała, więc $A_{1/6}$ pozostaje wielomianowy).
+Oznaczmy $V=f(OPT(I))\geq 3$. Wtedy
+\[
+	f(A_{1/6}(I))\ \geq\ \big(1-\tfrac16\big)V-1
+	\ =\ \tfrac56 V-1
+	\ =\ \tfrac12 V+\Big(\tfrac13 V-1\Big)
+	\ \geq\ \tfrac12 V,
+\]
+bo $\tfrac13 V-1\geq 0\iff V\geq 3$, co zachodzi. Zatem $A_{1/6}$ jest
+wielomianowym algorytmem $2$-aproksymacyjnym dla $P$. $\qed$
