@@ -175,12 +175,12 @@ Optymalne rozwiązanie problemu jest funkcją optymalnych rozwiązań podproblem
 
 	\begin{proof}[Dowód poprawności]
 		Jedyną rzeczą, która nie jest oczywista jest fakt, że sprawdzamy tylko $7$ następnych punktów po $p$ w $Y'$ w fazie połącz.
-		Przypuśćmy, że $p, q$ są parą punktów w najmniejszej odległości w $P$ i $d(p,q) = \delta'$. Niech
-		$p = (x_p, y_p),\ q = (x_q, y_q)$. Bez straty ogólności załóżmy $y_p \leq y_q$. Pokażemy, że algorytm znajdzie
+		Przypuśćmy, że $p, q$ są parą punktów w najmniejszej odległości w $P$, $\delta' \coloneq d(p,q) < \delta$. 
+    Niech $p = (x_p, y_p),\ q = (x_q, y_q)$. Bez straty ogólności załóżmy $y_p \leq y_q$. Pokażemy, że algorytm znajdzie
 		tę parę punktów. Przypuśćmy, że nie. Wtedy istnieje co najmniej $7$ punktów pomiędzy $p$ i $q$ w $Y'$.
 		Niech $r = (x_r, y_r)$ będzie jednym z nich. Skoro $d(p,q) < \delta$ to
 		$y_q - y_p = |y_q - y_p| \leq \sqrt{(x_p - x_q)^2 + (y_p - y_q)^2} = d(p, q) < \delta$.
-		Ponadto $y_r$ musi być między $y_p$ i $y_q$: $y_p \leq y_r \leq y_q$, więc $y_r - y_p \leq y_q - y_p < \delta$
+		Ponadto $y_r$ musi być między $y_p$ i $y_q$: $y_p \leq y_r \leq y_q$, więc $(y_p - y_p \leq)\ y_r - y_p \leq y_q - y_p < \delta$
 		zatem co najmniej 9 punktów z $P$ w prostokącie $2\delta\times\delta$ ograniczonym poziomymi liniami
 		$y = y_p,\ y = y_p + \delta$.
 

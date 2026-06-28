@@ -153,23 +153,25 @@
 		pad at break*=6pt,
 		before skip=10pt plus 2pt, after skip=10pt plus 2pt,
 	},
-	% dowód w ramce obowiazkowy: bez szarego pudełka (zostaje na tle cream)
-	pomijalnypusty/.style={blanker, before skip=\topsep, after skip=\topsep},
-	% Rozstrzygamy styl jako KOD (a nie listę kluczy) w chwili czytania opcji
-	% pudełka — wtedy \ifbool widzi już ustawione inobow (otwarte obowiazkowybox),
-	% a problem dzielenia listy po przecinkach znika.
-	proofbox/.code={\ifbool{inobow}{\tcbset{pomijalnypusty}}{\tcbset{pomijalnystyle}}},
 }
-% AZ_SKIP wygrywa: nieobowiązkowe dowody znikają zupełnie (przechwytujemy treść
-% przez \BODY i nie składamy jej). Obowiązkowe składamy normalnie oryginalnym
-% środowiskiem proof. Inaczej — w trybie wyróżnień — szare pudełka jak wyżej.
-\ifbool{azskip}{%
+% Dowód obowiązkowy (inobow) MUSI iść bez własnego tcolorboxa: leży już w breakable
+% obowiazkowybox, a tcolorbox nie obsługuje rzetelnie ZAGNIEŻDŻONYCH breakable pudełek
+% (pierwszy objaw: pusty segment cream + treść uciekająca poza ramkę). Dlatego zamiast
+% \tcolorboxenvironment (które opakowałoby KAŻDY proof) przepisujemy proof warunkowo:
+%   inobow  → oryginalny proof, bez pudełka, na tle cream rodzica;
+%   pomijalny → samodzielne szare pudełko (nie jest zagnieżdżone, więc breakable działa).
+% AZ_SKIP wygrywa: nieobowiązkowe dowody znikają zupełnie (treść przez \BODY nie składana).
+\ifboolexpr{bool {azskip} or bool {azhighlight}}{%
 	\let\azoldproof\proof
 	\let\azoldendproof\endproof
 	\RenewEnviron{proof}[1][\proofname]{%
-		\ifbool{inobow}{\azoldproof[#1]\BODY\azoldendproof}{}%
+		\ifbool{inobow}%
+			{\azoldproof[#1]\BODY\azoldendproof}%
+			{\ifbool{azskip}%
+				{}%                                          pomijalny + AZ_SKIP: pomiń
+				{\begin{tcolorbox}[pomijalnystyle]\azoldproof[#1]\BODY\azoldendproof\end{tcolorbox}}}%
 	}%
-}{\ifbool{azhighlight}{\tcolorboxenvironment{proof}{proofbox}}{}}
+}{}
 
 \titleformat{\section}{\large\bfseries\color{accent}}{}{0em}{}[\titlerule]
 \titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}

@@ -157,6 +157,7 @@ Ostatecznie złożoność GSC wynosi $\BO(|X| \cdot |\mathcal{F}| \cdot \min\{|X
 			H(0) = 0, \quad H(m) = 1 + \frac{1}{2} + \frac{1}{3} + \ldots + \frac{1}{m} \text{ dla } m \geq 1 &  &  &  &
 		\end{flalign*}
 	\end{theorem}
+
 	\begin{proof}
 		Niech $(X, \mathcal{F})$ będzie instancją wejściową.\\
 		$\mathcal{C}^*$ -- optymalne pokrycie dla $(X, \mathcal{F})$.\\
@@ -198,10 +199,10 @@ Ostatecznie złożoność GSC wynosi $\BO(|X| \cdot |\mathcal{F}| \cdot \min\{|X
 
 		Mamy:
 		\begin{align*}
-			\sum_{x \in S} c_x & = \sum_{i = 1}^{k} (n_{i-1} - n_i) \cdot \frac{1}{|S_i \setminus (S_1 \cup \ldots \cup S_{i-1})|} \overset{\eqref{eq:gsc-greedy}}{\leq} \sum_{i = 1}^{k} (n_{i-1} - n_i) \cdot \frac{1}{n_{i-1}}                                          \\
+			\sum_{x \in S} c_x & = \sum_{i = 1}^{k} (n_{i-1} - n_i) \cdot \frac{1}{|S_i \setminus (S_1 \cup \ldots \cup S_{i-1})|} \overset{\eqref{eq:gsc-greedy}}{\leq} \sum_{i = 1}^{k} (n_{i-1} - n_i) \cdot \frac{1}{n_{i-1}}                                                                                                                                       \\
 			                   & \overset{\ref{step:gsc-count}}{=} \sum_{i = 1}^{k} \sum_{j = n_i + 1}^{n_{i-1}} \frac{1}{n_{i-1}} \overset{\ref{step:gsc-bound}}{\leq} \sum_{i = 1}^{k} \sum_{j = n_i + 1}^{n_{i-1}} \frac{1}{j} \overset{\ref{step:gsc-split}}{=} \sum_{i = 1}^{k} \left( \sum_{j = 1}^{n_{i-1}} \frac{1}{j} - \sum_{j = 1}^{n_i} \frac{1}{j} \right) \\
-			                   & = \sum_{i = 1}^{k} \left( H(n_{i-1}) - H(n_i) \right)                                                                                                                                                                                  \\
-			                   & = \vphantom{\sum_{i = 1}^{k} \left( H(n_{i-1}) - H(n_i) \right)}\big( H(n_0) - H(n_1) \big) + \big( H(n_1) - H(n_2) \big) + \ldots + \big( H(n_{k-1}) - H(n_k) \big)                                                                   \\
+			                   & = \sum_{i = 1}^{k} \left( H(n_{i-1}) - H(n_i) \right)                                                                                                                                                                                                                                                                                  \\
+			                   & = \vphantom{\sum_{i = 1}^{k} \left( H(n_{i-1}) - H(n_i) \right)}\big( H(n_0) - H(n_1) \big) + \big( H(n_1) - H(n_2) \big) + \ldots + \big( H(n_{k-1}) - H(n_k) \big)                                                                                                                                                                   \\
 			                   & = \vphantom{\sum_{i = 1}^{k} \left( H(n_{i-1}) - H(n_i) \right)} H(n_0) - H(n_k) = H(|S|) - H(0) = H(|S|). \tag{$\ddagger$}\label{eq:gsc-cost}
 		\end{align*}
 		gdzie kolejne przejścia:
@@ -213,9 +214,9 @@ Ostatecznie złożoność GSC wynosi $\BO(|X| \cdot |\mathcal{F}| \cdot \min\{|X
 
 		Ostatecznie mamy:
 		\begin{align*}
-			|\mathcal{C}| = \sum_{x \in X} c_x \overset{\eqref{eq:gsc-cover}}{\leq} \sum_{S \in \mathcal{C}^*} \sum_{x \in S} c_x & \overset{\eqref{eq:gsc-cost}}{\leq} \sum_{S \in \mathcal{C}^*} H(|S|) \leq \sum_{S \in \mathcal{C}^*} \max\{H(|S|) : S \in \mathcal{C}^*\}                                                            \\
-			                                                                                      & = \vphantom{\sum_{S \in \mathcal{C}^*} H(|S|)} |\mathcal{C}^*| \cdot \max\{H(|S|) : S \in \mathcal{C}^*\}                                                              \\
-			                                                                                      & \overset{\mathcal{C}^* \subseteq \mathcal{F}}{\leq} \vphantom{\sum_{S \in \mathcal{C}^*} H(|S|)} |\mathcal{C}^*| \cdot \max\{H(|S|) : S \in \mathcal{F}\} = |\mathcal{C}^*| \cdot H(\max\{|S| : S \in \mathcal{F}\}),
+			|\mathcal{C}| = \sum_{x \in X} c_x \overset{\eqref{eq:gsc-cover}}{\leq} \sum_{S \in \mathcal{C}^*} \sum_{x \in S} c_x & \overset{\eqref{eq:gsc-cost}}{\leq} \sum_{S \in \mathcal{C}^*} H(|S|) \leq \sum_{S \in \mathcal{C}^*} \max\{H(|S|) : S \in \mathcal{C}^*\}                                                                            \\
+			                                                                                                                      & = \vphantom{\sum_{S \in \mathcal{C}^*} H(|S|)} |\mathcal{C}^*| \cdot \max\{H(|S|) : S \in \mathcal{C}^*\}                                                                                                             \\
+			                                                                                                                      & \overset{\mathcal{C}^* \subseteq \mathcal{F}}{\leq} \vphantom{\sum_{S \in \mathcal{C}^*} H(|S|)} |\mathcal{C}^*| \cdot \max\{H(|S|) : S \in \mathcal{F}\} = |\mathcal{C}^*| \cdot H(\max\{|S| : S \in \mathcal{F}\}),
 		\end{align*}
 		więc $\dfrac{|\mathcal{C}|}{|\mathcal{C}^*|} \leq H(\max\{|S| : S \in \mathcal{F}\})$.
 	\end{proof}
@@ -231,7 +232,7 @@ Ostatecznie złożoność GSC wynosi $\BO(|X| \cdot |\mathcal{F}| \cdot \min\{|X
 			H(\max\{|S| : S \in \mathcal{F}\}) \leq H(|X|) \leq \ln|X| + 1 &  &  &  & \tag*{\qedhere}
 		\end{flalign*}
 		\begin{dygresja}
-			Oszacowanie $H(n) \leq \ln n + 1$ wynika z~porównania sumy z~całką: $\sum_{j = 2}^{n} 1/j \leq \int_{1}^{n} 1/x \, \mathrm{d}x = \ln n$, więc $H(n) = 1 + \sum_{j = 2}^{n} 1/j \leq 1 + \ln n$. 
+			Oszacowanie $H(n) \leq \ln n + 1$ wynika z~porównania sumy z~całką: $\sum_{j = 2}^{n} 1/j \leq \int_{1}^{n} 1/x \, \mathrm{d}x = \ln n$, więc $H(n) = 1 + \sum_{j = 2}^{n} 1/j \leq 1 + \ln n$.
 		\end{dygresja}
 	\end{proof}
 \end{obowiazkowy}
