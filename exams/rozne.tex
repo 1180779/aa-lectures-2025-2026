@@ -1,0 +1,336 @@
+% ════════════════════════════════════════════════════════════════
+% Zadania różne (spoza datowanych egzaminów): klasyki ,,dziel
+% i~zwyciężaj'' / programowanie dynamiczne na drzewach.
+% ════════════════════════════════════════════════════════════════
+\section{Zadania różne}
+
+% ────────────────────────────────────────────────────────────────
+\begin{zadanie}[Zadanie 1 --- liczba inwersji]
+	Dla permutacji (ogólniej: tablicy) $A[1..n]$ policz liczbę par $i<j$
+	z~$A[i]>A[j]$. Wiele przypadków testowych, $n<1000$.
+\end{zadanie}
+
+\paragraph{Zmodyfikowany sort przez scalanie.}
+Liczbę inwersji liczymy ,,przy okazji'' scalania. Sortowanie przez scalanie
+dzieli $A$ na połowy, rekurencyjnie je sortuje i~\uemph{scala} dwie posortowane
+połowy w~jedną posortowaną listę (zob.\ \texttt{Merge}). Modyfikacja: scalanie
+zwraca też liczbę inwersji międzypołówkowych. Gdy bieżący element prawej połowy
+$R[j]$ jest mniejszy od~$L[i]$, to --- ponieważ lewa połowa jest posortowana ---
+$R[j]$ jest mniejszy od~całego pozostałego sufiksu $L[i\ldots k]$, czyli tworzy
+$k-i+1$ inwersji naraz.
+
+\begin{alg}{Count --- scalanie zliczające inwersje}{alg:count-inv}
+	\Function{CountAndMerge}{$L[1\ldots k],\,R[1\ldots l]$}\Comment{$L,R$ posortowane}
+	\State $i\gets 1$;\ \ $j\gets 1$;\ \ $C\gets$ pusta lista;\ \ $\mathit{inv}\gets 0$
+	\While{$i\leq k$ \textbf{and} $j\leq l$}
+	\If{$L[i]\leq R[j]$}\Comment{brak inwersji}
+	\State dołącz $L[i]$ do $C$;\ \ $i\gets i+1$
+	\Else\Comment{$R[j]<L[i]$, więc $R[j]$ wyprzedza $L[i\ldots k]$}
+	\State dołącz $R[j]$ do $C$;\ \ $j\gets j+1$
+	\State $\mathit{inv}\gets \mathit{inv}+(k-i+1)$
+	\EndIf
+	\EndWhile
+	\State dołącz do $C$ pozostałe elementy $L$ lub $R$
+	\State \Return $(C,\ \mathit{inv})$
+	\EndFunction
+\end{alg}
+\noindent Funkcja rekurencyjna sumuje $\mathit{inv}$ z~obu wywołań i~ze scalenia.
+
+\paragraph{Poprawność.}
+Każda inwersja $(i,j)$ ma elementy albo w~tej samej połowie (policzona
+rekurencyjnie), albo w~różnych (policzona przy scalaniu, bo $A[i]$ trafia do
+lewej, $A[j]$ do prawej połowy). Podziały są rozłączne, więc każda inwersja
+liczona dokładnie raz.
+
+\paragraph{Złożoność.}
+$T(n)=2T(n/2)+\BO(n)=\BO(n\log n)$ na test; wartości do~$10^{12}$ trzymamy
+w~64-bitowych liczbach (jak i~wynik, który może sięgać $\binom{n}{2}$). $\qed$
+
+\clearpage
+% ────────────────────────────────────────────────────────────────
+\begin{zadanie}[Zadanie 2 --- maksymalne skojarzenie w~drzewie bez ścieżek powiększających]
+	Znajdź maksymalne skojarzenie w~drzewie. Zaprezentuj działanie, udowodnij
+	poprawność, podaj złożoność.
+\end{zadanie}
+
+\paragraph{Zachłannie od~liści (DFS post-order).}
+Ukorzeniamy drzewo w~dowolnym wierzchołku i~uruchamiamy DFS. Decyzję
+o~skojarzeniu wierzchołka $v$ podejmujemy \uemph{dopiero po~przetworzeniu
+wszystkich jego poddrzew}: jeśli wówczas $v$ jest jeszcze wolny i~ma jakieś
+wolne dziecko $c$ (takie, którego własne poddrzewo nie zdołało go skojarzyć),
+to dodajemy krawędź $vc$ do~$M$ i~oznaczamy oboje jako skojarzonych. Każdy stan
+,,wolny/skojarzony'' przekazujemy w~górę: $v$ wraca do~swojego rodzica jako
+skojarzony albo wolny, co steruje decyzją rodzica.
+
+\begin{alg}{Maksymalne skojarzenie w~drzewie}{alg:tree-matching}
+	\Function{Match}{$v$}\Comment{zwraca (skojarzenie poddrzewa, czy $v$ skojarzony)}
+	\State $M\gets\emptyset$;\ \ $\mathit{matched}\gets\textbf{false}$
+	\ForAll{dziecko $c$ wierzchołka $v$}
+	\State $(M_c,\ \mathit{matched}_c)\gets\Call{Match}{c}$\Comment{najpierw całe poddrzewo $c$}
+	\State $M\gets M\cup M_c$
+	\If{\textbf{not} $\mathit{matched}$ \textbf{and} \textbf{not} $\mathit{matched}_c$}
+	\State $M\gets M\cup\{vc\}$;\ \ $\mathit{matched}\gets\textbf{true}$
+	\EndIf
+	\EndFor
+	\State \Return $(M,\ \mathit{matched})$
+	\EndFunction
+	\Statex
+	\State $(M,\ \_)\gets\Call{Match}{\mathit{root}}$;\ \ \Return $M$
+\end{alg}
+
+Liść nie ma dzieci, więc pętla się nie wykonuje i~liść wraca \emph{wolny};
+jego rodzic, widząc wolne dziecko, zagarnia je (o~ile sam jest jeszcze wolny).
+To realizuje regułę ,,skojarz liść z~rodzicem'' z~dowodu poprawności.
+
+\noindent Skojarzenie $v$ z~pierwszym wolnym dzieckiem \emph{nie} przerywa pętli
+po~dzieciach: pozostałe dzieci wciąż są odwiedzane (ich poddrzewa trzeba
+rozwiązać), tylko że $v$, będąc już zajęty, nie kojarzy się z~żadnym z~nich.
+Dopiero gdy \uemph{wszystkie} dzieci $v$ są przetworzone, $v$ wraca w~górę
+do~rodzica. Prześledzenie działania na~konkretnym drzewie pozostawiamy
+Czytelnikowi.
+
+\paragraph{Poprawność.}
+Kluczowy fakt: \uemph{istnieje maksymalne skojarzenie, w~którym pewien liść jest
+skojarzony ze swoim rodzicem.} Niech $\ell$ będzie liściem o~rodzicu~$u$
+i~niech $M^*$ będzie maksymalne. Jeśli $\ell\in M^*$, to skojarzone jako
+$\ell u$ (jedyny sąsiad). Jeśli $\ell$ wolny, to $u$ musi być skojarzony (inaczej
+$M^*\cup\{\ell u\}$ byłoby większe) z~pewnym $w$; wtedy
+$M^*-uw+\ell u$ jest skojarzeniem tej samej liczności, w~którym $\ell u\in M$.
+Zatem wybór $\ell u$ jest \uemph{bezpieczny}: skoro pewne najliczniejsze
+skojarzenie go zawiera, dołożenie $\ell u$ nie pogarsza optimum. Po~dołożeniu
+$\ell u$ żadna inna krawędź skojarzenia nie może dotykać $\ell$ ani~$u$, więc
+usuwamy oba wierzchołki (wraz z~incydentnymi krawędziami); pozostaje mniejszy
+las, a~najliczniejsze skojarzenie całego drzewa to $\{\ell u\}$ wraz
+z~najliczniejszym skojarzeniem reszty. Postępujemy tak rekurencyjnie. Przebieg
+post-order \emph{jest} tą rekurencją: zanim odwiedzimy dany wierzchołek, jego
+dzieci (a~wcześniej ich poddrzewa) są już przetworzone i~usunięte. Przez
+indukcję $M$ jest skojarzeniem o~maksymalnej liczności.
+
+\paragraph{Złożoność.}
+Jeden przebieg post-order, $\BO(1)$ na wierzchołek: $\BO(n)$ czasu
+i~pamięci. $\qed$
+
+\clearpage
+% ────────────────────────────────────────────────────────────────
+\begin{zadanie}[Zadanie 3 --- FZI\_STEF Stefan (maksymalny spójny zysk)]
+	Dany ciąg $n$ zysków/strat (możliwe ujemne), $1\le n\le 10^5$. Wybierz
+	\uemph{spójny} podciąg (być może pusty) o~maksymalnej sumie.
+\end{zadanie}
+
+\paragraph{Algorytm Kadane'a.}
+Przesuwamy się od~lewej, utrzymując $\mathit{cur}$ --- najlepszą sumę spójnego
+podciągu \emph{kończącego się} w~bieżącym mieście --- oraz globalne maksimum
+$\mathit{best}$. Aktualizacja $\mathit{cur}\gets\max(0,\ \mathit{cur}+a_i)$:
+zero odpowiada ,,rozpocznij trasę później / zakończ wcześniej'' (pusty wybór
+dozwolony, stąd wynik $\ge 0$).
+
+\begin{alg}{Kadane --- maksymalna suma spójnego podciągu}{alg:kadane}
+	\Function{MaxProfit}{$a[1\ldots n]$}
+	\State $\mathit{cur}\gets 0$;\ \ $\mathit{best}\gets 0$
+	\For{$i\gets 1$ \textbf{to} $n$}
+	\State $\mathit{cur}\gets\max(0,\ \mathit{cur}+a[i])$
+	\State $\mathit{best}\gets\max(\mathit{best},\ \mathit{cur})$
+	\EndFor
+	\State \Return $\mathit{best}$
+	\EndFunction
+\end{alg}
+
+\paragraph{Poprawność.}
+$\mathit{cur}$ po~$i$-tym kroku to maksimum z~$0$ i~najlepszego sufiksu
+kończącego się w~$i$: albo dokładamy $a_i$ do~najlepszego podciągu kończącego
+się w~$i{-}1$, albo zaczynamy na nowo (pusto). Każdy spójny podciąg kończy się
+w~którymś $i$, więc $\mathit{best}$ przegląda wszystkie kandydatury. Sprawdzenie
+na~przykładach $[1,-2,4,5,-2]\to 9$ oraz $[-1,-2]\to 0$ pozostawiamy
+Czytelnikowi.
+
+\paragraph{Złożoność.}
+Jeden przebieg, $\BO(n)$ czasu, $\BO(1)$ pamięci. $\qed$
+
+\clearpage
+% ────────────────────────────────────────────────────────────────
+\begin{zadanie}[Zadanie 4 --- liczba wszystkich pokryć wierzchołkowych drzewa]
+	Policz, na ile sposobów można wybrać pokrycie wierzchołkowe drzewa (zbiór
+	wierzchołków taki, że każda krawędź ma co najmniej jeden koniec w~tym
+	zbiorze). Liczymy \uemph{wszystkie}, nie tylko minimalne.
+\end{zadanie}
+
+\paragraph{Programowanie dynamiczne na drzewie.}
+Wybieramy dowolny korzeń $r$ i~ukorzeniamy drzewo (orientujemy krawędzie
+,,od~$r$ w~dół''), co nadaje każdemu wierzchołkowi rodzica oraz dzieci; przez
+$T_v$ oznaczamy poddrzewo zakorzenione w~$v$ (wierzchołek $v$ wraz ze~wszystkim
+poniżej). Wybór korzenia jest dowolny --- liczba pokryć całego drzewa od~niego
+nie zależy. Dla \emph{dowolnego} wierzchołka $v$ 
+definiujemy dwie liczby pokryć poddrzewa $T_v$:
+\begin{itemize}[nosep]
+	\item $f(v,1)$ --- liczba pokryć $T_v$, w~których $v$ \emph{jest} w~pokryciu;
+	\item $f(v,0)$ --- liczba pokryć $T_v$, w~których $v$ \emph{nie jest}.
+\end{itemize}
+Krawędź $v$--dziecko musi być pokryta. Jeśli $v\notin$ pokrycie, to każde
+dziecko \emph{musi} być wybrane; jeśli $v\in$ pokrycie, dziecko jest dowolne:
+\[
+	f(v,0)=\prod_{c\,\in\,\mathrm{children}(v)} f(c,1),
+	\qquad
+	f(v,1)=\prod_{c\,\in\,\mathrm{children}(v)} \big(f(c,0)+f(c,1)\big).
+\]
+Liść: poddrzewo $T_v$ to sam wierzchołek $v$, bez krawędzi do~pokrycia, więc
+każdy podzbiór $\{v\}$ jest pokryciem. Gdy $v$ jest poza pokryciem, jedynym
+pokryciem jest zbiór pusty ($f(v,0)=1$); gdy $v$ należy do~pokrycia, jedynym
+jest $\{v\}$ ($f(v,1)=1$) --- razem dwa pokrycia liścia.
+(Zgodnie ze~wzorami: pusty iloczyn po~braku dzieci równa się~$1$.) 
+
+Więc liczba wszystkich pokryć wierzchołkowych drzewa to $f(r,0)+f(r,1)$.
+
+\begin{alg}{Liczba pokryć wierzchołkowych drzewa}{alg:tree-vc-count}
+	\Function{Count}{$v$}\Comment{zwraca parę $\big(f(v,0),f(v,1)\big)$ przez DFS}
+	\State $f_0\gets 1$;\ \ $f_1\gets 1$
+	\ForAll{$c\in\mathrm{children}(v)$}
+	\State $(g_0,g_1)\gets$ \Call{Count}{$c$}\Comment{najpierw całe poddrzewo $c$}
+	\State $f_0\gets f_0\cdot g_1$
+	\State $f_1\gets f_1\cdot(g_0+g_1)$
+	\EndFor
+	\State \Return $(f_0,f_1)$
+	\EndFunction
+	\Statex
+	\State $(f_0,f_1)\gets$ \Call{Count}{$\mathit{root}$};\ \ \Return $f_0+f_1$
+\end{alg}
+
+\paragraph{Poprawność.}
+Wybory w~rozłącznych poddrzewach dzieci są niezależne (stąd iloczyny), a~jedyne
+ograniczenie międzypoddrzewowe to pokrycie krawędzi $v c$ --- uwzględnione przez
+warunkowanie na~przynależności $v$. Indukcja po~wysokości daje poprawność.
+
+\paragraph{Złożoność.}
+$\BO(1)$ pracy na krawędź, $\BO(n)$ łącznie (liczby trzymamy modulo, jeśli
+zadana reszta, lub w~wielkich liczbach). $\qed$
+
+\clearpage
+% ────────────────────────────────────────────────────────────────
+\begin{zadanie}[Zadanie 5 --- stonoga: najcięższy zbiór niezależny]
+	\uemph{Stonoga} to drzewo, które po~usunięciu liści staje się ścieżką
+	(,,łodygą''). Dana jest ważona stonoga $T$ o~$n$ wierzchołkach z~wagami
+	$w\colon V\to\mathbb{R}$. Znajdź zbiór niezależny o~maksymalnej wadze metodą
+	,,dziel i~zwyciężaj''.
+\end{zadanie}
+
+\begin{dygresja}
+	\uemph{Zbiór niezależny} grafu to zbiór wierzchołków $S$, w~którym żadne
+	dwa wierzchołki nie sąsiadują --- czyli żadna krawędź nie ma obu końców
+	w~$S$ (to niezależność \emph{grafowa}, nie matroidowa). Jest dopełnieniem
+	pokrycia wierzchołkowego: $S$ jest niezależny $\iff$ $V\setminus S$ jest
+	pokryciem wierzchołkowym. Szukamy $S$ maksymalizującego $\sum_{v\in S}w(v)$.
+\end{dygresja}
+
+\paragraph{Zwinięcie liści.}
+Niech łodyga to ścieżka $s_1,\dots,s_m$; każdy $s_i$ ma zbiór liści-nóżek
+$L_i$ (liście sąsiadują tylko ze swoim $s_i$). Liście jednego $s_i$ są parami
+niezależne i~sąsiadują tylko z~$s_i$. Stąd dla każdego $s_i$ mamy dwa warianty:
+\begin{itemize}[nosep]
+	\item \emph{bierzemy $s_i$:} wkład $w(s_i)$; nóżek nie bierzemy
+	      (sąsiadują z~$s_i$);
+	\item \emph{nie bierzemy $s_i$:} wkład $\ell_i:=\sum_{x\in L_i}\max(0,w(x))$
+	      (bierzemy wszystkie nóżki o~dodatniej wadze, niezależne od~całej reszty).
+\end{itemize}
+Problem redukuje się do~najcięższego zbioru niezależnego na \uemph{ścieżce}, gdzie
+$s_i$ ma dwie ,,wartości stanu''.
+
+\paragraph{Dziel i~zwyciężaj na ścieżce.}
+Ścieżkę $s_1..s_m$ dzielimy na środku. Rekurencja zwraca tablicę
+$M[a][d]$ ($a,d\in\{0,1\}$): $M[a][d]$ to maksymalna waga niezależnego podzbioru
+danego fragmentu \emph{przy ustalonym} stanie lewego krańca $a$ i~prawego $d$,
+gdzie $1$ oznacza ,,kraniec wzięty'', a~$0$ ,,niewzięty''. Scalając dwa sąsiadujące
+fragmenty łączymy wyniki po~wewnętrznych krańcach, zakazując ,,wzięty--wzięty''
+na styku. Dla lewej połówki o~tablicy $L$ i~prawej o~tablicy $R$ wynik scalenia
+$M$ to:
+\[
+	M[a][d]=\max_{\substack{b,c\\ \neg(b\wedge c)}}\big(L[a][b]+R[c][d]\big),
+\]
+gdzie $b$ to stan prawego krańca lewej połówki, a~$c$ --- lewego krańca prawej
+(czyli stany wierzchołków sąsiadujących na styku). Pojedynczy $s_i$ daje
+bazę: stan ,,wzięty'' $=w(s_i)$, ,,niewzięty'' $=\ell_i$.
+
+\begin{alg}{Najcięższy zbiór niezależny w~stonodze}{alg:centipede-mwis}
+	\Function{Solve}{$i,j$}\Comment{zwraca tablicę $M[a][d]$ dla łodygi $s_i..s_j$}
+	\If{$i=j$}\Comment{baza: jeden wierzchołek, lewy kraniec $=$ prawy}
+	\State $M[0][0]\gets\ell_i$;\ \ $M[1][1]\gets w(s_i)$
+	\State $M[0][1]\gets M[1][0]\gets-\infty$
+	\State \Return $M$
+	\EndIf
+	\State $k\gets\lfloor(i+j)/2\rfloor$
+	\State $L\gets$ \Call{Solve}{$i,k$};\ \ $R\gets$ \Call{Solve}{$k{+}1,j$}
+	\ForAll{$a,d\in\{0,1\}$}\Comment{scalenie po~krawędzi $s_k s_{k+1}$}
+	\State $M[a][d]\gets\max\limits_{\substack{b,c\in\{0,1\}\\ \neg(b\wedge c)}}\big(L[a][b]+R[c][d]\big)$
+	\EndFor
+	\State \Return $M$
+	\EndFunction
+	\Statex
+	\State $\ell_i\gets\sum_{x\in L_i}\max(0,w(x))$ dla każdego $s_i$\Comment{zwinięcie liści}
+	\State $M\gets$ \Call{Solve}{$1,m$};\ \ \Return $\max_{a,d}M[a][d]$
+\end{alg}
+
+\paragraph{Poprawność i~złożoność.}
+Tablica brzegowa $2\times 2$ jest pełnym ,,interfejsem'' fragmentu: jedyne
+zależności między fragmentami to krawędź na styku, więc znajomość stanów krańców
+wystarcza do~poprawnego scalenia (własność optymalnej podstruktury oraz rozłączność podproblemów).
+
+Zwinięcie liści (obliczenie wszystkich $\ell_i$) odwiedza każdy wierzchołek raz
+przed rekurencją, czyli $\BO(n)$. \\
+Koszt \Call{Solve}{$i,j$} poza wywołaniami rekurencyjnymi: baza ($i=j$) to $\BO(1)$; \\
+podział $k$ to $\BO(1)$; \\
+pętla scalająca przebiega $4$ pary $(a,d)$, a~każda to maksimum po~stałej liczbie sum, więc $\BO(1)$. \\
+Dwa wywołania na połówkach o~rozmiarze $m/2$ (gdzie $m$ to długość łodygi; $m\le n$) dają:
+\begin{flalign*}
+	T(m) & = 2\cdot T\!\left(\frac{m}{2}\right) + \BT(m^0) &  & a = 2,\ b = 2,\ k = 0 &  & \\[1.5ex]
+	2    & > 2^0 \Rightarrow T(m) = \BT\!\left(m^{\log_2 2}\right) = \BT(m) &  &                       &  &
+\end{flalign*}
+Razem z~$\BO(n)$ na zwinięcie liści i~$m\le n$ daje to łącznie $\BO(n)$. $\qed$
+
+\clearpage
+% ────────────────────────────────────────────────────────────────
+\begin{zadanie}[Zadanie 6 --- lider (element większościowy) przez dziel i~zwyciężaj]
+	\uemph{Lider} to wartość występująca $>\lfloor n/2\rfloor$ razy (jeśli
+	istnieje, jest jedna). Znajdź go metodą ,,dziel i~zwyciężaj'', bez
+	sortowania, używając tylko porównań~$==$.
+\end{zadanie}
+
+\paragraph{Algorytm.}
+Dla tablicy $A[1..n]$ niech $\Call{Leader}{A,p,r}$ zwraca lidera podtablicy
+$A[p..r]$ albo $\textsc{nil}$, gdy go nie ma. Dzielimy $A[p..r]$ na środku
+($q=\lfloor(p+r)/2\rfloor$) na dwie rozłączne, pełne połowy $A[p..q]$ i~$A[q{+}1..r]$
+i~rekurencyjnie znajdujemy lidera każdej z~nich. Kluczowa obserwacja:
+\uemph{jeśli $x$ jest liderem całości, to jest liderem co najmniej jednej
+z~połówek.} Zatem jedynymi kandydatami są zwrócone wartości $x_L$ i~$x_R$; dla
+każdego kandydata $\ne\textsc{nil}$ zliczamy jego wystąpienia w~\emph{całej}
+podtablicy (jednym przebiegiem, porównania $==$) i~zwracamy ten, którego licznik
+przekroczy $\lfloor(r-p+1)/2\rfloor$, inaczej $\textsc{nil}$.
+
+\begin{alg}{Lider przez dziel i~zwyciężaj}{alg:majority}
+	\Function{Leader}{$A,p,r$}\Comment{lider $A[p..r]$ albo $\textsc{nil}$}
+	\If{$p=r$}
+	\State \Return $A[p]$
+	\EndIf
+	\State $q\gets\lfloor(p+r)/2\rfloor$
+	\State $x_L\gets$ \Call{Leader}{$A,p,q$};\ \ $x_R\gets$ \Call{Leader}{$A,q{+}1,r$}
+	\ForAll{$x\in\{x_L,x_R\}\setminus\{\textsc{nil}\}$}\Comment{sprawdź kandydatów}
+	\State $c\gets\big|\{\,i\in[p,r]:A[i]=x\,\}\big|$\Comment{jeden przebieg, porównania $==$}
+	\If{$c>\lfloor(r-p+1)/2\rfloor$}
+	\State \Return $x$
+	\EndIf
+	\EndFor
+	\State \Return $\textsc{nil}$
+	\EndFunction
+\end{alg}
+
+\paragraph{Dlaczego kandydat jest w~połówce.}
+Gdyby $x$ nie był liderem żadnej połowy, to w~$A[p..q]$ występuje
+$\le\lfloor|A[p..q]|/2\rfloor$ razy i~podobnie w~$A[q{+}1..r]$, więc łącznie
+$\le\lfloor|A[p..q]|/2\rfloor+\lfloor|A[q{+}1..r]|/2\rfloor\le\lfloor(r-p+1)/2\rfloor$
+--- sprzeczność z~byciem liderem całości. Poprawność reszty: zliczenie w~całej
+podtablicy rozstrzyga kandydata bezbłędnie.
+
+\paragraph{Złożoność.}
+Faza scalania to dwa zliczenia $\BO(n)$, więc:
+\begin{flalign*}
+	T(n) & = 2\cdot T\!\left(\frac{n}{2}\right) + \BT(n^1) &  & a = 2,\ b = 2,\ k = 1 &  & \\[1.5ex]
+	2    & = 2^1 \Rightarrow T(n) = \BT\!\left(n^{1}\log n\right) = \BT(n\log n) &  &                       &  &
+\end{flalign*}
+$\qed$

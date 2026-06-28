@@ -1,0 +1,239 @@
+% ════════════════════════════════════════════════════════════════
+\subsection{Egzamin zerowy}
+% ════════════════════════════════════════════════════════════════
+
+\begin{zadanie}[Zadanie 1 --- dwa najtańsze symbole pod wspólnym rodzicem (15 p.)]
+	Udowodnij, że w~kodowaniu Huffmana istnieje optymalne drzewo kodowe,
+	w~którym dwa najtańsze (najrzadziej występujące) symbole mają wspólnego
+	rodzica.
+\end{zadanie}
+
+To jest dokładnie Lemat~\ref*{N-lemma:huffman:1} z~wykładu; przepiszemy jego dowód poniżej
+
+\begin{proof}
+	Znajdziemy drzewo reprezentujące optymalny kod prefiksowy, w którym liście reprezentujące $x$ i $y$ mają wspólnego rodzica i mają największą głębokość w drzewie.
+
+	Niech $T$ będzie dowolnym drzewem reprezentującym optymalny kod prefiksowy i niech $a$ i $b$ będą dwoma liśćmi o tym samym rodzicu i najmniejszej głębokości w $T$.
+	Bez straty ogólności możemy przyjąć, że $f(x) \leq f(y)$ i $f(a) \leq f(b)$.
+	$f(x)$ i $f(y)$ są najmniejszymi kluczami, więc $f(x) \leq f(a)$ i $f(y) \leq f(b)$.
+
+	Niech $T'$ będzie drzewem powstałym z $T$ przez zamianę liści $x$ i $a$.
+	\begin{flalign*}
+		B(T) - B(T') & = \sum_{c \in C} f(c) \cdot d_T(c) - \sum_{c \in C} f(c) \cdot d_{T'}(c) =                                        &  & \\
+		             & = \vphantom{\sum_{c \in C}} f(a) \cdot d_T(a) + f(x) \cdot d_T(x) - f(a) \cdot d_{T'}(a) - f(x) \cdot d_{T'}(x) = &  & \\
+		             & = \vphantom{\sum_{c \in C}} f(a) \cdot d_T(a) + f(x) \cdot d_T(x) - f(a) \cdot d_T(x) - f(x) \cdot d_T(a) =       &  & \\
+		             & = \vphantom{\sum_{c \in C}} f(a) (d_T(a) - d_T(x)) - f(x) (d_T(a) - d_T(x)) =                                     &  & \\
+		             & = \vphantom{\sum_{c \in C}} \underbrace{(f(a) - f(x))}_{\geq 0} \underbrace{(d_T(a) - d_T(x))}_{\geq 0} \geq 0    &  &
+	\end{flalign*}
+
+	Zatem $B(T) \geq B(T')$, ale $B(T)$ najmniejsze możliwe, więc $B(T') = B(T)$ czyli $T'$ też reprezentuje optymalny kod prefiksowy. Analogicznie zamieniamy miejscami liście $y$ i $b$ i otrzymujemy drzewo $T''$ reprezentujące optymalny kod prefiksowy, które ma żądane własności.
+\end{proof}
+
+\clearpage
+\begin{zadanie}[Zadanie 2 --- skojarzenie najliczniejsze a~ścieżki powiększające (15 p.)]
+	Udowodnij, że skojarzenie w~grafie jest najliczniejsze wtedy i~tylko wtedy,
+	gdy nie istnieje ścieżka powiększająca.
+\end{zadanie}
+
+Jest to dokładnie twierdzenie Berge'a (twierdzenie~\ref*{N-theorem:berge} z~notatek). Przepiszemy dowód poniżej.
+
+\begin{proof}
+	Niech $M$ będzie skojarzeniem w~$G$.
+	\begin{itemize}
+		\item[$\implies$]
+		      Przypuśćmy, że istnieje ścieżka powiększająca $P$ względem $M$. \\
+		      Wtedy $M' = M \div E(P)$ jest skojarzeniem i $|M'| > |M|$, więc $M$ nie jest skojarzeniem najliczniejszym.
+		\item[$\impliedby$]
+		      Przypuśćmy, że $M$ nie jest najliczniejszym skojarzeniem w $G$. \\
+		      Niech $M'$ będzie skojarzeniem takim, że $|M'| > |M|$. \\
+		      Niech $H$ będzie podgrafem $G$ indukowanym przez $M' \div M$, czyli $H = (V(G), M' \div M)$. \\
+		      $M, M'$ to skojarzenia, więc stopień wierzchołka $d_H(v) \le 2$ dla każdego $v \in V(G)$.
+
+		      Każda składowa $H$ jest ścieżką lub cyklem. \\
+		      $M, M'$ to skojarzenia, więc nie ma cykli nieparzystych w $H$. \\
+		      Każda składowa $H$ jest ścieżką lub cyklem parzystym. \\
+		      Skoro $|M'| > |M|$, to istnieje składowa $H$, która jest ścieżką zawierającą więcej krawędzi z $M'$ niż z $M$, więc ta ścieżka zaczyna się i kończy krawędzią z $M'$. Ta ścieżka jest ścieżką powiększającą względem $M$. \qedhere
+	\end{itemize}
+\end{proof}
+
+\clearpage
+\begin{zadanie}[Zadanie 3 --- matroid jednego wierzchołka na składową (15 p.)]
+	Niech $G$ będzie grafem, a~$\mathcal{A}_G$ rodziną podzbiorów $V(G)$ taką, że
+	$S\in\mathcal{A}_G$ wtedy i~tylko wtedy, gdy każda składowa spójności $G$
+	zawiera co najwyżej jeden wierzchołek z~$S$. Rozstrzygnij, czy para
+	$(V(G),\mathcal{A}_G)$ zawsze jest matroidem.
+\end{zadanie}
+
+\paragraph{Tak --- jest to \emph{partition matroid}.}
+\begin{dygresja}
+	\uemph{Partition matroid} (matroid podziałowy) powstaje z~podziału zbioru bazowego $S$ na rozłączne
+	klasy $S=C_1\cup\dots\cup C_p$ i~liczb $d_1,\dots,d_p\ge 0$ (pojemności): zbiór
+	$A\subseteq S$ jest niezależny $\iff |A\cap C_i|\le d_i$ dla każdej klasy $i$.
+	Innymi słowy --- z~każdej klasy wolno wziąć co najwyżej $d_i$ elementów,
+	niezależnie od~pozostałych klas. Że to faktycznie matroid, sprawdzamy poniżej;
+	tutaj wszystkie $d_i=1$, a~klasami są składowe spójności $G$.
+
+	\emph{Suma prosta matroidów jednorodnych.} Każda klasa $C_i$ z~pojemnością
+	$d_i$ to osobny \emph{uniform matroid} $U^{d_i}_{|C_i|}$ (niezależne są zbiory
+	$\le d_i$ elementów), a~cały partition matroid jest ich \uemph{sumą prostą}.
+	W~szczególności \emph{uniform matroid} to przypadek jednej klasy $C_1=S$
+	z~pojemnością $r$, oznaczany $U^r_n$ ($n=|S|$).
+
+	\emph{Baza, cykl, rząd.} \uemph{Baza} bierze z~każdego bloku dokładnie $d_i$
+	elementów; \uemph{cykl} (minimalny zbiór zależny) to $d_i{+}1$ elementów
+	z~jednego bloku; \uemph{rząd} matroidu to $\sum_i d_i$. (Dla naszego $G$:
+	baza = jeden wierzchołek na~składową, rząd = liczba składowych.)
+
+	\emph{Powiązania.} Klasa matroidów podziałowych jest zamknięta na~dualność,
+	minory i~sumy prostych. Gdy wszystkie $d_i=1$, partition matroid jest zarazem
+	\emph{transversal matroid} rodziny rozłącznych bloków; na~tym opiera się ujęcie
+	skojarzeń w~grafie dwudzielnym $(U,V)$ jako \uemph{przecięcia dwóch matroidów}
+	(po~jednym ,,brak wspólnego końca'' dla strony $U$ i~dla $V$).
+\end{dygresja}
+Niech $C_1,\dots,C_p$ będą składowymi spójności $G$; tworzą one podział
+$V(G)$. Z~definicji $S\in\mathcal{A}_G\iff |S\cap C_i|\le 1$ dla każdego $i$.
+Sprawdzamy aksjomaty:
+
+\newlength\labelw
+\settowidth\labelw{(wł.\ 1)\ }
+\begin{enumerate}[
+		label=(wł.\ \arabic*),
+		align=left,
+		labelwidth=\labelw,
+		labelsep=0pt,
+		leftmargin=\dimexpr\labelw-2em\relax,
+		itemindent=2em
+	]
+	\item[(wł.\ \ref*{N-matroid:skończoność})] $V(G)$ jest skończony i~niepusty. $\checkmark$
+	\item[(wł.\ \ref*{N-matroid:niepustość})] $\emptyset\in\mathcal{A}_G$, więc $\mathcal{A}_G\neq\emptyset$. $\checkmark$
+	\item[(wł.\ \ref*{N-matroid:dziedziczność})] Jeśli $S\in\mathcal{A}_G$ i~$S'\subseteq S$, to
+	      $|S'\cap C_i|\le|S\cap C_i|\le 1$, więc $S'\in\mathcal{A}_G$.
+	\item[(wł.\ \ref*{N-matroid:wymiana})] Niech $S_1,S_2\in\mathcal{A}_G$, $|S_1|<|S_2|$. Każda
+	      składowa zawiera $\le 1$ element każdego ze zbiorów, więc $|S_j|$ równa
+	      się liczbie składowych ,,trafionych'' przez $S_j$. Z~$|S_2|>|S_1|$
+	      wynika, że istnieje składowa $C_i$ trafiona przez $S_2$, ale nie przez
+	      $S_1$; biorąc $v\in S_2\cap C_i$ mamy $S_1\cup\{v\}\in\mathcal{A}_G$.
+\end{enumerate}
+Zatem $(V(G),\mathcal{A}_G)$ jest matroidem. $\qed$
+
+\clearpage
+\begin{zadanie}[Zadanie 4 --- dokładne pokrycie wierzchołkowe w~czasie podwykładniczym (15 p.)]
+	Zaprojektuj algorytm dokładny, który znajdzie liczność najmniejszego pokrycia
+	wierzchołkowego grafu w~czasie $o(2^n)$, gdzie $n$ jest liczbą wierzchołków.
+\end{zadanie}
+
+\paragraph{Rozgałęzianie po~wierzchołku dużego stopnia.}
+Korzystamy z~obserwacji: dla dowolnej krawędzi pokrycie $C$ musi zawierać jeden
+z~jej końców, a~równoważnie --- dla dowolnego wierzchołka $v$ albo $v\in C$,
+albo (jeśli $v\notin C$) wszyscy jego sąsiedzi $N(v)\subseteq C$.
+
+\begin{alg}{Minimalne pokrycie wierzchołkowe przez rozgałęzianie}{alg:minvc}
+	\Function{MinVC}{$G$}\Comment{zwraca liczność najmniejszego pokrycia}
+	\If{$G$ nie ma krawędzi}\State \Return $0$
+	\EndIf
+	\If{maksymalny stopień w~$G$ wynosi $\le 2$}
+	\State \Return minimalne pokrycie sumy ścieżek i~cykli
+	       \Comment{DP po~każdej ścieżce/cyklu}
+	       \Statex \hfill czas wielomianowy
+	\EndIf
+	\State wybierz wierzchołek $v$ o~stopniu $\ge 3$
+	\State $a\gets 1+{}$\Call{MinVC}{$G-v$}\Comment{gałąź $v\in C$}
+	\State $b\gets |N(v)|+{}$\Call{MinVC}{$G-v-N(v)$}\Comment{gałąź $v\notin C$, więc $N(v)\subseteq C$}
+	\State \Return $\min(a,b)$
+	\EndFunction
+\end{alg}
+
+\begin{dygresja}
+\uemph{DP ({\itshape Dynamic Programming}) po~ścieżce/cyklu.} Przy maksymalnym stopniu $\le 2$ graf rozpada
+	się na~rozłączne ścieżki i~cykle; każdą składową liczymy osobno i~sumujemy
+	wyniki. Dla ścieżki $v_1,\dots,v_k$ trzymamy dwa stany:
+	\begin{itemize}[nosep]
+		\item $f[i][0]$ --- minimalne pokrycie wierzchołków $v_1,\dots,v_i$ przy
+		      $v_i\notin C$;
+		\item $f[i][1]$ --- to samo przy $v_i\in C$.
+	\end{itemize}
+	Każda krawędź $v_{i-1}v_i$ musi być pokryta, stąd przejścia
+	\[
+		f[i][0]=f[i-1][1],\qquad
+		f[i][1]=1+\min\big(f[i-1][0],\,f[i-1][1]\big).
+	\]
+	Jeśli $v_i\notin C$, to poprzednik musi być w~$C$ (inaczej krawędź
+	$v_{i-1}v_i$ niepokryta); jeśli $v_i\in C$, poprzednik dowolny. Baza
+	to~$f[1][0]=0$, $f[1][1]=1$, a~wynik ścieżki to $\min\big(f[k][0],f[k][1]\big)$.
+
+	Dla cyklu dochodzi jedna domykająca krawędź $v_k v_1$. Robimy ten sam
+	rachunek co dla ścieżki $v_1,\dots,v_k$, ale uruchamiamy go dwukrotnie,
+	ustalając z~góry stan $v_1$ --- różnica jest tylko w~\emph{bazie} (w~$v_1$)
+	i~w~\emph{odczycie} (w~$v_k$):
+	\begin{itemize}[nosep]
+		\item \emph{wymuszamy $v_1\in C$:} baza $f[1][1]=1$, $f[1][0]=+\infty$;
+		      krawędź $v_k v_1$ jest pokryta przez $v_1$, więc $v_k$ dowolny ---
+		      odczyt $\min\big(f[k][0],f[k][1]\big)$;
+		\item \emph{wymuszamy $v_1\notin C$:} baza $f[1][0]=0$, $f[1][1]=+\infty$;
+		      teraz $v_k v_1$ wymusza $v_k\in C$ --- odczyt $f[k][1]$.
+	\end{itemize}
+	(Wartość $+\infty$ zakazuje stanu sprzecznego z~wymuszeniem.) Każda
+	składowa w~czasie liniowym, więc cały ten przypadek jest wielomianowy.
+\end{dygresja}
+
+\paragraph{Poprawność.}
+Przy stopniu $\ge 3$ każde pokrycie wpada do~jednej z~dwóch gałęzi (zawiera $v$
+lub całe $N(v)$), a~obie gałęzie zwracają poprawne minimum dla swojej
+podinstancji; bierzemy mniejsze. Przypadek maksymalnego stopnia $\le 2$
+rozwiązujemy wprost (graf jest sumą ścieżek i~cykli).
+
+\paragraph{Złożoność.}
+Gałąź pierwsza usuwa $1$ wierzchołek, druga co najmniej $1+3=4$ (sam $v$ oraz
+$\ge 3$ jego sąsiadów). Składnik $\mathrm{poly}(n)$ to praca poza wywołaniami
+rekurencyjnymi: znalezienie wierzchołka o~stopniu $\ge 3$ (lub stwierdzenie, że
+maksymalny stopień $\le 2$), zbudowanie podgrafów $G-v$ oraz $G-v-N(v)$ i~DP
+po~ścieżkach/cyklach w~przypadku bazowym --- każda z~tych operacji jest
+wielomianowa względem liczby wierzchołków i~krawędzi. Stąd
+\[
+	T(n)\le T(n-1)+T(n-4)+\mathrm{poly}(n).
+\]
+Równanie charakterystyczne $x^4=x^3+1$ ma pierwiastek dodatni
+$\alpha\approx 1{,}3803$, więc $T(n)=\BO(\alpha^n)=\BO(1{,}39^n)=o(2^n)$. $\qed$
+
+\clearpage
+\begin{zadanie}[Zadanie 5 --- 3-aproksymacja problemu 3DC (15 p.)]
+	Rozważmy problem --- nazwijmy go roboczo \emph{3DC} --- w~którym mamy daną
+	rodzinę $\mathcal{R}$ 3-elementowych podzbiorów pewnego zbioru $X$
+	i~poszukujemy jak najmniej licznego zbioru $S\subseteq X$ takiego, że każdy
+	zbiór z~$\mathcal{R}$ zawiera przynajmniej jeden element z~$S$. Zaprojektuj
+	wielomianowy algorytm 3-aproksymacyjny dla problemu 3DC (i~udowodnij, że stała
+	aproksymacji istotnie jest nie większa niż~3). Możesz zainspirować się
+	algorytmem 2-aproksymacyjnym dla problemu najmniejszego pokrycia
+	wierzchołkowego.
+\end{zadanie}
+
+\paragraph{Algorytm (jak 2-aproksymacja dla pokrycia wierzchołkowego).}
+\begin{alg}{3-aproksymacja problemu 3DC przez maksymalne dopasowanie}{alg:3dc}
+	\Function{Approx3DC}{$X,\mathcal{R}$}
+	\State $S\gets\emptyset$
+	\While{istnieje $R\in\mathcal{R}$ rozłączny z~$S$}
+	\State wybierz taki $R$
+	\State $S\gets S\cup R$\Comment{dodaj \uemph{wszystkie} trzy elementy}
+	\EndWhile
+	\State \Return $S$
+	\EndFunction
+\end{alg}
+Po~zakończeniu każdy zbiór z~$\mathcal{R}$ jest przecięty przez $S$, więc $S$ jest
+poprawnym rozwiązaniem.
+
+\paragraph{Współczynnik aproksymacji.}
+Niech $R_1,\dots,R_t$ będą zbiorami wybranymi w~kroku~2. Są one
+\uemph{parami rozłączne}: gdy wybieramy $R_i$, jest on rozłączny z~bieżącym $S$,
+a~ten zawiera wszystkie elementy wcześniej wybranych $R_1,\dots,R_{i-1}$; zatem
+$R_i$ jest rozłączny z~każdym $R_j$, $j<i$. Każde rozwiązanie optymalne $S^\ast$
+musi przecinać każdy $R_i$, a~skoro zbiory $R_i$ są rozłączne, potrzebuje na to
+co najmniej $t$ różnych elementów: $|S^\ast|\ge t$. Nasze rozwiązanie ma
+$|S|=3t\le 3|S^\ast|$. Algorytm jest więc $3$-aproksymacyjny.
+
+\paragraph{Złożoność.}
+Każdy obrót pętli dokłada do~$S$ trzy nowe elementy (wybrany $R$ jest rozłączny
+z~$S$), więc pętla wykonuje się co najwyżej $\lfloor |X|/3\rfloor$ razy. W~każdym
+obrocie przeglądamy rodzinę $\mathcal{R}$ w~poszukiwaniu zbioru rozłącznego
+z~$S$, sprawdzając dla każdego $R\in\mathcal{R}$ jego trzy elementy --- to
+$O(|\mathcal{R}|)$ pracy. Łącznie $O(|X|\cdot|\mathcal{R}|)$, czyli czas
+wielomianowy. $\qed$

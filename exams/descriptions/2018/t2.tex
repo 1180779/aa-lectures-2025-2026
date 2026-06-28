@@ -1,0 +1,49 @@
+% ════════════════════════════════════════════════════════════════
+\subsection{Termin 2}
+% ════════════════════════════════════════════════════════════════
+
+\begin{zadanie}[Zadanie 1 --- ścieżki powiększające zbioru niezależnego w~grafie bezpazurowym (15 p.)]
+	Graf $G$ jest \emph{bezpazurowy}, jeżeli żaden wierzchołek $G$ nie ma trzech
+	niezależnych sąsiadów. Niech $I$ będzie zbiorem niezależnym w~grafie. Ścieżkę
+	$P=v_1v_2\dots v_m$ nazywamy \emph{powiększającą} dla $I$, jeżeli $P$ ma
+	nieparzystą liczbę wierzchołków, wierzchołki o~parzystych indeksach należą do
+	$I$, wierzchołki o~nieparzystych indeksach nie należą do $I$ oraz $G$ nie
+	zawiera żadnej krawędzi między wierzchołkami niesąsiadującymi na ścieżce. Niech
+	$G$ będzie grafem bezpazurowym, a~$I$ zbiorem niezależnym w~$G$. Udowodnij, że
+	jeżeli $I$ nie jest najliczniejszym zbiorem niezależnym w~$G$, to istnieje
+	ścieżka powiększająca dla~$I$. \emph{Wskazówka:} zainspiruj się dowodem
+	analogicznego stwierdzenia dla skojarzeń.
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 2 --- matroid z~ograniczeniami licznościowymi na sumie zbiorów (15 p.)]
+	Niech $A$ i~$B$ będą niepustymi zbiorami rozłącznymi, a~$k$ dodatnią liczbą
+	naturalną. Niech $\mathcal{F}$ będzie rodziną podzbiorów zbioru $A\cup B$ taką,
+	że $S\in\mathcal{F}$ wtedy i~tylko wtedy, gdy $|S\cap B|\le k$ oraz
+	$|S\cap A|\le|S\cap B|$. Rozstrzygnij, czy para $(A\cup B,\mathcal{F})$ zawsze
+	jest matroidem (udowodnij to lub podaj kontrprzykład).
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 3 --- para najbliższych punktów w~czasie n log n (15 p.)]
+	Podaj algorytm, który znajduje parę najbliższych punktów na płaszczyźnie
+	w~czasie $\BO(n\log n)$, gdzie $n$ jest liczbą punktów. Uzasadnij jego
+	poprawność i~oszacuj czas działania. Możesz pominąć dowód potrzebnego
+	geometrycznego faktu (ale musisz go sformułować).
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 4 --- minimalny podział grafu na trójkąty (15 p.)]
+	Przez podział grafu $G$ na trójkąty rozumiemy podział zbioru $V(G)$ na
+	trzyelementowe podzbiory $\{u_i,v_i,w_i\}$ ($i=1,\dots,k$), gdzie dla każdego
+	$i$ zachodzi $u_iv_i,v_iw_i,u_iw_i\in E(G)$. Dla wagi $w:E(G)\to\mathbb{R}$
+	przez wagę podziału rozumiemy $\sum_{i=1}^k\big(w(u_iv_i)+w(v_iw_i)+w(u_iw_i)\big)$.
+	W~problemie \textsc{Minimum Triangle Partition} poszukujemy minimalnej wagi
+	podziału danego grafu ważonego na trójkąty. Zaprojektuj algorytm rozwiązujący
+	ten problem w~czasie $\BO^*(2^n)$, gdzie $n=|V(G)|$; uzasadnij poprawność
+	i~oszacuj czas działania. \emph{Wskazówka:} programowanie dynamiczne.
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 5 --- 3-aproksymacyjne kolorowanie grafów dysków jednostkowych (15 p.)]
+	Podaj wielomianowy algorytm $3$-aproksymacyjny dla problemu kolorowania grafów
+	przecięć dysków jednostkowych i~udowodnij, że współczynnik aproksymacji
+	istotnie wynosi~$3$. Możesz pominąć dowód potrzebnego geometrycznego faktu
+	(ale musisz go sformułować).
+\end{zadanie}

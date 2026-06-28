@@ -1,0 +1,175 @@
+% ════════════════════════════════════════════════════════════════
+\subsection{Termin poprawkowy}
+% ════════════════════════════════════════════════════════════════
+
+\begin{zadanie}[Zadanie 1 --- niemalejące długości najkrótszych ścieżek powiększających (15 p.)]
+	$P$ --- najkrótsza ścieżka powiększająca dla $M$, $M'=M\div P$, $P'$ ---
+	najkrótsza ścieżka powiększająca dla $M'$. Udowodnij $|P|\le|P'|$ oraz że
+	wspólny wierzchołek wymusza $|P|<|P'|$.
+\end{zadanie}
+
+(Lemat z~algorytmu Hopcrofta--Karpa.) Mierzymy $|P|$ liczbą krawędzi.
+
+\paragraph{Nierówność $|P|\le|P'|$.}
+Niech $M''=M'\div P'$; wtedy $|M''|=|M|+2$. Rozważmy $D=M\div M''$. Jako
+symetryczna różnica dwóch skojarzeń, $D$ ma stopnie $\le 2$, więc rozpada się na
+ścieżki i~cykle naprzemienne względem $M$. Skoro $|M''|=|M|+2$, w~$D$ jest o~dwie
+krawędzie $M''$ więcej niż $M$, zatem $D$ zawiera co najmniej dwie
+wierzchołkowo-rozłączne ścieżki powiększające $Q_1,Q_2$ względem~$M$. Każda
+z~nich ma długość $\ge|P|$ (bo $P$ jest najkrótsza), więc
+\[
+	|D|\ \ge\ |Q_1|+|Q_2|\ \ge\ 2|P|.
+\]
+Z~drugiej strony
+\[
+	D=M\div M''=(M\div M')\div(M'\div M'')=P\div P',
+\]
+a~dla symetrycznej różnicy zbiorów krawędzi
+$|P\div P'|=|P|+|P'|-2\,c$, gdzie $c=|E(P)\cap E(P')|$ to liczba wspólnych
+krawędzi. Łącząc:
+\[
+	|P|+|P'|-2c\ \ge\ 2|P|
+	\quad\Longrightarrow\quad
+	|P'|\ \ge\ |P|+2c\ \ge\ |P|.
+\]
+
+\paragraph{Wspólny wierzchołek $\Rightarrow$ ostra nierówność.}
+Pokażemy kontrapozycję: jeśli $|P'|=|P|$, to $P$ i~$P'$ są wierzchołkowo
+rozłączne. Z~powyższego $|P'|=|P|$ wymusza $c=0$ (brak wspólnych krawędzi),
+więc $D=P\div P'$ jest rozłączną krawędziowo sumą $P$ i~$P'$. Ale $D$ ma stopnie
+$\le 2$:
+\begin{itemize}[nosep]
+	\item gdyby $P$ i~$P'$ miały wspólny wierzchołek wewnętrzny $v$, jego stopień
+	      w~$D$ wynosiłby $2+2=4>2$ --- sprzeczność;
+	\item wspólnym wierzchołkiem nie może też być koniec: końce $P$ są wolne
+	      względem $M$, lecz \uemph{skojarzone} względem $M'=M\div P$, więc nie są
+	      wolnymi końcami $P'$ (a~końce $P'$ muszą być wolne względem $M'$); końce
+	      $P'$ z~kolei mają w~$D$ stopień $1$, a~wierzchołek wewnętrzny $P$ ma
+	      stopień~$2$, co znów dałoby stopień~$3$.
+\end{itemize}
+Zatem $P,P'$ są wierzchołkowo rozłączne. Równoważnie: wspólny wierzchołek
+$\Rightarrow |P'|\ne|P|$, a~ponieważ $|P'|\ge|P|$, otrzymujemy $|P|<|P'|$. $\qed$
+
+\clearpage
+\begin{zadanie}[Zadanie 2 --- matroid podzbiorów krawędzi o~ograniczonym stopniu (15 p.)]
+	$G$ spójny dwudzielny, $S\in\mathcal{F}\iff$ każdy wierzchołek incydentny
+	z~$\le k$ krawędziami z~$S$. Czy $(E,\mathcal{F})$ zawsze jest matroidem?
+\end{zadanie}
+
+\paragraph{Nie --- kontrprzykład.}
+Dla $k=1$ rodzina $\mathcal{F}$ to rodzina skojarzeń w~$G$. Weźmy ścieżkę
+$P_4$ na czterech wierzchołkach z~krawędziami $e_1,e_2,e_3$ (kolejno);
+jest to graf spójny i~dwudzielny. Rozważmy
+\[
+	I_1=\{e_2\}\in\mathcal{F},\qquad I_2=\{e_1,e_3\}\in\mathcal{F},
+	\qquad |I_1|<|I_2|.
+\]
+Aby zachować własność wymiany, powinniśmy móc dodać do $I_1$ pewną krawędź
+z~$I_2\setminus I_1$. Jednak $e_1$ i~$e_2$ mają wspólny wierzchołek (stopień $2>1$),
+tak samo $e_2$ i~$e_3$. Zatem ani $\{e_2,e_1\}$, ani $\{e_2,e_3\}$ nie należą do
+$\mathcal{F}$ --- własność wymiany jest złamana. Para $(E,\mathcal{F})$ nie jest
+więc matroidem. $\qed$
+
+\clearpage
+\begin{zadanie}[Zadanie 3 --- mnożenie dużych liczb metodą Tooma-Cooka (15 p.)]
+	Wykorzystując dane wzory (3 części, mnożenia $x_2y_2$, $x_0y_0$, $A$, $B$, $C$),
+	zaprojektuj algorytm mnożenia dużych liczb i~oszacuj jego czas.
+\end{zadanie}
+
+\paragraph{Algorytm (Toom--Cook 3-way).}
+Liczbę $n$-cyfrową zapisujemy w~bazie $10^{k}$, $k=\lceil n/3\rceil$, jako
+$x_2 10^{2k}+x_1 10^{k}+x_0$ (i~analogicznie dla drugiej liczby); każda część
+$x_i,y_i$ ma $\approx n/3$ cyfr. Liczymy pięć iloczynów
+\[
+	x_2y_2,\quad x_0y_0,\quad A,\quad B,\quad C,
+\]
+gdzie $A,B,C$ to iloczyny sum/różnic części z~małymi stałymi współczynnikami
+($2,4$); mnożniki te mają nadal $\BO(n/3)$ cyfr, więc to $5$ mnożeń liczb
+rozmiaru $\approx n/3$ (rekurencyjnie). Z~tych pięciu iloczynów składamy wynik
+danymi wzorami: pozostałe operacje to dodawania, odejmowania, przesunięcia
+(mnożenia przez $10^{jk}$) oraz dzielenia przez \uemph{stałe} $2$ i~$6$ ---
+wszystko w~czasie $\BO(n)$.
+
+\paragraph{Złożoność.}
+\[
+	T(n)=5\,T\!\Big(\tfrac n3\Big)+\BO(n).
+\]
+Ponieważ $\log_3 5\approx 1{,}465>1$, dominuje człon rekurencyjny:
+\[
+	T(n)=\Theta\!\big(n^{\log_3 5}\big)\approx\Theta\!\big(n^{1{,}465}\big),
+\]
+czyli asymptotycznie szybciej niż Karacuba ($n^{\log_2 3}\approx n^{1{,}585}$).
+$\qed$
+
+\clearpage
+\begin{zadanie}[Zadanie 4 --- najkrótszy cykl Hamiltona (15 p.)]
+	Algorytm znajdujący długość najkrótszego cyklu Hamiltona w~grafie ważonym
+	o~$n$ wierzchołkach w~czasie $\BO(2^n)$ (z~dokładnością do~wielomianu).
+\end{zadanie}
+
+\paragraph{Programowanie dynamiczne Helda--Karpa.}
+Ustalamy wierzchołek startowy $1$. Dla $S\subseteq V$ z~$1\in S$ oraz $v\in S$
+niech $D[S][v]$ będzie minimalną wagą ścieżki, która zaczyna się w~$1$, odwiedza
+\uemph{dokładnie} zbiór $S$ i~kończy się w~$v$. Wtedy
+\[
+	D[\{1\}][1]=0,\qquad
+	D[S][v]=\min_{u\in S\setminus\{v\}}\Big(D\big[S\setminus\{v\}\big][u]+w(u,v)\Big).
+\]
+Długość najkrótszego cyklu Hamiltona to
+\[
+	\min_{v\neq 1}\Big(D[V][v]+w(v,1)\Big).
+\]
+
+\paragraph{Poprawność.}
+$D[S][v]$ poprawnie liczy optymalną ścieżkę przez $S$ kończącą się w~$v$:
+przedostatni wierzchołek $u$ jednoznacznie wyznacza prefiks odwiedzający
+$S\setminus\{v\}$ i~kończący się w~$u$, optymalizowany rekurencyjnie
+(podstruktura optymalna). Dodanie krawędzi powrotnej $w(v,1)$ domyka cykl
+Hamiltona; minimalizacja po~$v$ daje optimum.
+
+\paragraph{Złożoność.}
+Stanów $D[S][v]$ jest $\BO(2^n n)$, a~każdy liczymy w~czasie $\BO(n)$:
+\[
+	\BO(2^n n^2)=\BO^*(2^n). \qquad\qed
+\]
+
+\clearpage
+\begin{zadanie}[Zadanie 5 --- 3-aproksymacyjny zbiór niezależny w~grafach dysków jednostkowych (15 p.)]
+	Wielomianowy algorytm $3$-aproksymacyjny dla najliczniejszego zbioru
+	niezależnego w~grafach dysków jednostkowych.
+\end{zadanie}
+
+Korzystamy z~tego samego faktu geometrycznego, co przy kolorowaniu
+(podrozdz.~\ref{sol:udg-coloring}): zbiór punktów z~prawej półpłaszczyzny koła
+o~promieniu $1$ wokół najbardziej lewego punktu $p$ rozkłada się na $3$ wycinki
+$60^\circ$, z~których każdy jest kliką.
+
+\paragraph{Algorytm (zachłanne ,,obieranie'' od~lewej).}
+\begin{enumerate}[nosep]
+	\item $\mathcal{I}\leftarrow\emptyset$.
+	\item Dopóki zostały punkty: wybierz najbardziej lewy (najmniejsze $x$) punkt
+	      $p$, dodaj $p$ do $\mathcal{I}$ i~usuń $p$ oraz wszystkich jego sąsiadów
+	      $N(p)$.
+	\item Zwróć $\mathcal{I}$.
+\end{enumerate}
+$\mathcal{I}$ jest niezależny: dodając $p$ usuwamy wszystkich jego sąsiadów, więc
+żadne dwa wybrane punkty nie sąsiadują.
+
+\paragraph{Współczynnik aproksymacji.}
+Niech $p_1,p_2,\dots,p_t$ będą kolejno wybranymi punktami; usuwane domknięte
+sąsiedztwa $N[p_i]=\{p_i\}\cup N(p_i)$ są parami rozłączne i~pokrywają wszystkie
+wierzchołki. Niech $\mathrm{OPT}$ będzie najliczniejszym zbiorem niezależnym.
+Dla każdego $i$ punkty $N(p_i)$ leżą (w~chwili wyboru, gdy $p_i$ jest najbardziej
+lewy) w~prawej półpłaszczyźnie koła, więc rozkładają się na $3$ kliki. Zbiór
+niezależny zawiera co najwyżej jeden punkt z~każdej kliki, więc
+\[
+	|\mathrm{OPT}\cap N[p_i]|\ \le\ 3.
+\]
+(Jeśli $p_i\in\mathrm{OPT}$, to żaden jego sąsiad nie jest w~$\mathrm{OPT}$, więc
+wkład wynosi $1$.) Ponieważ sąsiedztwa $N[p_i]$ pokrywają wszystkie wierzchołki
+i~są rozłączne,
+\[
+	|\mathrm{OPT}|=\sum_{i=1}^t|\mathrm{OPT}\cap N[p_i]|\le 3t=3|\mathcal{I}|,
+\]
+czyli $|\mathcal{I}|\ge|\mathrm{OPT}|/3$. Algorytm jest $3$-aproksymacyjny
+i~działa w~czasie wielomianowym. $\qed$

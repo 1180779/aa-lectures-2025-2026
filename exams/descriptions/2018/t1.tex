@@ -1,0 +1,45 @@
+% ════════════════════════════════════════════════════════════════
+\subsection{Termin 1}
+% ════════════════════════════════════════════════════════════════
+
+\begin{zadanie}[Zadanie 1 --- wszystkie liście Huffmana na tej samej głębokości (15 p.)]
+	Niech $T$ będzie optymalnym drzewem kodowym w~kodowaniu Huffmana dla alfabetu
+	$A$ oraz funkcji częstości $f:A\to\mathbb{N}$. Przypuśćmy, że $|A|=2^k$ oraz
+	dla każdych trzech symboli $x,y,z\in A$ zachodzi $f(x)+f(y)>f(z)$. Udowodnij,
+	że w~drzewie $T$ wszystkie liście znajdują się na tej samej głębokości
+	(równej~$k$).
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 2 --- najtańszy element w~bazie minimalnej (15 p.)]
+	Rozważmy matroid $M=(S,\mathcal{I})$ oraz funkcję wag $w:S\to\mathbb{R}_+$.
+	Niech $x$ będzie elementem $S$ minimalizującym $w(x)$. Udowodnij, że $x$
+	należy do pewnej bazy w~$M$ o~minimalnej wadze (innymi słowy: istnieje zbiór
+	$I\in\mathcal{I}$ taki, że $x\in I$ oraz $w(I)=\min_{J\in\mathcal{I}}w(J)$).
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 3 --- mnożenie macierzy z~32 mnożeniami bloków (15 p.)]
+	Przypuśćmy, że istnieją wzory pozwalające pomnożyć dwie macierze $4\times 4$
+	wykonując $256$ elementarnych operacji dodawania liczb i~$32$ elementarne
+	operacje mnożenia liczb (wzory nie korzystają z~przemienności mnożenia).
+	Skonstruuj na tej podstawie wydajny algorytm mnożenia macierzy; wyznacz
+	złożoność tego algorytmu.
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 4 --- minimalny podział grafu na trójkąty (15 p.)]
+	Przez podział grafu $G$ na trójkąty rozumiemy podział zbioru $V(G)$ na
+	trzyelementowe podzbiory $\{u_i,v_i,w_i\}$ ($i=1,\dots,k$), gdzie dla każdego
+	$i$ zachodzi $u_iv_i,v_iw_i,u_iw_i\in E(G)$. Dla wagi $w:E(G)\to\mathbb{R}$
+	przez wagę podziału rozumiemy $\sum_{i=1}^k\big(w(u_iv_i)+w(v_iw_i)+w(u_iw_i)\big)$.
+	W~problemie \textsc{Minimum Triangle Partition} mamy dany graf ważony
+	krawędziowo i~poszukujemy minimalnej wagi podziału na trójkąty. Zaprojektuj
+	algorytm rozwiązujący ten problem w~czasie $\BO^*(2^n)$, gdzie $n=|V(G)|$;
+	uzasadnij poprawność i~oszacuj czas działania. \emph{Wskazówka:} programowanie
+	dynamiczne.
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 5 --- 3-aproksymacyjne kolorowanie grafów dysków jednostkowych (15 p.)]
+	Podaj wielomianowy algorytm $3$-aproksymacyjny dla problemu kolorowania grafów
+	przecięć dysków jednostkowych i~udowodnij, że współczynnik aproksymacji
+	istotnie wynosi~$3$. Możesz pominąć dowód potrzebnego geometrycznego faktu
+	(ale musisz go sformułować).
+\end{zadanie}

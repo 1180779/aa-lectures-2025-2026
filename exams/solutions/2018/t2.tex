@@ -1,0 +1,138 @@
+% ════════════════════════════════════════════════════════════════
+\subsection{Termin 2}
+% ════════════════════════════════════════════════════════════════
+
+\begin{zadanie}[Zadanie 1 --- ścieżki powiększające zbioru niezależnego w~grafie bezpazurowym (15 p.)]
+	Mówimy, że graf $G$ jest \emph{bezpazurowy}, jeżeli żaden z~wierzchołków $G$
+	nie ma trzech niezależnych\footnote{Zbiór wierzchołków $S$ w~grafie jest
+	\emph{niezależny}, jeżeli żadne dwa wierzchołki z~$S$ nie są połączone
+	krawędzią.} sąsiadów. Niech $I$ będzie zbiorem niezależnym w~grafie. Mówimy,
+	że ścieżka $P=v_1v_2v_3\dots v_k$ jest \emph{ścieżką powiększającą} dla~$I$,
+	jeżeli $P$ ma nieparzystą liczbę wierzchołków, wierzchołki $v_2,v_4,v_6,\dots$
+	(o~parzystych indeksach) należą do~$I$, wierzchołki $v_1,v_3,v_5,\dots$ nie
+	należą do~$I$ oraz graf $G$ nie zawiera żadnej krawędzi między wierzchołkami
+	niesąsiadującymi na ścieżce. Niech $G$ będzie grafem bezpazurowym, a~$I$
+	zbiorem niezależnym w~$G$. Udowodnij, że jeżeli $I$ nie jest najliczniejszym
+	zbiorem niezależnym w~$G$, to istnieje ścieżka powiększająca dla~$I$.
+	\emph{Wskazówka:} zainspiruj się dowodem analogicznego stwierdzenia dla
+	skojarzeń.
+\end{zadanie}
+
+\paragraph{Analog twierdzenia Berge'a.}
+Niech $J$ będzie zbiorem niezależnym o~$|J|>|I|$. Rozważmy
+$D=I\div J=(I\setminus J)\cup(J\setminus I)$ oraz podgraf indukowany $G[D]$.
+Krawędzie w~$G[D]$ łączą tylko $I\setminus J$ z~$J\setminus I$ (każdy z~tych
+zbiorów jest niezależny).
+
+\emph{Stopnie w~$G[D]$ są $\le 2$.} Weźmy $v\in I\setminus J$. Jego sąsiady
+w~$D$ leżą w~$J\setminus I$, a~$J$ jest niezależny, więc są one parami
+niesąsiednie. Gdyby $v$ miał trzech takich sąsiadów, byłyby one trzema
+niezależnymi sąsiadami $v$ --- pazur, sprzeczność z~bezpazurowością. Zatem
+$\deg_{G[D]}(v)\le 2$; tak samo dla $v\in J\setminus I$.
+
+Skoro $G[D]$ ma maksymalny stopień $\le 2$, jego składowe to ścieżki i~cykle,
+naprzemienne między $I\setminus J$ a~$J\setminus I$ (bo krawędzie idą tylko
+między tymi stronami); cykle są parzyste. Każdy cykl i~każda ścieżka parzysta
+ma tyle samo wierzchołków z~$I$ co z~$J$. Ponieważ $|J\setminus I|>|I\setminus J|$,
+istnieje składowa z~przewagą wierzchołków $J\setminus I$ --- jest to ścieżka
+$P$ o~obu końcach w~$J\setminus I$, naprzemienna, o~nieparzystej liczbie
+wierzchołków.
+
+Ścieżka $P$ jest pełną składową $G[D]$, więc jest \uemph{indukowana} (brak
+krawędzi między niesąsiadującymi na niej wierzchołkami). Jej końce należą do
+$J\setminus I$, więc nie należą do~$I$; wierzchołki na pozycjach parzystych
+to $I\setminus J\subseteq I$, a~na nieparzystych $J\setminus I\notin I$. Jest to
+więc ścieżka powiększająca dla~$I$. $\qed$
+
+\clearpage
+\begin{zadanie}[Zadanie 2 --- matroid z~ograniczeniami licznościowymi na sumie zbiorów (15 p.)]
+	$A,B$ rozłączne, $S\in\mathcal{F}\iff|S\cap B|\le k$ oraz $|S\cap A|\le|S\cap B|$.
+	Rozstrzygnij, czy $(A\cup B,\mathcal{F})$ jest matroidem.
+\end{zadanie}
+
+\paragraph{Tak --- jest to matroid.}
+Dla zbioru $S$ piszemy $a(S)=|S\cap A|$, $b(S)=|S\cap B|$; warunek
+niezależności to $a(S)\le b(S)\le k$.
+
+\begin{itemize}[nosep]
+	\item \textbf{Niepustość:} $\emptyset\in\mathcal{F}$ ($0\le 0\le k$).
+	\item \textbf{Dziedziczność:} usunięcie elementu nie zwiększa $a$ ani $b$,
+	      a~zmniejszenie obu wielkości zachowuje $a\le b\le k$.
+	\item \textbf{Wymiana:} niech $I_1,I_2\in\mathcal{F}$, $|I_1|<|I_2|$. Oznaczmy
+	      $a_i=a(I_i)$, $b_i=b(I_i)$; mamy $a_1+b_1<a_2+b_2$.
+	      \begin{itemize}[nosep]
+	      	\item \emph{Jeśli $b_1<k$} i~$I_2\setminus I_1$ zawiera element $B$,
+	      	      dodajemy go: nowe $b_1{+}1\le k$ oraz $a_1\le b_1<b_1{+}1$ --- OK.
+	      	\item \emph{W~przeciwnym razie} albo $b_1=k$, albo $I_2\setminus I_1$
+	      	      nie ma elementów $B$. Pokażemy, że da się dodać element $A$, czyli
+	      	      że $a_1<b_1$ oraz $I_2\setminus I_1$ zawiera element~$A$.
+	      \end{itemize}
+\end{itemize}
+Rozważmy ostatni przypadek dokładniej. Jeśli $b_1=k$, to $b_2\le k=b_1$, więc
+$a_2+b_2>a_1+b_1$ daje $a_2>a_1$; gdyby $a_1=k=b_1$, to $|I_1|=2k\ge a_2+b_2=|I_2|$
+--- sprzeczność, zatem $a_1<k=b_1$. Jeśli zaś $I_2\setminus I_1$ nie ma elementów
+$B$ (a~$b_1<k$ nie zadziałało, bo wtedy poprzedni punkt by zakończył), to
+$b_2\le b_1$ i~znów $a_2>a_1$, a~$a_1\le b_1$; gdyby $a_1=b_1$, to z~$b_2\le b_1$
+mielibyśmy $a_2\le b_2\le b_1=a_1$, sprzeczne z~$a_2>a_1$, więc $a_1<b_1$.
+W~obu sytuacjach $a_1<b_1$ oraz $a_2>a_1$, więc $I_2\setminus I_1$ zawiera
+element~$A$; dodanie go daje $a_1{+}1\le b_1$ i~zachowuje niezależność.
+\smallskip
+
+We wszystkich przypadkach istnieje element $e\in I_2\setminus I_1$ z~$I_1\cup\{e\}
+\in\mathcal{F}$, więc spełniona jest własność wymiany. Para $(A\cup B,\mathcal{F})$
+jest matroidem. $\qed$
+
+\clearpage
+\begin{zadanie}[Zadanie 3 --- para najbliższych punktów w~czasie n log n (15 p.)]
+	Podaj algorytm $\BO(n\log n)$ znajdujący parę najbliższych punktów na
+	płaszczyźnie; sformułuj potrzebny fakt geometryczny.
+\end{zadanie}
+
+Standardowy algorytm ,,dziel i~zwyciężaj'' z~wykładu o~parze najbliższych
+punktów (rys.~\ref{N-fig:closestpoints:split},
+rys.~\ref{N-fig:closestpoints:rectangle}); tu w~metryce euklidesowej.
+
+\paragraph{Algorytm.}
+\begin{itemize}[nosep]
+	\item \textbf{Dziel.} Wstępnie sortujemy punkty po~$x$ i~dzielimy pionową
+	      prostą $l$ (mediana współrzędnej $x$) na dwie połowy po~$\lfloor n/2\rfloor$
+	      punktów.
+	\item \textbf{Zwyciężaj.} Rekurencyjnie wyznaczamy najmniejsze odległości
+	      $\delta_L,\delta_R$; $\delta=\min(\delta_L,\delta_R)$.
+	\item \textbf{Połącz.} W~pasie $|x-l|\le\delta$, przeglądając punkty
+	      posortowane po~$y$, porównujemy każdy punkt tylko z~kolejnymi, których
+	      $y$ różni się o~$\le\delta$.
+\end{itemize}
+Dla $n\le 3$ liczymy wszystkie pary wprost.
+
+\paragraph{Fakt geometryczny.}
+W~prostokącie $2\delta\times\delta$ (pas o~szerokości $2\delta$, wysokości
+$\delta$) leży co najwyżej stała liczba punktów (np.\ $\le 8$): gdyby było ich
+więcej, dwa leżałyby po~tej samej stronie prostej $l$ w~odległości $<\delta$,
+sprzecznie z~definicją $\delta$. Dzięki temu faza łączenia kosztuje $\BO(n)$
+(każdy punkt porównuje się z~$\BO(1)$ następnikami).
+
+\paragraph{Złożoność.}
+Sortowanie $\BO(n\log n)$; rekurencja $T(n)=2T(n/2)+\BO(n)=\BO(n\log n)$.
+Łącznie $\BO(n\log n)$. $\qed$
+
+\clearpage
+\begin{zadanie}[Zadanie 4 --- minimalny podział grafu na trójkąty (15 p.)]
+	\textsc{Minimum Triangle Partition} w~czasie $\BO^*(2^n)$.
+\end{zadanie}
+
+Identyczne z~rozwiązaniem zadania~4 z~Terminu~1
+(podrozdz.~\ref{sol:triangle-partition}): programowanie dynamiczne
+$D[U]=\min$ po~trójkątach zawierających $\min U$ z~$w(\text{trójkąt})+D[U\setminus
+\text{trójkąt}]$, w~czasie $\BO(2^n n^2)=\BO^*(2^n)$. $\qed$
+
+\clearpage
+\begin{zadanie}[Zadanie 5 --- 3-aproksymacyjne kolorowanie grafów dysków jednostkowych (15 p.)]
+	Wielomianowy algorytm $3$-aproksymacyjny dla kolorowania grafów dysków
+	jednostkowych.
+\end{zadanie}
+
+Identyczne z~rozwiązaniem zadania~5 z~Terminu~1
+(podrozdz.~\ref{sol:udg-coloring}): zachłanne kolorowanie w~kolejności rosnącej
+po~$x$; lewa półpłaszczyzna koła rozkłada się na $3$ wycinki-kliki, więc liczba
+użytych kolorów to $\le 3\omega-2\le 3\chi$. $\qed$

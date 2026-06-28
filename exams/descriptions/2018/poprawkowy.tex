@@ -1,0 +1,51 @@
+% ════════════════════════════════════════════════════════════════
+\subsection{Termin poprawkowy}
+% ════════════════════════════════════════════════════════════════
+
+\begin{zadanie}[Zadanie 1 --- niemalejące długości najkrótszych ścieżek powiększających (15 p.)]
+	Niech $M$ będzie skojarzeniem w~pewnym grafie $G$ oraz niech $P$ będzie
+	najkrótszą ścieżką powiększającą dla $M$. Oznaczamy $M':=M\div P$. Niech $P'$
+	będzie najkrótszą ścieżką powiększającą dla skojarzenia $M'$. Udowodnij, że
+	$|P|\le|P'|$ oraz że jeżeli $P$ i~$P'$ mają wspólny wierzchołek, to
+	$|P|<|P'|$.
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 2 --- matroid podzbiorów krawędzi o~ograniczonym stopniu (15 p.)]
+	Niech $G=(V,E)$ będzie spójnym grafem dwudzielnym, a~$k$ dodatnią liczbą
+	naturalną. Niech $\mathcal{F}$ będzie rodziną podzbiorów zbioru $E$ taką, że
+	$S\in\mathcal{F}$ wtedy i~tylko wtedy, gdy każdy wierzchołek grafu $G$ jest
+	incydentny z~co najwyżej $k$ krawędziami z~$S$. Rozstrzygnij, czy para
+	$(E,\mathcal{F})$ zawsze jest matroidem (udowodnij to lub podaj kontrprzykład).
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 3 --- mnożenie dużych liczb metodą Tooma-Cooka (15 p.)]
+	Wiemy, że
+	\[
+		(x_2 10^{2k}+x_1 10^{k}+x_0)(y_2 10^{2k}+y_1 10^{k}+y_0)
+		= x_2 y_2 10^{4k}
+		+ \tfrac{C-3A-B-12x_2y_2+3x_0y_0}{6}\,10^{3k}
+	\]
+	\[
+		{}+\Big(\tfrac{A+B}{2}-x_2y_2-x_0y_0\Big)10^{2k}
+		+ \tfrac{6A-2B-C+12x_2y_2-3x_0y_0}{6}\,10^{k}
+		+ x_0 y_0,
+	\]
+	gdzie $A=(x_2+x_1+x_0)(y_2+y_1+y_0)$, $B=(x_2-x_1+x_0)(y_2-y_1+y_0)$ oraz
+	$C=(4x_2+2x_1+x_0)(4y_2+2y_1+y_0)$. Wykorzystując te wzory, zaprojektuj
+	wydajny algorytm mnożenia dużych liczb i~oszacuj jego czas działania.
+	\emph{Wskazówka:} zainspiruj się algorytmem Karacuby.
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 4 --- najkrótszy cykl Hamiltona (15 p.)]
+	Podaj algorytm, który znajduje długość najkrótszego cyklu Hamiltona w~grafie
+	ważonym o~$n$ wierzchołkach w~czasie $\BO(2^n)$ (z~dokładnością do~czynnika
+	wielomianowego). Udowodnij jego poprawność i~oszacuj czas działania.
+\end{zadanie}
+
+\begin{zadanie}[Zadanie 5 --- 3-aproksymacyjny zbiór niezależny w~grafach dysków jednostkowych (15 p.)]
+	Zaprojektuj wielomianowy algorytm $3$-aproksymacyjny dla problemu
+	najliczniejszego zbioru niezależnego w~grafach przecięć dysków jednostkowych
+	i~udowodnij, że współczynnik aproksymacji istotnie wynosi~$3$. Za rozwiązanie
+	o~gorszym współczynniku można dostać część punktów. \emph{Wskazówka:}
+	zainspiruj się algorytmem aproksymacyjnym dla liczby chromatycznej tych grafów.
+\end{zadanie}

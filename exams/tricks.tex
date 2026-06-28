@@ -1,0 +1,40 @@
+% ════════════════════════════════════════════════════════════════
+% Powtarzalne chwyty egzaminacyjne --- wzorce, które wracają w~wielu
+% zadaniach. Każdy odsyła do konkretnych rozwiązań, gdzie go użyto.
+% ════════════════════════════════════════════════════════════════
+\section{Chwyty egzaminacyjne}
+
+Zadania egzaminacyjne rzadko wymagają nowego algorytmu od~zera --- najczęściej
+są \uemph{wariantem} czegoś z~wykładu. Poniżej zbieramy wzorce, które wracają.
+
+% ────────────────────────────────────────────────────────────────
+\subsection{Ta sama procedura, inna metryka}
+
+Algorytm ,,dziel i~zwyciężaj'' dla pary najbliższych punktów nie zależy od~tego,
+\emph{jaką} metrykę $d$ liczymy --- zależy tylko od~jednego \uemph{faktu
+upakowania}: w~prostokącie o~bokach $\BO(\delta)$ mieści się $\BO(1)$ punktów
+parami odległych o~$\ge\delta$. Dopóki ten fakt zachodzi, faza łączenia kosztuje
+$\BO(n)$, a~całość $\BO(n\log n)$ --- niezależnie od~metryki.
+
+Stąd przepis: \uemph{problem ,,czy istnieje bliska para'' przekształć w~parę
+najbliższych w~odpowiedniej metryce, uruchom standardowy algorytm, porównaj
+wynik z~progiem.}
+
+\begin{tblr}{colspec={Q[l]Q[l]Q[l]}, row{1}={font=\bfseries}, hline{1,2,Z}=0.5pt}
+	Metryka & Wzór & Gdzie \\
+	euklidesowa $\ell_2$  & $\sqrt{(\Delta x)^2+(\Delta y)^2}$ & para najbliższych z~wykładu \\
+	Czebyszewa $\ell_\infty$ & $\max(|\Delta x|,|\Delta y|)$ & kwadraty jednostkowe (2021, T1, Zad.~1) \\
+	miejska $\ell_1$ & $|\Delta x|+|\Delta y|$ & obrót o~$45^\circ$ sprowadza do~$\ell_\infty$ \\
+\end{tblr}
+
+\medskip
+\noindent\emph{Dlaczego $\ell_\infty$ dla kwadratów.} Dwa osiowe kwadraty o~boku
+$1$ przecinają się $\iff$ nakładają się ich rzuty na obie osie, czyli
+$|\Delta x|\le 1$ \emph{oraz} $|\Delta y|\le 1$, czyli $\ell_\infty\le 1$.
+Najmniejsza para w~$\ell_\infty$ i~porównanie z~$1$ rozstrzyga problem.
+
+\noindent\emph{Dlaczego $\ell_1$ sprowadza się do $\ell_\infty$.} Odwzorowanie
+$(x,y)\mapsto(x{+}y,\,x{-}y)$ przeprowadza $\ell_1$ w~$\ell_\infty$
+(z~czynnikiem stałym), więc wystarcza ta sama procedura na obróconych
+współrzędnych. Stała w~fakcie upakowania zmienia się (inny kształt ,,kuli''),
+ale pozostaje $\BO(1)$ --- złożoność bez zmian.
